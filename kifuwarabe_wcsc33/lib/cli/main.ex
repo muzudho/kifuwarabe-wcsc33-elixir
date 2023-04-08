@@ -2,7 +2,8 @@ defmodule KifuwarabeWcsc33.CLI do
   # For ".exe" file build
   def main(args \\ []) do
     # TODO: 実装
-    args |> IO.inspect()
+    IO.puts("Hi! I am a Kifuwarabe.")
+    # args |> IO.inspect()
     # args
     # |> parse_args
     # |> response
