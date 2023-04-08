@@ -19,3 +19,10 @@ mix run --no-halt
 ```shell
 C:\Users\むずでょ\Documents\GitHub\kifuwarabe-collection\shogi\kifuwarabe-wcsc33\kifuwarabe_wcsc33>main.bat
 ```
+
+または
+
+```shell
+cd kifuwarabe_wcsc33/lib/cli
+elixir mix.exs
+```
