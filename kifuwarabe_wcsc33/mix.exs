@@ -14,6 +14,7 @@ defmodule KifuwarabeWcsc33.MixProject do
   # Run "mix help compile.app" to learn about applications.
   def application do
     [
+      # このロガーは気に入らないが、削除するとプログラムがクラッシュするようだ
       extra_applications: [:logger],
 
       # 実行するモジュール
