@@ -18,7 +18,7 @@ defmodule KifuwarabeWcsc33.MixProject do
       extra_applications: [:logger],
 
       # 実行するモジュール
-      mod: {KifuwarabeWcsc33.CLI, []}
+      mod: {KifuwarabeWcsc33.CLI.Main, []}
     ]
   end
 

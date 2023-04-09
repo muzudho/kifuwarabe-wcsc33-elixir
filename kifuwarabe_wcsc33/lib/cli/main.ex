@@ -1,4 +1,4 @@
-defmodule KifuwarabeWcsc33.CLI do
+defmodule KifuwarabeWcsc33.CLI.Main do
   @doc """
   ## 雑談
   
@@ -110,7 +110,8 @@ defmodule KifuwarabeWcsc33.CLI do
       first_token == "board" ->
         # > | quit  | (ターミナルから私へ) 将棋盤を表示して
         # < | 　　　 | (私からターミナルへ) 将棋盤を表示
-        nil
+
+        KifuwarabeWcsc33.CLI.Views.Board.print()
 
       # Otherwise
       true ->
