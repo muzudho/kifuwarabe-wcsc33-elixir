@@ -1,24 +1,12 @@
 defmodule KifuwarabeWcsc33.CLI do
-  # For ".exe" file build
-  def main(args \\ []) do
-    # TODO: 実装
-    IO.puts("Hi! I am a Kifuwarabe.")
-    # args |> IO.inspect()
-    # args
-    # |> parse_args
-    # |> response
-    # |> IO.puts()
-  end
+  # コンソール・アプリケーションのエントリー・ポイント
+  def start(_type, _args) do
+    # Elixirのロガーが気に入らないので、正常時には出ないようにする
+    Logger.configure(level: :error)
 
-  defp parse_args(args) do
-    {opts, word, _} =
-      args
-      |> OptionParser.parse(switches: [upcase: :boolean])
+    IO.puts("Hi! I am a Kifuwarabe. It's start!")
 
-    {opts, List.to_string(word)}
-  end
-
-  defp response({opts, word}) do
-    if opts[:upcase], do: String.upcase(word), else: word
+    # 何だかよく分からない
+    {:ok, self()}
   end
 end

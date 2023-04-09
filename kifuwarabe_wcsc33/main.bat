@@ -1,1 +1,1 @@
-mix run --no-halt
+mix run

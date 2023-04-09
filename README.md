@@ -1,4 +1,4 @@
-# kifuwarabe-wcsc33
+# kifuwarabe-wcsc33-written-in-elixir-for-windows
 
 きふわらべWCSC33
 
