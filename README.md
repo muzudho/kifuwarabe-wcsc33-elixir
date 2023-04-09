@@ -2,27 +2,16 @@
 
 きふわらべWCSC33
 
+## 免責
+
+* escriptは気に入らないので、使わない
+* Elixirのロガーが気に入らないので、表示レベルは「エラー」にする
+* Elixirのスーパーバイザーが気に入らないので、使わない
+
 ## 実行方法
 
-### この方法は使わない
-
-* escript は使わない。 Linux 用だから。 Windows の実行ファイルの形をしていない  
-
-### この方法を使う
-
 ```shell
-mix run --no-halt
-```
+cd kifuwarabe_wcsc33
 
-または
-
-```shell
-C:\Users\むずでょ\Documents\GitHub\kifuwarabe-collection\shogi\kifuwarabe-wcsc33\kifuwarabe_wcsc33>main.bat
-```
-
-または
-
-```shell
-cd kifuwarabe_wcsc33/lib/cli
-elixir mix.exs
+main.bat
 ```
