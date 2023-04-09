@@ -24,12 +24,49 @@ defmodule KifuwarabeWcsc33.CLI do
     # Elixirに if～else-if～else 構造はない。 case文かcond文を使う。
     cond do
       input == "usi" ->
-        IO.puts("id name Kifuwarabe")
+        # > | usi             | (GUIから私へ) お前はUSIプロトコル対応エンジンか？
+        # < | id name xxxx    | (私からGUIへ) エンジンの名前は xxxx だぜ
+        # < | id author xxxx  |              エンジンの著者の名前は xxxx だぜ
+        # < | usiok           |              情報終わり。はい、USIプロトコル対応エンジンだぜ
+
+        # 将棋エンジン名 - （省略可） GUIに表示される。エンジンを選ぶのに使う。WCSC大会では使わないから、エンジンを区別しやすい名前がいい
+        IO.puts("id name Kifuwaraxir")
+
+        # エンジンの作者名 - (省略可) GUIでエンジンを選ぶときに表示されることがあるぐらい。WCSC大会では使わないから、エンジンを区別しやすい名前がいい
         IO.puts("id author TAKAHASHI satoshi")
         IO.puts("usiok")
 
       input == "isready" ->
+        # > | isready | (GUIから私へ) 命令送ったら応答できんの？
+        # < | readyok | (私からGUIへ) なんでもこい
         IO.puts("readyok")
+
+      input == "usinewgame" ->
+        # > | usinewgame  | (GUIから私へ) 新しい対局を始める。このタイミングで、前回の対局情報をクリアーしてもらってもかまわない
+        #   | 　　　　　　 | (私からGUIへ送るものは何もありません)
+        nil
+
+      input == "position" ->
+        # > | position  | (GUIから私へ) 現在の局面を作るのに必要な全データを送る。まだ何も応答するな
+        #   | 　　　　　　 | (私からGUIへ送るものは何もありません)
+        nil
+
+      input == "go" ->
+        # > | position        | (GUIから私へ) さっき送った局面に対して、指し手を返せ
+        # < | bestmove resign | (私からGUIへ) (指し手を返す)
+        IO.puts("bestmove resign")
+
+      input == "quit" ->
+        # > | quit  | (GUIから私へ) エンジン止めろ、アプリケーション終了しろ
+        #   | 　　　 | (私からGUIへ送るものは何もありません)
+        System.stop()
+        nil
+
+      # 以下は、USIプロトコルにないコマンド
+      input == "board" ->
+        # > | quit  | (ターミナルから私へ) 将棋盤を表示して
+        # < | 　　　 | (私からターミナルへ) 将棋盤を表示
+        nil
 
       # Otherwise
       true ->
