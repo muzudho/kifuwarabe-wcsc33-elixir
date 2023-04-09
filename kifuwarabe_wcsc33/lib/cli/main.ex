@@ -49,11 +49,23 @@ defmodule KifuwarabeWcsc33.CLI do
   defp usi_loop() do
     # 標準入力を受け取る |> 末尾の改行を削除するために trim() を使う
     input = IO.gets("") |> String.trim_trailing()
+    # IO.puts("input:" <> input)
+
+    # |> 文字列を空白で区切ってリストにする
+    input_tokens = input |> String.split(" ")
+    # IO.puts("input_tokens:" <> Enum.join(input_tokens, ""))
+
+    # 先頭の要素を取る
+    # ==============
+    #
+    # Elixier ではリストへの添え字アクセスは遅い。先頭の要素を取るのが高速なので、 hd という操作がある
+    first_token = hd(input_tokens)
+    # IO.puts("first_token:" <> first_token)
 
     #
     # Elixirに if～else-if～else 構造はない。 case文かcond文を使う。
     cond do
-      input == "usi" ->
+      first_token == "usi" ->
         # > | usi             | (GUIから私へ) お前はUSIプロトコル対応エンジンか？
         # < | id name xxxx    | (私からGUIへ) エンジンの名前は xxxx だぜ
         # < | id author xxxx  |              エンジンの著者の名前は xxxx だぜ
@@ -66,27 +78,27 @@ defmodule KifuwarabeWcsc33.CLI do
         IO.puts("id author TAKAHASHI satoshi")
         IO.puts("usiok")
 
-      input == "isready" ->
+      first_token == "isready" ->
         # > | isready | (GUIから私へ) 命令送ったら応答できんの？
         # < | readyok | (私からGUIへ) なんでもこい
         IO.puts("readyok")
 
-      input == "usinewgame" ->
+      first_token == "usinewgame" ->
         # > | usinewgame  | (GUIから私へ) 新しい対局を始める。このタイミングで、前回の対局情報をクリアーしてもらってもかまわない
         #   | 　　　　　　 | (私からGUIへ送るものは何もありません)
         nil
 
-      input == "position" ->
+      first_token == "position" ->
         # > | position  | (GUIから私へ) 現在の局面を作るのに必要な全データを送る。まだ何も応答するな
         #   | 　　　　　　 | (私からGUIへ送るものは何もありません)
         nil
 
-      input == "go" ->
+      first_token == "go" ->
         # > | position        | (GUIから私へ) さっき送った局面に対して、指し手を返せ
         # < | bestmove resign | (私からGUIへ) (指し手を返す)
         IO.puts("bestmove resign")
 
-      input == "quit" ->
+      first_token == "quit" ->
         # > | quit  | (GUIから私へ) エンジン止めろ、アプリケーション終了しろ
         #   | 　　　 | (私からGUIへ送るものは何もありません)
 
@@ -95,14 +107,17 @@ defmodule KifuwarabeWcsc33.CLI do
         System.stop()
 
       # 以下は、USIプロトコルにないコマンド
-      input == "board" ->
+      first_token == "board" ->
         # > | quit  | (ターミナルから私へ) 将棋盤を表示して
         # < | 　　　 | (私からターミナルへ) 将棋盤を表示
         nil
 
       # Otherwise
       true ->
-        IO.puts("Hi! I am a Kifuwarabe. It's start! " <> input)
+        # ここにくるようならエラー
+        IO.puts(
+          "Hi! I am a Kifuwarabe. It's start! first_token[" <> first_token <> "] input:" <> input
+        )
     end
 
     # 再帰ループ
