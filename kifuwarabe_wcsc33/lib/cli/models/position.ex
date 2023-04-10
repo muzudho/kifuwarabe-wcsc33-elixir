@@ -24,15 +24,15 @@ defmodule KifuwarabeWcsc33.CLI.Models.Position do
               21 => :n2,
               11 => :l2,
               # ２段目
-              92 => :em,
+              92 => :sp,
               82 => :b2,
-              72 => :em,
-              62 => :em,
-              52 => :em,
-              42 => :em,
-              32 => :em,
+              72 => :sp,
+              62 => :sp,
+              52 => :sp,
+              42 => :sp,
+              32 => :sp,
               22 => :r2,
-              12 => :em,
+              12 => :sp,
               # ３段目
               93 => :p2,
               83 => :p2,
@@ -44,35 +44,35 @@ defmodule KifuwarabeWcsc33.CLI.Models.Position do
               23 => :p2,
               13 => :p2,
               # ４段目
-              94 => :em,
-              84 => :em,
-              74 => :em,
-              64 => :em,
-              54 => :em,
-              44 => :em,
-              34 => :em,
-              24 => :em,
-              14 => :em,
+              94 => :sp,
+              84 => :sp,
+              74 => :sp,
+              64 => :sp,
+              54 => :sp,
+              44 => :sp,
+              34 => :sp,
+              24 => :sp,
+              14 => :sp,
               # ５段目
-              95 => :em,
-              85 => :em,
-              75 => :em,
-              65 => :em,
-              55 => :em,
-              45 => :em,
-              35 => :em,
-              25 => :em,
-              15 => :em,
+              95 => :sp,
+              85 => :sp,
+              75 => :sp,
+              65 => :sp,
+              55 => :sp,
+              45 => :sp,
+              35 => :sp,
+              25 => :sp,
+              15 => :sp,
               # ６段目
-              96 => :em,
-              86 => :em,
-              76 => :em,
-              66 => :em,
-              56 => :em,
-              46 => :em,
-              36 => :em,
-              26 => :em,
-              16 => :em,
+              96 => :sp,
+              86 => :sp,
+              76 => :sp,
+              66 => :sp,
+              56 => :sp,
+              46 => :sp,
+              36 => :sp,
+              26 => :sp,
+              16 => :sp,
               # ７段目
               97 => :p1,
               87 => :p1,
@@ -84,15 +84,15 @@ defmodule KifuwarabeWcsc33.CLI.Models.Position do
               27 => :p1,
               17 => :p1,
               # ８段目
-              98 => :em,
+              98 => :sp,
               88 => :b1,
-              78 => :em,
-              68 => :em,
-              58 => :em,
-              48 => :em,
-              38 => :em,
+              78 => :sp,
+              68 => :sp,
+              58 => :sp,
+              48 => :sp,
+              38 => :sp,
               28 => :r1,
-              18 => :em,
+              18 => :sp,
               # ９段目
               99 => :l1,
               89 => :n1,
@@ -146,13 +146,13 @@ defmodule KifuwarabeWcsc33.CLI.Models.Position do
   # defstruct piece_list:
   #             [] ++
   #               [:l2, :n2, :s2, :g2, :k2, :g2, :s2, :n2, :l2] ++
-  #               [:em, :b2, :em, :em, :em, :em, :em, :r2, :em] ++
+  #               [:sp, :b2, :sp, :sp, :sp, :sp, :sp, :r2, :sp] ++
   #               [:p2, :p2, :p2, :p2, :p2, :p2, :p2, :p2, :p2] ++
-  #               [:em, :em, :em, :em, :em, :em, :em, :em, :em] ++
-  #               [:em, :em, :em, :em, :em, :em, :em, :em, :em] ++
-  #               [:em, :em, :em, :em, :em, :em, :em, :em, :em] ++
+  #               [:sp, :sp, :sp, :sp, :sp, :sp, :sp, :sp, :sp] ++
+  #               [:sp, :sp, :sp, :sp, :sp, :sp, :sp, :sp, :sp] ++
+  #               [:sp, :sp, :sp, :sp, :sp, :sp, :sp, :sp, :sp] ++
   #               [:p1, :p1, :p1, :p1, :p1, :p1, :p1, :p1, :p1] ++
-  #               [:em, :b1, :em, :em, :em, :em, :em, :r1, :em] ++
+  #               [:sp, :b1, :sp, :sp, :sp, :sp, :sp, :r1, :sp] ++
   #               [:l1, :n1, :s1, :g1, :k1, :g1, :s1, :n1, :l1]
 
   def(new()) do

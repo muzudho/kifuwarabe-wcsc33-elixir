@@ -28,7 +28,7 @@ defmodule KifuwarabeWcsc33.CLI.Views.Position do
     """)
   end
 
-  # 後手（上手）の駒台（持ち駒の数）表示
+  # ▽後手（上手）の駒台（持ち駒の数）表示
   #
   # ## 例
   #
@@ -38,21 +38,21 @@ defmodule KifuwarabeWcsc33.CLI.Views.Position do
   #  +--+--+--+--+--+--+--+--+
   #
   defp print_hand2() do
-    # King（玉）
+    # キング（King；玉）
     k = " 0"
-    # Rook（飛車）
+    # ルック（Rook；飛車）
     r = " 0"
-    # Bishop（角）
+    # ビショップ（Bishop；角）
     b = " 0"
-    # Gold（金）
+    # ゴールド（Gold；金）
     g = " 0"
-    # Silver（銀）
+    # シルバー（Silver；銀）
     s = " 0"
-    # kNight（桂）
+    # ナイト（kNight；桂）
     n = " 0"
-    # Lance（香）
+    # ランス（Lance；香）
     l = " 0"
-    # Pawn（歩）
+    # ポーン（Pawn；歩）
     p = " 0"
 
     IO.puts("""
@@ -63,7 +63,7 @@ defmodule KifuwarabeWcsc33.CLI.Views.Position do
     """)
   end
 
-  # 先手（下手）の駒台（持ち駒の数）表示
+  # ▲先手（下手）の駒台（持ち駒の数）表示
   #
   # ## 例
   #
@@ -73,21 +73,21 @@ defmodule KifuwarabeWcsc33.CLI.Views.Position do
   #       +--+--+--+--+--+--+--+--+
   #
   defp print_hand1() do
-    # King（玉）
+    # キング（King；玉）
     k = " 0"
-    # Rook（飛車）
+    # ルック（Rook；飛車）
     r = " 0"
-    # Bishop（角）
+    # ビショップ（Bishop；角）
     b = " 0"
-    # Gold（金）
+    # ゴールド（Gold；金）
     g = " 0"
-    # Silver（銀）
+    # シルバー（Silver；銀）
     s = " 0"
-    # kNight（桂）
+    # ナイト（kNight；桂）
     n = " 0"
-    # Lance（香）
+    # ランス（Lance；香）
     l = " 0"
-    # Pawn（歩）
+    # ポーン（Pawn；歩）
     p = " 0"
 
     IO.puts("""
@@ -126,95 +126,95 @@ defmodule KifuwarabeWcsc33.CLI.Views.Position do
   defp print_body() do
     # うわっ、めんどくさ！
     # １段目
-    a9 = " l"
-    a8 = " n"
-    a7 = " s"
-    a6 = " g"
-    a5 = " k"
-    a4 = " g"
-    a3 = " s"
-    a2 = " n"
-    a1 = " l"
+    a9 = print_piece(:l2)
+    a8 = print_piece(:n2)
+    a7 = print_piece(:s2)
+    a6 = print_piece(:g2)
+    a5 = print_piece(:k2)
+    a4 = print_piece(:g2)
+    a3 = print_piece(:s2)
+    a2 = print_piece(:n2)
+    a1 = print_piece(:l2)
     # ２段目
-    b9 = "  "
-    b8 = " r"
-    b7 = "  "
-    b6 = "  "
-    b5 = "  "
-    b4 = "  "
-    b3 = "  "
-    b2 = " b"
-    b1 = "  "
+    b9 = print_piece(:sp)
+    b8 = print_piece(:r2)
+    b7 = print_piece(:sp)
+    b6 = print_piece(:sp)
+    b5 = print_piece(:sp)
+    b4 = print_piece(:sp)
+    b3 = print_piece(:sp)
+    b2 = print_piece(:b2)
+    b1 = print_piece(:sp)
     # ３段目
-    c9 = " p"
-    c8 = " p"
-    c7 = " p"
-    c6 = " p"
-    c5 = " p"
-    c4 = " p"
-    c3 = " p"
-    c2 = " p"
-    c1 = " p"
+    c9 = print_piece(:p2)
+    c8 = print_piece(:p2)
+    c7 = print_piece(:p2)
+    c6 = print_piece(:p2)
+    c5 = print_piece(:p2)
+    c4 = print_piece(:p2)
+    c3 = print_piece(:p2)
+    c2 = print_piece(:p2)
+    c1 = print_piece(:p2)
     # ４段目
-    d9 = "  "
-    d8 = "  "
-    d7 = "  "
-    d6 = "  "
-    d5 = "  "
-    d4 = "  "
-    d3 = "  "
-    d2 = "  "
-    d1 = "  "
+    d9 = print_piece(:sp)
+    d8 = print_piece(:sp)
+    d7 = print_piece(:sp)
+    d6 = print_piece(:sp)
+    d5 = print_piece(:sp)
+    d4 = print_piece(:sp)
+    d3 = print_piece(:sp)
+    d2 = print_piece(:sp)
+    d1 = print_piece(:sp)
     # ５段目
-    e9 = "  "
-    e8 = "  "
-    e7 = "  "
-    e6 = "  "
-    e5 = "  "
-    e4 = "  "
-    e3 = "  "
-    e2 = "  "
-    e1 = "  "
+    e9 = print_piece(:sp)
+    e8 = print_piece(:sp)
+    e7 = print_piece(:sp)
+    e6 = print_piece(:sp)
+    e5 = print_piece(:sp)
+    e4 = print_piece(:sp)
+    e3 = print_piece(:sp)
+    e2 = print_piece(:sp)
+    e1 = print_piece(:sp)
     # ６段目
-    f9 = "  "
-    f8 = "  "
-    f7 = "  "
-    f6 = "  "
-    f5 = "  "
-    f4 = "  "
-    f3 = "  "
-    f2 = "  "
-    f1 = "  "
+    f9 = print_piece(:sp)
+    f8 = print_piece(:sp)
+    f7 = print_piece(:sp)
+    f6 = print_piece(:sp)
+    f5 = print_piece(:sp)
+    f4 = print_piece(:sp)
+    f3 = print_piece(:sp)
+    f2 = print_piece(:sp)
+    f1 = print_piece(:sp)
     # ７段目
-    g9 = " P"
-    g8 = " P"
-    g7 = " P"
-    g6 = " P"
-    g5 = " P"
-    g4 = " P"
-    g3 = " P"
-    g2 = " P"
-    g1 = " P"
+    g9 = print_piece(:p1)
+    g8 = print_piece(:p1)
+    g7 = print_piece(:p1)
+    g6 = print_piece(:p1)
+    g5 = print_piece(:p1)
+    g4 = print_piece(:p1)
+    g3 = print_piece(:p1)
+    g2 = print_piece(:p1)
+    g1 = print_piece(:p1)
     # ８段目
-    h9 = "  "
-    h8 = " B"
-    h7 = "  "
-    h6 = "  "
-    h5 = "  "
-    h4 = "  "
-    h3 = "  "
-    h2 = " R"
-    h1 = "  "
+    h9 = print_piece(:sp)
+    h8 = print_piece(:b1)
+    h7 = print_piece(:sp)
+    h6 = print_piece(:sp)
+    h5 = print_piece(:sp)
+    h4 = print_piece(:sp)
+    h3 = print_piece(:sp)
+    h2 = print_piece(:r1)
+    h1 = print_piece(:sp)
     # ９段目
-    i9 = " L"
-    i8 = " N"
-    i7 = " S"
-    i6 = " G"
-    i5 = " K"
-    i4 = " G"
-    i3 = " S"
-    i2 = " N"
-    i1 = " L"
+    i9 = print_piece(:l1)
+    i8 = print_piece(:n1)
+    i7 = print_piece(:s1)
+    i6 = print_piece(:g1)
+    i5 = print_piece(:k1)
+    i4 = print_piece(:g1)
+    i3 = print_piece(:s1)
+    i2 = print_piece(:n1)
+    i1 = print_piece(:l1)
 
     IO.puts("""
       9  8  7  6  5  4  3  2  1
@@ -238,5 +238,84 @@ defmodule KifuwarabeWcsc33.CLI.Views.Position do
     |#{i9}|#{i8}|#{i7}|#{i6}|#{i5}|#{i4}|#{i3}|#{i2}|#{i1}| i
     +--+--+--+--+--+--+--+--+--+
     """)
+  end
+
+  # 駒の表示
+  #
+  # ## 引数
+  #
+  # pc - ピース（piece；先後付きの駒種類）
+  #
+  defp print_piece(pc) do
+    case pc do
+      # ▲先手（下手）
+      # キング（King；玉）
+      :k1 -> " K"
+      # ルック（Rook；飛車）
+      :r1 -> " R"
+      # ビショップ（Bishop；角）
+      :b1 -> " B"
+      # ゴールド（Gold；金）
+      :g1 -> " G"
+      # シルバー（Silver；銀）
+      :s1 -> " S"
+      # ナイト（kNight；桂）
+      :n1 -> " N"
+      # ランス（Lance；香）
+      :l1 -> " L"
+      # ポーン（Pawn；歩）
+      :p1 -> " P"
+      # 玉は成れません
+      # :pk
+      # It's reasonably a プロモーテッド・ルック（Promoted Rook；成飛）. It's actually ドラゴン（Dragon；竜）
+      :pr1 -> "+R"
+      # It's reasonably a プロモーテッド・ビショップ（Promoted Bishop；成角）.  It's actually ホース（Horse；馬）. Ponanza calls ペガサス（Pegasus；天馬）
+      :pb1 -> "+B"
+      # 金は成れません
+      # :pg
+      # プロモーテッド・シルバー（Promoted Silver；成銀. Or 全 in one letter）
+      :ps1 -> "+S"
+      # プロモーテッド・ナイト（Promoted kNight；成桂. Or 圭 in one letter）
+      :pn1 -> "+N"
+      # プロモーテッド・ランス（Promoted Lance；成香. Or 杏 in one letter）
+      :pl1 -> "+L"
+      # It's reasonably a プロモーテッド・ポーン（Promoted Pawn；成歩）. It's actually と（"To"；と is 金 cursive）
+      :pp1 -> "+P"
+      # ▽後手（上手）
+      # キング（King；玉）
+      :k2 -> " k"
+      # ルック（Rook；飛車）
+      :r2 -> " r"
+      # ビショップ（Bishop；角）
+      :b2 -> " b"
+      # ゴールド（Gold；金）
+      :g2 -> " g"
+      # シルバー（Silver；銀）
+      :s2 -> " s"
+      # ナイト（kNight；桂）
+      :n2 -> " n"
+      # ランス（Lance；香）
+      :l2 -> " l"
+      # ポーン（Pawn；歩）
+      :p2 -> " p"
+      # 玉は成れません
+      # :pk
+      # It's reasonably a プロモーテッド・ルック（Promoted Rook；成飛）. It's actually ドラゴン（Dragon；竜）
+      :pr2 -> "+r"
+      # It's reasonably a プロモーテッド・ビショップ（Promoted Bishop；成角）.  It's actually ホース（Horse；馬）. Ponanza calls ペガサス（Pegasus；天馬）
+      :pb2 -> "+b"
+      # 金は成れません
+      # :pg
+      # プロモーテッド・シルバー（Promoted Silver；成銀. Or 全 in one letter）
+      :ps2 -> "+s"
+      # プロモーテッド・ナイト（Promoted kNight；成桂. Or 圭 in one letter）
+      :pn2 -> "+n"
+      # プロモーテッド・ランス（Promoted Lance；成香. Or 杏 in one letter）
+      :pl2 -> "+l"
+      # It's reasonably a プロモーテッド・ポーン（Promoted Pawn；成歩）. It's actually と（"To"；と is 金 cursive）
+      :pp2 -> "+p"
+      # スペース（Space；空きマス）
+      :sp -> "  "
+    end
   end
 end
