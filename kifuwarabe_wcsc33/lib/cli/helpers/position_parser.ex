@@ -59,6 +59,23 @@ defmodule KifuwarabeWcsc33.CLI.Helpers.PositionParser do
   # デービッド・フォーサイスさんの発案したチェスの盤面の記録方法（１行ごとに縦線 | で区切る）を、
   # スティーブン・J・エドワーズさんがコンピューター・チェスのメーリングリストで１０年がかりで意見を取り入れてコンピューター向けに仕様を決めたもの
   defp parse_board(rest) do
+    #
+    # 盤の符号 ９一、８一、７一 …と読んでいく。１九が最後。
+    # 10ずつ減っていき、十の位が無くなったら一の位が増える。
+    #
+    # KifuwarabeWcsc33.CLI.Models.Sequence.get_address_list()
+    # |> Enum.map(fn sq ->
+    #  IO.puts("sq:#{sq}")
+    # end)
+    #
+    # TODO こんなん毎回生成したくないぞ
+    sequence = KifuwarabeWcsc33.CLI.Models.Sequence.new()
+
+    sequence.address_list
+    |> Enum.map(fn sq ->
+      IO.puts("sq:#{sq}")
+    end)
+
     # こうやって、１文字ずつ取っていけるけど……
     tuple = parse_piece_on_board(rest)
     rest = elem(tuple, 0)
