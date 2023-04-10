@@ -113,7 +113,8 @@ defmodule KifuwarabeWcsc33.CLI.Main do
         # > | quit  | (ターミナルから私へ) 将棋盤を表示して
         # < | 　　　 | (私からターミナルへ) 将棋盤を表示
 
-        KifuwarabeWcsc33.CLI.Views.Position.print()
+        pos = KifuwarabeWcsc33.CLI.Models.Position.new()
+        KifuwarabeWcsc33.CLI.Views.Position.print(pos)
 
       # Otherwise
       true ->
