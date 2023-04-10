@@ -17,11 +17,11 @@ defmodule KifuwarabeWcsc33.CLI.Views.Position do
   #
   defp print_header() do
     # ムーブズ・ナンバー（moves-number；何手目か）、Half-ply
-    m = "?"
+    m = "#{1}"
     # ターン（turn；手番）
-    t = "First?"
+    t = print_turn(:sente)
     # フォーフォルド・レピティション（Fourfold repetition；千日手）
-    r = "0"
+    r = "#{0}"
 
     IO.puts("""
     [#{m} moves / #{t} / #{r} repeat(s)]
@@ -242,6 +242,14 @@ defmodule KifuwarabeWcsc33.CLI.Views.Position do
     |#{i9}|#{i8}|#{i7}|#{i6}|#{i5}|#{i4}|#{i3}|#{i2}|#{i1}| i
     +--+--+--+--+--+--+--+--+--+
     """)
+  end
+
+  # 手番の表示
+  defp print_turn(turn) do
+    case turn do
+      :sente -> "Sente"
+      :gote -> "Gote"
+    end
   end
 
   # 駒の表示
