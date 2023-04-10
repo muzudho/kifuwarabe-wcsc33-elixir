@@ -5,7 +5,9 @@ defmodule KifuwarabeWcsc33.CLI.Models.Position do
   #   リストに入れてからマップに変換など、色々やってみたが、これよりマシに Auto Format されるものを見つけられなかった。
   #   このようなコーディング体験は不快だ
   #
-  defstruct piece_map: %{
+  # 何手目か
+  defstruct moves: 0,
+            piece_map: %{
               # １段目
               91 => :l2,
               81 => :n2,
@@ -96,6 +98,43 @@ defmodule KifuwarabeWcsc33.CLI.Models.Position do
               39 => :s1,
               29 => :n1,
               19 => :l1
+            },
+            # 駒台（持ち駒の数）
+            hand_map: %{
+              # ▲先手
+              # キング（King；玉）
+              :k1 => 0,
+              # ルック（Rook；飛）
+              :r1 => 0,
+              # ビショップ（Bishop；角）
+              :b1 => 0,
+              # ゴールド（Gold；金）
+              :g1 => 0,
+              # シルバー（Silver；銀）
+              :s1 => 0,
+              # ナイト（kNight；桂）
+              :n1 => 0,
+              # ランス（Lance；香）
+              :l1 => 0,
+              # ポーン（Pawn；歩）
+              :p1 => 0,
+              # ▽後手
+              # キング（King；玉）
+              :k2 => 0,
+              # ルック（Rook；飛）
+              :r2 => 0,
+              # ビショップ（Bishop；角）
+              :b2 => 0,
+              # ゴールド（Gold；金）
+              :g2 => 0,
+              # シルバー（Silver；銀）
+              :s2 => 0,
+              # ナイト（kNight；桂）
+              :n2 => 0,
+              # ランス（Lance；香）
+              :l2 => 0,
+              # ポーン（Pawn；歩）
+              :p2 => 0
             }
 
   # Elixir のリスト、リンクドリストだ、ランダム・アクセス遅そう、使いたくねー
