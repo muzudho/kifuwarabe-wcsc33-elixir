@@ -1,27 +1,36 @@
 defmodule KifuwarabeWcsc33.CLI.Views.Position do
   @doc """
     盤表示
+  
+  ## 引数
+  
+    * `pos` - ポジション（Position；局面）
+  
   """
   def print(pos) do
-    print_header()
-    print_hand2()
+    print_header(pos)
+    print_hand2(pos)
     print_body(pos)
-    print_hand1()
+    print_hand1(pos)
   end
 
   # 盤表示のヘッダー
+  #
+  # ## 引数
+  #
+  #   * `pos` - ポジション（Position；局面）
   #
   # ## 例
   #
   #   [1 moves / First / 0 repeat(s)]
   #
-  defp print_header() do
+  defp print_header(pos) do
     # ムーブズ・ナンバー（moves-number；何手目か）、Half-ply
-    m = "#{1}"
+    m = "#{pos.moves_num}"
     # ターン（turn；手番）
-    t = print_turn(:sente)
+    t = print_turn(pos.turn)
     # フォーフォルド・レピティション（Fourfold repetition；千日手）
-    r = "#{0}"
+    r = "#{pos.fourfold_repetition}"
 
     IO.puts("""
     [#{m} moves / #{t} / #{r} repeat(s)]
@@ -30,6 +39,10 @@ defmodule KifuwarabeWcsc33.CLI.Views.Position do
 
   # ▽後手（上手）の駒台（持ち駒の数）表示
   #
+  # ## 引数
+  #
+  #   * `pos` - ポジション（Position；局面）
+  #
   # ## 例
   #
   #    k  r  b  g  s  n  l  p
@@ -37,7 +50,7 @@ defmodule KifuwarabeWcsc33.CLI.Views.Position do
   #  | 0| 0| 0| 0| 0| 0| 0| 0|
   #  +--+--+--+--+--+--+--+--+
   #
-  defp print_hand2() do
+  defp print_hand2(_pos) do
     # キング（King；玉）
     k = String.pad_leading("#{0}", 2, " ")
     # ルック（Rook；飛車）
@@ -65,6 +78,10 @@ defmodule KifuwarabeWcsc33.CLI.Views.Position do
 
   # ▲先手（下手）の駒台（持ち駒の数）表示
   #
+  # ## 引数
+  #
+  #   * `pos` - ポジション（Position；局面）
+  #
   # ## 例
   #
   #         K  R  B  G  S  N  L  P
@@ -72,7 +89,7 @@ defmodule KifuwarabeWcsc33.CLI.Views.Position do
   #       | 0| 0| 0| 0| 0| 0| 0| 0|
   #       +--+--+--+--+--+--+--+--+
   #
-  defp print_hand1() do
+  defp print_hand1(_pos) do
     # キング（King；玉）
     k = String.pad_leading("#{0}", 2, " ")
     # ルック（Rook；飛車）
