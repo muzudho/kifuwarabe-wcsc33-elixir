@@ -18,7 +18,8 @@ defmodule KifuwarabeWcsc33.CLI.Helpers.PositionParser do
 
     rest =
       if String.starts_with?(line, "position startpos") do
-        String.slice(line, String.length("position startpos")..-1)
+        # `position startpos` で始まる |> 続くスペースを削除
+        String.slice(line, String.length("position startpos")..-1) |> String.trim_leading()
       else
         line
       end
