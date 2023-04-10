@@ -37,7 +37,7 @@ defmodule KifuwarabeWcsc33.CLI.Views.Position do
     """)
   end
 
-  # ▽後手（上手）の駒台（持ち駒の数）表示
+  # ▽ごて（Gote；後手） or うわて（Uwate；上手）の、駒台（持ち駒の数）表示
   #
   # ## 引数
   #
@@ -76,7 +76,7 @@ defmodule KifuwarabeWcsc33.CLI.Views.Position do
     """)
   end
 
-  # ▲先手（下手）の駒台（持ち駒の数）表示
+  # ▲せんて（Sente；先手） or したて（Shitate；下手）の、駒台（持ち駒の数）表示
   #
   # ## 引数
   #
@@ -277,7 +277,9 @@ defmodule KifuwarabeWcsc33.CLI.Views.Position do
   #
   defp print_piece(pc) do
     case pc do
-      # ▲先手（下手）
+      # ▲せんて（Sente；先手） or したて（Shitate；下手）
+      # ============================================
+      #
       # キング（King；玉）
       :k1 -> " K"
       # ルック（Rook；飛車）
@@ -310,7 +312,10 @@ defmodule KifuwarabeWcsc33.CLI.Views.Position do
       :pl1 -> "+L"
       # It's reasonably a プロモーテッド・ポーン（Promoted Pawn；成歩）. It's actually と（"To"；と is 金 cursive）
       :pp1 -> "+P"
-      # ▽後手（上手）
+      #
+      # ▽ごて（Gote；後手） or うわて（Uwate；上手）
+      # =======================================
+      #
       # キング（King；玉）
       :k2 -> " k"
       # ルック（Rook；飛車）
