@@ -62,6 +62,7 @@ defmodule KifuwarabeWcsc33.CLI.Helpers.PositionParser do
     # こうやって、１文字ずつ取っていけるけど……
     rest = parse_piece_on_board(rest)
     rest = parse_piece_on_board(rest)
+    rest = parse_piece_on_board(rest)
 
     rest
   end
@@ -71,7 +72,30 @@ defmodule KifuwarabeWcsc33.CLI.Helpers.PositionParser do
     # こうやって、１文字ずつ取っていけるけど……
     char = rest |> String.at(0)
     IO.puts("parse_board char:#{char}")
+    rest = rest |> String.slice(1..-1)
 
-    rest |> String.slice(1..-1)
+    rest =
+      cond do
+        # 本将棋の盤上の１行では、連続するスペースの数は最大で１桁に収まる
+        is_integer(char) ->
+          # TODO 空きマス対応
+          _space_num = String.to_integer(char)
+          rest
+
+        # 成り駒
+        char == "+" ->
+          char = rest |> String.at(0)
+          _promoted_piece = KifuwarabeWcsc33.CLI.Helpers.PieceParser.parse(char)
+          # TODO 成り駒を置く
+          rest |> String.slice(1..-1)
+
+        # それ以外
+        true ->
+          _piece = KifuwarabeWcsc33.CLI.Helpers.PieceParser.parse(char)
+          # TODO 駒を置く
+          rest
+      end
+
+    rest
   end
 end
