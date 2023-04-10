@@ -107,7 +107,7 @@ defmodule KifuwarabeWcsc33.CLI.Models.Position do
             # 駒台（持ち駒の数）
             hand_map: %{
               # ▲先手
-              # キング（King；玉）
+              # キング（King；玉）. 対局中は玉は取れない。検討時など、盤上から玉を取り除きたいときに使う
               :k1 => 0,
               # ルック（Rook；飛）
               :r1 => 0,
@@ -124,7 +124,7 @@ defmodule KifuwarabeWcsc33.CLI.Models.Position do
               # ポーン（Pawn；歩）
               :p1 => 0,
               # ▽後手
-              # キング（King；玉）
+              # キング（King；玉）. 対局中は玉は取れない。検討時など、盤上から玉を取り除きたいときに使う
               :k2 => 0,
               # ルック（Rook；飛）
               :r2 => 0,

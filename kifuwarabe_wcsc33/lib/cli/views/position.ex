@@ -50,23 +50,23 @@ defmodule KifuwarabeWcsc33.CLI.Views.Position do
   #  | 0| 0| 0| 0| 0| 0| 0| 0|
   #  +--+--+--+--+--+--+--+--+
   #
-  defp print_hand2(_pos) do
+  defp print_hand2(pos) do
     # キング（King；玉）
-    k = String.pad_leading("#{0}", 2, " ")
+    k = String.pad_leading("#{pos.hand_map[:k2]}", 2, " ")
     # ルック（Rook；飛車）
-    r = String.pad_leading("#{0}", 2, " ")
+    r = String.pad_leading("#{pos.hand_map[:r2]}", 2, " ")
     # ビショップ（Bishop；角）
-    b = String.pad_leading("#{0}", 2, " ")
+    b = String.pad_leading("#{pos.hand_map[:b2]}", 2, " ")
     # ゴールド（Gold；金）
-    g = String.pad_leading("#{0}", 2, " ")
+    g = String.pad_leading("#{pos.hand_map[:g2]}", 2, " ")
     # シルバー（Silver；銀）
-    s = String.pad_leading("#{0}", 2, " ")
+    s = String.pad_leading("#{pos.hand_map[:s2]}", 2, " ")
     # ナイト（kNight；桂）
-    n = String.pad_leading("#{0}", 2, " ")
+    n = String.pad_leading("#{pos.hand_map[:n2]}", 2, " ")
     # ランス（Lance；香）
-    l = String.pad_leading("#{0}", 2, " ")
+    l = String.pad_leading("#{pos.hand_map[:l2]}", 2, " ")
     # ポーン（Pawn；歩）
-    p = String.pad_leading("#{0}", 2, " ")
+    p = String.pad_leading("#{pos.hand_map[:p2]}", 2, " ")
 
     IO.puts("""
       k  r  b  g  s  n  l  p
@@ -89,23 +89,23 @@ defmodule KifuwarabeWcsc33.CLI.Views.Position do
   #       | 0| 0| 0| 0| 0| 0| 0| 0|
   #       +--+--+--+--+--+--+--+--+
   #
-  defp print_hand1(_pos) do
+  defp print_hand1(pos) do
     # キング（King；玉）
-    k = String.pad_leading("#{0}", 2, " ")
+    k = String.pad_leading("#{pos.hand_map[:k1]}", 2, " ")
     # ルック（Rook；飛車）
-    r = String.pad_leading("#{0}", 2, " ")
+    r = String.pad_leading("#{pos.hand_map[:r1]}", 2, " ")
     # ビショップ（Bishop；角）
-    b = String.pad_leading("#{0}", 2, " ")
+    b = String.pad_leading("#{pos.hand_map[:b1]}", 2, " ")
     # ゴールド（Gold；金）
-    g = String.pad_leading("#{0}", 2, " ")
+    g = String.pad_leading("#{pos.hand_map[:g1]}", 2, " ")
     # シルバー（Silver；銀）
-    s = String.pad_leading("#{0}", 2, " ")
+    s = String.pad_leading("#{pos.hand_map[:s1]}", 2, " ")
     # ナイト（kNight；桂）
-    n = String.pad_leading("#{0}", 2, " ")
+    n = String.pad_leading("#{pos.hand_map[:n1]}", 2, " ")
     # ランス（Lance；香）
-    l = String.pad_leading("#{0}", 2, " ")
+    l = String.pad_leading("#{pos.hand_map[:l1]}", 2, " ")
     # ポーン（Pawn；歩）
-    p = String.pad_leading("#{0}", 2, " ")
+    p = String.pad_leading("#{pos.hand_map[:p1]}", 2, " ")
 
     IO.puts("""
          K  R  B  G  S  N  L  P
