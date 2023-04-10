@@ -107,11 +107,13 @@ defmodule KifuwarabeWcsc33.CLI.Main do
         System.stop()
 
       # 以下は、USIプロトコルにないコマンド
-      first_token == "board" ->
+      #
+      # `pos` - ポジション表示
+      first_token == "pos" ->
         # > | quit  | (ターミナルから私へ) 将棋盤を表示して
         # < | 　　　 | (私からターミナルへ) 将棋盤を表示
 
-        KifuwarabeWcsc33.CLI.Views.Board.print()
+        KifuwarabeWcsc33.CLI.Views.Position.print()
 
       # Otherwise
       true ->

@@ -1,4 +1,4 @@
-defmodule KifuwarabeWcsc33.CLI.Views.Board do
+defmodule KifuwarabeWcsc33.CLI.Views.Position do
   @doc """
     盤表示
   """
@@ -16,11 +16,11 @@ defmodule KifuwarabeWcsc33.CLI.Views.Board do
   #   [1 moves / First / 0 repeat(s)]
   #
   defp print_header() do
-    # moves
+    # ムーブズ・ナンバー（moves-number；何手目か）、Half-ply
     m = "?"
-    # turn
+    # ターン（turn；手番）
     t = "First?"
-    # Fourfold repetition
+    # フォーフォルド・レピティション（Fourfold repetition；千日手）
     r = "0"
 
     IO.puts("""

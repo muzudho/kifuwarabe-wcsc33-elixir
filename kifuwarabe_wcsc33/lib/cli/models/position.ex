@@ -5,8 +5,13 @@ defmodule KifuwarabeWcsc33.CLI.Models.Position do
   #   リストに入れてからマップに変換など、色々やってみたが、これよりマシに Auto Format されるものを見つけられなかった。
   #   このようなコーディング体験は不快だ
   #
-  # 何手目か
-  defstruct moves: 0,
+  # ムーブズ・ナンバー（moves-number；何手目か）、Half-ply
+  defstruct moves_num: 0,
+            # ターン（turn；手番）
+            turn: :sente,
+            # フォーフォルド・レピティション（Fourfold repetition；千日手）
+            fourfold_repetition: 0,
+            # 盤上の駒
             piece_map: %{
               # １段目
               91 => :l2,
