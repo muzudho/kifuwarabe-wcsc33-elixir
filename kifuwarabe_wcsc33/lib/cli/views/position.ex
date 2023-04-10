@@ -39,21 +39,21 @@ defmodule KifuwarabeWcsc33.CLI.Views.Position do
   #
   defp print_hand2() do
     # キング（King；玉）
-    k = " 0"
+    k = String.pad_leading("#{0}", 2, " ")
     # ルック（Rook；飛車）
-    r = " 0"
+    r = String.pad_leading("#{0}", 2, " ")
     # ビショップ（Bishop；角）
-    b = " 0"
+    b = String.pad_leading("#{0}", 2, " ")
     # ゴールド（Gold；金）
-    g = " 0"
+    g = String.pad_leading("#{0}", 2, " ")
     # シルバー（Silver；銀）
-    s = " 0"
+    s = String.pad_leading("#{0}", 2, " ")
     # ナイト（kNight；桂）
-    n = " 0"
+    n = String.pad_leading("#{0}", 2, " ")
     # ランス（Lance；香）
-    l = " 0"
+    l = String.pad_leading("#{0}", 2, " ")
     # ポーン（Pawn；歩）
-    p = " 0"
+    p = String.pad_leading("#{0}", 2, " ")
 
     IO.puts("""
       k  r  b  g  s  n  l  p
@@ -74,21 +74,21 @@ defmodule KifuwarabeWcsc33.CLI.Views.Position do
   #
   defp print_hand1() do
     # キング（King；玉）
-    k = " 0"
+    k = String.pad_leading("#{0}", 2, " ")
     # ルック（Rook；飛車）
-    r = " 0"
+    r = String.pad_leading("#{0}", 2, " ")
     # ビショップ（Bishop；角）
-    b = " 0"
+    b = String.pad_leading("#{0}", 2, " ")
     # ゴールド（Gold；金）
-    g = " 0"
+    g = String.pad_leading("#{0}", 2, " ")
     # シルバー（Silver；銀）
-    s = " 0"
+    s = String.pad_leading("#{0}", 2, " ")
     # ナイト（kNight；桂）
-    n = " 0"
+    n = String.pad_leading("#{0}", 2, " ")
     # ランス（Lance；香）
-    l = " 0"
+    l = String.pad_leading("#{0}", 2, " ")
     # ポーン（Pawn；歩）
-    p = " 0"
+    p = String.pad_leading("#{0}", 2, " ")
 
     IO.puts("""
          K  R  B  G  S  N  L  P
