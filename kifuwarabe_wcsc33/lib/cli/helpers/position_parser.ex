@@ -60,9 +60,20 @@ defmodule KifuwarabeWcsc33.CLI.Helpers.PositionParser do
   # スティーブン・J・エドワーズさんがコンピューター・チェスのメーリングリストで１０年がかりで意見を取り入れてコンピューター向けに仕様を決めたもの
   defp parse_board(rest) do
     # こうやって、１文字ずつ取っていけるけど……
-    rest = parse_piece_on_board(rest)
-    rest = parse_piece_on_board(rest)
-    rest = parse_piece_on_board(rest)
+    tuple = parse_piece_on_board(rest)
+    rest = elem(tuple, 0)
+    pc = elem(tuple, 1)
+    IO.puts("pc:#{pc}")
+
+    tuple = parse_piece_on_board(rest)
+    rest = elem(tuple, 0)
+    pc = elem(tuple, 1)
+    IO.puts("pc:#{pc}")
+
+    tuple = parse_piece_on_board(rest)
+    rest = elem(tuple, 0)
+    pc = elem(tuple, 1)
+    IO.puts("pc:#{pc}")
 
     rest
   end
@@ -74,28 +85,26 @@ defmodule KifuwarabeWcsc33.CLI.Helpers.PositionParser do
     IO.puts("parse_board char:#{char}")
     rest = rest |> String.slice(1..-1)
 
-    rest =
-      cond do
-        # 本将棋の盤上の１行では、連続するスペースの数は最大で１桁に収まる
-        is_integer(char) ->
-          # TODO 空きマス対応
-          _space_num = String.to_integer(char)
-          rest
+    cond do
+      # 本将棋の盤上の１行では、連続するスペースの数は最大で１桁に収まる
+      is_integer(char) ->
+        # TODO 空きマス対応
+        space_num = String.to_integer(char)
+        {rest, :sp, space_num}
 
-        # 成り駒
-        char == "+" ->
-          char = rest |> String.at(0)
-          _promoted_piece = KifuwarabeWcsc33.CLI.Helpers.PieceParser.parse(char)
-          # TODO 成り駒を置く
-          rest |> String.slice(1..-1)
+      # 成り駒
+      char == "+" ->
+        char = rest |> String.at(0)
+        promoted_piece = KifuwarabeWcsc33.CLI.Helpers.PieceParser.parse(char)
+        # TODO 成り駒を置く
+        rest = rest |> String.slice(1..-1)
+        {rest, promoted_piece, 1}
 
-        # それ以外
-        true ->
-          _piece = KifuwarabeWcsc33.CLI.Helpers.PieceParser.parse(char)
-          # TODO 駒を置く
-          rest
-      end
-
-    rest
+      # それ以外
+      true ->
+        piece = KifuwarabeWcsc33.CLI.Helpers.PieceParser.parse(char)
+        # TODO 駒を置く
+        {rest, piece, 1}
+    end
   end
 end
