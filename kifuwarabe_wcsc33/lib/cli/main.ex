@@ -62,6 +62,9 @@ defmodule KifuwarabeWcsc33.CLI.Main do
     first_token = hd(input_tokens)
     # IO.puts("first_token:" <> first_token)
 
+    # 局面データ
+    pos = KifuwarabeWcsc33.CLI.Models.Position.new()
+
     #
     # Elixirに if～else-if～else 構造はない。 case文かcond文を使う。
     cond do
@@ -91,7 +94,7 @@ defmodule KifuwarabeWcsc33.CLI.Main do
       first_token == "position" ->
         # > | position  | (GUIから私へ) 現在の局面を作るのに必要な全データを送る。まだ何も応答するな
         #   | 　　　　　　 | (私からGUIへ送るものは何もありません)
-        nil
+        KifuwarabeWcsc33.CLI.Helpers.PositionParser.parse(input)
 
       first_token == "go" ->
         # > | position        | (GUIから私へ) さっき送った局面に対して、指し手を返せ
@@ -113,7 +116,6 @@ defmodule KifuwarabeWcsc33.CLI.Main do
         # > | quit  | (ターミナルから私へ) 将棋盤を表示して
         # < | 　　　 | (私からターミナルへ) 将棋盤を表示
 
-        pos = KifuwarabeWcsc33.CLI.Models.Position.new()
         KifuwarabeWcsc33.CLI.Views.Position.print(pos)
 
       # Otherwise

@@ -6,7 +6,7 @@ defmodule KifuwarabeWcsc33.CLI.Models.Position do
   #   このようなコーディング体験は不快だ
   #
   # ムーブズ・ナンバー（moves-number；何手目か）、Half-ply
-  defstruct moves_num: 0,
+  defstruct moves_num: 1,
             # ターン（turn；手番）
             turn: :sente,
             # フォーフォルド・レピティション（Fourfold repetition；千日手）
