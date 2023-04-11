@@ -53,9 +53,10 @@ defmodule KifuwarabeWcsc33.CLI.Helpers.PositionParser do
         # TODO 盤面部分を解析
         result = []
         tuple = parse_board(rest, result)
-        _rest = elem(tuple, 0)
+        rest = elem(tuple, 0)
         result = elem(tuple, 1)
         IO.inspect(result, label: "The result list is")
+        rest
       else
         # pass
         rest
