@@ -101,21 +101,21 @@ defmodule KifuwarabeWcsc33.CLI.Helpers.PositionParser do
     if rest |> String.length() < 1 do
       # base case
 
-      # 何の成果も増えません
+      # 何の成果も増えません。計算終了
       {false, rest, result}
     else
       # recursive
 
       # こうやって、１文字ずつ取りだして、減らしていけるけど……
-      char = rest |> String.at(0)
-      IO.puts("parse_piece char:#{char}")
+      first_char = rest |> String.at(0)
+      IO.puts("parse_piece char:[#{first_char}]")
       rest = rest |> String.slice(1..-1)
 
       cond do
         # 本将棋の盤上の１行では、連続するスペースの数は最大で１桁に収まる
-        is_integer(char) ->
+        Regex.match?(~r/^\d+$/, first_char) ->
           # 空きマスが何個連続するかの数
-          space_num = String.to_integer(char)
+          space_num = String.to_integer(first_char)
           # 愚直な方法
           result =
             case space_num do
@@ -128,22 +128,35 @@ defmodule KifuwarabeWcsc33.CLI.Helpers.PositionParser do
               7 -> result ++ [:sp, :sp, :sp, :sp, :sp, :sp, :sp]
               8 -> result ++ [:sp, :sp, :sp, :sp, :sp, :sp, :sp, :sp]
               9 -> result ++ [:sp, :sp, :sp, :sp, :sp, :sp, :sp, :sp, :sp]
-              _ -> raise "space_num failed: #{space_num}"
+              _ -> raise "unexpected space_num:#{space_num}"
             end
 
           {true, rest, result}
 
         # 成り駒
-        char == "+" ->
-          char = rest |> String.at(0)
-          promoted_piece = KifuwarabeWcsc33.CLI.Helpers.PieceParser.parse(char)
+        first_char == "+" ->
+          second_char = rest |> String.at(0)
+
+          promoted_piece =
+            KifuwarabeWcsc33.CLI.Helpers.PieceParser.parse(first_char <> second_char)
+
           result = result ++ [promoted_piece]
           rest = rest |> String.slice(1..-1)
           {true, rest, result}
 
+        # 段の区切り
+        first_char == "/" ->
+          # 何の成果も増えません
+          {true, rest, result}
+
+        # 盤の区切り
+        first_char == " " ->
+          # 何の成果も増えません。計算終了
+          {false, rest, result}
+
         # それ以外
         true ->
-          piece = KifuwarabeWcsc33.CLI.Helpers.PieceParser.parse(char)
+          piece = KifuwarabeWcsc33.CLI.Helpers.PieceParser.parse(first_char)
           result = result ++ [piece]
           {true, rest, result}
       end

@@ -5,7 +5,7 @@ defmodule KifuwarabeWcsc33.CLI.Helpers.PieceParser do
   
   ## 引数
   
-    * `pt` - ピース・タイプ（Piece Type；駒種類）の文字列。例参照
+    * `pt` - ピース・タイプ（Piece Type；駒種類）の文字列。例参照。この関数では、スペース（Space；空きマス）は判定しません
   
   ## 例
   
@@ -88,13 +88,10 @@ defmodule KifuwarabeWcsc33.CLI.Helpers.PieceParser do
       # It's reasonably a プロモーテッド・ポーン（Promoted Pawn；成歩）. It's actually と（"To"；と is 金 cursive）
       "+p" -> :pp2
       #
-      # その他
-      # =======================================
+      # それ以外はエラー
+      # ==============
       #
-      # この関数では、スペース（Space；空きマス）は判定しません
-      # " "
-      # そのた（Otherwise；その他）
-      _ -> :otherwise
+      _ -> raise "unexpected pt:#{pt}"
     end
   end
 end
