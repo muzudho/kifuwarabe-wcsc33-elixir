@@ -38,8 +38,24 @@ defmodule KifuwarabeWcsc33.CLI.Helpers.PositionParser do
 
         IO.puts("parse-3 rest:#{rest}")
 
+        #
+        # 盤の符号 ９一、８一、７一 …と読んでいく。１九が最後。
+        # 10ずつ減っていき、十の位が無くなったら一の位が増える。
+        #
+        # TODO こんなん毎回生成したくないぞ
+        # sequence = KifuwarabeWcsc33.CLI.Models.Sequence.new()
+        #
+        # show_sq = fn sq -> IO.puts("sq:#{sq}") end
+        #
+        # sequence.address_list
+        # |> Enum.map(show_sq)
+
         # TODO 盤面部分を解析
-        parse_board(rest)
+        result = []
+        tuple = parse_board(rest, result)
+        _rest = elem(tuple, 0)
+        result = elem(tuple, 1)
+        IO.inspect(result, label: "The result list is")
       else
         # pass
         rest
@@ -58,64 +74,41 @@ defmodule KifuwarabeWcsc33.CLI.Helpers.PositionParser do
   #
   # デービッド・フォーサイスさんの発案したチェスの盤面の記録方法（１行ごとに縦線 | で区切る）を、
   # スティーブン・J・エドワーズさんがコンピューター・チェスのメーリングリストで１０年がかりで意見を取り入れてコンピューター向けに仕様を決めたもの
-  defp parse_board(rest) do
-    result = []
-
-    #
-    # 盤の符号 ９一、８一、７一 …と読んでいく。１九が最後。
-    # 10ずつ減っていき、十の位が無くなったら一の位が増える。
-    #
-    # KifuwarabeWcsc33.CLI.Models.Sequence.get_address_list()
-    # |> Enum.map(fn sq ->
-    #  IO.puts("sq:#{sq}")
-    # end)
-    #
-    # TODO こんなん毎回生成したくないぞ
-    sequence = KifuwarabeWcsc33.CLI.Models.Sequence.new()
-
-    show_sq = fn sq -> IO.puts("sq:#{sq}") end
-
-    sequence.address_list
-    |> Enum.map(show_sq)
-
+  defp parse_board(rest, result) do
     # こうやって、１文字ずつ取っていけるけど……
     tuple = parse_piece(rest, result)
-    rest = elem(tuple, 0)
-    pc = elem(tuple, 1)
-    result = elem(tuple, 3)
-    IO.puts("pc:#{pc}")
-    IO.inspect(result, label: "The result list is")
+    is_ok = elem(tuple, 0)
+    rest = elem(tuple, 1)
+    result = elem(tuple, 2)
 
-    case pc do
-      :none ->
-        # 盤終了
-        nil
-
-      :sp ->
-        # TODO 盤に連続する空きマスを置く
-        nil
-
-      _ ->
-        # TODO 盤に駒を置く
-        nil
+    if is_ok do
+      # Recursive
+      parse_board(rest, result)
+    else
+      # Basecase
+      {rest, result}
     end
-
-    rest
   end
 
   # 字を解析して、駒または :none を返す
+  #
+  # ## Parameters
+  #
+  #   * `rest` - 残りの文字列
+  #   * `result` - 成果物のリスト
+  #
   defp parse_piece(rest, result) do
     if rest |> String.length() < 1 do
       # base case
 
-      # ループ終了
-      {rest, :none, 0, result}
+      # 何の成果も増えません
+      {false, rest, result}
     else
       # recursive
 
-      # こうやって、１文字ずつ取っていけるけど……
+      # こうやって、１文字ずつ取りだして、減らしていけるけど……
       char = rest |> String.at(0)
-      IO.puts("parse_board char:#{char}")
+      IO.puts("parse_piece char:#{char}")
       rest = rest |> String.slice(1..-1)
 
       cond do
@@ -123,8 +116,22 @@ defmodule KifuwarabeWcsc33.CLI.Helpers.PositionParser do
         is_integer(char) ->
           # 空きマスが何個連続するかの数
           space_num = String.to_integer(char)
-          result = result ++ [:sp]
-          {rest, :sp, space_num, result}
+          # 愚直な方法
+          result =
+            case space_num do
+              1 -> result ++ [:sp]
+              2 -> result ++ [:sp, :sp]
+              3 -> result ++ [:sp, :sp, :sp]
+              4 -> result ++ [:sp, :sp, :sp, :sp]
+              5 -> result ++ [:sp, :sp, :sp, :sp, :sp]
+              6 -> result ++ [:sp, :sp, :sp, :sp, :sp, :sp]
+              7 -> result ++ [:sp, :sp, :sp, :sp, :sp, :sp, :sp]
+              8 -> result ++ [:sp, :sp, :sp, :sp, :sp, :sp, :sp, :sp]
+              9 -> result ++ [:sp, :sp, :sp, :sp, :sp, :sp, :sp, :sp, :sp]
+              _ -> raise "space_num failed: #{space_num}"
+            end
+
+          {true, rest, result}
 
         # 成り駒
         char == "+" ->
@@ -132,13 +139,13 @@ defmodule KifuwarabeWcsc33.CLI.Helpers.PositionParser do
           promoted_piece = KifuwarabeWcsc33.CLI.Helpers.PieceParser.parse(char)
           result = result ++ [promoted_piece]
           rest = rest |> String.slice(1..-1)
-          {rest, promoted_piece, 1, result}
+          {true, rest, result}
 
         # それ以外
         true ->
           piece = KifuwarabeWcsc33.CLI.Helpers.PieceParser.parse(char)
           result = result ++ [piece]
-          {rest, piece, 1, result}
+          {true, rest, result}
       end
     end
   end
