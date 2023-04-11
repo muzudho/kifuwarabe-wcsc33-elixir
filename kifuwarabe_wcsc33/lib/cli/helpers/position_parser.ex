@@ -71,57 +71,73 @@ defmodule KifuwarabeWcsc33.CLI.Helpers.PositionParser do
     # TODO こんなん毎回生成したくないぞ
     sequence = KifuwarabeWcsc33.CLI.Models.Sequence.new()
 
+    show_sq = fn sq -> IO.puts("sq:#{sq}") end
+
+    # sequence.address_list
+    # |> Enum.map(fn sq ->
+    #   IO.puts("sq:#{sq}")
+    # end)
     sequence.address_list
-    |> Enum.map(fn sq ->
-      IO.puts("sq:#{sq}")
-    end)
+    |> Enum.map(show_sq)
 
     # こうやって、１文字ずつ取っていけるけど……
-    tuple = parse_piece_on_board(rest)
+    tuple = parse_piece(rest)
     rest = elem(tuple, 0)
     pc = elem(tuple, 1)
     IO.puts("pc:#{pc}")
 
-    tuple = parse_piece_on_board(rest)
-    rest = elem(tuple, 0)
-    pc = elem(tuple, 1)
-    IO.puts("pc:#{pc}")
+    case pc do
+      :none ->
+        # 盤終了
+        nil
 
-    tuple = parse_piece_on_board(rest)
-    rest = elem(tuple, 0)
-    pc = elem(tuple, 1)
-    IO.puts("pc:#{pc}")
+      :sp ->
+        # TODO 盤に連続する空きマスを置く
+        nil
+
+      _ ->
+        # TODO 盤に駒を置く
+        nil
+    end
 
     rest
   end
 
-  # 盤面部分の駒を解析
-  defp parse_piece_on_board(rest) do
-    # こうやって、１文字ずつ取っていけるけど……
-    char = rest |> String.at(0)
-    IO.puts("parse_board char:#{char}")
-    rest = rest |> String.slice(1..-1)
+  # 字を解析して、駒または :none を返す
+  defp parse_piece(rest) do
+    if rest |> String.length() < 1 do
+      # base case
 
-    cond do
-      # 本将棋の盤上の１行では、連続するスペースの数は最大で１桁に収まる
-      is_integer(char) ->
-        # TODO 空きマス対応
-        space_num = String.to_integer(char)
-        {rest, :sp, space_num}
+      # ループ終了
+      {rest, :none, 0}
+    else
+      # recursive
 
-      # 成り駒
-      char == "+" ->
-        char = rest |> String.at(0)
-        promoted_piece = KifuwarabeWcsc33.CLI.Helpers.PieceParser.parse(char)
-        # TODO 成り駒を置く
-        rest = rest |> String.slice(1..-1)
-        {rest, promoted_piece, 1}
+      # こうやって、１文字ずつ取っていけるけど……
+      char = rest |> String.at(0)
+      IO.puts("parse_board char:#{char}")
+      rest = rest |> String.slice(1..-1)
 
-      # それ以外
-      true ->
-        piece = KifuwarabeWcsc33.CLI.Helpers.PieceParser.parse(char)
-        # TODO 駒を置く
-        {rest, piece, 1}
+      cond do
+        # 本将棋の盤上の１行では、連続するスペースの数は最大で１桁に収まる
+        is_integer(char) ->
+          # 空きマスが何個連続するかの数
+          space_num = String.to_integer(char)
+          {rest, :sp, space_num}
+
+        # 成り駒
+        char == "+" ->
+          char = rest |> String.at(0)
+          promoted_piece = KifuwarabeWcsc33.CLI.Helpers.PieceParser.parse(char)
+          rest = rest |> String.slice(1..-1)
+          {rest, promoted_piece, 1}
+
+        # それ以外
+        true ->
+          piece = KifuwarabeWcsc33.CLI.Helpers.PieceParser.parse(char)
+          # TODO 駒を置く
+          {rest, piece, 1}
+      end
     end
   end
 end
