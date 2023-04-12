@@ -71,11 +71,11 @@ defmodule KifuwarabeWcsc33.CLI.Helpers.PositionParser do
         IO.puts("parse-5 rest:#{rest} turn:#{turn}")
 
         # 駒台（持ち駒の数）の解析
-        tuple = rest |> parse_hands([])
+        tuple = rest |> parse_hands(%{})
         rest = tuple |> elem(0)
-        hand_list = tuple |> elem(1)
+        hand_num_map = tuple |> elem(1)
         IO.puts("parse-6 rest:#{rest}")
-        IO.inspect(hand_list, label: "The hand list is")
+        IO.inspect(hand_num_map, label: "The hand number map is")
 
         rest
       else
@@ -210,9 +210,9 @@ defmodule KifuwarabeWcsc33.CLI.Helpers.PositionParser do
   # ## Returns
   #
   #   * 0 - レスト（Rest；残りの文字列）
-  #   * 1 - ハンド・リスト（Hand List；持ち駒のリスト）
+  #   * 1 - ハンド・ナンバー・マップ（Hand Number Map；持ち駒と枚数のマップ）
   #
-  defp parse_hands(rest, hand_list) do
+  defp parse_hands(rest, hand_num_map) do
     # 先頭の１文字（取りださない）
     first_char = rest |> String.at(0)
     IO.puts("parse_hands first_char:[#{first_char}]")
@@ -221,18 +221,16 @@ defmodule KifuwarabeWcsc33.CLI.Helpers.PositionParser do
     if first_char == "-" do
       # 持ち駒１つもなし
       IO.puts("parse_hands no-hands")
-      {rest, hand_list}
+      {rest, hand_num_map}
     else
       # 持ち駒あり
-      tuple = rest |> parse_piece_type_on_hands(0)
+      tuple = rest |> parse_piece_type_on_hands(0, hand_num_map)
       rest = tuple |> elem(0)
-      number = tuple |> elem(1)
-      piece = tuple |> elem(2)
-      IO.puts("parse_hands number:#{number} piece:#{piece}")
-      hand_list = hand_list ++ [piece]
-      IO.inspect(hand_list, label: "parse_hands hand_list:")
+      hand_num_map = tuple |> elem(1)
+      IO.puts("parse_hands rest:#{rest}")
+      IO.inspect(hand_num_map, label: "parse_hands hand_num_map:")
 
-      {rest, hand_list}
+      {rest, hand_num_map}
     end
   end
 
@@ -243,10 +241,9 @@ defmodule KifuwarabeWcsc33.CLI.Helpers.PositionParser do
   # ## Returns
   #
   #   * 0 - レスト（Rest；残りの文字列）
-  #   * 1 - ナンバー（Number；駒の数）
-  #   * 2 - ピース（Piece；先後付きの駒の種類）
+  #   * 1 - ハンド・ナンバー・マップ（Hand Number Map；持ち駒と枚数のマップ）
   #
-  defp parse_piece_type_on_hands(rest, number) do
+  defp parse_piece_type_on_hands(rest, number, hand_num_map) do
     # 先頭の１文字切り出し
     first_char = rest |> String.at(0)
     IO.puts("parse_piece_type_on_hands first_char:[#{first_char}]")
@@ -257,11 +254,16 @@ defmodule KifuwarabeWcsc33.CLI.Helpers.PositionParser do
       # ２つ目の数字は一の位なので、以前の数は十の位なので、10倍する
       number = 10 * number + String.to_integer(first_char)
       # Recursive
-      tuple = rest |> parse_piece_type_on_hands(number)
+      tuple = rest |> parse_piece_type_on_hands(number, hand_num_map)
       rest = tuple |> elem(0)
       number = tuple |> elem(1)
       piece = tuple |> elem(2)
-      {rest, number, piece}
+      IO.puts("parse_piece_type_on_hands number:#{number} piece:#{piece}")
+
+      hand_num_map = Map.merge(hand_num_map, %{piece => number})
+      IO.inspect(hand_num_map, label: "parse_piece_type_on_hands hand_num_map:")
+
+      {rest, hand_num_map}
     else
       # ピース（Piece；先後付きの駒種類）
       piece = KifuwarabeWcsc33.CLI.Helpers.PieceParser.parse(first_char)
@@ -274,7 +276,12 @@ defmodule KifuwarabeWcsc33.CLI.Helpers.PositionParser do
           number
         end
 
-      {rest, number, piece}
+      IO.puts("parse_piece_type_on_hands number:#{number} piece:#{piece}")
+
+      hand_num_map = Map.merge(hand_num_map, %{piece => number})
+      IO.inspect(hand_num_map, label: "parse_piece_type_on_hands hand_num_map:")
+
+      {rest, hand_num_map}
     end
   end
 end
