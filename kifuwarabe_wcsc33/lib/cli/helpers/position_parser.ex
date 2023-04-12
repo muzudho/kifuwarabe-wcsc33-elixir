@@ -220,7 +220,11 @@ defmodule KifuwarabeWcsc33.CLI.Helpers.PositionParser do
 
     if first_char == "-" do
       # 持ち駒１つもなし
-      IO.puts("parse_hands no-hands")
+
+      # 先頭の２文字 "- " を切り捨て
+      rest = rest |> String.slice(2..-1)
+
+      IO.puts("parse_hands no-hands rest:#{rest}")
       {rest, hand_num_map}
     else
       # 持ち駒あり
@@ -249,38 +253,58 @@ defmodule KifuwarabeWcsc33.CLI.Helpers.PositionParser do
     IO.puts("parse_piece_type_on_hands first_char:[#{first_char}]")
     rest = rest |> String.slice(1..-1)
 
-    # 数字が出てきたら
-    if Regex.match?(~r/^\d$/, first_char) do
-      # ２つ目の数字は一の位なので、以前の数は十の位なので、10倍する
-      number = 10 * number + String.to_integer(first_char)
-      # Recursive
-      tuple = rest |> parse_piece_type_on_hands(number, hand_num_map)
-      rest = tuple |> elem(0)
-      number = tuple |> elem(1)
-      piece = tuple |> elem(2)
-      IO.puts("parse_piece_type_on_hands number:#{number} piece:#{piece}")
-
-      hand_num_map = Map.merge(hand_num_map, %{piece => number})
-      IO.inspect(hand_num_map, label: "parse_piece_type_on_hands hand_num_map:")
-
+    if first_char == " " do
+      # Base case
+      IO.puts("parse_piece_type_on_hands Terminate")
+      # 何も成果を増やさず終了
       {rest, hand_num_map}
     else
-      # ピース（Piece；先後付きの駒種類）
-      piece = KifuwarabeWcsc33.CLI.Helpers.PieceParser.parse(first_char)
+      tuple =
+        cond do
+          # 数字が出てきたら -> 数が増えるだけ
+          Regex.match?(~r/^\d$/, first_char) ->
+            # ２つ目の数字は一の位なので、以前の数は十の位なので、10倍する
+            number = 10 * number + String.to_integer(first_char)
+            IO.puts("parse_piece_type_on_hands number:#{number}")
 
-      # 枚数指定がないなら 1
-      number =
-        if number == 0 do
-          1
-        else
-          number
+            {rest, number, hand_num_map}
+
+          true ->
+            # ピース（Piece；先後付きの駒種類）
+            piece = KifuwarabeWcsc33.CLI.Helpers.PieceParser.parse(first_char)
+
+            # 枚数指定がないなら 1
+            number =
+              if number == 0 do
+                1
+              else
+                number
+              end
+
+            IO.puts("parse_piece_type_on_hands number:#{number} piece:#{piece}")
+
+            # 持ち駒データ追加
+            hand_num_map = Map.merge(hand_num_map, %{piece => number})
+            IO.inspect(hand_num_map, label: "parse_piece_type_on_hands hand_num_map:")
+
+            # 数をリセット
+            number = 0
+
+            {rest, number, hand_num_map}
         end
 
-      IO.puts("parse_piece_type_on_hands number:#{number} piece:#{piece}")
+      # Next
+      # ====
 
-      hand_num_map = Map.merge(hand_num_map, %{piece => number})
-      IO.inspect(hand_num_map, label: "parse_piece_type_on_hands hand_num_map:")
+      rest = tuple |> elem(0)
+      number = tuple |> elem(1)
+      hand_num_map = tuple |> elem(2)
 
+      # Recursive
+      tuple = rest |> parse_piece_type_on_hands(number, hand_num_map)
+      # 結果を上に投げ上げるだけ
+      rest = tuple |> elem(0)
+      hand_num_map = tuple |> elem(1)
       {rest, hand_num_map}
     end
   end
