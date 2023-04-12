@@ -12,6 +12,12 @@ defmodule KifuwarabeWcsc33.CLI.Helpers.PositionParser do
     position startpos moves 7g7f 3c3d 2g2f
     position sfen lnsgkgsnl/9/ppppppppp/9/9/9/PPPPPPPPP/1B5R1/LNSGKGSNL w - 1 moves 5a6b 7g7f 3a3b
   
+    // 📖 [USIプロトコル表記: 最多合法手５９３手の局面](https://ameblo.jp/professionalhearts/entry-10001031814.html)
+    position sfen R8/2K1S1SSk/4B4/9/9/9/9/9/1L1L1L3 w RBGSNLP3g3n17p 1
+  
+    // 📖 [USIプロトコル表記: 飛角落ち初期局面](http://www.geocities.jp/shogidokoro/usi.html)
+    position sfen lnsgkgsnl/9/ppppppppp/9/9/9/PPPPPPPPP/1B5R1/LNSGKGSNL w - 1 moves 5a6b 7g7f 3a3b
+  
   """
   def parse(line) do
     IO.puts("parse-1 line:#{line}")
@@ -56,20 +62,28 @@ defmodule KifuwarabeWcsc33.CLI.Helpers.PositionParser do
         rest = tuple |> elem(0)
         result = tuple |> elem(1)
         IO.inspect(result, label: "The result list is")
+
+        IO.puts("parse-4 rest:#{rest}")
+
+        # 手番の解析
+        tuple = rest |> parse_turn()
+        rest = tuple |> elem(0)
+        turn = tuple |> elem(1)
+        IO.puts("parse-5 rest:#{rest} turn:#{turn}")
+
+        # 駒台（持ち駒の数）の解析
+        hand_list = []
+        tuple = rest |> parse_hands(hand_list)
+        rest = tuple |> elem(0)
+        turn = tuple |> elem(1)
+        IO.puts("parse-6 rest:#{rest} turn:#{turn}")
+        IO.inspect(hand_list, label: "The hand list is")
+
         rest
       else
         # pass
         rest
       end
-
-    IO.puts("parse-4 rest:#{rest}")
-
-    # 手番の読取
-    tuple = rest |> parse_turn()
-    rest = tuple |> elem(0)
-    turn = tuple |> elem(1)
-
-    IO.puts("parse-5 rest:#{rest} turn:#{turn}")
   end
 
   # 盤面部分を解析
@@ -121,7 +135,7 @@ defmodule KifuwarabeWcsc33.CLI.Helpers.PositionParser do
 
       cond do
         # 本将棋の盤上の１行では、連続するスペースの数は最大で１桁に収まる
-        Regex.match?(~r/^\d+$/, first_char) ->
+        Regex.match?(~r/^\d$/, first_char) ->
           # 空きマスが何個連続するかの数
           space_num = String.to_integer(first_char)
           # 愚直な方法
@@ -171,11 +185,11 @@ defmodule KifuwarabeWcsc33.CLI.Helpers.PositionParser do
     end
   end
 
-  # 指定局面の手番
+  # 指定局面の手番の解析
   #
   # w （Whiteの頭文字）なら、せんて（Sente；先手）
   # b （Blackの頭文字）なら、ごて（Gote；後手）
-  defp parse_turn(rest) do
+  defp parse_turn(rest, hand_list) do
     # ２文字取る
     first_chars = rest |> String.slice(0..1)
     IO.puts("parse_piece_on_board chars:[#{first_chars}]")
@@ -189,5 +203,52 @@ defmodule KifuwarabeWcsc33.CLI.Helpers.PositionParser do
       end
 
     {rest, turn}
+  end
+
+  # 駒台（持ち駒の数）の解析
+  defp parse_hands(rest) do
+    # 先頭の１文字（取りださない）
+    first_char = rest |> String.at(0)
+    IO.puts("parse_hands first_char:[#{first_char}]")
+    # rest = rest |> String.slice(1..-1)
+
+    if first_char == "-" do
+      # 持ち駒１つもなし
+      rest = rest |> parse_piece_type_on_hands(0)
+    else
+    end
+
+    rest
+  end
+
+  # 持ち駒の種類１つ分の解析
+  #
+  # 数字が出てきたら、もう１回再帰
+  #
+  # ## Returns
+  #
+  #   * 0 - レスト（Rest；残りの文字列）
+  #   * 1 - ナンバー（Number；駒の数）
+  #   * 2 - ピース・タイプ（Piece Type；駒の種類）
+  #
+  defp parse_piece_type_on_hands(rest, number) do
+    # 先頭の１文字切り出し
+    first_char = rest |> String.at(0)
+    IO.puts("parse_piece_type_on_hands first_char:[#{first_char}]")
+    rest = rest |> String.slice(1..-1)
+
+    cond do
+      # 数字が出てきたら
+      Regex.match?(~r/^\d$/, first_char) ->
+        # ２つ目の数字は一の位なので、以前の数は十の位なので、10倍する
+        number = 10 * number + String.to_integer(first_char)
+        # Recursive
+        tuple = parse_piece_type_on_hands(rest, number)
+        rest = tuple |> elem(0)
+        number = tuple |> elem(1)
+        piece_type = tuple |> elem(2)
+    end
+
+    {rest, number, piece_type}
   end
 end
