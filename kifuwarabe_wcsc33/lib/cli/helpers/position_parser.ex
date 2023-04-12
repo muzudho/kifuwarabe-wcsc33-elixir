@@ -17,11 +17,11 @@ defmodule KifuwarabeWcsc33.CLI.Helpers.PositionParser do
     IO.puts("parse-1 line:#{line}")
 
     rest =
-      if String.starts_with?(line, "position startpos") do
+      if line |> String.starts_with?("position startpos") do
         # TODO 平手初期局面をセット
 
         # `position startpos` を除去 |> あれば、続くスペースを削除
-        String.slice(line, String.length("position startpos")..-1) |> String.trim_leading()
+        line |> String.slice(String.length("position startpos")..-1) |> String.trim_leading()
       else
         # pass
         line
@@ -30,11 +30,11 @@ defmodule KifuwarabeWcsc33.CLI.Helpers.PositionParser do
     IO.puts("parse-2 rest:#{rest}")
 
     rest =
-      if String.starts_with?(rest, "position sfen") do
+      if rest |> String.starts_with?("position sfen") do
         # TODO 途中局面をセット
 
         # `position startpos` を除去 |> あれば、続くスペースを削除
-        rest = String.slice(line, String.length("position sfen")..-1) |> String.trim_leading()
+        rest = line |> String.slice(String.length("position sfen")..-1) |> String.trim_leading()
 
         IO.puts("parse-3 rest:#{rest}")
 
@@ -52,9 +52,9 @@ defmodule KifuwarabeWcsc33.CLI.Helpers.PositionParser do
 
         # TODO 盤面部分を解析
         result = []
-        tuple = parse_board(rest, result)
-        rest = elem(tuple, 0)
-        result = elem(tuple, 1)
+        tuple = rest |> parse_board(result)
+        rest = tuple |> elem(0)
+        result = tuple |> elem(1)
         IO.inspect(result, label: "The result list is")
         rest
       else
@@ -63,6 +63,13 @@ defmodule KifuwarabeWcsc33.CLI.Helpers.PositionParser do
       end
 
     IO.puts("parse-4 rest:#{rest}")
+
+    # 手番の読取
+    tuple = rest |> parse_turn()
+    rest = tuple |> elem(0)
+    turn = tuple |> elem(1)
+
+    IO.puts("parse-5 rest:#{rest} turn:#{turn}")
   end
 
   # 盤面部分を解析
@@ -77,7 +84,7 @@ defmodule KifuwarabeWcsc33.CLI.Helpers.PositionParser do
   # スティーブン・J・エドワーズさんがコンピューター・チェスのメーリングリストで１０年がかりで意見を取り入れてコンピューター向けに仕様を決めたもの
   defp parse_board(rest, result) do
     # こうやって、１文字ずつ取っていけるけど……
-    tuple = parse_piece(rest, result)
+    tuple = parse_piece_on_board(rest, result)
     is_ok = elem(tuple, 0)
     rest = elem(tuple, 1)
     result = elem(tuple, 2)
@@ -98,7 +105,7 @@ defmodule KifuwarabeWcsc33.CLI.Helpers.PositionParser do
   #   * `rest` - 残りの文字列
   #   * `result` - 成果物のリスト
   #
-  defp parse_piece(rest, result) do
+  defp parse_piece_on_board(rest, result) do
     if rest |> String.length() < 1 do
       # base case
 
@@ -109,7 +116,7 @@ defmodule KifuwarabeWcsc33.CLI.Helpers.PositionParser do
 
       # こうやって、１文字ずつ取りだして、減らしていけるけど……
       first_char = rest |> String.at(0)
-      IO.puts("parse_piece char:[#{first_char}]")
+      IO.puts("parse_piece_on_board char:[#{first_char}]")
       rest = rest |> String.slice(1..-1)
 
       cond do
@@ -162,5 +169,25 @@ defmodule KifuwarabeWcsc33.CLI.Helpers.PositionParser do
           {true, rest, result}
       end
     end
+  end
+
+  # 指定局面の手番
+  #
+  # w （Whiteの頭文字）なら、せんて（Sente；先手）
+  # b （Blackの頭文字）なら、ごて（Gote；後手）
+  defp parse_turn(rest) do
+    # ２文字取る
+    first_chars = rest |> String.slice(0..1)
+    IO.puts("parse_piece_on_board chars:[#{first_chars}]")
+    rest = rest |> String.slice(2..-1)
+
+    turn =
+      case first_chars do
+        "w " -> :sente
+        "b " -> :gote
+        _ -> raise "unexpected first_chars:#{first_chars}"
+      end
+
+    {rest, turn}
   end
 end
