@@ -57,8 +57,7 @@ defmodule KifuwarabeWcsc33.CLI.Helpers.PositionParser do
         # |> Enum.map(show_sq)
 
         # TODO 盤面部分を解析
-        result = []
-        tuple = rest |> parse_board(result)
+        tuple = rest |> parse_board([])
         rest = tuple |> elem(0)
         result = tuple |> elem(1)
         IO.inspect(result, label: "The result list is")
@@ -72,10 +71,10 @@ defmodule KifuwarabeWcsc33.CLI.Helpers.PositionParser do
         IO.puts("parse-5 rest:#{rest} turn:#{turn}")
 
         # 駒台（持ち駒の数）の解析
-        hand_list = []
-        tuple = rest |> parse_hands(hand_list)
+        tuple = rest |> parse_hands([])
         rest = tuple |> elem(0)
-        IO.puts("parse-6 rest:#{rest} turn:#{turn}")
+        hand_list = tuple |> elem(1)
+        IO.puts("parse-6 rest:#{rest}")
         IO.inspect(hand_list, label: "The hand list is")
 
         rest
@@ -211,6 +210,7 @@ defmodule KifuwarabeWcsc33.CLI.Helpers.PositionParser do
   # ## Returns
   #
   #   * 0 - レスト（Rest；残りの文字列）
+  #   * 1 - ハンド・リスト（Hand List；持ち駒のリスト）
   #
   defp parse_hands(rest, hand_list) do
     # 先頭の１文字（取りださない）
@@ -218,24 +218,22 @@ defmodule KifuwarabeWcsc33.CLI.Helpers.PositionParser do
     IO.puts("parse_hands first_char:[#{first_char}]")
     # rest = rest |> String.slice(1..-1)
 
-    rest =
-      if first_char == "-" do
-        # 持ち駒１つもなし
-        IO.puts("parse_hands no-hands")
-        rest
-      else
-        # 持ち駒あり
-        tuple = rest |> parse_piece_type_on_hands(0)
-        rest = tuple |> elem(0)
-        number = tuple |> elem(1)
-        piece = tuple |> elem(2)
-        IO.puts("parse_hands number:#{number} piece:#{piece}")
-        hand_list ++ [piece]
+    if first_char == "-" do
+      # 持ち駒１つもなし
+      IO.puts("parse_hands no-hands")
+      {rest, hand_list}
+    else
+      # 持ち駒あり
+      tuple = rest |> parse_piece_type_on_hands(0)
+      rest = tuple |> elem(0)
+      number = tuple |> elem(1)
+      piece = tuple |> elem(2)
+      IO.puts("parse_hands number:#{number} piece:#{piece}")
+      hand_list = hand_list ++ [piece]
+      IO.inspect(hand_list, label: "parse_hands hand_list:")
 
-        rest
-      end
-
-    {rest}
+      {rest, hand_list}
+    end
   end
 
   # 持ち駒の種類１つ分の解析
