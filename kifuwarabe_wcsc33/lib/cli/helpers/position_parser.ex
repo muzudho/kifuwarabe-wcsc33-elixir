@@ -20,7 +20,7 @@ defmodule KifuwarabeWcsc33.CLI.Helpers.PositionParser do
   
   """
   def parse(line) do
-    IO.puts("parse-1 line:#{line}")
+    IO.puts("parse(1) line:#{line}")
 
     rest =
       if line |> String.starts_with?("position startpos") do
@@ -33,7 +33,7 @@ defmodule KifuwarabeWcsc33.CLI.Helpers.PositionParser do
         line
       end
 
-    IO.puts("parse-2 rest:#{rest}")
+    IO.puts("parse(2) rest:#{rest}")
 
     rest =
       if rest |> String.starts_with?("position sfen") do
@@ -42,7 +42,7 @@ defmodule KifuwarabeWcsc33.CLI.Helpers.PositionParser do
         # `position startpos` を除去 |> あれば、続くスペースを削除
         rest = line |> String.slice(String.length("position sfen")..-1) |> String.trim_leading()
 
-        IO.puts("parse-3 rest:#{rest}")
+        IO.puts("parse(3) rest:#{rest}")
 
         #
         # 盤の符号 ９一、８一、７一 …と読んでいく。１九が最後。
@@ -56,26 +56,38 @@ defmodule KifuwarabeWcsc33.CLI.Helpers.PositionParser do
         # sequence.address_list
         # |> Enum.map(show_sq)
 
-        # TODO 盤面部分を解析
-        tuple = rest |> parse_board([])
+        # 盤面部分を解析
+        tuple = rest |> parse_board_string_to_piece_list([])
         rest = tuple |> elem(0)
-        result = tuple |> elem(1)
-        IO.inspect(result, label: "The result list is")
-
-        IO.puts("parse-4 rest:#{rest}")
+        piece_list_on_board = tuple |> elem(1)
+        IO.inspect(piece_list_on_board, label: "parse(4) The piece_list_on_board is")
+        IO.puts("parse(5) rest:#{rest}")
 
         # 手番の解析
         tuple = rest |> parse_turn()
         rest = tuple |> elem(0)
         turn = tuple |> elem(1)
-        IO.puts("parse-5 rest:#{rest} turn:#{turn}")
+        IO.puts("parse(6) turn:#{turn} rest:#{rest}")
 
         # 駒台（持ち駒の数）の解析
         tuple = rest |> parse_hands(%{})
         rest = tuple |> elem(0)
         hand_num_map = tuple |> elem(1)
-        IO.puts("parse-6 rest:#{rest}")
-        IO.inspect(hand_num_map, label: "The hand number map is")
+        IO.inspect(hand_num_map, label: "parse(7) The hand number map is")
+        IO.puts("parse(8) rest:#{rest}")
+
+        # 次の手は何手目か、を表す数字だが、「将棋所」は「この数字は必ず１にしています」という仕様なので
+        # 「将棋所」しか使わないのなら、「1」しかこない、というプログラムにしてしまうのも手だ
+        first_char = rest |> String.at(0)
+        IO.puts("parse first_char:[#{first_char}]")
+        rest = rest |> String.slice(1..-1)
+
+        if first_char != "1" do
+          raise "unexpected first_char:#{first_char}"
+        end
+
+        moves_num = String.to_integer(first_char)
+        IO.puts("parse moves_num:[#{moves_num}]")
 
         rest
       else
@@ -83,10 +95,20 @@ defmodule KifuwarabeWcsc33.CLI.Helpers.PositionParser do
         rest
       end
 
-    IO.puts("parse-7 rest:#{rest}")
+    IO.puts("parse(9) rest:#{rest}")
   end
 
-  # 盤面部分を解析
+  # 盤面文字列を解析して、駒のリストを返す
+  #
+  # ## Parameters
+  #
+  #   * `rest` - 残りの文字列
+  #   * `result` - 成果物。ピースのリスト
+  #
+  # ## Returns
+  #
+  #   0. レスト（Rest；残りの文字列）
+  #   1. リザルト（Result；結果）
   #
   # ## 例
   #
@@ -96,91 +118,85 @@ defmodule KifuwarabeWcsc33.CLI.Helpers.PositionParser do
   #
   # デービッド・フォーサイスさんの発案したチェスの盤面の記録方法（１行ごとに縦線 | で区切る）を、
   # スティーブン・J・エドワーズさんがコンピューター・チェスのメーリングリストで１０年がかりで意見を取り入れてコンピューター向けに仕様を決めたもの
-  defp parse_board(rest, result) do
-    # こうやって、１文字ずつ取っていけるけど……
-    tuple = parse_piece_on_board(rest, result)
-    is_ok = elem(tuple, 0)
-    rest = elem(tuple, 1)
-    result = elem(tuple, 2)
-
-    if is_ok do
-      # Recursive
-      parse_board(rest, result)
-    else
-      # Basecase
-      {rest, result}
-    end
-  end
-
-  # 字を解析して、駒または :none を返す
   #
-  # ## Parameters
-  #
-  #   * `rest` - 残りの文字列
-  #   * `result` - 成果物のリスト
-  #
-  defp parse_piece_on_board(rest, result) do
+  defp parse_board_string_to_piece_list(rest, result) do
     if rest |> String.length() < 1 do
       # base case
 
       # 何の成果も増えません。計算終了
-      {false, rest, result}
+      {rest, result}
     else
       # recursive
 
       # こうやって、１文字ずつ取りだして、減らしていけるけど……
       first_char = rest |> String.at(0)
-      IO.puts("parse_piece_on_board char:[#{first_char}]")
+      # IO.puts("parse_board_string_to_piece_list char:[#{first_char}]")
       rest = rest |> String.slice(1..-1)
 
-      cond do
-        # 本将棋の盤上の１行では、連続するスペースの数は最大で１桁に収まる
-        Regex.match?(~r/^\d$/, first_char) ->
-          # 空きマスが何個連続するかの数
-          space_num = String.to_integer(first_char)
-          # 愚直な方法
-          result =
-            case space_num do
-              1 -> result ++ [:sp]
-              2 -> result ++ [:sp, :sp]
-              3 -> result ++ [:sp, :sp, :sp]
-              4 -> result ++ [:sp, :sp, :sp, :sp]
-              5 -> result ++ [:sp, :sp, :sp, :sp, :sp]
-              6 -> result ++ [:sp, :sp, :sp, :sp, :sp, :sp]
-              7 -> result ++ [:sp, :sp, :sp, :sp, :sp, :sp, :sp]
-              8 -> result ++ [:sp, :sp, :sp, :sp, :sp, :sp, :sp, :sp]
-              9 -> result ++ [:sp, :sp, :sp, :sp, :sp, :sp, :sp, :sp, :sp]
-              _ -> raise "unexpected space_num:#{space_num}"
-            end
+      # 盤の区切り
+      if first_char == " " do
+        # base case
 
-          {true, rest, result}
+        # 何の成果も増えません。計算終了
+        {rest, result}
+      else
+        tuple =
+          cond do
+            # 本将棋の盤上の１行では、連続するスペースの数は最大で１桁に収まる
+            Regex.match?(~r/^\d$/, first_char) ->
+              # 空きマスが何個連続するかの数
+              space_num = String.to_integer(first_char)
+              # 愚直な方法
+              result =
+                case space_num do
+                  1 -> result ++ [:sp]
+                  2 -> result ++ [:sp, :sp]
+                  3 -> result ++ [:sp, :sp, :sp]
+                  4 -> result ++ [:sp, :sp, :sp, :sp]
+                  5 -> result ++ [:sp, :sp, :sp, :sp, :sp]
+                  6 -> result ++ [:sp, :sp, :sp, :sp, :sp, :sp]
+                  7 -> result ++ [:sp, :sp, :sp, :sp, :sp, :sp, :sp]
+                  8 -> result ++ [:sp, :sp, :sp, :sp, :sp, :sp, :sp, :sp]
+                  9 -> result ++ [:sp, :sp, :sp, :sp, :sp, :sp, :sp, :sp, :sp]
+                  _ -> raise "unexpected space_num:#{space_num}"
+                end
 
-        # 成り駒
-        first_char == "+" ->
-          second_char = rest |> String.at(0)
+              {rest, result}
 
-          promoted_piece =
-            KifuwarabeWcsc33.CLI.Helpers.PieceParser.parse(first_char <> second_char)
+            # 成り駒
+            first_char == "+" ->
+              second_char = rest |> String.at(0)
 
-          result = result ++ [promoted_piece]
-          rest = rest |> String.slice(1..-1)
-          {true, rest, result}
+              promoted_piece =
+                KifuwarabeWcsc33.CLI.Helpers.PieceParser.parse(first_char <> second_char)
 
-        # 段の区切り
-        first_char == "/" ->
-          # 何の成果も増えません
-          {true, rest, result}
+              result = result ++ [promoted_piece]
+              rest = rest |> String.slice(1..-1)
+              {rest, result}
 
-        # 盤の区切り
-        first_char == " " ->
-          # 何の成果も増えません。計算終了
-          {false, rest, result}
+            # 段の区切り
+            first_char == "/" ->
+              # 何の成果も増えません
+              {rest, result}
 
-        # それ以外
-        true ->
-          piece = KifuwarabeWcsc33.CLI.Helpers.PieceParser.parse(first_char)
-          result = result ++ [piece]
-          {true, rest, result}
+            # それ以外
+            true ->
+              piece = KifuwarabeWcsc33.CLI.Helpers.PieceParser.parse(first_char)
+              result = result ++ [piece]
+              {rest, result}
+          end
+
+        # Recursive
+        # =========
+
+        rest = tuple |> elem(0)
+        result = tuple |> elem(1)
+        tuple = rest |> parse_board_string_to_piece_list(result)
+
+        # 結果を上に投げ上げるだけ
+        rest = tuple |> elem(0)
+        result = tuple |> elem(1)
+        {rest, result}
       end
     end
   end
@@ -192,7 +208,7 @@ defmodule KifuwarabeWcsc33.CLI.Helpers.PositionParser do
   defp parse_turn(rest) do
     # ２文字取る
     first_chars = rest |> String.slice(0..1)
-    IO.puts("parse_piece_on_board chars:[#{first_chars}]")
+    IO.puts("parse_turn chars:[#{first_chars}]")
     rest = rest |> String.slice(2..-1)
 
     turn =
@@ -231,7 +247,7 @@ defmodule KifuwarabeWcsc33.CLI.Helpers.PositionParser do
       tuple = rest |> parse_piece_type_on_hands(0, hand_num_map)
       rest = tuple |> elem(0)
       hand_num_map = tuple |> elem(1)
-      IO.inspect(hand_num_map, label: "parse_hands hand_num_map:")
+      # IO.inspect(hand_num_map, label: "parse_hands hand_num_map")
       IO.puts("parse_hands rest:#{rest}")
 
       {rest, hand_num_map}
@@ -293,14 +309,13 @@ defmodule KifuwarabeWcsc33.CLI.Helpers.PositionParser do
             {rest, number, hand_num_map}
         end
 
-      # Next
-      # ====
+      # Recursive
+      # =========
 
       rest = tuple |> elem(0)
       number = tuple |> elem(1)
       hand_num_map = tuple |> elem(2)
 
-      # Recursive
       tuple = rest |> parse_piece_type_on_hands(number, hand_num_map)
       # 結果を上に投げ上げるだけ
       rest = tuple |> elem(0)
