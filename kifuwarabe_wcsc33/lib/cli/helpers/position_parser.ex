@@ -400,13 +400,13 @@ defmodule KifuwarabeWcsc33.CLI.Helpers.PositionParser do
           # 1文字目が駒だったら打
           move =
             case first_char do
-              "R" -> %{move | piece_type: :r, drop?: true}
-              "B" -> %{move | piece_type: :b, drop?: true}
-              "G" -> %{move | piece_type: :g, drop?: true}
-              "S" -> %{move | piece_type: :s, drop?: true}
-              "N" -> %{move | piece_type: :n, drop?: true}
-              "L" -> %{move | piece_type: :l, drop?: true}
-              "P" -> %{move | piece_type: :p, drop?: true}
+              "R" -> %{move | drop_piece_type: :r}
+              "B" -> %{move | drop_piece_type: :b}
+              "G" -> %{move | drop_piece_type: :g}
+              "S" -> %{move | drop_piece_type: :s}
+              "N" -> %{move | drop_piece_type: :n}
+              "L" -> %{move | drop_piece_type: :l}
+              "P" -> %{move | drop_piece_type: :p}
             end
 
           # 2文字目は必ず「*」なはずなので読み飛ばす。

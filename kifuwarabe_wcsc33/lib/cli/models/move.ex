@@ -7,10 +7,8 @@ defmodule KifuwarabeWcsc33.CLI.Models.Move do
   defstruct source: nil,
             # 移動先マス
             destination: nil,
-            # 動かす駒の種類（先後の情報は持たない）
-            piece_type: nil,
-            # 打つか？
-            drop?: false,
+            # （あれば）打つ駒の種類（先後の情報は持たない）
+            drop_piece_type: nil,
             # 移動後に成るか？
             promote?: false,
             # あれば、取った駒
