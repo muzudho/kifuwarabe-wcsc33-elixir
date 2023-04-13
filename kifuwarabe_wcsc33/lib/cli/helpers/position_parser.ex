@@ -359,18 +359,37 @@ defmodule KifuwarabeWcsc33.CLI.Helpers.PositionParser do
     cond do
       # 数字が出てきたら -> 「筋の数字」
       Regex.match?(~r/^\d$/, first_char) ->
-        nil
+        move = %{move | source: String.to_integer(first_char)}
+        IO.inspect(move, label: "parse(12) The move is")
+
+      # TODO 「列の小文字アルファベット」
 
       # それ以外は「打つ駒」
       true ->
-        # 1文字目が駒だったら打。2文字目は必ず「*」なはずなので読み飛ばす。
-        case first_char do
-          "R" ->
-            move = %{move | piece_type: :r}
-            IO.inspect(move, label: "parse(12) The move is")
+        # 1文字目が駒だったら打
+        move =
+          case first_char do
+            "R" -> %{move | piece_type: :r}
+            "B" -> %{move | piece_type: :b}
+            "G" -> %{move | piece_type: :g}
+            "S" -> %{move | piece_type: :s}
+            "N" -> %{move | piece_type: :n}
+            "L" -> %{move | piece_type: :l}
+            "P" -> %{move | piece_type: :p}
+          end
+
+        # 2文字目は必ず「*」なはずなので読み飛ばす。
+        second_char = rest |> String.at(0)
+
+        if second_char != "*" do
+          raise "unexpected second_char:#{second_char}"
         end
 
-        nil
+        # IO.puts("parse_piece_type_on_hands first_char:[#{first_char}]")
+        rest = rest |> String.slice(1..-1)
+
+        IO.inspect(move, label: "parse(12) The move is")
+        IO.puts("parse_moves_string_to_move_list rest:[#{rest}]")
     end
 
     {rest, result}
