@@ -12,6 +12,7 @@ defmodule KifuwarabeWcsc33.CLI.Views.Position do
     print_hand2(pos)
     print_body(pos)
     print_hand1(pos)
+    print_moves(pos)
   end
 
   # 盤表示のヘッダー
@@ -351,5 +352,11 @@ defmodule KifuwarabeWcsc33.CLI.Views.Position do
       # スペース（Space；空きマス）
       :sp -> "  "
     end
+  end
+
+  # 棋譜の表示
+  defp print_moves(pos) do
+    IO.write("moves ")
+    IO.inspect(pos.moves)
   end
 end
