@@ -51,15 +51,16 @@ defmodule KifuwarabeWcsc33.CLI.Helpers.PositionParser do
 
         IO.puts("parse(3) rest:#{rest}")
 
-        # 盤面部分を解析
-        {rest, piece_list_on_board} = rest |> parse_board_string_to_piece_list([])
+        # 盤面部分を解析。「９一」番地からスタート
+        {rest, _sq, board} = rest |> map_string_to_board(91, %{})
         # rest = tuple |> elem(0)
-        # piece_list_on_board = tuple |> elem(1)
-        IO.inspect(piece_list_on_board, label: "parse(4) The piece_list_on_board is")
+        # sq = tuple |> elem(1)
+        # board = tuple |> elem(2)
+        IO.inspect(board, label: "parse(4) The board is")
         IO.puts("parse(5) rest:#{rest}")
 
-        if length(piece_list_on_board) != 81 do
-          raise "unexpected board cell count:#{length(piece_list_on_board)}"
+        if map_size(board) != 81 do
+          raise "unexpected board cell count:#{length(board)}"
         end
 
         # 手番の解析
@@ -134,7 +135,8 @@ defmodule KifuwarabeWcsc33.CLI.Helpers.PositionParser do
   # ## Parameters
   #
   #   * `rest` - 残りの文字列
-  #   * `result` - 成果物。ピースのリスト
+  #   * `sq` - スクウェア（Square；マス番地）
+  #   * `board` - （成果物）ボード（Board；将棋盤）
   #
   # ## Returns
   #
@@ -150,18 +152,18 @@ defmodule KifuwarabeWcsc33.CLI.Helpers.PositionParser do
   # デービッド・フォーサイスさんの発案したチェスの盤面の記録方法（１行ごとに縦線 | で区切る）を、
   # スティーブン・J・エドワーズさんがコンピューター・チェスのメーリングリストで１０年がかりで意見を取り入れてコンピューター向けに仕様を決めたもの
   #
-  defp parse_board_string_to_piece_list(rest, result) do
+  defp map_string_to_board(rest, sq, board) do
     if rest |> String.length() < 1 do
       # base case
 
       # 何の成果も増えません。計算終了
-      {rest, result}
+      {rest, sq, board}
     else
       # recursive
 
       # こうやって、１文字ずつ取りだして、減らしていけるけど……
       first_char = rest |> String.at(0)
-      # IO.puts("parse_board_string_to_piece_list char:[#{first_char}]")
+      # IO.puts("map_string_to_board char:[#{first_char}]")
       rest = rest |> String.slice(1..-1)
 
       # 盤の区切り
@@ -169,30 +171,100 @@ defmodule KifuwarabeWcsc33.CLI.Helpers.PositionParser do
         # base case
 
         # 何の成果も増えません。計算終了
-        {rest, result}
+        {rest, sq, board}
       else
-        tuple =
+        {rest, sq, board} =
           cond do
             # 本将棋の盤上の１行では、連続するスペースの数は最大で１桁に収まる
             Regex.match?(~r/^\d$/, first_char) ->
               # 空きマスが何個連続するかの数
               space_num = String.to_integer(first_char)
               # 愚直な方法
-              result =
+              {sq, board} =
                 case space_num do
-                  1 -> result ++ [:sp]
-                  2 -> result ++ [:sp, :sp]
-                  3 -> result ++ [:sp, :sp, :sp]
-                  4 -> result ++ [:sp, :sp, :sp, :sp]
-                  5 -> result ++ [:sp, :sp, :sp, :sp, :sp]
-                  6 -> result ++ [:sp, :sp, :sp, :sp, :sp, :sp]
-                  7 -> result ++ [:sp, :sp, :sp, :sp, :sp, :sp, :sp]
-                  8 -> result ++ [:sp, :sp, :sp, :sp, :sp, :sp, :sp, :sp]
-                  9 -> result ++ [:sp, :sp, :sp, :sp, :sp, :sp, :sp, :sp, :sp]
-                  _ -> raise "unexpected space_num:#{space_num}"
+                  1 ->
+                    {sq - 10, Map.merge(board, %{sq => :sq})}
+
+                  2 ->
+                    {sq - 20, Map.merge(board, %{sq => :sq, (sq - 10) => :sq})}
+
+                  3 ->
+                    {sq - 30, Map.merge(board, %{sq => :sq, (sq - 10) => :sq, (sq - 20) => :sq})}
+
+                  4 ->
+                    {sq - 40,
+                     Map.merge(board, %{
+                       sq => :sq,
+                       (sq - 10) => :sq,
+                       (sq - 20) => :sq,
+                       (sq - 30) => :sq
+                     })}
+
+                  5 ->
+                    {sq - 50,
+                     Map.merge(board, %{
+                       sq => :sq,
+                       (sq - 10) => :sq,
+                       (sq - 20) => :sq,
+                       (sq - 30) => :sq,
+                       (sq - 40) => :sq
+                     })}
+
+                  6 ->
+                    {sq - 60,
+                     Map.merge(board, %{
+                       sq => :sq,
+                       (sq - 10) => :sq,
+                       (sq - 20) => :sq,
+                       (sq - 30) => :sq,
+                       (sq - 40) => :sq,
+                       (sq - 50) => :sq
+                     })}
+
+                  7 ->
+                    {sq - 70,
+                     Map.merge(board, %{
+                       sq => :sq,
+                       (sq - 10) => :sq,
+                       (sq - 20) => :sq,
+                       (sq - 30) => :sq,
+                       (sq - 40) => :sq,
+                       (sq - 50) => :sq,
+                       (sq - 60) => :sq
+                     })}
+
+                  8 ->
+                    {sq - 80,
+                     Map.merge(board, %{
+                       sq => :sq,
+                       (sq - 10) => :sq,
+                       (sq - 20) => :sq,
+                       (sq - 30) => :sq,
+                       (sq - 40) => :sq,
+                       (sq - 50) => :sq,
+                       (sq - 60) => :sq,
+                       (sq - 70) => :sq
+                     })}
+
+                  9 ->
+                    {sq - 90,
+                     Map.merge(board, %{
+                       sq => :sq,
+                       (sq - 10) => :sq,
+                       (sq - 20) => :sq,
+                       (sq - 30) => :sq,
+                       (sq - 40) => :sq,
+                       (sq - 50) => :sq,
+                       (sq - 60) => :sq,
+                       (sq - 70) => :sq,
+                       (sq - 80) => :sq
+                     })}
+
+                  _ ->
+                    raise "unexpected space_num:#{space_num}"
                 end
 
-              {rest, result}
+              {rest, sq, board}
 
             # 成り駒
             first_char == "+" ->
@@ -201,33 +273,40 @@ defmodule KifuwarabeWcsc33.CLI.Helpers.PositionParser do
               promoted_piece =
                 KifuwarabeWcsc33.CLI.Helpers.PieceParser.parse(first_char <> second_char)
 
-              result = result ++ [promoted_piece]
+              board = Map.merge(board, %{sq => promoted_piece})
+              # 右列へ１つ移動（-10）
+              sq = sq - 10
+
               rest = rest |> String.slice(1..-1)
-              {rest, result}
+              {rest, sq, board}
 
             # 段の区切り
             first_char == "/" ->
-              # 何の成果も増えません
-              {rest, result}
+              # 次の段へ
+
+              # 左端列に戻って（+90）
+              # 一段下がる（+1）
+              sq = sq + 91
+              {rest, sq, board}
 
             # それ以外
             true ->
               piece = KifuwarabeWcsc33.CLI.Helpers.PieceParser.parse(first_char)
-              result = result ++ [piece]
-              {rest, result}
+
+              board = Map.merge(board, %{sq => piece})
+              # 右列へ１つ移動（-10）
+              sq = sq - 10
+
+              {rest, sq, board}
           end
 
         # Recursive
         # =========
 
-        rest = tuple |> elem(0)
-        result = tuple |> elem(1)
-        tuple = rest |> parse_board_string_to_piece_list(result)
+        {rest, sq, board} = rest |> map_string_to_board(sq, board)
 
         # 結果を上に投げ上げるだけ
-        rest = tuple |> elem(0)
-        result = tuple |> elem(1)
-        {rest, result}
+        {rest, sq, board}
       end
     end
   end
