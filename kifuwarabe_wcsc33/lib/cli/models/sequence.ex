@@ -7,6 +7,19 @@ defmodule KifuwarabeWcsc33.CLI.Models.Sequence do
   # 盤の符号 ９一、８一、７一 …と読んでいく。１九が最後。
   # 10ずつ減っていき、十の位が無くなったら一の位が増える。
   #
+  # ## Examples
+  #
+  # 盤の符号 ９一、８一、７一 …と読んでいく。１九が最後。
+  # 10ずつ減っていき、十の位が無くなったら一の位が増える。
+  #
+  # TODO こんなん毎回生成したくないぞ
+  # sequence = KifuwarabeWcsc33.CLI.Models.Sequence.new()
+  #
+  # show_sq = fn sq -> IO.puts("sq:#{sq}") end
+  #
+  # sequence.address_list
+  # |> Enum.map(show_sq)
+  #
   defstruct address_list: [
               # １段目
               91,

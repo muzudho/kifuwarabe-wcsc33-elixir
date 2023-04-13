@@ -3,11 +3,15 @@ defmodule KifuwarabeWcsc33.CLI.Helpers.PositionParser do
   
     解析
   
-  ## 引数
+  ## Parameters
   
     * `line` - 一行の文字列。例参考
   
-  ## 例
+  ## Returns
+  
+    0. ポジション（Position；局面）
+  
+  ## Examples
   
     position startpos moves 7g7f 3c3d 2g2f
     position sfen lnsgkgsnl/9/ppppppppp/9/9/9/PPPPPPPPP/1B5R1/LNSGKGSNL w - 1 moves 5a6b 7g7f 3a3b
@@ -22,9 +26,12 @@ defmodule KifuwarabeWcsc33.CLI.Helpers.PositionParser do
   def parse(line) do
     IO.puts("parse(1) line:#{line}")
 
+    # 局面データ（初期値は平手初期局面）
+    pos = KifuwarabeWcsc33.CLI.Models.Position.new()
+
     rest =
       if line |> String.starts_with?("position startpos") do
-        # TODO 平手初期局面をセット
+        # 平手初期局面をセット（初期値のまま）
 
         # `position startpos` を除去 |> あれば、続くスペースを削除
         line |> String.slice(String.length("position startpos")..-1) |> String.trim_leading()
@@ -37,31 +44,23 @@ defmodule KifuwarabeWcsc33.CLI.Helpers.PositionParser do
 
     rest =
       if rest |> String.starts_with?("position sfen") do
-        # TODO 途中局面をセット
+        # 途中局面をセット
 
         # `position startpos` を除去 |> あれば、続くスペースを削除
         rest = line |> String.slice(String.length("position sfen")..-1) |> String.trim_leading()
 
         IO.puts("parse(3) rest:#{rest}")
 
-        #
-        # 盤の符号 ９一、８一、７一 …と読んでいく。１九が最後。
-        # 10ずつ減っていき、十の位が無くなったら一の位が増える。
-        #
-        # TODO こんなん毎回生成したくないぞ
-        # sequence = KifuwarabeWcsc33.CLI.Models.Sequence.new()
-        #
-        # show_sq = fn sq -> IO.puts("sq:#{sq}") end
-        #
-        # sequence.address_list
-        # |> Enum.map(show_sq)
-
         # 盤面部分を解析
-        tuple = rest |> parse_board_string_to_piece_list([])
-        rest = tuple |> elem(0)
-        piece_list_on_board = tuple |> elem(1)
+        {rest, piece_list_on_board} = rest |> parse_board_string_to_piece_list([])
+        # rest = tuple |> elem(0)
+        # piece_list_on_board = tuple |> elem(1)
         IO.inspect(piece_list_on_board, label: "parse(4) The piece_list_on_board is")
         IO.puts("parse(5) rest:#{rest}")
+
+        if length(piece_list_on_board) != 81 do
+          raise "unexpected board cell count:#{length(piece_list_on_board)}"
+        end
 
         # 手番の解析
         tuple = rest |> parse_turn()
@@ -102,25 +101,32 @@ defmodule KifuwarabeWcsc33.CLI.Helpers.PositionParser do
     first_5chars = rest |> String.slice(0..4)
     rest = rest |> String.slice(5..-1)
 
-    if first_5chars == "moves" do
-      # 指し手が付いている場合
-      IO.puts("parse(10) first_5chars:[#{first_5chars}]")
-      IO.puts("parse(11) rest:#{rest}")
+    rest =
+      if first_5chars == "moves" do
+        # 指し手が付いている場合
+        # IO.puts("parse(10) first_5chars:[#{first_5chars}]")
+        # IO.puts("parse(11) rest:#{rest}")
 
-      # 残りの文字列 |> あれば、続くスペースを削除
-      rest = rest |> String.trim_leading()
+        # 残りの文字列 |> あれば、続くスペースを削除
+        rest = rest |> String.trim_leading()
 
-      # TODO 指し手読取
-      tuple = rest |> parse_moves_string_to_move_list([])
-      rest = tuple |> elem(0)
-      move_list = tuple |> elem(1)
+        # TODO 指し手読取
+        tuple = rest |> parse_moves_string_to_move_list([])
+        rest = tuple |> elem(0)
+        move_list = tuple |> elem(1)
 
-      IO.inspect(move_list, label: "parse(12) The hand number map is")
-      IO.puts("parse(13) rest:#{rest}")
-    else
-      # 指し手が付いていない場合
-      # 完了
-    end
+        IO.inspect(move_list, label: "parse(12) The move_list is")
+        rest
+      else
+        # 指し手が付いていない場合
+        # 完了
+        rest
+      end
+
+    IO.puts("parse(13) rest:#{rest}")
+
+    # TODO 消す。盤表示
+    KifuwarabeWcsc33.CLI.Views.Position.print(pos)
   end
 
   # 盤面文字列を解析して、駒のリストを返す
@@ -233,7 +239,7 @@ defmodule KifuwarabeWcsc33.CLI.Helpers.PositionParser do
   defp parse_turn(rest) do
     # ２文字取る
     first_chars = rest |> String.slice(0..1)
-    IO.puts("parse_turn chars:[#{first_chars}]")
+    # IO.puts("parse_turn chars:[#{first_chars}]")
     rest = rest |> String.slice(2..-1)
 
     turn =
@@ -256,7 +262,7 @@ defmodule KifuwarabeWcsc33.CLI.Helpers.PositionParser do
   defp parse_hands(rest, hand_num_map) do
     # 先頭の１文字（取りださない）
     first_char = rest |> String.at(0)
-    IO.puts("parse_hands first_char:[#{first_char}]")
+    # IO.puts("parse_hands first_char:[#{first_char}]")
     # rest = rest |> String.slice(1..-1)
 
     if first_char == "-" do
@@ -265,7 +271,7 @@ defmodule KifuwarabeWcsc33.CLI.Helpers.PositionParser do
       # 先頭の２文字 "- " を切り捨て
       rest = rest |> String.slice(2..-1)
 
-      IO.puts("parse_hands no-hands rest:#{rest}")
+      # IO.puts("parse_hands no-hands rest:#{rest}")
       {rest, hand_num_map}
     else
       # 持ち駒あり
@@ -273,7 +279,7 @@ defmodule KifuwarabeWcsc33.CLI.Helpers.PositionParser do
       rest = tuple |> elem(0)
       hand_num_map = tuple |> elem(1)
       # IO.inspect(hand_num_map, label: "parse_hands hand_num_map")
-      IO.puts("parse_hands rest:#{rest}")
+      # IO.puts("parse_hands rest:#{rest}")
 
       {rest, hand_num_map}
     end
@@ -479,7 +485,7 @@ defmodule KifuwarabeWcsc33.CLI.Helpers.PositionParser do
         {rest, move}
       end
 
-    IO.inspect(move, label: "parse move")
+    # IO.inspect(move, label: "parse move")
 
     # 指し手追加
     result = result ++ [move]

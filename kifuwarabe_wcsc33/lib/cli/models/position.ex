@@ -12,7 +12,7 @@ defmodule KifuwarabeWcsc33.CLI.Models.Position do
             # フォーフォルド・レピティション（Fourfold repetition；千日手）
             fourfold_repetition: 0,
             # 盤上の駒
-            piece_map: %{
+            board: %{
               # １段目
               91 => :l2,
               81 => :n2,
@@ -105,7 +105,7 @@ defmodule KifuwarabeWcsc33.CLI.Models.Position do
               19 => :l1
             },
             # 駒台（持ち駒の数）
-            hand_map: %{
+            hand_pieces: %{
               #
               # ▲せんて（Sente；先手） or したて（Shitate；下手）
               # ============================================
@@ -146,7 +146,9 @@ defmodule KifuwarabeWcsc33.CLI.Models.Position do
               :l2 => 0,
               # ポーン（Pawn；歩）
               :p2 => 0
-            }
+            },
+            # ムーブズ（Moves；指し手のリスト）
+            moves: []
 
   # Elixir のリスト、リンクドリストだ、ランダム・アクセス遅そう、使いたくねー
   # defstruct piece_list:
