@@ -107,6 +107,9 @@ defmodule KifuwarabeWcsc33.CLI.Helpers.PositionParser do
       IO.puts("parse(10) first_5chars:[#{first_5chars}]")
       IO.puts("parse(11) rest:#{rest}")
 
+      # 残りの文字列 |> あれば、続くスペースを削除
+      rest = rest |> String.trim_leading()
+
       # TODO 指し手読取
       tuple = rest |> parse_moves_string_to_move_list([])
       rest = tuple |> elem(0)
@@ -375,7 +378,7 @@ defmodule KifuwarabeWcsc33.CLI.Helpers.PositionParser do
           rest = rest |> String.slice(1..-1)
 
           rank =
-            case first_char do
+            case second_char do
               "a" -> 1
               "b" -> 2
               "c" -> 3
@@ -425,8 +428,66 @@ defmodule KifuwarabeWcsc33.CLI.Helpers.PositionParser do
     # 移動先
     # =====
     #
-    # * 次の２文字は、「移動先マス」
+    # * ３文字目は「ファイル（File；筋）の数字」
+    # * ４文字目は「ランク（Rank；段）のアルファベット」
     #
+
+    # 先頭の１文字切り出し
+    third_char = rest |> String.at(0)
+    IO.puts("parse_moves_string_to_move_list third_char:[#{third_char}]")
+    rest = rest |> String.slice(1..-1)
+
+    # きっと数字だろ
+    file = String.to_integer(third_char)
+
+    # 先頭の１文字切り出し
+    fourth_char = rest |> String.at(0)
+    IO.puts("parse_moves_string_to_move_list fourth_char:[#{fourth_char}]")
+    rest = rest |> String.slice(1..-1)
+
+    # きっと英数字小文字だろ
+    rank =
+      case fourth_char do
+        "a" -> 1
+        "b" -> 2
+        "c" -> 3
+        "d" -> 4
+        "e" -> 5
+        "f" -> 6
+        "g" -> 7
+        "h" -> 8
+        "i" -> 9
+      end
+
+    move = %{move | destination: 10 * file + rank}
+    IO.inspect(move, label: "parse(13) The move is")
+
+    # 成り
+    # ====
+    #
+    # * ５文字目に + があれば「プロモート（Promote；成り）
+    #
+
+    {rest, move} =
+      if rest |> String.at(0) == "+" do
+        # 先頭の１文字切り出し
+        rest = rest |> String.slice(1..-1)
+        %{move | promote?: true}
+
+        {rest, move}
+      else
+        {rest, move}
+      end
+
+    IO.inspect(move, label: "parse(14) The move is")
+
+    # 区切り
+    # ======
+    #
+    # * 続くスペースを除去
+    #
+
+    rest = rest |> String.trim_leading()
 
     # 指し手追加
 
