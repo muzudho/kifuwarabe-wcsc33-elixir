@@ -108,6 +108,12 @@ defmodule KifuwarabeWcsc33.CLI.Helpers.PositionParser do
       IO.puts("parse(11) rest:#{rest}")
 
       # TODO 指し手読取
+      tuple = rest |> parse_moves_string_to_move_list([])
+      rest = tuple |> elem(0)
+      move_list = tuple |> elem(1)
+
+      IO.inspect(move_list, label: "parse(12) The hand number map is")
+      IO.puts("parse(13) rest:#{rest}")
     else
       # 指し手が付いていない場合
       # 完了
@@ -338,5 +344,35 @@ defmodule KifuwarabeWcsc33.CLI.Helpers.PositionParser do
       hand_num_map = tuple |> elem(1)
       {rest, hand_num_map}
     end
+  end
+
+  # 指し手の解析
+  defp parse_moves_string_to_move_list(rest, result) do
+    move = KifuwarabeWcsc33.CLI.Models.Move.new()
+    # １文字目は、「大文字英字」か、「筋の数字」
+
+    # 先頭の１文字切り出し
+    first_char = rest |> String.at(0)
+    IO.puts("parse_moves_string_to_move_list first_char:[#{first_char}]")
+    rest = rest |> String.slice(1..-1)
+
+    cond do
+      # 数字が出てきたら -> 「筋の数字」
+      Regex.match?(~r/^\d$/, first_char) ->
+        nil
+
+      # それ以外は「打つ駒」
+      true ->
+        # 1文字目が駒だったら打。2文字目は必ず「*」なはずなので読み飛ばす。
+        case first_char do
+          "R" ->
+            move = %{move | piece_type: :r}
+            IO.inspect(move, label: "parse(12) The move is")
+        end
+
+        nil
+    end
+
+    {rest, result}
   end
 end
