@@ -351,6 +351,7 @@ defmodule KifuwarabeWcsc33.CLI.Views.Position do
       :pp2 -> "+p"
       # スペース（Space；空きマス）
       :sp -> "  "
+      _ -> raise "unexpected piece:#{pc}"
     end
   end
 

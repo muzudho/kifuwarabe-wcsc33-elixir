@@ -42,7 +42,7 @@ defmodule KifuwarabeWcsc33.CLI.Helpers.PositionParser do
 
     IO.puts("parse(2) rest:#{rest}")
 
-    rest =
+    {rest, pos} =
       if rest |> String.starts_with?("position sfen") do
         # 途中局面をセット
 
@@ -62,6 +62,9 @@ defmodule KifuwarabeWcsc33.CLI.Helpers.PositionParser do
         if map_size(board) != 81 do
           raise "unexpected board cell count:#{length(board)}"
         end
+
+        # 将棋盤の更新
+        pos = %{pos | board: board}
 
         # 手番の解析
         tuple = rest |> parse_turn()
@@ -92,10 +95,10 @@ defmodule KifuwarabeWcsc33.CLI.Helpers.PositionParser do
         # 残りの文字列 |> あれば、続くスペースを削除
         rest = rest |> String.trim_leading()
 
-        rest
+        {rest, pos}
       else
         # pass
-        rest
+        {rest, pos}
       end
 
     # ５文字取る
@@ -128,6 +131,8 @@ defmodule KifuwarabeWcsc33.CLI.Helpers.PositionParser do
 
     # TODO 消す。盤表示
     KifuwarabeWcsc33.CLI.Views.Position.print(pos)
+
+    pos
   end
 
   # 盤面文字列を解析して、駒のリストを返す
@@ -183,81 +188,81 @@ defmodule KifuwarabeWcsc33.CLI.Helpers.PositionParser do
               {sq, board} =
                 case space_num do
                   1 ->
-                    {sq - 10, Map.merge(board, %{sq => :sq})}
+                    {sq - 10, Map.merge(board, %{sq => :sp})}
 
                   2 ->
-                    {sq - 20, Map.merge(board, %{sq => :sq, (sq - 10) => :sq})}
+                    {sq - 20, Map.merge(board, %{sq => :sp, (sq - 10) => :sp})}
 
                   3 ->
-                    {sq - 30, Map.merge(board, %{sq => :sq, (sq - 10) => :sq, (sq - 20) => :sq})}
+                    {sq - 30, Map.merge(board, %{sq => :sp, (sq - 10) => :sp, (sq - 20) => :sp})}
 
                   4 ->
                     {sq - 40,
                      Map.merge(board, %{
-                       sq => :sq,
-                       (sq - 10) => :sq,
-                       (sq - 20) => :sq,
-                       (sq - 30) => :sq
+                       sq => :sp,
+                       (sq - 10) => :sp,
+                       (sq - 20) => :sp,
+                       (sq - 30) => :sp
                      })}
 
                   5 ->
                     {sq - 50,
                      Map.merge(board, %{
-                       sq => :sq,
-                       (sq - 10) => :sq,
-                       (sq - 20) => :sq,
-                       (sq - 30) => :sq,
-                       (sq - 40) => :sq
+                       sq => :sp,
+                       (sq - 10) => :sp,
+                       (sq - 20) => :sp,
+                       (sq - 30) => :sp,
+                       (sq - 40) => :sp
                      })}
 
                   6 ->
                     {sq - 60,
                      Map.merge(board, %{
-                       sq => :sq,
-                       (sq - 10) => :sq,
-                       (sq - 20) => :sq,
-                       (sq - 30) => :sq,
-                       (sq - 40) => :sq,
-                       (sq - 50) => :sq
+                       sq => :sp,
+                       (sq - 10) => :sp,
+                       (sq - 20) => :sp,
+                       (sq - 30) => :sp,
+                       (sq - 40) => :sp,
+                       (sq - 50) => :sp
                      })}
 
                   7 ->
                     {sq - 70,
                      Map.merge(board, %{
-                       sq => :sq,
-                       (sq - 10) => :sq,
-                       (sq - 20) => :sq,
-                       (sq - 30) => :sq,
-                       (sq - 40) => :sq,
-                       (sq - 50) => :sq,
-                       (sq - 60) => :sq
+                       sq => :sp,
+                       (sq - 10) => :sp,
+                       (sq - 20) => :sp,
+                       (sq - 30) => :sp,
+                       (sq - 40) => :sp,
+                       (sq - 50) => :sp,
+                       (sq - 60) => :sp
                      })}
 
                   8 ->
                     {sq - 80,
                      Map.merge(board, %{
-                       sq => :sq,
-                       (sq - 10) => :sq,
-                       (sq - 20) => :sq,
-                       (sq - 30) => :sq,
-                       (sq - 40) => :sq,
-                       (sq - 50) => :sq,
-                       (sq - 60) => :sq,
-                       (sq - 70) => :sq
+                       sq => :sp,
+                       (sq - 10) => :sp,
+                       (sq - 20) => :sp,
+                       (sq - 30) => :sp,
+                       (sq - 40) => :sp,
+                       (sq - 50) => :sp,
+                       (sq - 60) => :sp,
+                       (sq - 70) => :sp
                      })}
 
                   9 ->
                     {sq - 90,
                      Map.merge(board, %{
-                       sq => :sq,
-                       (sq - 10) => :sq,
-                       (sq - 20) => :sq,
-                       (sq - 30) => :sq,
-                       (sq - 40) => :sq,
-                       (sq - 50) => :sq,
-                       (sq - 60) => :sq,
-                       (sq - 70) => :sq,
-                       (sq - 80) => :sq
+                       sq => :sp,
+                       (sq - 10) => :sp,
+                       (sq - 20) => :sp,
+                       (sq - 30) => :sp,
+                       (sq - 40) => :sp,
+                       (sq - 50) => :sp,
+                       (sq - 60) => :sp,
+                       (sq - 70) => :sp,
+                       (sq - 80) => :sp
                      })}
 
                   _ ->
