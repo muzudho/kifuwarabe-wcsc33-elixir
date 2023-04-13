@@ -349,48 +349,88 @@ defmodule KifuwarabeWcsc33.CLI.Helpers.PositionParser do
   # 指し手の解析
   defp parse_moves_string_to_move_list(rest, result) do
     move = KifuwarabeWcsc33.CLI.Models.Move.new()
-    # １文字目は、「大文字英字」か、「筋の数字」
 
+    # 移動元
+    # =====
+    #
+    # * 最初の２文字は、「打った駒の種類」か、「移動元マス」
+    #
+
+    # １文字目は、「大文字英字」か、「筋の数字」
     # 先頭の１文字切り出し
     first_char = rest |> String.at(0)
     IO.puts("parse_moves_string_to_move_list first_char:[#{first_char}]")
     rest = rest |> String.slice(1..-1)
 
-    cond do
-      # 数字が出てきたら -> 「筋の数字」
-      Regex.match?(~r/^\d$/, first_char) ->
-        move = %{move | source: String.to_integer(first_char)}
-        IO.inspect(move, label: "parse(12) The move is")
+    rest =
+      cond do
+        # 数字が出てきたら -> 「ファイル（File；筋）の数字」
+        Regex.match?(~r/^\d$/, first_char) ->
+          file = String.to_integer(first_char)
 
-      # TODO 「列の小文字アルファベット」
+          # 「ランク（Rank；段）の小文字アルファベット」
+          # 先頭の１文字切り出し
+          second_char = rest |> String.at(0)
+          IO.puts("parse_moves_string_to_move_list second_char:[#{second_char}]")
+          rest = rest |> String.slice(1..-1)
 
-      # それ以外は「打つ駒」
-      true ->
-        # 1文字目が駒だったら打
-        move =
-          case first_char do
-            "R" -> %{move | piece_type: :r}
-            "B" -> %{move | piece_type: :b}
-            "G" -> %{move | piece_type: :g}
-            "S" -> %{move | piece_type: :s}
-            "N" -> %{move | piece_type: :n}
-            "L" -> %{move | piece_type: :l}
-            "P" -> %{move | piece_type: :p}
+          rank =
+            case first_char do
+              "a" -> 1
+              "b" -> 2
+              "c" -> 3
+              "d" -> 4
+              "e" -> 5
+              "f" -> 6
+              "g" -> 7
+              "h" -> 8
+              "i" -> 9
+            end
+
+          move = %{move | source: 10 * file + rank}
+          IO.inspect(move, label: "parse(12) The move is")
+
+          rest
+
+        # それ以外は「打つ駒」
+        true ->
+          # 1文字目が駒だったら打
+          move =
+            case first_char do
+              "R" -> %{move | piece_type: :r}
+              "B" -> %{move | piece_type: :b}
+              "G" -> %{move | piece_type: :g}
+              "S" -> %{move | piece_type: :s}
+              "N" -> %{move | piece_type: :n}
+              "L" -> %{move | piece_type: :l}
+              "P" -> %{move | piece_type: :p}
+            end
+
+          # 2文字目は必ず「*」なはずなので読み飛ばす。
+          second_char = rest |> String.at(0)
+
+          if second_char != "*" do
+            raise "unexpected second_char:#{second_char}"
           end
 
-        # 2文字目は必ず「*」なはずなので読み飛ばす。
-        second_char = rest |> String.at(0)
+          # IO.puts("parse_piece_type_on_hands first_char:[#{first_char}]")
+          rest = rest |> String.slice(1..-1)
 
-        if second_char != "*" do
-          raise "unexpected second_char:#{second_char}"
-        end
+          IO.inspect(move, label: "parse(12) The move is")
+          IO.puts("parse_moves_string_to_move_list rest:[#{rest}]")
 
-        # IO.puts("parse_piece_type_on_hands first_char:[#{first_char}]")
-        rest = rest |> String.slice(1..-1)
+          rest
+      end
 
-        IO.inspect(move, label: "parse(12) The move is")
-        IO.puts("parse_moves_string_to_move_list rest:[#{rest}]")
-    end
+    # 移動先
+    # =====
+    #
+    # * 次の２文字は、「移動先マス」
+    #
+
+    # 指し手追加
+
+    result = result ++ [move]
 
     {rest, result}
   end
