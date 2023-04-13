@@ -479,19 +479,27 @@ defmodule KifuwarabeWcsc33.CLI.Helpers.PositionParser do
         {rest, move}
       end
 
+    IO.inspect(move, label: "parse move")
+
+    # 指し手追加
+    result = result ++ [move]
+
     # 区切り
     # ======
     #
-    # * 続くスペースを除去
+    # * （あれば）続くスペースを除去
     #
-
     rest = rest |> String.trim_leading()
 
-    # 指し手追加
-
-    result = result ++ [move]
-
-    IO.inspect(move, label: "parse move")
+    {rest, result} =
+      if rest |> String.length() < 1 do
+        # Base case
+        {rest, result}
+      else
+        # Recursive
+        {rest, result} = rest |> parse_moves_string_to_move_list(result)
+        {rest, result}
+      end
 
     {rest, result}
   end
