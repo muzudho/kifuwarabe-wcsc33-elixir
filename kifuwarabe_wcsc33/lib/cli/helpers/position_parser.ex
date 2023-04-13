@@ -113,7 +113,7 @@ defmodule KifuwarabeWcsc33.CLI.Helpers.PositionParser do
         # 指し手読取
         {rest, moves} = rest |> parse_string_to_moves([])
 
-        IO.inspect(moves, label: "parse(12) The move_list is")
+        # IO.inspect(moves, label: "parse(12) The move_list is")
 
         # 将棋盤の更新
         pos = %{pos | moves: moves}
