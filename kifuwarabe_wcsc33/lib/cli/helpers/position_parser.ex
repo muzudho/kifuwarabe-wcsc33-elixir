@@ -79,15 +79,18 @@ defmodule KifuwarabeWcsc33.CLI.Helpers.PositionParser do
         # 次の手は何手目か、を表す数字だが、「将棋所」は「この数字は必ず１にしています」という仕様なので
         # 「将棋所」しか使わないのなら、「1」しかこない、というプログラムにしてしまうのも手だ
         first_char = rest |> String.at(0)
-        IO.puts("parse first_char:[#{first_char}]")
         rest = rest |> String.slice(1..-1)
 
         if first_char != "1" do
           raise "unexpected first_char:#{first_char}"
         end
 
+        # IO.puts("parse first_char:[#{first_char}]")
         moves_num = String.to_integer(first_char)
-        IO.puts("parse moves_num:[#{moves_num}]")
+        IO.puts("parse(9) moves_num:[#{moves_num}]")
+
+        # 残りの文字列 |> あれば、続くスペースを削除
+        rest = rest |> String.trim_leading()
 
         rest
       else
@@ -95,7 +98,20 @@ defmodule KifuwarabeWcsc33.CLI.Helpers.PositionParser do
         rest
       end
 
-    IO.puts("parse(9) rest:#{rest}")
+    # ５文字取る
+    first_5chars = rest |> String.slice(0..4)
+    rest = rest |> String.slice(5..-1)
+
+    if first_5chars == "moves" do
+      # 指し手が付いている場合
+      IO.puts("parse(10) first_5chars:[#{first_5chars}]")
+      IO.puts("parse(11) rest:#{rest}")
+
+      # TODO 指し手読取
+    else
+      # 指し手が付いていない場合
+      # 完了
+    end
   end
 
   # 盤面文字列を解析して、駒のリストを返す
