@@ -362,10 +362,10 @@ defmodule KifuwarabeWcsc33.CLI.Helpers.PositionParser do
     # １文字目は、「大文字英字」か、「筋の数字」
     # 先頭の１文字切り出し
     first_char = rest |> String.at(0)
-    IO.puts("parse_moves_string_to_move_list first_char:[#{first_char}]")
+    # IO.puts("parse_moves_string_to_move_list first_char:[#{first_char}]")
     rest = rest |> String.slice(1..-1)
 
-    rest =
+    {rest, move} =
       cond do
         # 数字が出てきたら -> 「ファイル（File；筋）の数字」
         Regex.match?(~r/^\d$/, first_char) ->
@@ -374,7 +374,7 @@ defmodule KifuwarabeWcsc33.CLI.Helpers.PositionParser do
           # 「ランク（Rank；段）の小文字アルファベット」
           # 先頭の１文字切り出し
           second_char = rest |> String.at(0)
-          IO.puts("parse_moves_string_to_move_list second_char:[#{second_char}]")
+          # IO.puts("parse_moves_string_to_move_list second_char:[#{second_char}]")
           rest = rest |> String.slice(1..-1)
 
           rank =
@@ -391,22 +391,22 @@ defmodule KifuwarabeWcsc33.CLI.Helpers.PositionParser do
             end
 
           move = %{move | source: 10 * file + rank}
-          IO.inspect(move, label: "parse(12) The move is")
+          # IO.inspect(move, label: "parse(12) The move is")
 
-          rest
+          {rest, move}
 
         # それ以外は「打つ駒」
         true ->
           # 1文字目が駒だったら打
           move =
             case first_char do
-              "R" -> %{move | piece_type: :r}
-              "B" -> %{move | piece_type: :b}
-              "G" -> %{move | piece_type: :g}
-              "S" -> %{move | piece_type: :s}
-              "N" -> %{move | piece_type: :n}
-              "L" -> %{move | piece_type: :l}
-              "P" -> %{move | piece_type: :p}
+              "R" -> %{move | piece_type: :r, drop?: true}
+              "B" -> %{move | piece_type: :b, drop?: true}
+              "G" -> %{move | piece_type: :g, drop?: true}
+              "S" -> %{move | piece_type: :s, drop?: true}
+              "N" -> %{move | piece_type: :n, drop?: true}
+              "L" -> %{move | piece_type: :l, drop?: true}
+              "P" -> %{move | piece_type: :p, drop?: true}
             end
 
           # 2文字目は必ず「*」なはずなので読み飛ばす。
@@ -419,10 +419,10 @@ defmodule KifuwarabeWcsc33.CLI.Helpers.PositionParser do
           # IO.puts("parse_piece_type_on_hands first_char:[#{first_char}]")
           rest = rest |> String.slice(1..-1)
 
-          IO.inspect(move, label: "parse(12) The move is")
-          IO.puts("parse_moves_string_to_move_list rest:[#{rest}]")
+          # IO.inspect(move, label: "parse(12) The move is")
+          # IO.puts("parse_moves_string_to_move_list rest:[#{rest}]")
 
-          rest
+          {rest, move}
       end
 
     # 移動先
@@ -434,7 +434,7 @@ defmodule KifuwarabeWcsc33.CLI.Helpers.PositionParser do
 
     # 先頭の１文字切り出し
     third_char = rest |> String.at(0)
-    IO.puts("parse_moves_string_to_move_list third_char:[#{third_char}]")
+    # IO.puts("parse_moves_string_to_move_list third_char:[#{third_char}]")
     rest = rest |> String.slice(1..-1)
 
     # きっと数字だろ
@@ -442,7 +442,7 @@ defmodule KifuwarabeWcsc33.CLI.Helpers.PositionParser do
 
     # 先頭の１文字切り出し
     fourth_char = rest |> String.at(0)
-    IO.puts("parse_moves_string_to_move_list fourth_char:[#{fourth_char}]")
+    # IO.puts("parse_moves_string_to_move_list fourth_char:[#{fourth_char}]")
     rest = rest |> String.slice(1..-1)
 
     # きっと英数字小文字だろ
@@ -460,7 +460,7 @@ defmodule KifuwarabeWcsc33.CLI.Helpers.PositionParser do
       end
 
     move = %{move | destination: 10 * file + rank}
-    IO.inspect(move, label: "parse(13) The move is")
+    # IO.inspect(move, label: "parse(13) The move is")
 
     # 成り
     # ====
@@ -479,8 +479,6 @@ defmodule KifuwarabeWcsc33.CLI.Helpers.PositionParser do
         {rest, move}
       end
 
-    IO.inspect(move, label: "parse(14) The move is")
-
     # 区切り
     # ======
     #
@@ -492,6 +490,8 @@ defmodule KifuwarabeWcsc33.CLI.Helpers.PositionParser do
     # 指し手追加
 
     result = result ++ [move]
+
+    IO.inspect(move, label: "parse move")
 
     {rest, result}
   end
