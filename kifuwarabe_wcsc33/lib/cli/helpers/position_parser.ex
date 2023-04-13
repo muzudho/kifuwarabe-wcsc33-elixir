@@ -40,7 +40,7 @@ defmodule KifuwarabeWcsc33.CLI.Helpers.PositionParser do
         line
       end
 
-    IO.puts("parse(2) rest:#{rest}")
+    # IO.puts("parse(2) rest:#{rest}")
 
     {rest, pos} =
       if rest |> String.starts_with?("position sfen") do
@@ -49,35 +49,28 @@ defmodule KifuwarabeWcsc33.CLI.Helpers.PositionParser do
         # `position startpos` を除去 |> あれば、続くスペースを削除
         rest = line |> String.slice(String.length("position sfen")..-1) |> String.trim_leading()
 
-        IO.puts("parse(3) rest:#{rest}")
+        # IO.puts("parse(3) rest:#{rest}")
 
         # 盤面部分を解析。「９一」番地からスタート
         {rest, _sq, board} = rest |> map_string_to_board(91, %{})
         # rest = tuple |> elem(0)
         # sq = tuple |> elem(1)
         # board = tuple |> elem(2)
-        IO.inspect(board, label: "parse(4) The board is")
-        IO.puts("parse(5) rest:#{rest}")
+        # IO.inspect(board, label: "parse(4) The board is")
+        # IO.puts("parse(5) rest:#{rest}")
 
         if map_size(board) != 81 do
           raise "unexpected board cell count:#{length(board)}"
         end
 
-        # 将棋盤の更新
-        pos = %{pos | board: board}
-
         # 手番の解析
-        tuple = rest |> parse_turn()
-        rest = tuple |> elem(0)
-        turn = tuple |> elem(1)
-        IO.puts("parse(6) turn:#{turn} rest:#{rest}")
+        {rest, turn} = rest |> parse_turn()
+        # IO.puts("parse(6) turn:#{turn} rest:#{rest}")
 
         # 駒台（持ち駒の数）の解析
-        tuple = rest |> parse_hands(%{})
-        rest = tuple |> elem(0)
-        hand_num_map = tuple |> elem(1)
-        IO.inspect(hand_num_map, label: "parse(7) The hand number map is")
-        IO.puts("parse(8) rest:#{rest}")
+        {rest, hand_pieces} = rest |> parse_hands(%{})
+        # IO.inspect(hand_pieces, label: "parse(7) The hand_pieces is")
+        # IO.puts("parse(8) rest:#{rest}")
 
         # 次の手は何手目か、を表す数字だが、「将棋所」は「この数字は必ず１にしています」という仕様なので
         # 「将棋所」しか使わないのなら、「1」しかこない、というプログラムにしてしまうのも手だ
@@ -90,7 +83,10 @@ defmodule KifuwarabeWcsc33.CLI.Helpers.PositionParser do
 
         # IO.puts("parse first_char:[#{first_char}]")
         moves_num = String.to_integer(first_char)
-        IO.puts("parse(9) moves_num:[#{moves_num}]")
+        # IO.puts("parse(9) moves_num:[#{moves_num}]")
+
+        # 将棋盤の更新
+        pos = %{pos | moves_num: moves_num, turn: turn, board: board, hand_pieces: hand_pieces}
 
         # 残りの文字列 |> あれば、続くスペースを削除
         rest = rest |> String.trim_leading()
@@ -105,7 +101,7 @@ defmodule KifuwarabeWcsc33.CLI.Helpers.PositionParser do
     first_5chars = rest |> String.slice(0..4)
     rest = rest |> String.slice(5..-1)
 
-    rest =
+    {rest, pos} =
       if first_5chars == "moves" do
         # 指し手が付いている場合
         # IO.puts("parse(10) first_5chars:[#{first_5chars}]")
@@ -114,17 +110,19 @@ defmodule KifuwarabeWcsc33.CLI.Helpers.PositionParser do
         # 残りの文字列 |> あれば、続くスペースを削除
         rest = rest |> String.trim_leading()
 
-        # TODO 指し手読取
-        tuple = rest |> parse_moves_string_to_move_list([])
-        rest = tuple |> elem(0)
-        move_list = tuple |> elem(1)
+        # 指し手読取
+        {rest, moves} = rest |> parse_string_to_moves([])
 
-        IO.inspect(move_list, label: "parse(12) The move_list is")
-        rest
+        IO.inspect(moves, label: "parse(12) The move_list is")
+
+        # 将棋盤の更新
+        pos = %{pos | moves: moves}
+
+        {rest, pos}
       else
         # 指し手が付いていない場合
         # 完了
-        rest
+        {rest, pos}
       end
 
     IO.puts("parse(13) rest:#{rest}")
@@ -440,7 +438,13 @@ defmodule KifuwarabeWcsc33.CLI.Helpers.PositionParser do
   end
 
   # 指し手の解析
-  defp parse_moves_string_to_move_list(rest, result) do
+  #
+  # ## Parameters
+  #
+  #   * `rest` - レスト（Rest；残りの文字列）
+  #   * `moves` - ムーブズ・リスト（Moves List；指し手のリスト）
+  #
+  defp parse_string_to_moves(rest, moves) do
     move = KifuwarabeWcsc33.CLI.Models.Move.new()
 
     # 移動元
@@ -452,7 +456,7 @@ defmodule KifuwarabeWcsc33.CLI.Helpers.PositionParser do
     # １文字目は、「大文字英字」か、「筋の数字」
     # 先頭の１文字切り出し
     first_char = rest |> String.at(0)
-    # IO.puts("parse_moves_string_to_move_list first_char:[#{first_char}]")
+    # IO.puts("parse_string_to_moves first_char:[#{first_char}]")
     rest = rest |> String.slice(1..-1)
 
     {rest, move} =
@@ -464,7 +468,7 @@ defmodule KifuwarabeWcsc33.CLI.Helpers.PositionParser do
           # 「ランク（Rank；段）の小文字アルファベット」
           # 先頭の１文字切り出し
           second_char = rest |> String.at(0)
-          # IO.puts("parse_moves_string_to_move_list second_char:[#{second_char}]")
+          # IO.puts("parse_string_to_moves second_char:[#{second_char}]")
           rest = rest |> String.slice(1..-1)
 
           rank =
@@ -510,7 +514,7 @@ defmodule KifuwarabeWcsc33.CLI.Helpers.PositionParser do
           rest = rest |> String.slice(1..-1)
 
           # IO.inspect(move, label: "parse(12) The move is")
-          # IO.puts("parse_moves_string_to_move_list rest:[#{rest}]")
+          # IO.puts("parse_string_to_moves rest:[#{rest}]")
 
           {rest, move}
       end
@@ -524,7 +528,7 @@ defmodule KifuwarabeWcsc33.CLI.Helpers.PositionParser do
 
     # 先頭の１文字切り出し
     third_char = rest |> String.at(0)
-    # IO.puts("parse_moves_string_to_move_list third_char:[#{third_char}]")
+    # IO.puts("parse_string_to_moves third_char:[#{third_char}]")
     rest = rest |> String.slice(1..-1)
 
     # きっと数字だろ
@@ -532,7 +536,7 @@ defmodule KifuwarabeWcsc33.CLI.Helpers.PositionParser do
 
     # 先頭の１文字切り出し
     fourth_char = rest |> String.at(0)
-    # IO.puts("parse_moves_string_to_move_list fourth_char:[#{fourth_char}]")
+    # IO.puts("parse_string_to_moves fourth_char:[#{fourth_char}]")
     rest = rest |> String.slice(1..-1)
 
     # きっと英数字小文字だろ
@@ -572,7 +576,7 @@ defmodule KifuwarabeWcsc33.CLI.Helpers.PositionParser do
     # IO.inspect(move, label: "parse move")
 
     # 指し手追加
-    result = result ++ [move]
+    moves = moves ++ [move]
 
     # 区切り
     # ======
@@ -581,16 +585,16 @@ defmodule KifuwarabeWcsc33.CLI.Helpers.PositionParser do
     #
     rest = rest |> String.trim_leading()
 
-    {rest, result} =
+    {rest, moves} =
       if rest |> String.length() < 1 do
         # Base case
-        {rest, result}
+        {rest, moves}
       else
         # Recursive
-        {rest, result} = rest |> parse_moves_string_to_move_list(result)
-        {rest, result}
+        {rest, moves} = rest |> parse_string_to_moves(moves)
+        {rest, moves}
       end
 
-    {rest, result}
+    {rest, moves}
   end
 end
