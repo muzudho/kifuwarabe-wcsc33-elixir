@@ -7,12 +7,14 @@ defmodule KifuwarabeWcsc33.CLI.Views.Position do
     * `pos` - ポジション（Position；局面）
 
   """
-  def print(pos) do
-    print_header(pos)
-    print_hand2(pos)
-    print_body(pos)
-    print_hand1(pos)
-    print_moves(pos)
+  def stringify(pos) do
+    header = pos|>stringify_header()
+    hand2 = pos|>    stringify_hand2()
+    body = pos|>    stringify_body()
+    hand1 = pos |>     stringify_hand1()
+    moves = pos |>    stringify_moves()
+
+    header <> hand2 <> body <> hand1 <> moves
   end
 
   # 盤表示のヘッダー
@@ -25,17 +27,17 @@ defmodule KifuwarabeWcsc33.CLI.Views.Position do
   #
   #   [1 moves / First / 0 repeat(s)]
   #
-  defp print_header(pos) do
+  defp stringify_header(pos) do
     # ムーブズ・ナンバー（moves-number；何手目か）、Half-ply
     m = "#{pos.moves_num}"
     # ターン（turn；手番）
-    t = print_turn(pos.turn)
+    t = stringify_turn(pos.turn)
     # フォーフォルド・レピティション（Fourfold repetition；千日手）
     r = "#{pos.fourfold_repetition}"
 
-    IO.puts("""
+    """
     [#{m} moves / #{t} / #{r} repeat(s)]
-    """)
+    """
   end
 
   # ▽ごて（Gote；後手） or うわて（Uwate；上手）の、駒台（持ち駒の数）表示
@@ -51,7 +53,7 @@ defmodule KifuwarabeWcsc33.CLI.Views.Position do
   #  | 0| 0| 0| 0| 0| 0| 0| 0|
   #  +--+--+--+--+--+--+--+--+
   #
-  defp print_hand2(pos) do
+  defp stringify_hand2(pos) do
     # キング（King；玉）
     k = String.pad_leading("#{pos.hand_pieces[:k2]}", 2, " ")
     # ルック（Rook；飛車）
@@ -69,12 +71,12 @@ defmodule KifuwarabeWcsc33.CLI.Views.Position do
     # ポーン（Pawn；歩）
     p = String.pad_leading("#{pos.hand_pieces[:p2]}", 2, " ")
 
-    IO.puts("""
+    """
       k  r  b  g  s  n  l  p
     +--+--+--+--+--+--+--+--+
     |#{k}|#{r}|#{b}|#{g}|#{s}|#{n}|#{l}|#{p}|
     +--+--+--+--+--+--+--+--+
-    """)
+    """
   end
 
   # ▲せんて（Sente；先手） or したて（Shitate；下手）の、駒台（持ち駒の数）表示
@@ -90,7 +92,7 @@ defmodule KifuwarabeWcsc33.CLI.Views.Position do
   #       | 0| 0| 0| 0| 0| 0| 0| 0|
   #       +--+--+--+--+--+--+--+--+
   #
-  defp print_hand1(pos) do
+  defp stringify_hand1(pos) do
     # キング（King；玉）
     k = String.pad_leading("#{pos.hand_pieces[:k1]}", 2, " ")
     # ルック（Rook；飛車）
@@ -108,12 +110,12 @@ defmodule KifuwarabeWcsc33.CLI.Views.Position do
     # ポーン（Pawn；歩）
     p = String.pad_leading("#{pos.hand_pieces[:p1]}", 2, " ")
 
-    IO.puts("""
+    """
          K  R  B  G  S  N  L  P
        +--+--+--+--+--+--+--+--+
        |#{k}|#{r}|#{b}|#{g}|#{s}|#{n}|#{l}|#{p}|
        +--+--+--+--+--+--+--+--+
-    """)
+    """
   end
 
   # 盤表示
@@ -141,104 +143,104 @@ defmodule KifuwarabeWcsc33.CLI.Views.Position do
   #    |  |  |  |  |  |  |  |  |  | i
   #    +--+--+--+--+--+--+--+--+--+
   #
-  defp print_body(pos) do
+  defp stringify_body(pos) do
     #
     # 将棋盤を反時計回りに９０°回すと、座標は 11,12,13 ... のように合理的になるが
     # 本エンジンでは素直に（将棋盤を回さず）、コーディングする
     #
     # うわっ、めんどくさ！
     # １段目
-    a9 = print_piece(pos.board[91])
-    a8 = print_piece(pos.board[81])
-    a7 = print_piece(pos.board[71])
-    a6 = print_piece(pos.board[61])
-    a5 = print_piece(pos.board[51])
-    a4 = print_piece(pos.board[41])
-    a3 = print_piece(pos.board[31])
-    a2 = print_piece(pos.board[21])
-    a1 = print_piece(pos.board[11])
+    a9 = stringify_piece(pos.board[91])
+    a8 = stringify_piece(pos.board[81])
+    a7 = stringify_piece(pos.board[71])
+    a6 = stringify_piece(pos.board[61])
+    a5 = stringify_piece(pos.board[51])
+    a4 = stringify_piece(pos.board[41])
+    a3 = stringify_piece(pos.board[31])
+    a2 = stringify_piece(pos.board[21])
+    a1 = stringify_piece(pos.board[11])
     # ２段目
-    b9 = print_piece(pos.board[92])
-    b8 = print_piece(pos.board[82])
-    b7 = print_piece(pos.board[72])
-    b6 = print_piece(pos.board[62])
-    b5 = print_piece(pos.board[52])
-    b4 = print_piece(pos.board[42])
-    b3 = print_piece(pos.board[32])
-    b2 = print_piece(pos.board[22])
-    b1 = print_piece(pos.board[12])
+    b9 = stringify_piece(pos.board[92])
+    b8 = stringify_piece(pos.board[82])
+    b7 = stringify_piece(pos.board[72])
+    b6 = stringify_piece(pos.board[62])
+    b5 = stringify_piece(pos.board[52])
+    b4 = stringify_piece(pos.board[42])
+    b3 = stringify_piece(pos.board[32])
+    b2 = stringify_piece(pos.board[22])
+    b1 = stringify_piece(pos.board[12])
     # ３段目
-    c9 = print_piece(pos.board[93])
-    c8 = print_piece(pos.board[83])
-    c7 = print_piece(pos.board[73])
-    c6 = print_piece(pos.board[63])
-    c5 = print_piece(pos.board[53])
-    c4 = print_piece(pos.board[43])
-    c3 = print_piece(pos.board[33])
-    c2 = print_piece(pos.board[23])
-    c1 = print_piece(pos.board[13])
+    c9 = stringify_piece(pos.board[93])
+    c8 = stringify_piece(pos.board[83])
+    c7 = stringify_piece(pos.board[73])
+    c6 = stringify_piece(pos.board[63])
+    c5 = stringify_piece(pos.board[53])
+    c4 = stringify_piece(pos.board[43])
+    c3 = stringify_piece(pos.board[33])
+    c2 = stringify_piece(pos.board[23])
+    c1 = stringify_piece(pos.board[13])
     # ４段目
-    d9 = print_piece(pos.board[94])
-    d8 = print_piece(pos.board[84])
-    d7 = print_piece(pos.board[74])
-    d6 = print_piece(pos.board[64])
-    d5 = print_piece(pos.board[54])
-    d4 = print_piece(pos.board[44])
-    d3 = print_piece(pos.board[34])
-    d2 = print_piece(pos.board[24])
-    d1 = print_piece(pos.board[14])
+    d9 = stringify_piece(pos.board[94])
+    d8 = stringify_piece(pos.board[84])
+    d7 = stringify_piece(pos.board[74])
+    d6 = stringify_piece(pos.board[64])
+    d5 = stringify_piece(pos.board[54])
+    d4 = stringify_piece(pos.board[44])
+    d3 = stringify_piece(pos.board[34])
+    d2 = stringify_piece(pos.board[24])
+    d1 = stringify_piece(pos.board[14])
     # ５段目
-    e9 = print_piece(pos.board[95])
-    e8 = print_piece(pos.board[85])
-    e7 = print_piece(pos.board[75])
-    e6 = print_piece(pos.board[65])
-    e5 = print_piece(pos.board[55])
-    e4 = print_piece(pos.board[45])
-    e3 = print_piece(pos.board[35])
-    e2 = print_piece(pos.board[25])
-    e1 = print_piece(pos.board[15])
+    e9 = stringify_piece(pos.board[95])
+    e8 = stringify_piece(pos.board[85])
+    e7 = stringify_piece(pos.board[75])
+    e6 = stringify_piece(pos.board[65])
+    e5 = stringify_piece(pos.board[55])
+    e4 = stringify_piece(pos.board[45])
+    e3 = stringify_piece(pos.board[35])
+    e2 = stringify_piece(pos.board[25])
+    e1 = stringify_piece(pos.board[15])
     # ６段目
-    f9 = print_piece(pos.board[96])
-    f8 = print_piece(pos.board[86])
-    f7 = print_piece(pos.board[76])
-    f6 = print_piece(pos.board[66])
-    f5 = print_piece(pos.board[56])
-    f4 = print_piece(pos.board[46])
-    f3 = print_piece(pos.board[36])
-    f2 = print_piece(pos.board[26])
-    f1 = print_piece(pos.board[16])
+    f9 = stringify_piece(pos.board[96])
+    f8 = stringify_piece(pos.board[86])
+    f7 = stringify_piece(pos.board[76])
+    f6 = stringify_piece(pos.board[66])
+    f5 = stringify_piece(pos.board[56])
+    f4 = stringify_piece(pos.board[46])
+    f3 = stringify_piece(pos.board[36])
+    f2 = stringify_piece(pos.board[26])
+    f1 = stringify_piece(pos.board[16])
     # ７段目
-    g9 = print_piece(pos.board[97])
-    g8 = print_piece(pos.board[87])
-    g7 = print_piece(pos.board[77])
-    g6 = print_piece(pos.board[67])
-    g5 = print_piece(pos.board[57])
-    g4 = print_piece(pos.board[47])
-    g3 = print_piece(pos.board[37])
-    g2 = print_piece(pos.board[27])
-    g1 = print_piece(pos.board[17])
+    g9 = stringify_piece(pos.board[97])
+    g8 = stringify_piece(pos.board[87])
+    g7 = stringify_piece(pos.board[77])
+    g6 = stringify_piece(pos.board[67])
+    g5 = stringify_piece(pos.board[57])
+    g4 = stringify_piece(pos.board[47])
+    g3 = stringify_piece(pos.board[37])
+    g2 = stringify_piece(pos.board[27])
+    g1 = stringify_piece(pos.board[17])
     # ８段目
-    h9 = print_piece(pos.board[98])
-    h8 = print_piece(pos.board[88])
-    h7 = print_piece(pos.board[78])
-    h6 = print_piece(pos.board[68])
-    h5 = print_piece(pos.board[58])
-    h4 = print_piece(pos.board[48])
-    h3 = print_piece(pos.board[38])
-    h2 = print_piece(pos.board[28])
-    h1 = print_piece(pos.board[18])
+    h9 = stringify_piece(pos.board[98])
+    h8 = stringify_piece(pos.board[88])
+    h7 = stringify_piece(pos.board[78])
+    h6 = stringify_piece(pos.board[68])
+    h5 = stringify_piece(pos.board[58])
+    h4 = stringify_piece(pos.board[48])
+    h3 = stringify_piece(pos.board[38])
+    h2 = stringify_piece(pos.board[28])
+    h1 = stringify_piece(pos.board[18])
     # ９段目
-    i9 = print_piece(pos.board[99])
-    i8 = print_piece(pos.board[89])
-    i7 = print_piece(pos.board[79])
-    i6 = print_piece(pos.board[69])
-    i5 = print_piece(pos.board[59])
-    i4 = print_piece(pos.board[49])
-    i3 = print_piece(pos.board[39])
-    i2 = print_piece(pos.board[29])
-    i1 = print_piece(pos.board[19])
+    i9 = stringify_piece(pos.board[99])
+    i8 = stringify_piece(pos.board[89])
+    i7 = stringify_piece(pos.board[79])
+    i6 = stringify_piece(pos.board[69])
+    i5 = stringify_piece(pos.board[59])
+    i4 = stringify_piece(pos.board[49])
+    i3 = stringify_piece(pos.board[39])
+    i2 = stringify_piece(pos.board[29])
+    i1 = stringify_piece(pos.board[19])
 
-    IO.puts("""
+    """
       9  8  7  6  5  4  3  2  1
     +--+--+--+--+--+--+--+--+--+
     |#{a9}|#{a8}|#{a7}|#{a6}|#{a5}|#{a4}|#{a3}|#{a2}|#{a1}| a
@@ -259,11 +261,11 @@ defmodule KifuwarabeWcsc33.CLI.Views.Position do
     +--+--+--+--+--+--+--+--+--+
     |#{i9}|#{i8}|#{i7}|#{i6}|#{i5}|#{i4}|#{i3}|#{i2}|#{i1}| i
     +--+--+--+--+--+--+--+--+--+
-    """)
+    """
   end
 
   # 手番の表示
-  defp print_turn(turn) do
+  defp stringify_turn(turn) do
     case turn do
       :sente -> "Sente"
       :gote -> "Gote"
@@ -276,7 +278,7 @@ defmodule KifuwarabeWcsc33.CLI.Views.Position do
   #
   # pc - ピース（piece；先後付きの駒種類）
   #
-  defp print_piece(pc) do
+  defp stringify_piece(pc) do
     case pc do
       # ▲せんて（Sente；先手） or したて（Shitate；下手）
       # ============================================
@@ -356,13 +358,13 @@ defmodule KifuwarabeWcsc33.CLI.Views.Position do
   end
 
   # 棋譜の表示
-  defp print_moves(pos) do
+  defp stringify_moves(pos) do
     # IO.inspect(pos.moves)
-    IO.write("moves")
+    move_list = Enum.map(pos.moves, fn move -> " #{KifuwarabeWcsc33.CLI.Views.Move.as_code(move)}" end)
+    IO.inspect(move_list)
 
-    Enum.map(pos.moves, fn move -> IO.write(" #{KifuwarabeWcsc33.CLI.Views.Move.as_code(move)}") end)
+    move_list_as_str = move_list |> Enum.join()
 
-    # 改行
-    IO.puts("")
+    "moves" <> move_list_as_str
   end
 end

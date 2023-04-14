@@ -128,7 +128,7 @@ defmodule KifuwarabeWcsc33.CLI.Helpers.PositionParser do
     IO.puts("parse(13) rest:#{rest}")
 
     # TODO 消す。盤表示
-    KifuwarabeWcsc33.CLI.Views.Position.print(pos)
+    IO.puts(KifuwarabeWcsc33.CLI.Views.Position.stringify(pos))
 
     pos
   end

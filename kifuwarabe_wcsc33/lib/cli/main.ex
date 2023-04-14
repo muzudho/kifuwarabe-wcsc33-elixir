@@ -1,7 +1,7 @@
 defmodule KifuwarabeWcsc33.CLI.Main do
   @doc """
   ## 雑談
-  
+
       このメソッドは、コンソール・アプリケーションのエントリー・ポイントではなく、
       本来はスーパーバイザーの開始を書くメソッドだが、Elixirのスーパーバイザーが気に入らないので書かない。
   """
@@ -116,7 +116,7 @@ defmodule KifuwarabeWcsc33.CLI.Main do
         # > | quit  | (ターミナルから私へ) 将棋盤を表示して
         # < | 　　　 | (私からターミナルへ) 将棋盤を表示
 
-        KifuwarabeWcsc33.CLI.Views.Position.print(pos)
+        IO.puts(KifuwarabeWcsc33.CLI.Views.Position.stringify(pos))
 
       # Otherwise
       true ->
