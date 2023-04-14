@@ -1,4 +1,4 @@
-defmodule KifuwarabeWcsc33.CLI.Views.Piece do
+defmodule KifuwarabeWcsc33.CLI.Mediators.ToPieceType do
 
   @doc """
 
@@ -6,93 +6,88 @@ defmodule KifuwarabeWcsc33.CLI.Views.Piece do
 
   ## 引数
 
-    * `pt` - ピース・タイプ（Piece Type；駒種類）の文字列。例参照。この関数では、スペース（Space；空きマス）は判定しません
+    * `piece` - ピース（Piece；先後付きの駒種類）の文字列。例参照。この関数では、スペース（Space；空きマス）は判定しません
 
-  ## 例
-
-    "l"
-    "n"
-    ...
   """
-  def as_code(pt) do
-    case pt do
+  def from_piece(piece) do
+    case piece do
       #
       # ▲せんて（Sente；先手） or したて（Shitate；下手）
       # ============================================
       #
       # キング（King；玉）
-      "K" -> :k1
+      :k1 -> :k
       # ルック（Rook；飛車）
-      "R" -> :r1
+      :r1 -> :r
       # ビショップ（Bishop；角）
-      "B" -> :b1
+      :b1 -> :b
       # ゴールド（Gold；金）
-      "G" -> :g1
+      :g1 -> :g
       # シルバー（Silver；銀）
-      "S" -> :s1
+      :s1 -> :s
       # ナイト（kNight；桂）
-      "N" -> :n1
+      :n1 -> :n
       # ランス（Lance；香）
-      "L" -> :l1
+      :l1 -> :l
       # ポーン（Pawn；歩）
-      "P" -> :p1
+      :p1 -> :p
       # 玉は成れません
-      # "+K"
+      # :pk1
       # It's reasonably a プロモーテッド・ルック（Promoted Rook；成飛）. It's actually ドラゴン（Dragon；竜）
-      "+R" -> :pr1
+      :pr1 -> :pr
       # It's reasonably a プロモーテッド・ビショップ（Promoted Bishop；成角）.  It's actually ホース（Horse；馬）. Ponanza calls ペガサス（Pegasus；天馬）
-      "+B" -> :pb1
+      :pb1 -> :pb
       # 金は成れません
-      # "+G"
+      # :pg1
       # プロモーテッド・シルバー（Promoted Silver；成銀. Or 全 in one letter）
-      "+S" -> :ps1
+      :ps1 -> :ps
       # プロモーテッド・ナイト（Promoted kNight；成桂. Or 圭 in one letter）
-      "+N" -> :pn1
+      :pn1 -> :pn
       # プロモーテッド・ランス（Promoted Lance；成香. Or 杏 in one letter）
-      "+L" -> :pl1
+      :pl1 -> :pl
       # It's reasonably a プロモーテッド・ポーン（Promoted Pawn；成歩）. It's actually と（"To"；と is 金 cursive）
-      "+P" -> :pp1
+      :pp1 -> :pp
       #
       # ▽ごて（Gote；後手） or うわて（Uwate；上手）
       # =======================================
       #
       # キング（King；玉）
-      "k" -> :k2
+      :k2 -> :k
       # ルック（Rook；飛車）
-      "r" -> :r2
+      :r2 -> :r
       # ビショップ（Bishop；角）
-      "b" -> :b2
+      :b2 -> :b
       # ゴールド（Gold；金）
-      "g" -> :g2
+      :g2 -> :g
       # シルバー（Silver；銀）
-      "s" -> :s2
+      :s2 -> :s
       # ナイト（kNight；桂）
-      "n" -> :n2
+      :n2 -> :n
       # ランス（Lance；香）
-      "l" -> :l2
+      :l2 -> :l
       # ポーン（Pawn；歩）
-      "p" -> :p2
+      :p2 -> :p
       # 玉は成れません
-      # "+k"
+      # :pk2
       # It's reasonably a プロモーテッド・ルック（Promoted Rook；成飛）. It's actually ドラゴン（Dragon；竜）
-      "+r" -> :pr2
+      :pr2 -> :pr
       # It's reasonably a プロモーテッド・ビショップ（Promoted Bishop；成角）.  It's actually ホース（Horse；馬）. Ponanza calls ペガサス（Pegasus；天馬）
-      "+b" -> :pb2
+      :pb2 -> :pb
       # 金は成れません
-      # "+g"
+      # :pg2
       # プロモーテッド・シルバー（Promoted Silver；成銀. Or 全 in one letter）
-      "+s" -> :ps2
+      :ps2 -> :ps
       # プロモーテッド・ナイト（Promoted kNight；成桂. Or 圭 in one letter）
-      "+n" -> :pn2
+      :pn2 -> :pn
       # プロモーテッド・ランス（Promoted Lance；成香. Or 杏 in one letter）
-      "+l" -> :pl2
+      :pl2 -> :pl
       # It's reasonably a プロモーテッド・ポーン（Promoted Pawn；成歩）. It's actually と（"To"；と is 金 cursive）
-      "+p" -> :pp2
+      :pp2 -> :pp
       #
       # それ以外はエラー
       # ==============
       #
-      _ -> raise "unexpected pt:#{pt}"
+      _ -> raise "unexpected piece:#{piece}"
     end
   end
 end
