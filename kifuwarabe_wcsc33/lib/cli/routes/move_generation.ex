@@ -38,7 +38,15 @@ defmodule KifuwarabeWcsc33.CLI.Routes.MoveGeneration do
   defp make_move_list_by_piece(pos, sq, piece) do
     # IO.puts("pos.turn:#{pos.turn} sq:#{sq} piece:#{piece}")
     turn_of_piece = KifuwarabeWcsc33.CLI.Mediators.ToTurn.from_piece(piece)
-    IO.puts("pos.turn:#{pos.turn} sq:#{sq} piece:#{piece} turn_of_piece:#{turn_of_piece}")
+
+    # 手番側の駒だけ見ろ
+    if turn_of_piece == pos.turn do
+
+      IO.puts("pos.turn:#{pos.turn} sq:#{sq} piece:#{piece} turn_of_piece:#{turn_of_piece}")
+
+      # 駒の種類ごとに動きの方向が違う
+    end
+
     nil
   end
 end
