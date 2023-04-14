@@ -1,11 +1,11 @@
 defmodule KifuwarabeWcsc33.CLI.Views.Position do
   @doc """
     盤表示
-  
+
   ## 引数
-  
+
     * `pos` - ポジション（Position；局面）
-  
+
   """
   def print(pos) do
     print_header(pos)
@@ -357,7 +357,12 @@ defmodule KifuwarabeWcsc33.CLI.Views.Position do
 
   # 棋譜の表示
   defp print_moves(pos) do
-    IO.write("moves ")
-    IO.inspect(pos.moves)
+    # IO.inspect(pos.moves)
+    IO.write("moves")
+
+    Enum.map(pos.moves, fn move -> IO.write(" #{KifuwarabeWcsc33.CLI.Views.Move.as_code(move)}") end)
+
+    # 改行
+    IO.puts("")
   end
 end

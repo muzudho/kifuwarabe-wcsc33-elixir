@@ -1,19 +1,19 @@
-defmodule KifuwarabeWcsc33.CLI.Helpers.PieceParser do
+defmodule KifuwarabeWcsc33.CLI.Views.Piece do
   @doc """
-  
+
     解析
-  
+
   ## 引数
-  
+
     * `pt` - ピース・タイプ（Piece Type；駒種類）の文字列。例参照。この関数では、スペース（Space；空きマス）は判定しません
-  
+
   ## 例
-  
+
     "l"
     "n"
     ...
   """
-  def parse(pt) do
+  def as_code(pt) do
     case pt do
       #
       # ▲せんて（Sente；先手） or したて（Shitate；下手）
