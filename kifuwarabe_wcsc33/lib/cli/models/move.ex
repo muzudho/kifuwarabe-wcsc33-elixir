@@ -5,7 +5,9 @@ defmodule KifuwarabeWcsc33.CLI.Models.Move do
 
   # 移動元マス
   defstruct source: nil,
-            # 移動先マス
+            # 移動先マス。
+            #
+            # - nil なら、リザイン（Resign；投了）とする
             destination: nil,
             # （あれば）打つ駒の種類（先後の情報は持たない）
             drop_piece_type: nil,

@@ -98,8 +98,13 @@ defmodule KifuwarabeWcsc33.CLI.Main do
 
       first_token == "go" ->
         # > | position        | (GUIから私へ) さっき送った局面に対して、指し手を返せ
-        # < | bestmove resign | (私からGUIへ) (指し手を返す)
-        IO.puts("bestmove resign")
+        # < | bestmove xxxx   | (私からGUIへ) (指し手を返す)
+
+        # 最善手
+        best_move = KifuwarabeWcsc33.CLI.Models.Move.new()
+        best_move_as_str = KifuwarabeWcsc33.CLI.Views.Move.as_code(best_move)
+
+        IO.puts("bestmove #{best_move_as_str}")
 
       first_token == "quit" ->
         # > | quit  | (GUIから私へ) エンジン止めろ、アプリケーション終了しろ
