@@ -9,8 +9,11 @@ defmodule KifuwarabeWcsc33.CLI.Main do
     # Elixirのロガーが気に入らないので、正常時には出ないようにする
     Logger.configure(level: :error)
 
+    # 局面データ
+    pos = KifuwarabeWcsc33.CLI.Models.Position.new()
+
     # USIプロトコル対応
-    usi_loop()
+    usi_loop(pos)
 
     # 本来は、スーパーバイザーのPIDを返却する
     {:ok, self()}
@@ -46,7 +49,12 @@ defmodule KifuwarabeWcsc33.CLI.Main do
   #   WCSCではCSAプロトコルを使う。
   #   しかし、「将棋所」を使うと、USIプロトコルで書かれた将棋エンジンに代わって CSAプロトコルで通信してくれる
   #   http://shogidokoro.starfree.jp/
-  defp usi_loop() do
+  #
+  # ## Parameters
+  #
+  #   * `pos` - ポジション（Position；局面）
+  #
+  defp usi_loop(pos) do
     # 標準入力を受け取る |> 末尾の改行を削除するために trim() を使う
     input = IO.gets("") |> String.trim_trailing()
     # IO.puts("input:" <> input)
@@ -62,76 +70,83 @@ defmodule KifuwarabeWcsc33.CLI.Main do
     first_token = hd(input_tokens)
     # IO.puts("first_token:" <> first_token)
 
-    # 局面データ
-    pos = KifuwarabeWcsc33.CLI.Models.Position.new()
-
     #
     # Elixirに if～else-if～else 構造はない。 case文かcond文を使う。
-    cond do
-      first_token == "usi" ->
-        # > | usi             | (GUIから私へ) お前はUSIプロトコル対応エンジンか？
-        # < | id name xxxx    | (私からGUIへ) エンジンの名前は xxxx だぜ
-        # < | id author xxxx  |              エンジンの著者の名前は xxxx だぜ
-        # < | usiok           |              情報終わり。はい、USIプロトコル対応エンジンだぜ
+    {pos} =
+      cond do
+        first_token == "usi" ->
+          # > | usi             | (GUIから私へ) お前はUSIプロトコル対応エンジンか？
+          # < | id name xxxx    | (私からGUIへ) エンジンの名前は xxxx だぜ
+          # < | id author xxxx  |              エンジンの著者の名前は xxxx だぜ
+          # < | usiok           |              情報終わり。はい、USIプロトコル対応エンジンだぜ
 
-        # 将棋エンジン名 - （省略可） GUIに表示される。エンジンを選ぶのに使う。WCSC大会では使わないから、エンジンを区別しやすい名前がいい
-        IO.puts("id name Kifuwaraxir")
+          # 将棋エンジン名 - （省略可） GUIに表示される。エンジンを選ぶのに使う。WCSC大会では使わないから、エンジンを区別しやすい名前がいい
+          IO.puts("id name Kifuwaraxir")
 
-        # エンジンの作者名 - (省略可) GUIでエンジンを選ぶときに表示されることがあるぐらい。WCSC大会では使わないから、エンジンを区別しやすい名前がいい
-        IO.puts("id author TAKAHASHI satoshi")
-        IO.puts("usiok")
+          # エンジンの作者名 - (省略可) GUIでエンジンを選ぶときに表示されることがあるぐらい。WCSC大会では使わないから、エンジンを区別しやすい名前がいい
+          IO.puts("id author TAKAHASHI satoshi")
+          IO.puts("usiok")
+          {pos}
 
-      first_token == "isready" ->
-        # > | isready | (GUIから私へ) 命令送ったら応答できんの？
-        # < | readyok | (私からGUIへ) なんでもこい
-        IO.puts("readyok")
+        first_token == "isready" ->
+          # > | isready | (GUIから私へ) 命令送ったら応答できんの？
+          # < | readyok | (私からGUIへ) なんでもこい
+          IO.puts("readyok")
+          {pos}
 
-      first_token == "usinewgame" ->
-        # > | usinewgame  | (GUIから私へ) 新しい対局を始める。このタイミングで、前回の対局情報をクリアーしてもらってもかまわない
-        #   | 　　　　　　 | (私からGUIへ送るものは何もありません)
-        nil
+        first_token == "usinewgame" ->
+          # > | usinewgame  | (GUIから私へ) 新しい対局を始める。このタイミングで、前回の対局情報をクリアーしてもらってもかまわない
+          #   | 　　　　　　 | (私からGUIへ送るものは何もありません)
+          {pos}
 
-      first_token == "position" ->
-        # > | position  | (GUIから私へ) 現在の局面を作るのに必要な全データを送る。まだ何も応答するな
-        #   | 　　　　　　 | (私からGUIへ送るものは何もありません)
-        KifuwarabeWcsc33.CLI.Helpers.PositionParser.parse(input)
+        first_token == "position" ->
+          # > | position  | (GUIから私へ) 現在の局面を作るのに必要な全データを送る。まだ何も応答するな
+          #   | 　　　　    | (私からGUIへ送るものは何もありません)
 
-      first_token == "go" ->
-        # > | position        | (GUIから私へ) さっき送った局面に対して、指し手を返せ
-        # < | bestmove xxxx   | (私からGUIへ) (指し手を返す)
+          # 局面は、丸ごと差し替えだ
+          pos = KifuwarabeWcsc33.CLI.Helpers.PositionParser.parse(input)
+          {pos}
 
-        # 最善手
-        best_move = KifuwarabeWcsc33.CLI.Models.Move.new()
-        best_move_as_str = KifuwarabeWcsc33.CLI.Views.Move.as_code(best_move)
+        first_token == "go" ->
+          # > | position        | (GUIから私へ) さっき送った局面に対して、指し手を返せ
+          # < | bestmove xxxx   | (私からGUIへ) (指し手を返す)
 
-        IO.puts("bestmove #{best_move_as_str}")
+          # 現局面から、最善手を１つ選ぶ
+          best_move = KifuwarabeWcsc33.CLI.Routes.Think.go(pos)
+          best_move_as_str = KifuwarabeWcsc33.CLI.Views.Move.as_code(best_move)
 
-      first_token == "quit" ->
-        # > | quit  | (GUIから私へ) エンジン止めろ、アプリケーション終了しろ
-        #   | 　　　 | (私からGUIへ送るものは何もありません)
+          IO.puts("bestmove #{best_move_as_str}")
+          {pos}
 
-        # Elixirで 終了処理は、どう書けばいいのか？
-        # exit(0)
-        System.stop()
+        first_token == "quit" ->
+          # > | quit  | (GUIから私へ) エンジン止めろ、アプリケーション終了しろ
+          #   | 　　　 | (私からGUIへ送るものは何もありません)
 
-      # 以下は、USIプロトコルにないコマンド
-      #
-      # `pos` - ポジション表示
-      first_token == "pos" ->
-        # > | quit  | (ターミナルから私へ) 将棋盤を表示して
-        # < | 　　　 | (私からターミナルへ) 将棋盤を表示
+          # Elixirで 終了処理は、どう書けばいいのか？
+          # exit(0)
+          System.stop()
+          {pos}
 
-        IO.puts(KifuwarabeWcsc33.CLI.Views.Position.stringify(pos))
+        # 以下は、USIプロトコルにないコマンド
+        #
+        # `pos` - ポジション表示
+        first_token == "pos" ->
+          # > | quit  | (ターミナルから私へ) 将棋盤を表示して
+          # < | 　　　 | (私からターミナルへ) 将棋盤を表示
 
-      # Otherwise
-      true ->
-        # ここにくるようならエラー
-        IO.puts(
-          "Hi! I am a Kifuwarabe. It's start! first_token[" <> first_token <> "] input:" <> input
-        )
-    end
+          IO.puts(KifuwarabeWcsc33.CLI.Views.Position.stringify(pos))
+          {pos}
+
+        # Otherwise
+        true ->
+          # ここにくるようならエラー
+          IO.puts(
+            "Hi! I am a Kifuwarabe. It's start! first_token[" <> first_token <> "] input:" <> input
+          )
+          {pos}
+      end
 
     # 再帰ループ
-    usi_loop()
+    usi_loop(pos)
   end
 end
