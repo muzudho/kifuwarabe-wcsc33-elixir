@@ -24,7 +24,7 @@ defmodule KifuwarabeWcsc33.CLI.Helpers.PositionParser do
 
   """
   def parse(line) do
-    IO.puts("parse(1) line:#{line}")
+    # IO.puts("parse(1) line:#{line}")
 
     # 局面データ（初期値は平手初期局面）
     pos = KifuwarabeWcsc33.CLI.Models.Position.new()
@@ -101,7 +101,7 @@ defmodule KifuwarabeWcsc33.CLI.Helpers.PositionParser do
     first_5chars = rest |> String.slice(0..4)
     rest = rest |> String.slice(5..-1)
 
-    {rest, pos} =
+    {_rest, pos} =
       if first_5chars == "moves" do
         # 指し手が付いている場合
         # IO.puts("parse(10) first_5chars:[#{first_5chars}]")
@@ -125,7 +125,7 @@ defmodule KifuwarabeWcsc33.CLI.Helpers.PositionParser do
         {rest, pos}
       end
 
-    IO.puts("parse(13) rest:#{rest}")
+    # IO.puts("parse(13) rest:#{rest}")
 
     # TODO 消す。盤表示
     IO.puts(KifuwarabeWcsc33.CLI.Views.Position.stringify(pos))

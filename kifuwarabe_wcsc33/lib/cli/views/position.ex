@@ -14,7 +14,9 @@ defmodule KifuwarabeWcsc33.CLI.Views.Position do
     hand1 = pos |>     stringify_hand1()
     moves = pos |>    stringify_moves()
 
-    header <> hand2 <> body <> hand1 <> moves
+    """
+
+    """ <> header <> hand2 <> body <> hand1 <> moves
   end
 
   # 盤表示のヘッダー
@@ -37,6 +39,7 @@ defmodule KifuwarabeWcsc33.CLI.Views.Position do
 
     """
     [#{m} moves / #{t} / #{r} repeat(s)]
+
     """
   end
 
@@ -76,6 +79,7 @@ defmodule KifuwarabeWcsc33.CLI.Views.Position do
     +--+--+--+--+--+--+--+--+
     |#{k}|#{r}|#{b}|#{g}|#{s}|#{n}|#{l}|#{p}|
     +--+--+--+--+--+--+--+--+
+
     """
   end
 
@@ -115,6 +119,7 @@ defmodule KifuwarabeWcsc33.CLI.Views.Position do
        +--+--+--+--+--+--+--+--+
        |#{k}|#{r}|#{b}|#{g}|#{s}|#{n}|#{l}|#{p}|
        +--+--+--+--+--+--+--+--+
+
     """
   end
 
@@ -261,6 +266,7 @@ defmodule KifuwarabeWcsc33.CLI.Views.Position do
     +--+--+--+--+--+--+--+--+--+
     |#{i9}|#{i8}|#{i7}|#{i6}|#{i5}|#{i4}|#{i3}|#{i2}|#{i1}| i
     +--+--+--+--+--+--+--+--+--+
+
     """
   end
 
@@ -361,10 +367,12 @@ defmodule KifuwarabeWcsc33.CLI.Views.Position do
   defp stringify_moves(pos) do
     # IO.inspect(pos.moves)
     move_list = Enum.map(pos.moves, fn move -> " #{KifuwarabeWcsc33.CLI.Views.Move.as_code(move)}" end)
-    IO.inspect(move_list)
+    # IO.inspect(move_list)
 
     move_list_as_str = move_list |> Enum.join()
 
-    "moves" <> move_list_as_str
+    "moves" <> move_list_as_str <> """
+
+    """
   end
 end
