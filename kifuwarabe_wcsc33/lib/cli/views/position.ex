@@ -57,6 +57,8 @@ defmodule KifuwarabeWcsc33.CLI.Views.Position do
   #  +--+--+--+--+--+--+--+--+
   #
   defp stringify_hand2(pos) do
+    IO.inspect(pos.hand_pieces, label: "stringify_hand2 pos.hand_pieces")
+
     # キング（King；玉）
     k = String.pad_leading("#{pos.hand_pieces[:k2]}", 2, " ")
     # ルック（Rook；飛車）
@@ -97,6 +99,8 @@ defmodule KifuwarabeWcsc33.CLI.Views.Position do
   #       +--+--+--+--+--+--+--+--+
   #
   defp stringify_hand1(pos) do
+    IO.inspect(pos.hand_pieces, label: "stringify_hand1 pos.hand_pieces")
+
     # キング（King；玉）
     k = String.pad_leading("#{pos.hand_pieces[:k1]}", 2, " ")
     # ルック（Rook；飛車）
