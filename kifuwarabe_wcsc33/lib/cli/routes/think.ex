@@ -19,6 +19,7 @@ defmodule KifuwarabeWcsc33.CLI.Routes.Think do
 
     # とりあえず、現局面で指せる手（合法手）を全部列挙しようぜ
     move_list = KifuwarabeWcsc33.CLI.Routes.MoveGeneration.make_move_list(pos)
+    IO.inspect(move_list, label: "[Think go] move_list")
 
     best_move =
       if move_list |> length() < 1 do
@@ -31,6 +32,7 @@ defmodule KifuwarabeWcsc33.CLI.Routes.Think do
         best_move
       end
 
+    IO.puts("[Think go] best_move:#{KifuwarabeWcsc33.CLI.Views.Move.as_code(best_move)}")
     best_move
   end
 end
