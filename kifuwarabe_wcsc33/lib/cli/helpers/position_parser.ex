@@ -349,7 +349,7 @@ defmodule KifuwarabeWcsc33.CLI.Helpers.PositionParser do
   defp parse_hands(rest, hand_pieces) do
     # 先頭の１文字（取りださない）
     first_char = rest |> String.at(0)
-    IO.puts("parse_hands first_char:[#{first_char}]")
+    # IO.puts("parse_hands first_char:[#{first_char}]")
 
     if first_char == "-" do
       # 持ち駒１つもなし
@@ -357,13 +357,13 @@ defmodule KifuwarabeWcsc33.CLI.Helpers.PositionParser do
       # 先頭の２文字 "- " を切り捨て
       rest = rest |> String.slice(2..-1)
 
-      IO.puts("parse_hands no-hands rest:#{rest}")
+      # IO.puts("parse_hands no-hands rest:#{rest}")
       {rest, hand_pieces}
     else
       # 持ち駒あり
       {rest, hand_pieces} = rest |> parse_piece_type_on_hands(0, hand_pieces)
-      IO.inspect(hand_pieces, label: "parse_hands hand_pieces")
-      IO.puts("parse_hands rest:#{rest}")
+      # IO.inspect(hand_pieces, label: "parse_hands hand_pieces")
+      # IO.puts("parse_hands rest:#{rest}")
 
       {rest, hand_pieces}
     end
@@ -387,12 +387,12 @@ defmodule KifuwarabeWcsc33.CLI.Helpers.PositionParser do
   defp parse_piece_type_on_hands(rest, number, hand_pieces) do
     # 先頭の１文字切り出し
     first_char = rest |> String.at(0)
-    IO.puts("parse_piece_type_on_hands first_char:[#{first_char}]")
+    # IO.puts("parse_piece_type_on_hands first_char:[#{first_char}]")
     rest = rest |> String.slice(1..-1)
 
     if first_char == " " do
       # Base case
-      IO.puts("parse_piece_type_on_hands Terminate")
+      # IO.puts("parse_piece_type_on_hands Terminate")
       # 何も成果を増やさず終了
       {rest, hand_pieces}
     else
@@ -402,7 +402,7 @@ defmodule KifuwarabeWcsc33.CLI.Helpers.PositionParser do
           Regex.match?(~r/^\d$/, first_char) ->
             # ２つ目の数字は一の位なので、以前の数は十の位なので、10倍する
             number = 10 * number + String.to_integer(first_char)
-            IO.puts("parse_piece_type_on_hands number:#{number}")
+            # IO.puts("parse_piece_type_on_hands number:#{number}")
 
             {rest, number, hand_pieces}
 
@@ -418,11 +418,11 @@ defmodule KifuwarabeWcsc33.CLI.Helpers.PositionParser do
                 number
               end
 
-            IO.puts("parse_piece_type_on_hands number:#{number} piece:#{piece}")
+            # IO.puts("parse_piece_type_on_hands number:#{number} piece:#{piece}")
 
             # 持ち駒データ追加
             hand_pieces = Map.merge(hand_pieces, %{piece => number})
-            IO.inspect(hand_pieces, label: "parse_piece_type_on_hands hand_pieces:")
+            # IO.inspect(hand_pieces, label: "parse_piece_type_on_hands hand_pieces:")
 
             # 数をリセット
             number = 0
