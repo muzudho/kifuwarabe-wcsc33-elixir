@@ -108,6 +108,7 @@ defmodule KifuwarabeWcsc33.CLI.Routes.MoveGeneration do
   #
   defp make_move_of_king(pos, src_sq) do
     # IO.puts("[move_generation make_move_of_king] pos.turn:#{pos.turn} src_sq:#{src_sq}")
+
     # 先手視点で定義しろだぜ
     [
       # ∧

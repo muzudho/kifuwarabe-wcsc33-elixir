@@ -1,4 +1,4 @@
-defmodule KifuwarabeWcsc33.CLI.Models.ToBoardInfo do
+defmodule KifuwarabeWcsc33.CLI.Mappings.ToBoardInfo do
   # 指定マスが、盤上かどうか判定する
   #
   # ## Parameters

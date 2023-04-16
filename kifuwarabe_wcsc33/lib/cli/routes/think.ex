@@ -38,6 +38,9 @@ defmodule KifuwarabeWcsc33.CLI.Routes.Think do
         best_move
       end
 
+    # TODO 自分から相手の利きへ飛び込む手（自殺手）は除外したい
+    # 動かして、玉が相手の利きに飛び込むようなら、戻す
+
     # IO.puts("[Think go] best_move:#{KifuwarabeWcsc33.CLI.Views.Move.as_code(best_move)}")
     best_move
   end

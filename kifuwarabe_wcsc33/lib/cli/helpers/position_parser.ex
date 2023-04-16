@@ -576,8 +576,8 @@ defmodule KifuwarabeWcsc33.CLI.Helpers.PositionParser do
 
     # IO.inspect(move, label: "parse move")
 
-    # 局面更新
-    {pos, _captured} = pos |> KifuwarabeWcsc33.CLI.Models.ToPosition.move(move)
+    # 局面更新（実際、指してみる）
+    pos = pos |> KifuwarabeWcsc33.CLI.Routes.DoMove.move(move)
 
     # 区切り
     # ======

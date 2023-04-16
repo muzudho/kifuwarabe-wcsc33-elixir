@@ -76,7 +76,7 @@ defmodule KifuwarabeWcsc33.CLI.Mappings.ToMove do
         :gote -> src_sq - relative
       end
 
-    if KifuwarabeWcsc33.CLI.Models.ToBoardInfo.in_board(dst_sq) do
+    if KifuwarabeWcsc33.CLI.Mappings.ToBoardInfo.in_board(dst_sq) do
       # 盤上なら
       # ターゲット・ピース（Target Piece；移動先の駒）を調べる
       # IO.puts("[to_destination move_list_from] in_board src_sq:#{src_sq} dst_sq:#{dst_sq} direction_of:#{direction_of} step:#{step} relative:#{relative} pos.turn:#{pos.turn}")
@@ -134,7 +134,7 @@ defmodule KifuwarabeWcsc33.CLI.Mappings.ToMove do
           :gote -> src_sq - step * relative
         end
 
-      if KifuwarabeWcsc33.CLI.Models.ToBoardInfo.in_board(dst_sq) do
+      if KifuwarabeWcsc33.CLI.Mappings.ToBoardInfo.in_board(dst_sq) do
         # 盤上なら
         # ターゲット・ピース（Target Piece；移動先の駒）を調べる
         # IO.puts("[to_destination move_list_from] in_board src_sq:#{src_sq} dst_sq:#{dst_sq} direction_of:#{direction_of} step:#{step} relative:#{relative} pos.turn:#{pos.turn}")

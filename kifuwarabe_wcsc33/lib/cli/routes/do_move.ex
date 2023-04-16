@@ -1,4 +1,4 @@
-defmodule KifuwarabeWcsc33.CLI.Models.ToPosition do
+defmodule KifuwarabeWcsc33.CLI.Routes.DoMove do
   @moduledoc """
     局面ができる
   """
@@ -19,10 +19,7 @@ defmodule KifuwarabeWcsc33.CLI.Models.ToPosition do
   
   """
   def move(pos, move) do
-    # 移動先マスにある駒。無ければ空マス
-    captured = pos.board[move.destination]
-
-    {pos, captured} =
+    pos =
       if move.drop_piece_type != nil do
         # 打つ駒と、減った枚数
         drop_piece = KifuwarabeWcsc33.CLI.Mappings.ToPiece.from_turn_and_piece_type(pos.turn, move.drop_piece_type)
@@ -41,8 +38,20 @@ defmodule KifuwarabeWcsc33.CLI.Models.ToPosition do
           }
         }
 
-        {pos, captured}
+        pos
       else
+        # 移動先にある駒。無ければ空マス
+        target = pos.board[move.destination]
+
+        # 駒があれば取る
+        move =
+          if target != :sp do
+            # 指し手更新
+            %{ move | captured: KifuwarabeWcsc33.CLI.Mappings.ToPieceType.from_piece(target)}
+          else
+            move
+          end
+
         # 局面更新
         pos = %{ pos |
           # 将棋盤更新
@@ -54,7 +63,7 @@ defmodule KifuwarabeWcsc33.CLI.Models.ToPosition do
           }
         }
 
-        {pos, captured}
+        pos
       end
 
     # 局面更新
@@ -63,6 +72,6 @@ defmodule KifuwarabeWcsc33.CLI.Models.ToPosition do
             moves: pos.moves ++ [move]}
 
     # TODO 取った駒を、棋譜に記録したい
-    {pos, captured}
+    pos
   end
 end

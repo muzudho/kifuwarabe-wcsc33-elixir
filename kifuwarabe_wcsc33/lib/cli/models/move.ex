@@ -12,7 +12,9 @@ defmodule KifuwarabeWcsc33.CLI.Models.Move do
             # - nil なら、リザイン（Resign；投了）とする
             destination: nil,
             # 移動後に成るか？
-            promote?: false
+            promote?: false,
+            # （あれば）取った駒（先後の情報は持たない）
+            captured: nil
 
   # ## 雑談
   #
