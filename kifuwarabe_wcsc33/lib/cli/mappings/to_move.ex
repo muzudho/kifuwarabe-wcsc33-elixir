@@ -3,11 +3,11 @@ defmodule KifuwarabeWcsc33.CLI.Mappings.ToMove do
   # 先手から見た数にしろだぜ。
   # 将棋盤は反時計回りに９０°回転すると考えれば、マス番地は読みやすくなるだろう。
   @relative_offset %{
-    # 45
+    # 54
     # ∧
     # │
     # 55
-    north_of: -10,
+    north_of: -1,
     # 　　　44
     # 　　─┐
     # 　／
