@@ -110,13 +110,10 @@ defmodule KifuwarabeWcsc33.CLI.Helpers.PositionParser do
         # 残りの文字列 |> あれば、続くスペースを削除
         rest = rest |> String.trim_leading()
 
-        # 指し手読取
-        {rest, turn, moves} = rest |> parse_string_to_moves(pos.turn, [])
+        # 指し手読取と、局面更新
+        {rest, pos} = rest |> parse_moves_string_and_update_position(pos)
 
         # IO.inspect(moves, label: "parse(12) The move_list is")
-
-        # 将棋盤の更新
-        pos = %{pos | turn: turn, moves: moves}
 
         {rest, pos}
       else
@@ -438,15 +435,17 @@ defmodule KifuwarabeWcsc33.CLI.Helpers.PositionParser do
     end
   end
 
-  # 指し手の解析
+  # 指し手の解析と、局面更新
+  #
+  # - 手番の更新
+  # - 駒の位置の更新
   #
   # ## Parameters
   #
   #   * `rest` - レスト（Rest；残りの文字列）
-  #   * `turn` - ターン（Turn；手番）
-  #   * `moves` - ムーブズ・リスト（Moves List；指し手のリスト）
+  #   * `pos` - ポジション（Position；局面）
   #
-  defp parse_string_to_moves(rest, turn, moves) do
+  defp parse_moves_string_and_update_position(rest, pos) do
     move = KifuwarabeWcsc33.CLI.Models.Move.new()
 
     # 移動元
@@ -458,7 +457,7 @@ defmodule KifuwarabeWcsc33.CLI.Helpers.PositionParser do
     # １文字目は、「大文字英字」か、「筋の数字」
     # 先頭の１文字切り出し
     first_char = rest |> String.at(0)
-    # IO.puts("parse_string_to_moves first_char:[#{first_char}]")
+    # IO.puts("parse_moves_string_and_update_position first_char:[#{first_char}]")
     rest = rest |> String.slice(1..-1)
 
     {rest, move} =
@@ -470,7 +469,7 @@ defmodule KifuwarabeWcsc33.CLI.Helpers.PositionParser do
           # 「ランク（Rank；段）の小文字アルファベット」
           # 先頭の１文字切り出し
           second_char = rest |> String.at(0)
-          # IO.puts("parse_string_to_moves second_char:[#{second_char}]")
+          # IO.puts("parse_moves_string_and_update_position second_char:[#{second_char}]")
           rest = rest |> String.slice(1..-1)
 
           rank =
@@ -516,7 +515,7 @@ defmodule KifuwarabeWcsc33.CLI.Helpers.PositionParser do
           rest = rest |> String.slice(1..-1)
 
           # IO.inspect(move, label: "parse(12) The move is")
-          # IO.puts("parse_string_to_moves rest:[#{rest}]")
+          # IO.puts("parse_moves_string_and_update_position rest:[#{rest}]")
 
           {rest, move}
       end
@@ -530,7 +529,7 @@ defmodule KifuwarabeWcsc33.CLI.Helpers.PositionParser do
 
     # 先頭の１文字切り出し
     third_char = rest |> String.at(0)
-    # IO.puts("parse_string_to_moves third_char:[#{third_char}]")
+    # IO.puts("parse_moves_string_and_update_position third_char:[#{third_char}]")
     rest = rest |> String.slice(1..-1)
 
     # きっと数字だろ
@@ -538,7 +537,7 @@ defmodule KifuwarabeWcsc33.CLI.Helpers.PositionParser do
 
     # 先頭の１文字切り出し
     fourth_char = rest |> String.at(0)
-    # IO.puts("parse_string_to_moves fourth_char:[#{fourth_char}]")
+    # IO.puts("parse_moves_string_and_update_position fourth_char:[#{fourth_char}]")
     rest = rest |> String.slice(1..-1)
 
     # きっと英数字小文字だろ
@@ -577,9 +576,10 @@ defmodule KifuwarabeWcsc33.CLI.Helpers.PositionParser do
 
     # IO.inspect(move, label: "parse move")
 
-    # 指し手追加
-    moves = moves ++ [move]
-    turn = KifuwarabeWcsc33.CLI.Mappings.ToTurn.flip(turn)
+    # 局面更新
+    pos = %{pos |
+            turn: KifuwarabeWcsc33.CLI.Mappings.ToTurn.flip(pos.turn),
+            moves: pos.moves ++ [move]}
 
     # 区切り
     # ======
@@ -588,15 +588,15 @@ defmodule KifuwarabeWcsc33.CLI.Helpers.PositionParser do
     #
     rest = rest |> String.trim_leading()
 
-    {rest, turn, moves} =
+    {rest, pos} =
       if rest |> String.length() < 1 do
         # Base case
-        {rest, turn, moves}
+        {rest, pos}
       else
         # Recursive
-        rest |> parse_string_to_moves(turn, moves)
+        rest |> parse_moves_string_and_update_position(pos)
       end
 
-    {rest, turn, moves}
+    {rest, pos}
   end
 end
