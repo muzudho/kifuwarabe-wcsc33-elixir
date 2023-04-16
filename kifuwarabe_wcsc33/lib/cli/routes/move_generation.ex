@@ -419,14 +419,6 @@ defmodule KifuwarabeWcsc33.CLI.Routes.MoveGeneration do
     end
   end
 
-  defp make_drop_moves(piece_type, destination_squares) do
-    destination_squares
-      |> Enum.map(fn (dst_sq) ->
-          move = KifuwarabeWcsc33.CLI.Models.Move.new()
-          %{ move | drop_piece_type: piece_type, destination: dst_sq}
-          end)
-  end
-
   # ルック（Rook；飛車）
   #
   # ## Parameters
@@ -435,8 +427,7 @@ defmodule KifuwarabeWcsc33.CLI.Routes.MoveGeneration do
   #   * `piece_type` - ピース・タイプ（Piece Type；先後付きの駒種類）
   #
   defp make_move_of_rook_on_hand(_pos) do
-    destination_squares = KifuwarabeWcsc33.CLI.Models.Squares.all_squares
-    make_drop_moves(:r, destination_squares)
+    KifuwarabeWcsc33.CLI.Models.Squares.all_squares |> make_drop_moves(:r)
   end
 
   # ビショップ（Bishop；角）
@@ -447,8 +438,7 @@ defmodule KifuwarabeWcsc33.CLI.Routes.MoveGeneration do
   #   * `piece_type` - ピース・タイプ（Piece Type；先後付きの駒種類）
   #
   defp make_move_of_bishop_on_hand(_pos) do
-    destination_squares = KifuwarabeWcsc33.CLI.Models.Squares.all_squares
-    make_drop_moves(:b, destination_squares)
+    KifuwarabeWcsc33.CLI.Models.Squares.all_squares |> make_drop_moves(:b)
   end
 
   # ゴールド（Gold；金）
@@ -459,8 +449,7 @@ defmodule KifuwarabeWcsc33.CLI.Routes.MoveGeneration do
   #   * `piece_type` - ピース・タイプ（Piece Type；先後付きの駒種類）
   #
   defp make_move_of_gold_on_hand(_pos) do
-    destination_squares = KifuwarabeWcsc33.CLI.Models.Squares.all_squares
-    make_drop_moves(:g, destination_squares)
+    KifuwarabeWcsc33.CLI.Models.Squares.all_squares |> make_drop_moves(:g)
   end
 
   # シルバー（Silver；銀）
@@ -471,8 +460,7 @@ defmodule KifuwarabeWcsc33.CLI.Routes.MoveGeneration do
   #   * `piece_type` - ピース・タイプ（Piece Type；先後付きの駒種類）
   #
   defp make_move_of_silver_on_hand(_pos) do
-    destination_squares = KifuwarabeWcsc33.CLI.Models.Squares.all_squares
-    make_drop_moves(:s, destination_squares)
+    KifuwarabeWcsc33.CLI.Models.Squares.all_squares |> make_drop_moves(:s)
   end
 
   # ナイト（kNight；桂）
@@ -490,7 +478,7 @@ defmodule KifuwarabeWcsc33.CLI.Routes.MoveGeneration do
         KifuwarabeWcsc33.CLI.Models.Squares.gote_knight_drop_squares
       end
 
-    make_drop_moves(:g, destination_squares)
+    destination_squares |> make_drop_moves(:g)
   end
   
   # ランス（Lance；香）
@@ -509,7 +497,7 @@ defmodule KifuwarabeWcsc33.CLI.Routes.MoveGeneration do
         KifuwarabeWcsc33.CLI.Models.Squares.gote_lance_and_pawn_drop_squares
       end
 
-    make_drop_moves(:g, destination_squares)
+    destination_squares |> make_drop_moves(:g)
   end
 
   # ポーン（Pawn；歩）
@@ -529,7 +517,16 @@ defmodule KifuwarabeWcsc33.CLI.Routes.MoveGeneration do
         KifuwarabeWcsc33.CLI.Models.Squares.gote_lance_and_pawn_drop_squares
       end
 
-    make_drop_moves(:g, destination_squares)
+    destination_squares |> make_drop_moves(:g)
+  end
+
+  # 打つ指し手に変換
+  defp make_drop_moves(destination_squares, piece_type) do
+    destination_squares
+      |> Enum.map(fn (dst_sq) ->
+          move = KifuwarabeWcsc33.CLI.Models.Move.new()
+          %{ move | drop_piece_type: piece_type, destination: dst_sq}
+          end)
   end
 
 end

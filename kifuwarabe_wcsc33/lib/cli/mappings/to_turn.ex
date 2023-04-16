@@ -1,4 +1,26 @@
 defmodule KifuwarabeWcsc33.CLI.Mappings.ToTurn do
+  @moduledoc """
+
+    手番
+
+  """
+
+  @doc """
+
+    先後を反転
+
+  ## Parameters
+
+    * `turn` - ターン（Turn；先後）
+    
+  """
+  def flip(turn) do
+      case turn do
+          :sente -> :gote
+          :gote -> :sente
+      end
+  end
+
   @doc """
     ピースを、ターンへ変換
 

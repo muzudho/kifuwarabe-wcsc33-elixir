@@ -111,12 +111,12 @@ defmodule KifuwarabeWcsc33.CLI.Helpers.PositionParser do
         rest = rest |> String.trim_leading()
 
         # 指し手読取
-        {rest, moves} = rest |> parse_string_to_moves([])
+        {rest, turn, moves} = rest |> parse_string_to_moves(pos.turn, [])
 
         # IO.inspect(moves, label: "parse(12) The move_list is")
 
         # 将棋盤の更新
-        pos = %{pos | moves: moves}
+        pos = %{pos | turn: turn, moves: moves}
 
         {rest, pos}
       else
@@ -443,9 +443,10 @@ defmodule KifuwarabeWcsc33.CLI.Helpers.PositionParser do
   # ## Parameters
   #
   #   * `rest` - レスト（Rest；残りの文字列）
+  #   * `turn` - ターン（Turn；手番）
   #   * `moves` - ムーブズ・リスト（Moves List；指し手のリスト）
   #
-  defp parse_string_to_moves(rest, moves) do
+  defp parse_string_to_moves(rest, turn, moves) do
     move = KifuwarabeWcsc33.CLI.Models.Move.new()
 
     # 移動元
@@ -578,6 +579,7 @@ defmodule KifuwarabeWcsc33.CLI.Helpers.PositionParser do
 
     # 指し手追加
     moves = moves ++ [move]
+    turn = KifuwarabeWcsc33.CLI.Mappings.ToTurn.flip(turn)
 
     # 区切り
     # ======
@@ -586,16 +588,15 @@ defmodule KifuwarabeWcsc33.CLI.Helpers.PositionParser do
     #
     rest = rest |> String.trim_leading()
 
-    {rest, moves} =
+    {rest, turn, moves} =
       if rest |> String.length() < 1 do
         # Base case
-        {rest, moves}
+        {rest, turn, moves}
       else
         # Recursive
-        {rest, moves} = rest |> parse_string_to_moves(moves)
-        {rest, moves}
+        rest |> parse_string_to_moves(turn, moves)
       end
 
-    {rest, moves}
+    {rest, turn, moves}
   end
 end

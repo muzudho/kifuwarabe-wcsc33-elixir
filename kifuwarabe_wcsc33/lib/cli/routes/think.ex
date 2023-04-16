@@ -17,6 +17,8 @@ defmodule KifuwarabeWcsc33.CLI.Routes.Think do
   """
   def go(pos) do
 
+    # IO.puts("[think go] pos.turn:#{pos.turn}")
+
     # とりあえず、現局面で指せる手（合法手）を全部列挙しようぜ
     move_list = KifuwarabeWcsc33.CLI.Routes.MoveGeneration.make_move_list(pos)
     # IO.inspect(move_list, label: "[Think go] move_list")
