@@ -577,9 +577,7 @@ defmodule KifuwarabeWcsc33.CLI.Helpers.PositionParser do
     # IO.inspect(move, label: "parse move")
 
     # 局面更新
-    pos = %{pos |
-            turn: KifuwarabeWcsc33.CLI.Mappings.ToTurn.flip(pos.turn),
-            moves: pos.moves ++ [move]}
+    {pos, _captured} = pos |> KifuwarabeWcsc33.CLI.Models.ToPosition.move(move)
 
     # 区切り
     # ======
