@@ -88,33 +88,32 @@ defmodule KifuwarabeWcsc33.CLI.Routes.MoveGeneration do
   #   * `src_sq` - ソース・スクウェア（SouRCe SQuare：マス番地）
   #
   defp make_move_of_king(pos, src_sq) do
-    IO.puts("[move_generation make_move_of_king] pos.turn:#{pos.turn} src_sq:#{src_sq}")
+    # IO.puts("[move_generation make_move_of_king] pos.turn:#{pos.turn} src_sq:#{src_sq}")
     # 先手視点で定義しろだぜ
-    # [
-    #   # ∧
-    #   # │
-    #   KifuwarabeWcsc33.CLI.Models.ToMove.from(src_sq, pos, :north_of),
-    #   # 　─┐
-    #   # ／
-    #   KifuwarabeWcsc33.CLI.Models.ToMove.from(src_sq, pos, :north_east_of),
-    #   # ──＞
-    #   KifuwarabeWcsc33.CLI.Models.ToMove.from(src_sq, pos, :east_of),
-    #   # ＼
-    #   # 　─┘
-    #   KifuwarabeWcsc33.CLI.Models.ToMove.from(src_sq, pos, :south_east_of),
-    #   # │
-    #   # Ｖ
-    #   KifuwarabeWcsc33.CLI.Models.ToMove.from(src_sq, pos, :south_of),
-    #   # 　／
-    #   # └─
-    #   KifuwarabeWcsc33.CLI.Models.ToMove.from(src_sq, pos, :south_west_of),
-    #   # ＜──
-    #   KifuwarabeWcsc33.CLI.Models.ToMove.from(src_sq, pos, :west_of),
-    #   # ┌─
-    #   # 　＼
-    #   KifuwarabeWcsc33.CLI.Models.ToMove.from(src_sq, pos, :north_west_of),
-    # ]
-    nil
+    [
+      # ∧
+      # │
+      KifuwarabeWcsc33.CLI.Models.ToMove.from(src_sq, pos, :north_of),
+      # 　─┐
+      # ／
+      KifuwarabeWcsc33.CLI.Models.ToMove.from(src_sq, pos, :north_east_of),
+      # ──＞
+      KifuwarabeWcsc33.CLI.Models.ToMove.from(src_sq, pos, :east_of),
+      # ＼
+      # 　─┘
+      KifuwarabeWcsc33.CLI.Models.ToMove.from(src_sq, pos, :south_east_of),
+      # │
+      # Ｖ
+      KifuwarabeWcsc33.CLI.Models.ToMove.from(src_sq, pos, :south_of),
+      # 　／
+      # └─
+      KifuwarabeWcsc33.CLI.Models.ToMove.from(src_sq, pos, :south_west_of),
+      # ＜──
+      KifuwarabeWcsc33.CLI.Models.ToMove.from(src_sq, pos, :west_of),
+      # ┌─
+      # 　＼
+      KifuwarabeWcsc33.CLI.Models.ToMove.from(src_sq, pos, :north_west_of),
+    ]
   end
 
   # 手番の、ルック（Rook；飛車）
@@ -125,22 +124,21 @@ defmodule KifuwarabeWcsc33.CLI.Routes.MoveGeneration do
   #   * `src_sq` - ソース・スクウェア（SouRCe SQuare：マス番地）
   #
   defp make_move_of_rook(pos, src_sq) do
-    IO.puts("[move_generation make_move_of_rook] pos.turn:#{pos.turn} src_sq:#{src_sq}")
-    # [
-    #   # ∧ Long
-    #   # │
-    #   # │
-    #   KifuwarabeWcsc33.CLI.Models.ToMove.list_from(src_sq, pos, :north_of),
-    #   # ────＞ Long
-    #   KifuwarabeWcsc33.CLI.Models.ToMove.list_from(src_sq, pos, :east_of),
-    #   # │
-    #   # │
-    #   # Ｖ Long
-    #   KifuwarabeWcsc33.CLI.Models.ToMove.list_from(src_sq, pos, :south_of),
-    #   # ＜──── Long
-    #   KifuwarabeWcsc33.CLI.Models.ToMove.list_from(src_sq, pos, :west_of),
-    # ] |> List.flatten()
-    nil
+    # IO.puts("[move_generation make_move_of_rook] pos.turn:#{pos.turn} src_sq:#{src_sq}")
+    [
+      # ∧ Long
+      # │
+      # │
+      KifuwarabeWcsc33.CLI.Models.ToMove.list_from(src_sq, pos, :north_of),
+      # ────＞ Long
+      KifuwarabeWcsc33.CLI.Models.ToMove.list_from(src_sq, pos, :east_of),
+      # │
+      # │
+      # Ｖ Long
+      KifuwarabeWcsc33.CLI.Models.ToMove.list_from(src_sq, pos, :south_of),
+      # ＜──── Long
+      KifuwarabeWcsc33.CLI.Models.ToMove.list_from(src_sq, pos, :west_of),
+    ] |> List.flatten()
   end
 
   # 手番の、ビショップ（Bishop；角）
@@ -151,26 +149,25 @@ defmodule KifuwarabeWcsc33.CLI.Routes.MoveGeneration do
   #   * `src_sq` - ソース・スクウェア（SouRCe SQuare：マス番地）
   #
   defp make_move_of_bishop(pos, src_sq) do
-    IO.puts("[move_generation make_move_of_bishop] pos.turn:#{pos.turn} src_sq:#{src_sq}")
-    # [
-    #   # 　　─┐ Long
-    #   # 　／
-    #   # ／
-    #   KifuwarabeWcsc33.CLI.Models.ToMove.list_from(src_sq, pos, :north_east_of),
-    #   # ＼
-    #   # 　＼
-    #   # 　　─┘ Long
-    #   KifuwarabeWcsc33.CLI.Models.ToMove.list_from(src_sq, pos, :south_east_of),
-    #   # 　　／
-    #   # 　／
-    #   # └─ Long
-    #   KifuwarabeWcsc33.CLI.Models.ToMove.list_from(src_sq, pos, :south_west_of),
-    #   # ┌─ Long
-    #   # 　＼
-    #   # 　　＼
-    #   KifuwarabeWcsc33.CLI.Models.ToMove.list_from(src_sq, pos, :north_west_of),
-    # ] |> List.flatten()
-    nil
+    # IO.puts("[move_generation make_move_of_bishop] pos.turn:#{pos.turn} src_sq:#{src_sq}")
+    [
+      # 　　─┐ Long
+      # 　／
+      # ／
+      KifuwarabeWcsc33.CLI.Models.ToMove.list_from(src_sq, pos, :north_east_of),
+      # ＼
+      # 　＼
+      # 　　─┘ Long
+      KifuwarabeWcsc33.CLI.Models.ToMove.list_from(src_sq, pos, :south_east_of),
+      # 　　／
+      # 　／
+      # └─ Long
+      KifuwarabeWcsc33.CLI.Models.ToMove.list_from(src_sq, pos, :south_west_of),
+      # ┌─ Long
+      # 　＼
+      # 　　＼
+      KifuwarabeWcsc33.CLI.Models.ToMove.list_from(src_sq, pos, :north_west_of),
+    ] |> List.flatten()
   end
 
   # 手番の、ゴールド（Gold；金）
@@ -181,26 +178,25 @@ defmodule KifuwarabeWcsc33.CLI.Routes.MoveGeneration do
   #   * `src_sq` - ソース・スクウェア（SouRCe SQuare：マス番地）
   #
   defp make_move_of_gold(pos, src_sq) do
-    IO.puts("[move_generation make_move_of_gold] pos.turn:#{pos.turn} src_sq:#{src_sq}")
-    # [
-    #   # ∧
-    #   # │
-    #   KifuwarabeWcsc33.CLI.Models.ToMove.from(src_sq, pos, :north_of),
-    #   # 　─┐
-    #   # ／
-    #   KifuwarabeWcsc33.CLI.Models.ToMove.from(src_sq, pos, :north_east_of),
-    #   # ──＞
-    #   KifuwarabeWcsc33.CLI.Models.ToMove.from(src_sq, pos, :east_of),
-    #   # │
-    #   # Ｖ
-    #   KifuwarabeWcsc33.CLI.Models.ToMove.from(src_sq, pos, :south_of),
-    #   # ＜──
-    #   KifuwarabeWcsc33.CLI.Models.ToMove.from(src_sq, pos, :west_of),
-    #   # ┌─
-    #   # 　＼
-    #   KifuwarabeWcsc33.CLI.Models.ToMove.from(src_sq, pos, :north_west_of),
-    # ]
-    nil
+    # IO.puts("[move_generation make_move_of_gold] pos.turn:#{pos.turn} src_sq:#{src_sq}")
+    [
+      # ∧
+      # │
+      KifuwarabeWcsc33.CLI.Models.ToMove.from(src_sq, pos, :north_of),
+      # 　─┐
+      # ／
+      KifuwarabeWcsc33.CLI.Models.ToMove.from(src_sq, pos, :north_east_of),
+      # ──＞
+      KifuwarabeWcsc33.CLI.Models.ToMove.from(src_sq, pos, :east_of),
+      # │
+      # Ｖ
+      KifuwarabeWcsc33.CLI.Models.ToMove.from(src_sq, pos, :south_of),
+      # ＜──
+      KifuwarabeWcsc33.CLI.Models.ToMove.from(src_sq, pos, :west_of),
+      # ┌─
+      # 　＼
+      KifuwarabeWcsc33.CLI.Models.ToMove.from(src_sq, pos, :north_west_of),
+    ]
   end
 
   # 手番の、シルバー（Silver；銀）
@@ -211,25 +207,24 @@ defmodule KifuwarabeWcsc33.CLI.Routes.MoveGeneration do
   #   * `src_sq` - ソース・スクウェア（SouRCe SQuare：マス番地）
   #
   defp make_move_of_silver(pos, src_sq) do
-    IO.puts("[move_generation make_move_of_silver] pos.turn:#{pos.turn} src_sq:#{src_sq}")
-    # [
-    #   # ∧
-    #   # │
-    #   KifuwarabeWcsc33.CLI.Models.ToMove.from(src_sq, pos, :north_of),
-    #   # 　─┐
-    #   # ／
-    #   KifuwarabeWcsc33.CLI.Models.ToMove.from(src_sq, pos, :north_east_of),
-    #   # ＼
-    #   # 　─┘
-    #   KifuwarabeWcsc33.CLI.Models.ToMove.from(src_sq, pos, :south_east_of),
-    #   # 　／
-    #   # └─
-    #   KifuwarabeWcsc33.CLI.Models.ToMove.from(src_sq, pos, :south_west_of),
-    #   # ┌─
-    #   # 　＼
-    #   KifuwarabeWcsc33.CLI.Models.ToMove.from(src_sq, pos, :north_west_of),
-    # ]
-    nil
+    # IO.puts("[move_generation make_move_of_silver] pos.turn:#{pos.turn} src_sq:#{src_sq}")
+    [
+      # ∧
+      # │
+      KifuwarabeWcsc33.CLI.Models.ToMove.from(src_sq, pos, :north_of),
+      # 　─┐
+      # ／
+      KifuwarabeWcsc33.CLI.Models.ToMove.from(src_sq, pos, :north_east_of),
+      # ＼
+      # 　─┘
+      KifuwarabeWcsc33.CLI.Models.ToMove.from(src_sq, pos, :south_east_of),
+      # 　／
+      # └─
+      KifuwarabeWcsc33.CLI.Models.ToMove.from(src_sq, pos, :south_west_of),
+      # ┌─
+      # 　＼
+      KifuwarabeWcsc33.CLI.Models.ToMove.from(src_sq, pos, :north_west_of),
+    ]
   end
 
   # 手番の、ナイト（kNight；桂）
@@ -240,7 +235,7 @@ defmodule KifuwarabeWcsc33.CLI.Routes.MoveGeneration do
   #   * `src_sq` - ソース・スクウェア（SouRCe SQuare：マス番地）
   #
   defp make_move_of_knight(pos, src_sq) do
-    IO.puts("[move_generation make_move_of_knight] pos.turn:#{pos.turn} src_sq:#{src_sq}")
+    # IO.puts("[move_generation make_move_of_knight] pos.turn:#{pos.turn} src_sq:#{src_sq}")
     [
       # 　─┐
       # ／
@@ -261,15 +256,13 @@ defmodule KifuwarabeWcsc33.CLI.Routes.MoveGeneration do
   #   * `src_sq` - ソース・スクウェア（SouRCe SQuare：マス番地）
   #
   defp make_move_of_lance(pos, src_sq) do
-    IO.puts("[move_generation make_move_of_lance] pos.turn:#{pos.turn} src_sq:#{src_sq}")
-    # [
-    #   # ∧ Long
-    #   # │
-    #   # │
-    #   KifuwarabeWcsc33.CLI.Models.ToMove.list_from(src_sq, pos, :north_of),
-    # ] |> List.flatten()
-
-    nil
+    # IO.puts("[move_generation make_move_of_lance] pos.turn:#{pos.turn} src_sq:#{src_sq}")
+    [
+      # ∧ Long
+      # │
+      # │
+      KifuwarabeWcsc33.CLI.Models.ToMove.list_from(src_sq, pos, :north_of),
+    ] |> List.flatten()
   end
 
   # 手番の、ポーン（Pawn；歩）
@@ -280,13 +273,12 @@ defmodule KifuwarabeWcsc33.CLI.Routes.MoveGeneration do
   #   * `src_sq` - ソース・スクウェア（SouRCe SQuare：マス番地）
   #
   defp make_move_of_pawn(pos, src_sq) do
-    IO.puts("[move_generation make_move_of_pawn] pos.turn:#{pos.turn} src_sq:#{src_sq}")
-    # [
-    #   # ∧
-    #   # │
-    #   KifuwarabeWcsc33.CLI.Models.ToMove.from(src_sq, pos, :north_of),
-    # ]
-    nil
+    # IO.puts("[move_generation make_move_of_pawn] pos.turn:#{pos.turn} src_sq:#{src_sq}")
+    [
+      # ∧
+      # │
+      KifuwarabeWcsc33.CLI.Models.ToMove.from(src_sq, pos, :north_of),
+    ]
   end
 
   # 手番の、It's reasonably a プロモーテッド・ルック（Promoted Rook；成飛）. It's actually ドラゴン（Dragon；竜）
@@ -297,39 +289,38 @@ defmodule KifuwarabeWcsc33.CLI.Routes.MoveGeneration do
   #   * `src_sq` - ソース・スクウェア（SouRCe SQuare：マス番地）
   #
   defp make_move_of_promoted_rook(pos, src_sq) do
-    IO.puts("[move_generation make_move_of_promoted_rook] pos.turn:#{pos.turn} src_sq:#{src_sq}")
-    # short_effect = [
-    #   # 　─┐
-    #   # ／
-    #   KifuwarabeWcsc33.CLI.Models.ToMove.from(src_sq, pos, :north_east_of),
-    #   # ＼
-    #   # 　─┘
-    #   KifuwarabeWcsc33.CLI.Models.ToMove.from(src_sq, pos, :south_east_of),
-    #   # 　／
-    #   # └─
-    #   KifuwarabeWcsc33.CLI.Models.ToMove.from(src_sq, pos, :south_west_of),
-    #   # ┌─
-    #   # 　＼
-    #   KifuwarabeWcsc33.CLI.Models.ToMove.from(src_sq, pos, :north_west_of),
-    # ]
-# 
-    # long_effect = [
-    #   # ∧ Long
-    #   # │
-    #   # │
-    #   KifuwarabeWcsc33.CLI.Models.ToMove.list_from(src_sq, pos, :north_of),
-    #   # ────＞ Long
-    #   KifuwarabeWcsc33.CLI.Models.ToMove.list_from(src_sq, pos, :east_of),
-    #   # │
-    #   # │
-    #   # Ｖ Long
-    #   KifuwarabeWcsc33.CLI.Models.ToMove.list_from(src_sq, pos, :south_of),
-    #   # ＜──── Long
-    #   KifuwarabeWcsc33.CLI.Models.ToMove.list_from(src_sq, pos, :west_of),
-    # ] |> List.flatten()
-# 
-    # short_effect ++ long_effect
-    nil
+    # IO.puts("[move_generation make_move_of_promoted_rook] pos.turn:#{pos.turn} src_sq:#{src_sq}")
+    short_effect = [
+      # 　─┐
+      # ／
+      KifuwarabeWcsc33.CLI.Models.ToMove.from(src_sq, pos, :north_east_of),
+      # ＼
+      # 　─┘
+      KifuwarabeWcsc33.CLI.Models.ToMove.from(src_sq, pos, :south_east_of),
+      # 　／
+      # └─
+      KifuwarabeWcsc33.CLI.Models.ToMove.from(src_sq, pos, :south_west_of),
+      # ┌─
+      # 　＼
+      KifuwarabeWcsc33.CLI.Models.ToMove.from(src_sq, pos, :north_west_of),
+    ]
+    
+    long_effect = [
+      # ∧ Long
+      # │
+      # │
+      KifuwarabeWcsc33.CLI.Models.ToMove.list_from(src_sq, pos, :north_of),
+      # ────＞ Long
+      KifuwarabeWcsc33.CLI.Models.ToMove.list_from(src_sq, pos, :east_of),
+      # │
+      # │
+      # Ｖ Long
+      KifuwarabeWcsc33.CLI.Models.ToMove.list_from(src_sq, pos, :south_of),
+      # ＜──── Long
+      KifuwarabeWcsc33.CLI.Models.ToMove.list_from(src_sq, pos, :west_of),
+    ] |> List.flatten()
+    
+    short_effect ++ long_effect
   end
 
   # 手番の、It's reasonably a プロモーテッド・ビショップ（Promoted Bishop；成角）.  It's actually ホース（Horse；馬）. Ponanza calls ペガサス（Pegasus；天馬）
@@ -340,40 +331,39 @@ defmodule KifuwarabeWcsc33.CLI.Routes.MoveGeneration do
   #   * `src_sq` - ソース・スクウェア（SouRCe SQuare：マス番地）
   #
   defp make_move_of_promoted_bishop(pos, src_sq) do
-    IO.puts("[move_generation make_move_of_promoted_bishop] pos.turn:#{pos.turn} src_sq:#{src_sq}")
-    #short_effect = [
-    #  # ∧
-    #  # │
-    #  KifuwarabeWcsc33.CLI.Models.ToMove.from(src_sq, pos, :north_of),
-    #  # ──＞
-    #  KifuwarabeWcsc33.CLI.Models.ToMove.from(src_sq, pos, :east_of),
-    #  # │
-    #  # Ｖ
-    #  KifuwarabeWcsc33.CLI.Models.ToMove.from(src_sq, pos, :south_of),
-    #  # ＜──
-    #  KifuwarabeWcsc33.CLI.Models.ToMove.from(src_sq, pos, :west_of),
-    #]
-#
-    #long_effect = [
-    #  # 　　─┐ Long
-    #  # 　／
-    #  # ／
-    #  KifuwarabeWcsc33.CLI.Models.ToMove.list_from(src_sq, pos, :north_east_of),
-    #  # ＼
-    #  # 　＼
-    #  # 　　─┘ Long
-    #  KifuwarabeWcsc33.CLI.Models.ToMove.list_from(src_sq, pos, :south_east_of),
-    #  # 　　／
-    #  # 　／
-    #  # └─ Long
-    #  KifuwarabeWcsc33.CLI.Models.ToMove.list_from(src_sq, pos, :south_west_of),
-    #  # ┌─ Long
-    #  # 　＼
-    #  # 　　＼
-    #  KifuwarabeWcsc33.CLI.Models.ToMove.list_from(src_sq, pos, :north_west_of),
-    #] |> List.flatten()
-#
-    #short_effect ++ long_effect
-    nil
+    # IO.puts("[move_generation make_move_of_promoted_bishop] pos.turn:#{pos.turn} src_sq:#{src_sq}")
+    short_effect = [
+      # ∧
+      # │
+      KifuwarabeWcsc33.CLI.Models.ToMove.from(src_sq, pos, :north_of),
+      # ──＞
+      KifuwarabeWcsc33.CLI.Models.ToMove.from(src_sq, pos, :east_of),
+      # │
+      # Ｖ
+      KifuwarabeWcsc33.CLI.Models.ToMove.from(src_sq, pos, :south_of),
+      # ＜──
+      KifuwarabeWcsc33.CLI.Models.ToMove.from(src_sq, pos, :west_of),
+    ]
+    
+    long_effect = [
+      # 　　─┐ Long
+      # 　／
+      # ／
+      KifuwarabeWcsc33.CLI.Models.ToMove.list_from(src_sq, pos, :north_east_of),
+      # ＼
+      # 　＼
+      # 　　─┘ Long
+      KifuwarabeWcsc33.CLI.Models.ToMove.list_from(src_sq, pos, :south_east_of),
+      # 　　／
+      # 　／
+      # └─ Long
+      KifuwarabeWcsc33.CLI.Models.ToMove.list_from(src_sq, pos, :south_west_of),
+      # ┌─ Long
+      # 　＼
+      # 　　＼
+      KifuwarabeWcsc33.CLI.Models.ToMove.list_from(src_sq, pos, :north_west_of),
+    ] |> List.flatten()
+    
+    short_effect ++ long_effect
   end
 end
