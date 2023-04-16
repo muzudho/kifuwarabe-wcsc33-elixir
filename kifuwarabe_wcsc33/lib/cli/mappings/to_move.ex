@@ -1,58 +1,4 @@
 defmodule KifuwarabeWcsc33.CLI.Mappings.ToMove do
-  # マップ定数の定義
-  # 先手から見た数にしろだぜ。
-  # 将棋盤は反時計回りに９０°回転すると考えれば、マス番地は読みやすくなるだろう。
-  @relative_offset %{
-    # 54
-    # ∧
-    # │
-    # 55
-    north_of: -1,
-    # 　　　44
-    # 　　─┐
-    # 　／
-    # 55
-    north_east_of: -11,
-    # 55 ──＞ 54
-    east_of: -1,
-    # 55
-    # 　＼
-    # 　　─┘
-    # 　　　46
-    south_east_of: -9,
-    # 55
-    # │
-    # Ｖ
-    # 54
-    south_of: -1,
-    # 　　　55
-    # 　　／
-    # 　└─
-    # 66
-    south_west_of: 11,
-    # 65 ＜── 55
-    west_of: 10,
-    # 64
-    # 　┌─
-    # 　　＼
-    # 　　　55
-    north_west_of: 9,
-    # 先手桂馬
-    # 　　　43
-    # 　　─┐
-    # 　／
-    #  │
-    # 55
-    north_north_east_of: -12,
-    # 後手桂馬
-    # 63
-    # 　┌─
-    # 　　＼
-    #  　　│
-    # 　　55
-    north_north_west_of: 8,
-  }
-
   @doc """
 
     移動元マス番地と、先後から、指定方向の移動先マス番地を取得
@@ -69,7 +15,7 @@ defmodule KifuwarabeWcsc33.CLI.Mappings.ToMove do
 
   """
   def from(src_sq, pos, direction_of) do
-    relative = @relative_offset[direction_of]
+    relative = KifuwarabeWcsc33.CLI.Models.Squares.relative_offset[direction_of]
     dst_sq =
       case pos.turn do
         :sente -> src_sq + relative
@@ -127,7 +73,7 @@ defmodule KifuwarabeWcsc33.CLI.Mappings.ToMove do
     if 8<step do
       move_list
     else
-      relative = @relative_offset[direction_of]
+      relative = KifuwarabeWcsc33.CLI.Models.Squares.relative_offset[direction_of]
       dst_sq =
         case pos.turn do
           :sente -> src_sq + step * relative
