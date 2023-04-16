@@ -1,4 +1,4 @@
-defmodule KifuwarabeWcsc33.CLI.Mediators.ToPieceType do
+defmodule KifuwarabeWcsc33.CLI.Mappings.ToPieceType do
 
   @doc """
 

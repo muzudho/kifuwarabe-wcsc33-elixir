@@ -1,4 +1,4 @@
-defmodule KifuwarabeWcsc33.CLI.Mediators.ToTurn do
+defmodule KifuwarabeWcsc33.CLI.Mappings.ToTurn do
   @doc """
     ピースを、ターンへ変換
 

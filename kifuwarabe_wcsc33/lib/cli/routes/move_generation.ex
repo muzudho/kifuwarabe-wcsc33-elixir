@@ -22,8 +22,8 @@ defmodule KifuwarabeWcsc33.CLI.Routes.MoveGeneration do
     # |> リストがネストしていたら、フラットにする
     move_sub_list = pos.board
       |> Enum.filter(fn{_sq,piece} -> piece != :sp end)
-      |> Enum.filter(fn{_sq,piece} -> pos.turn == KifuwarabeWcsc33.CLI.Mediators.ToTurn.from_piece(piece) end)
-      |> Enum.map(fn{sq,piece} -> {sq,KifuwarabeWcsc33.CLI.Mediators.ToPieceType.from_piece(piece)} end)
+      |> Enum.filter(fn{_sq,piece} -> pos.turn == KifuwarabeWcsc33.CLI.Mappings.ToTurn.from_piece(piece) end)
+      |> Enum.map(fn{sq,piece} -> {sq,KifuwarabeWcsc33.CLI.Mappings.ToPieceType.from_piece(piece)} end)
       |> Enum.map(fn {sq,piece_type} -> pos|>make_move_list_by_piece(sq,piece_type) end)
       |> Enum.filter(& !is_nil(&1))
       |> List.flatten()
@@ -91,8 +91,17 @@ defmodule KifuwarabeWcsc33.CLI.Routes.MoveGeneration do
   #   * `pos` - ポジション（Position；局面）
   #   * `src_sq` - ソース・スクウェア（SouRCe SQuare：マス番地）
   #
-  defp make_move_of_king(_pos, _src_sq) do
-    []
+  defp make_move_of_king(pos, src_sq) do
+    [
+      KifuwarabeWcsc33.CLI.Models.ToDestination.from(src_sq, pos.turn, :north_of),
+      KifuwarabeWcsc33.CLI.Models.ToDestination.from(src_sq, pos.turn, :north_east_of),
+      KifuwarabeWcsc33.CLI.Models.ToDestination.from(src_sq, pos.turn, :east_of),
+      KifuwarabeWcsc33.CLI.Models.ToDestination.from(src_sq, pos.turn, :south_east_of),
+      KifuwarabeWcsc33.CLI.Models.ToDestination.from(src_sq, pos.turn, :south_of),
+      KifuwarabeWcsc33.CLI.Models.ToDestination.from(src_sq, pos.turn, :south_west_of),
+      KifuwarabeWcsc33.CLI.Models.ToDestination.from(src_sq, pos.turn, :west_of),
+      KifuwarabeWcsc33.CLI.Models.ToDestination.from(src_sq, pos.turn, :north_west_of),
+    ]
   end
 
   # 手番の、ルック（Rook；飛車）
