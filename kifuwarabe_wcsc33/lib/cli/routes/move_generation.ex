@@ -130,14 +130,14 @@ defmodule KifuwarabeWcsc33.CLI.Routes.MoveGeneration do
     [
       # ∧ ×８
       # │
-      KifuwarabeWcsc33.CLI.Models.ToDestination.list_from(src_sq, pos, :north_of, 8),
+      KifuwarabeWcsc33.CLI.Models.ToDestination.move_list_from(src_sq, pos, :north_of),
       # ─＞ ×８
-      KifuwarabeWcsc33.CLI.Models.ToDestination.list_from(src_sq, pos, :east_of, 8),
+      KifuwarabeWcsc33.CLI.Models.ToDestination.move_list_from(src_sq, pos, :east_of),
       # │
       # Ｖ ×８
-      KifuwarabeWcsc33.CLI.Models.ToDestination.list_from(src_sq, pos, :south_of, 8),
+      KifuwarabeWcsc33.CLI.Models.ToDestination.move_list_from(src_sq, pos, :south_of),
       # ＜─ ×８
-      KifuwarabeWcsc33.CLI.Models.ToDestination.list_from(src_sq, pos, :west_of, 8),
+      KifuwarabeWcsc33.CLI.Models.ToDestination.move_list_from(src_sq, pos, :west_of),
     ] |> List.flatten()
   end
 

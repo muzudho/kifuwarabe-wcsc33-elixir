@@ -56,7 +56,7 @@ defmodule KifuwarabeWcsc33.CLI.Models.ToDestination do
     0. ムーブ・リスト（Move List；指し手のリスト）
 
   """
-  def list_from(src_sq, pos, direction_of, step \\ 1, move_list \\ []) do
+  def move_list_from(src_sq, pos, direction_of, step \\ 1, move_list \\ []) do
     # - 盤を8マス以上まっすぐ進むと盤外に飛び出るので、おわり
     if 8<step do
       move_list
@@ -71,7 +71,7 @@ defmodule KifuwarabeWcsc33.CLI.Models.ToDestination do
       if KifuwarabeWcsc33.CLI.Models.ToBoardInfo.in_board(dst_sq) do
         # 盤上なら
         # ターゲット・ピース（Target Piece；移動先の駒）を調べる
-        IO.puts("[to_destination list_from] in_board src_sq:#{src_sq} dst_sq:#{dst_sq} direction_of:#{direction_of} step:#{step} relative:#{relative} pos.turn:#{pos.turn}")
+        # IO.puts("[to_destination move_list_from] in_board src_sq:#{src_sq} dst_sq:#{dst_sq} direction_of:#{direction_of} step:#{step} relative:#{relative} pos.turn:#{pos.turn}")
         target_pc = pos.board[dst_sq]
 
         target_turn_or_nil =
@@ -87,11 +87,13 @@ defmodule KifuwarabeWcsc33.CLI.Models.ToDestination do
           # 空マス、または、相手駒にぶつかったら、指し手は生成する
           move = KifuwarabeWcsc33.CLI.Models.Move.new()
           move = %{ move | source: src_sq, destination: dst_sq}
+
           move_list = move_list ++ [move]
+          # IO.inspect(move_list, label: "[to_destination move_list_from] move_list")
 
           if target_turn_or_nil == nil do
             # 空マスなら、まだ指し手を増やす
-            list_from(src_sq, pos.turn, direction_of, step+1, move_list)
+            move_list_from(src_sq, pos, direction_of, step+1, move_list)
           else
             # 相手駒にぶつかったら、指し手は増やさない
             move_list
