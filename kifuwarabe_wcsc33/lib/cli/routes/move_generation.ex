@@ -112,26 +112,26 @@ defmodule KifuwarabeWcsc33.CLI.Routes.MoveGeneration do
     [
       # ∧
       # │
-      KifuwarabeWcsc33.CLI.Models.ToMove.from(src_sq, pos, :north_of),
+      KifuwarabeWcsc33.CLI.Mappings.ToMove.from(src_sq, pos, :north_of),
       # 　─┐
       # ／
-      KifuwarabeWcsc33.CLI.Models.ToMove.from(src_sq, pos, :north_east_of),
+      KifuwarabeWcsc33.CLI.Mappings.ToMove.from(src_sq, pos, :north_east_of),
       # ──＞
-      KifuwarabeWcsc33.CLI.Models.ToMove.from(src_sq, pos, :east_of),
+      KifuwarabeWcsc33.CLI.Mappings.ToMove.from(src_sq, pos, :east_of),
       # ＼
       # 　─┘
-      KifuwarabeWcsc33.CLI.Models.ToMove.from(src_sq, pos, :south_east_of),
+      KifuwarabeWcsc33.CLI.Mappings.ToMove.from(src_sq, pos, :south_east_of),
       # │
       # Ｖ
-      KifuwarabeWcsc33.CLI.Models.ToMove.from(src_sq, pos, :south_of),
+      KifuwarabeWcsc33.CLI.Mappings.ToMove.from(src_sq, pos, :south_of),
       # 　／
       # └─
-      KifuwarabeWcsc33.CLI.Models.ToMove.from(src_sq, pos, :south_west_of),
+      KifuwarabeWcsc33.CLI.Mappings.ToMove.from(src_sq, pos, :south_west_of),
       # ＜──
-      KifuwarabeWcsc33.CLI.Models.ToMove.from(src_sq, pos, :west_of),
+      KifuwarabeWcsc33.CLI.Mappings.ToMove.from(src_sq, pos, :west_of),
       # ┌─
       # 　＼
-      KifuwarabeWcsc33.CLI.Models.ToMove.from(src_sq, pos, :north_west_of),
+      KifuwarabeWcsc33.CLI.Mappings.ToMove.from(src_sq, pos, :north_west_of),
     ]
   end
 
@@ -148,15 +148,15 @@ defmodule KifuwarabeWcsc33.CLI.Routes.MoveGeneration do
       # ∧ Long
       # │
       # │
-      KifuwarabeWcsc33.CLI.Models.ToMove.list_from(src_sq, pos, :north_of),
+      KifuwarabeWcsc33.CLI.Mappings.ToMove.list_from(src_sq, pos, :north_of),
       # ────＞ Long
-      KifuwarabeWcsc33.CLI.Models.ToMove.list_from(src_sq, pos, :east_of),
+      KifuwarabeWcsc33.CLI.Mappings.ToMove.list_from(src_sq, pos, :east_of),
       # │
       # │
       # Ｖ Long
-      KifuwarabeWcsc33.CLI.Models.ToMove.list_from(src_sq, pos, :south_of),
+      KifuwarabeWcsc33.CLI.Mappings.ToMove.list_from(src_sq, pos, :south_of),
       # ＜──── Long
-      KifuwarabeWcsc33.CLI.Models.ToMove.list_from(src_sq, pos, :west_of),
+      KifuwarabeWcsc33.CLI.Mappings.ToMove.list_from(src_sq, pos, :west_of),
     ] |> List.flatten()
   end
 
@@ -173,19 +173,19 @@ defmodule KifuwarabeWcsc33.CLI.Routes.MoveGeneration do
       # 　　─┐ Long
       # 　／
       # ／
-      KifuwarabeWcsc33.CLI.Models.ToMove.list_from(src_sq, pos, :north_east_of),
+      KifuwarabeWcsc33.CLI.Mappings.ToMove.list_from(src_sq, pos, :north_east_of),
       # ＼
       # 　＼
       # 　　─┘ Long
-      KifuwarabeWcsc33.CLI.Models.ToMove.list_from(src_sq, pos, :south_east_of),
+      KifuwarabeWcsc33.CLI.Mappings.ToMove.list_from(src_sq, pos, :south_east_of),
       # 　　／
       # 　／
       # └─ Long
-      KifuwarabeWcsc33.CLI.Models.ToMove.list_from(src_sq, pos, :south_west_of),
+      KifuwarabeWcsc33.CLI.Mappings.ToMove.list_from(src_sq, pos, :south_west_of),
       # ┌─ Long
       # 　＼
       # 　　＼
-      KifuwarabeWcsc33.CLI.Models.ToMove.list_from(src_sq, pos, :north_west_of),
+      KifuwarabeWcsc33.CLI.Mappings.ToMove.list_from(src_sq, pos, :north_west_of),
     ] |> List.flatten()
   end
 
@@ -201,20 +201,20 @@ defmodule KifuwarabeWcsc33.CLI.Routes.MoveGeneration do
     [
       # ∧
       # │
-      KifuwarabeWcsc33.CLI.Models.ToMove.from(src_sq, pos, :north_of),
+      KifuwarabeWcsc33.CLI.Mappings.ToMove.from(src_sq, pos, :north_of),
       # 　─┐
       # ／
-      KifuwarabeWcsc33.CLI.Models.ToMove.from(src_sq, pos, :north_east_of),
+      KifuwarabeWcsc33.CLI.Mappings.ToMove.from(src_sq, pos, :north_east_of),
       # ──＞
-      KifuwarabeWcsc33.CLI.Models.ToMove.from(src_sq, pos, :east_of),
+      KifuwarabeWcsc33.CLI.Mappings.ToMove.from(src_sq, pos, :east_of),
       # │
       # Ｖ
-      KifuwarabeWcsc33.CLI.Models.ToMove.from(src_sq, pos, :south_of),
+      KifuwarabeWcsc33.CLI.Mappings.ToMove.from(src_sq, pos, :south_of),
       # ＜──
-      KifuwarabeWcsc33.CLI.Models.ToMove.from(src_sq, pos, :west_of),
+      KifuwarabeWcsc33.CLI.Mappings.ToMove.from(src_sq, pos, :west_of),
       # ┌─
       # 　＼
-      KifuwarabeWcsc33.CLI.Models.ToMove.from(src_sq, pos, :north_west_of),
+      KifuwarabeWcsc33.CLI.Mappings.ToMove.from(src_sq, pos, :north_west_of),
     ]
   end
 
@@ -230,19 +230,19 @@ defmodule KifuwarabeWcsc33.CLI.Routes.MoveGeneration do
     [
       # ∧
       # │
-      KifuwarabeWcsc33.CLI.Models.ToMove.from(src_sq, pos, :north_of),
+      KifuwarabeWcsc33.CLI.Mappings.ToMove.from(src_sq, pos, :north_of),
       # 　─┐
       # ／
-      KifuwarabeWcsc33.CLI.Models.ToMove.from(src_sq, pos, :north_east_of),
+      KifuwarabeWcsc33.CLI.Mappings.ToMove.from(src_sq, pos, :north_east_of),
       # ＼
       # 　─┘
-      KifuwarabeWcsc33.CLI.Models.ToMove.from(src_sq, pos, :south_east_of),
+      KifuwarabeWcsc33.CLI.Mappings.ToMove.from(src_sq, pos, :south_east_of),
       # 　／
       # └─
-      KifuwarabeWcsc33.CLI.Models.ToMove.from(src_sq, pos, :south_west_of),
+      KifuwarabeWcsc33.CLI.Mappings.ToMove.from(src_sq, pos, :south_west_of),
       # ┌─
       # 　＼
-      KifuwarabeWcsc33.CLI.Models.ToMove.from(src_sq, pos, :north_west_of),
+      KifuwarabeWcsc33.CLI.Mappings.ToMove.from(src_sq, pos, :north_west_of),
     ]
   end
 
@@ -259,11 +259,11 @@ defmodule KifuwarabeWcsc33.CLI.Routes.MoveGeneration do
       # 　─┐
       # ／
       # │
-      KifuwarabeWcsc33.CLI.Models.ToMove.from(src_sq, pos, :north_north_east_of),
+      KifuwarabeWcsc33.CLI.Mappings.ToMove.from(src_sq, pos, :north_north_east_of),
       # ┌─
       # 　＼
       # 　　│
-      KifuwarabeWcsc33.CLI.Models.ToMove.from(src_sq, pos, :north_north_west_of),
+      KifuwarabeWcsc33.CLI.Mappings.ToMove.from(src_sq, pos, :north_north_west_of),
     ]
   end
 
@@ -280,7 +280,7 @@ defmodule KifuwarabeWcsc33.CLI.Routes.MoveGeneration do
       # ∧ Long
       # │
       # │
-      KifuwarabeWcsc33.CLI.Models.ToMove.list_from(src_sq, pos, :north_of),
+      KifuwarabeWcsc33.CLI.Mappings.ToMove.list_from(src_sq, pos, :north_of),
     ] |> List.flatten()
   end
 
@@ -296,7 +296,7 @@ defmodule KifuwarabeWcsc33.CLI.Routes.MoveGeneration do
     [
       # ∧
       # │
-      KifuwarabeWcsc33.CLI.Models.ToMove.from(src_sq, pos, :north_of),
+      KifuwarabeWcsc33.CLI.Mappings.ToMove.from(src_sq, pos, :north_of),
     ]
   end
 
@@ -312,31 +312,31 @@ defmodule KifuwarabeWcsc33.CLI.Routes.MoveGeneration do
     short_effect = [
       # 　─┐
       # ／
-      KifuwarabeWcsc33.CLI.Models.ToMove.from(src_sq, pos, :north_east_of),
+      KifuwarabeWcsc33.CLI.Mappings.ToMove.from(src_sq, pos, :north_east_of),
       # ＼
       # 　─┘
-      KifuwarabeWcsc33.CLI.Models.ToMove.from(src_sq, pos, :south_east_of),
+      KifuwarabeWcsc33.CLI.Mappings.ToMove.from(src_sq, pos, :south_east_of),
       # 　／
       # └─
-      KifuwarabeWcsc33.CLI.Models.ToMove.from(src_sq, pos, :south_west_of),
+      KifuwarabeWcsc33.CLI.Mappings.ToMove.from(src_sq, pos, :south_west_of),
       # ┌─
       # 　＼
-      KifuwarabeWcsc33.CLI.Models.ToMove.from(src_sq, pos, :north_west_of),
+      KifuwarabeWcsc33.CLI.Mappings.ToMove.from(src_sq, pos, :north_west_of),
     ]
     
     long_effect = [
       # ∧ Long
       # │
       # │
-      KifuwarabeWcsc33.CLI.Models.ToMove.list_from(src_sq, pos, :north_of),
+      KifuwarabeWcsc33.CLI.Mappings.ToMove.list_from(src_sq, pos, :north_of),
       # ────＞ Long
-      KifuwarabeWcsc33.CLI.Models.ToMove.list_from(src_sq, pos, :east_of),
+      KifuwarabeWcsc33.CLI.Mappings.ToMove.list_from(src_sq, pos, :east_of),
       # │
       # │
       # Ｖ Long
-      KifuwarabeWcsc33.CLI.Models.ToMove.list_from(src_sq, pos, :south_of),
+      KifuwarabeWcsc33.CLI.Mappings.ToMove.list_from(src_sq, pos, :south_of),
       # ＜──── Long
-      KifuwarabeWcsc33.CLI.Models.ToMove.list_from(src_sq, pos, :west_of),
+      KifuwarabeWcsc33.CLI.Mappings.ToMove.list_from(src_sq, pos, :west_of),
     ] |> List.flatten()
     
     short_effect ++ long_effect
@@ -354,33 +354,33 @@ defmodule KifuwarabeWcsc33.CLI.Routes.MoveGeneration do
     short_effect = [
       # ∧
       # │
-      KifuwarabeWcsc33.CLI.Models.ToMove.from(src_sq, pos, :north_of),
+      KifuwarabeWcsc33.CLI.Mappings.ToMove.from(src_sq, pos, :north_of),
       # ──＞
-      KifuwarabeWcsc33.CLI.Models.ToMove.from(src_sq, pos, :east_of),
+      KifuwarabeWcsc33.CLI.Mappings.ToMove.from(src_sq, pos, :east_of),
       # │
       # Ｖ
-      KifuwarabeWcsc33.CLI.Models.ToMove.from(src_sq, pos, :south_of),
+      KifuwarabeWcsc33.CLI.Mappings.ToMove.from(src_sq, pos, :south_of),
       # ＜──
-      KifuwarabeWcsc33.CLI.Models.ToMove.from(src_sq, pos, :west_of),
+      KifuwarabeWcsc33.CLI.Mappings.ToMove.from(src_sq, pos, :west_of),
     ]
     
     long_effect = [
       # 　　─┐ Long
       # 　／
       # ／
-      KifuwarabeWcsc33.CLI.Models.ToMove.list_from(src_sq, pos, :north_east_of),
+      KifuwarabeWcsc33.CLI.Mappings.ToMove.list_from(src_sq, pos, :north_east_of),
       # ＼
       # 　＼
       # 　　─┘ Long
-      KifuwarabeWcsc33.CLI.Models.ToMove.list_from(src_sq, pos, :south_east_of),
+      KifuwarabeWcsc33.CLI.Mappings.ToMove.list_from(src_sq, pos, :south_east_of),
       # 　　／
       # 　／
       # └─ Long
-      KifuwarabeWcsc33.CLI.Models.ToMove.list_from(src_sq, pos, :south_west_of),
+      KifuwarabeWcsc33.CLI.Mappings.ToMove.list_from(src_sq, pos, :south_west_of),
       # ┌─ Long
       # 　＼
       # 　　＼
-      KifuwarabeWcsc33.CLI.Models.ToMove.list_from(src_sq, pos, :north_west_of),
+      KifuwarabeWcsc33.CLI.Mappings.ToMove.list_from(src_sq, pos, :north_west_of),
     ] |> List.flatten()
     
     short_effect ++ long_effect

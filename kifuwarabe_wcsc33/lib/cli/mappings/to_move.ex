@@ -1,17 +1,56 @@
-defmodule KifuwarabeWcsc33.CLI.Models.ToMove do
+defmodule KifuwarabeWcsc33.CLI.Mappings.ToMove do
   # マップ定数の定義
+  # 先手から見た数にしろだぜ。
+  # 将棋盤は反時計回りに９０°回転すると考えれば、マス番地は読みやすくなるだろう。
   @relative_offset %{
+    # 45
+    # ∧
+    # │
+    # 55
     north_of: -10,
-    north_east_of: -9,
-    east_of: 1,
-    south_east_of: 11,
-    south_of: 10,
-    south_west_of: 9,
-    west_of: -1,
-    north_west_of: -11,
+    # 　　　44
+    # 　　─┐
+    # 　／
+    # 55
+    north_east_of: -11,
+    # 55 ──＞ 54
+    east_of: -1,
+    # 55
+    # 　＼
+    # 　　─┘
+    # 　　　46
+    south_east_of: -9,
+    # 55
+    # │
+    # Ｖ
+    # 54
+    south_of: -1,
+    # 　　　55
+    # 　　／
+    # 　└─
+    # 66
+    south_west_of: 11,
+    # 65 ＜── 55
+    west_of: 10,
+    # 64
+    # 　┌─
+    # 　　＼
+    # 　　　55
+    north_west_of: 9,
     # 先手桂馬
-    north_north_east_of: -19,
-    north_north_west_of: -21,
+    # 　　　43
+    # 　　─┐
+    # 　／
+    #  │
+    # 55
+    north_north_east_of: -12,
+    # 後手桂馬
+    # 63
+    # 　┌─
+    # 　　＼
+    #  　　│
+    # 　　55
+    north_north_west_of: 8,
   }
 
   @doc """
