@@ -61,11 +61,12 @@ defmodule KifuwarabeWcsc33.CLI.Routes.UndoMove do
             # 移動元マスは、動かした駒になる
             move.source => pos.board[move.destination],
             # 移動先マスは、取った駒（なければ空マス）になる
-            move.destination => if move.captured != nil do
-              KifuwarabeWcsc33.CLI.Mappings.ToPiece(opponent_turn, move.captured)
-            else
-              :sp
-            end
+            move.destination =>
+              if move.captured != nil do
+                KifuwarabeWcsc33.CLI.Mappings.ToPiece.from_turn_and_piece_type(opponent_turn, move.captured)
+              else
+                :sp
+              end
           }
         }
 

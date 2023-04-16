@@ -27,21 +27,72 @@ defmodule KifuwarabeWcsc33.CLI.Routes.Think do
     #     IO.puts("[Think go] move_code: (#{move_code})")
     #   end)
 
-    best_move =
-      if move_list |> length() < 1 do
-        # 合法手が無ければ投了
-        best_move = KifuwarabeWcsc33.CLI.Models.Move.new()
-        best_move
-      else
-        # 合法手が１つ以上あれば、どれか適当に選ぶ
-        best_move = Enum.random(move_list)
-        best_move
-      end
+    # シャッフルする
+    move_list = move_list |> Enum.shuffle()
 
-    # TODO 自分から相手の利きへ飛び込む手（自殺手）は除外したい
-    # 動かして、玉が相手の利きに飛び込むようなら、戻す
+    # 最善手を選ぶ
+    {_pos, _move_list, best_move} = pos |> choice(move_list)
 
     # IO.puts("[Think go] best_move:#{KifuwarabeWcsc33.CLI.Views.Move.as_code(best_move)}")
     best_move
+  end
+
+  # 最善手を選ぶ
+  #
+  # - 候補手は１つずつ減らしていく
+  #
+  # ## Parameters
+  #
+  # * `pos` - ポジション（Position；局面）
+  # * `move_list` - ムーブ・リスト（Move List；指し手のリスト）
+  #
+  # ## Returns
+  #
+  # 0. ポジション（Position；局面）
+  # 1. ムーブ・リスト（Move List；指し手のリスト）
+  # 2. ベスト・ムーブ（Best Move；最善手）
+  #
+  defp choice(pos, move_list) do
+
+    {move_list, best_move} =
+      if move_list |> length() < 1 do
+        # 合法手が無ければ投了
+        resign_move = KifuwarabeWcsc33.CLI.Models.Move.new()
+        {move_list, resign_move}
+      else
+        # 合法手が１つ以上あれば、先頭の手を選ぶ。先頭の手は削除する
+        best_move = hd(move_list)
+        {move_list |> List.delete_at(0), best_move}
+      end
+
+    pos =
+      if best_move.destination == nil do
+        # 投了なら、おわり
+        pos
+      else
+        # とりあえず、指してみる
+        pos = pos |> KifuwarabeWcsc33.CLI.Routes.DoMove.move(best_move)
+
+        # TODO 自分から相手の利きへ飛び込む手（自殺手）は除外したい
+        pos =
+          if pos |> KifuwarabeWcsc33.CLI.Thesis.IsSuicideMove.is_suicide_move?() do
+            # 自殺手だ
+            # 戻す
+            pos = pos |> KifuwarabeWcsc33.CLI.Routes.UndoMove.move()
+
+            # Recursive
+            # =========
+            #
+            # - ベストムーブか、投了のどちらかを取得するまで続ける
+            pos |> choice(move_list)
+            pos
+          else
+            pos
+          end
+
+        pos
+      end
+
+    {pos, move_list, best_move}
   end
 end

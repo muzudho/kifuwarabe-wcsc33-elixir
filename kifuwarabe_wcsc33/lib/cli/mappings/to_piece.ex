@@ -1,4 +1,5 @@
 defmodule KifuwarabeWcsc33.CLI.Mappings.ToPiece do
+  # 変換
   def from_turn_and_piece_type(turn, piece_type) do
     if turn == :sente do
       #
