@@ -71,20 +71,45 @@ defmodule KifuwarabeWcsc33.CLI.Routes.Think do
         pos
       else
         # とりあえず、指してみる
+        previous_turn = pos.turn
         pos = pos |> KifuwarabeWcsc33.CLI.Routes.DoMove.move(best_move)
 
-        # TODO 自分から相手の利きへ飛び込む手（自殺手）は除外したい
-        pos =
-          if pos |> KifuwarabeWcsc33.CLI.Thesis.IsSuicideMove.is_suicide_move?() do
-            # 自殺手だ
-            # 戻す
-            pos = pos |> KifuwarabeWcsc33.CLI.Routes.UndoMove.move()
+        # 自玉の位置を検索
+        # TODO 盤上にあるものとする
+        tuple = pos.board |> Enum.find(fn {_sq, piece} ->
+            # 空白ではなく
+            piece != :sp and
+            # キング
+            KifuwarabeWcsc33.CLI.Mappings.ToPieceType.from_piece(piece) == :k and
+            # 指す前の手番か
+            KifuwarabeWcsc33.CLI.Mappings.ToTurn.from_piece(piece) == previous_turn
+          end)
+        
+        IO.inspect(tuple, label: "[think choice] tuple")
 
-            # Recursive
-            # =========
-            #
-            # - ベストムーブか、投了のどちらかを取得するまで続ける
-            pos |> choice(move_list)
+        pos =
+          if tuple != nil do
+            # 指した後の自玉のマス番地
+            king_sq = tuple |> elem(0)
+            # king_piece = tuple |> elem(1)
+            # IO.puts("[think choice] pos.turn:#{pos.turn} king_sq:#{king_sq} king_piece:#{king_piece}")
+
+            # TODO 自分から相手の利きへ飛び込む手（自殺手）は除外したい
+            pos =
+              if pos |> KifuwarabeWcsc33.CLI.Thesis.IsSuicideMove.is_suicide_move?(king_sq) do
+                # 自殺手だ
+                # 戻す
+                pos = pos |> KifuwarabeWcsc33.CLI.Routes.UndoMove.move()
+
+                # Recursive
+                # =========
+                #
+                # - ベストムーブか、投了のどちらかを取得するまで続ける
+                pos |> choice(move_list)
+                pos
+              else
+                pos
+              end
             pos
           else
             pos

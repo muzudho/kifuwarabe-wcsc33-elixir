@@ -90,4 +90,32 @@ defmodule KifuwarabeWcsc33.CLI.Mappings.ToPieceType do
       _ -> raise "unexpected piece:#{piece}"
     end
   end
+
+  @doc """
+  
+    移動先の駒の先後を調べる（なければニル）
+
+  ## Parameters
+
+    * `pos` - ポジション（Position；局面）
+    * `dst_sq` - デスティネーションスクウェア（DeSTination SQuare：移動先のマス番地）
+
+  """
+  def get_it_or_nil_from_destination(pos, dst_sq) do
+    # 盤上なら
+    # ターゲット・ピース（Target Piece；移動先の駒）を調べる
+    # IO.puts("[to_destination move_list_from] in_board src_sq:#{src_sq} dst_sq:#{dst_sq} direction_of:#{direction_of} step:#{step} pos.turn:#{pos.turn}")
+    target_pc = pos.board[dst_sq]
+
+    target_turn_or_nil =
+      cond do
+        target_pc == :sp ->
+          nil
+
+        true ->
+          KifuwarabeWcsc33.CLI.Mappings.ToTurn.from_piece(target_pc)
+      end
+
+    target_turn_or_nil
+  end
 end

@@ -15,27 +15,13 @@ defmodule KifuwarabeWcsc33.CLI.Mappings.ToMove do
 
   """
   def from(src_sq, pos, direction_of) do
-    relative = KifuwarabeWcsc33.CLI.Models.Squares.relative_offset[direction_of]
-    dst_sq =
-      case pos.turn do
-        :sente -> src_sq + relative
-        :gote -> src_sq - relative
-      end
+    dst_sq = KifuwarabeWcsc33.CLI.Mappings.ToDestination.from_turn_and_source(pos.turn, src_sq, direction_of)
 
-    if KifuwarabeWcsc33.CLI.Mappings.ToBoardInfo.in_board(dst_sq) do
+    if KifuwarabeWcsc33.CLI.Thesis.Board.in_board(dst_sq) do
       # 盤上なら
-      # ターゲット・ピース（Target Piece；移動先の駒）を調べる
-      # IO.puts("[to_destination move_list_from] in_board src_sq:#{src_sq} dst_sq:#{dst_sq} direction_of:#{direction_of} step:#{step} relative:#{relative} pos.turn:#{pos.turn}")
-      target_pc = pos.board[dst_sq]
 
-      target_turn_or_nil =
-        cond do
-          target_pc == :sp ->
-            nil
-
-          true ->
-            KifuwarabeWcsc33.CLI.Mappings.ToTurn.from_piece(target_pc)
-        end
+      # 移動先の駒の先後を調べる（なければニル）
+      target_turn_or_nil = pos |> KifuwarabeWcsc33.CLI.Mappings.ToPieceType.get_it_or_nil_from_destination(dst_sq)
 
       if target_turn_or_nil == pos.turn do
         # 自駒とぶつかるなら
@@ -73,27 +59,13 @@ defmodule KifuwarabeWcsc33.CLI.Mappings.ToMove do
     if 8<step do
       move_list
     else
-      relative = KifuwarabeWcsc33.CLI.Models.Squares.relative_offset[direction_of]
-      dst_sq =
-        case pos.turn do
-          :sente -> src_sq + step * relative
-          :gote -> src_sq - step * relative
-        end
+      dst_sq = KifuwarabeWcsc33.CLI.Mappings.ToDestination.from_turn_and_source(pos.turn, src_sq, direction_of)
 
-      if KifuwarabeWcsc33.CLI.Mappings.ToBoardInfo.in_board(dst_sq) do
+      if KifuwarabeWcsc33.CLI.Thesis.Board.in_board(dst_sq) do
         # 盤上なら
-        # ターゲット・ピース（Target Piece；移動先の駒）を調べる
-        # IO.puts("[to_destination move_list_from] in_board src_sq:#{src_sq} dst_sq:#{dst_sq} direction_of:#{direction_of} step:#{step} relative:#{relative} pos.turn:#{pos.turn}")
-        target_pc = pos.board[dst_sq]
 
-        target_turn_or_nil =
-          cond do
-            target_pc == :sp ->
-              nil
-
-            true ->
-              KifuwarabeWcsc33.CLI.Mappings.ToTurn.from_piece(target_pc)
-          end
+        # 移動先の駒の先後を調べる（なければニル）
+        target_turn_or_nil = pos |> KifuwarabeWcsc33.CLI.Mappings.ToPieceType.get_it_or_nil_from_destination(dst_sq)
 
         if target_turn_or_nil == nil || target_turn_or_nil != pos.turn do
           # 空マス、または、相手駒にぶつかったら、指し手は生成する
