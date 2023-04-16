@@ -435,7 +435,7 @@ defmodule KifuwarabeWcsc33.CLI.Routes.MoveGeneration do
   #   * `piece_type` - ピース・タイプ（Piece Type；先後付きの駒種類）
   #
   defp make_move_of_rook_on_hand(_pos) do
-    destination_squares = KifuwarabeWcsc33.CLI.Mappings.ToSquares.on_board()
+    destination_squares = KifuwarabeWcsc33.CLI.Models.Squares.all_squares
     make_drop_moves(:r, destination_squares)
   end
 
@@ -447,7 +447,7 @@ defmodule KifuwarabeWcsc33.CLI.Routes.MoveGeneration do
   #   * `piece_type` - ピース・タイプ（Piece Type；先後付きの駒種類）
   #
   defp make_move_of_bishop_on_hand(_pos) do
-    destination_squares = KifuwarabeWcsc33.CLI.Mappings.ToSquares.on_board()
+    destination_squares = KifuwarabeWcsc33.CLI.Models.Squares.all_squares
     make_drop_moves(:b, destination_squares)
   end
 
@@ -459,7 +459,7 @@ defmodule KifuwarabeWcsc33.CLI.Routes.MoveGeneration do
   #   * `piece_type` - ピース・タイプ（Piece Type；先後付きの駒種類）
   #
   defp make_move_of_gold_on_hand(_pos) do
-    destination_squares = KifuwarabeWcsc33.CLI.Mappings.ToSquares.on_board()
+    destination_squares = KifuwarabeWcsc33.CLI.Models.Squares.all_squares
     make_drop_moves(:g, destination_squares)
   end
 
@@ -471,7 +471,7 @@ defmodule KifuwarabeWcsc33.CLI.Routes.MoveGeneration do
   #   * `piece_type` - ピース・タイプ（Piece Type；先後付きの駒種類）
   #
   defp make_move_of_silver_on_hand(_pos) do
-    destination_squares = KifuwarabeWcsc33.CLI.Mappings.ToSquares.on_board()
+    destination_squares = KifuwarabeWcsc33.CLI.Models.Squares.all_squares
     make_drop_moves(:s, destination_squares)
   end
 
@@ -483,14 +483,13 @@ defmodule KifuwarabeWcsc33.CLI.Routes.MoveGeneration do
   #   * `piece_type` - ピース・タイプ（Piece Type；先後付きの駒種類）
   #
   defp make_move_of_knight_on_hand(pos) do
-    {top_rank, bottom_rank} =
+    destination_squares =
       if pos.turn == :sente do
-        {3, 9}
+        KifuwarabeWcsc33.CLI.Models.Squares.sente_knight_drop_squares
       else
-        {1, 7}
+        KifuwarabeWcsc33.CLI.Models.Squares.gote_knight_drop_squares
       end
 
-    destination_squares = KifuwarabeWcsc33.CLI.Mappings.ToSquares.on_board(top_rank, bottom_rank)
     make_drop_moves(:g, destination_squares)
   end
   
@@ -502,14 +501,14 @@ defmodule KifuwarabeWcsc33.CLI.Routes.MoveGeneration do
   #   * `piece_type` - ピース・タイプ（Piece Type；先後付きの駒種類）
   #
   defp make_move_of_lance_on_hand(pos) do
-    {top_rank, bottom_rank} =
+    destination_squares =
       if pos.turn == :sente do
-        {2, 9}
+        # 歩と香は同じ
+        KifuwarabeWcsc33.CLI.Models.Squares.sente_lance_and_pawn_drop_squares
       else
-        {1, 8}
+        KifuwarabeWcsc33.CLI.Models.Squares.gote_lance_and_pawn_drop_squares
       end
 
-    destination_squares = KifuwarabeWcsc33.CLI.Mappings.ToSquares.on_board(top_rank, bottom_rank)
     make_drop_moves(:g, destination_squares)
   end
 
@@ -523,14 +522,13 @@ defmodule KifuwarabeWcsc33.CLI.Routes.MoveGeneration do
   #   * `piece_type` - ピース・タイプ（Piece Type；先後付きの駒種類）
   #
   defp make_move_of_pawn_on_hand(pos) do
-    {top_rank, bottom_rank} =
+    destination_squares =
       if pos.turn == :sente do
-        {2, 9}
+        KifuwarabeWcsc33.CLI.Models.Squares.sente_lance_and_pawn_drop_squares
       else
-        {1, 8}
+        KifuwarabeWcsc33.CLI.Models.Squares.gote_lance_and_pawn_drop_squares
       end
 
-    destination_squares = KifuwarabeWcsc33.CLI.Mappings.ToSquares.on_board(top_rank, bottom_rank)
     make_drop_moves(:g, destination_squares)
   end
 
