@@ -8,7 +8,10 @@ defmodule KifuwarabeWcsc33.CLI.Models.ToDestination do
     south_of: 10,
     south_west_of: 9,
     west_of: -1,
-    north_west_of: -11
+    north_west_of: -11,
+    # 先手桂馬
+    north_north_east_of: -19,
+    north_north_west_of: -21,
   }
 
   @doc """

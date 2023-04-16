@@ -68,13 +68,13 @@ defmodule KifuwarabeWcsc33.CLI.Routes.MoveGeneration do
       # 金は成れません
       # :pg1
       # プロモーテッド・シルバー（Promoted Silver；成銀. Or 全 in one letter）
-      :ps -> pos |> make_move_of_promoted_silver(src_sq)
+      :ps -> pos |> make_move_of_gold(src_sq)
       # プロモーテッド・ナイト（Promoted kNight；成桂. Or 圭 in one letter）
-      :pn -> pos |> make_move_of_promoted_knight(src_sq)
+      :pn -> pos |> make_move_of_gold(src_sq)
       # プロモーテッド・ランス（Promoted Lance；成香. Or 杏 in one letter）
-      :pl -> pos |> make_move_of_promoted_lance(src_sq)
+      :pl -> pos |> make_move_of_gold(src_sq)
       # It's reasonably a プロモーテッド・ポーン（Promoted Pawn；成歩）. It's actually と（"To Kin"；と金 is 金 cursive）
-      :pp -> pos |> make_move_of_promoted_pawn(src_sq)
+      :pp -> pos |> make_move_of_gold(src_sq)
       #
       # それ以外はエラー
       # ==============
@@ -128,15 +128,17 @@ defmodule KifuwarabeWcsc33.CLI.Routes.MoveGeneration do
   #
   defp make_move_of_rook(pos, src_sq) do
     [
-      # ∧ ×８
+      # ∧ Long
+      # │
       # │
       KifuwarabeWcsc33.CLI.Models.ToDestination.move_list_from(src_sq, pos, :north_of),
-      # ─＞ ×８
+      # ────＞ Long
       KifuwarabeWcsc33.CLI.Models.ToDestination.move_list_from(src_sq, pos, :east_of),
       # │
-      # Ｖ ×８
+      # │
+      # Ｖ Long
       KifuwarabeWcsc33.CLI.Models.ToDestination.move_list_from(src_sq, pos, :south_of),
-      # ＜─ ×８
+      # ＜──── Long
       KifuwarabeWcsc33.CLI.Models.ToDestination.move_list_from(src_sq, pos, :west_of),
     ] |> List.flatten()
   end
@@ -148,8 +150,25 @@ defmodule KifuwarabeWcsc33.CLI.Routes.MoveGeneration do
   #   * `pos` - ポジション（Position；局面）
   #   * `src_sq` - ソース・スクウェア（SouRCe SQuare：マス番地）
   #
-  defp make_move_of_bishop(_pos, _src_sq) do
-    []
+  defp make_move_of_bishop(pos, src_sq) do
+    [
+      # 　　─┐ Long
+      # 　／
+      # ／
+      KifuwarabeWcsc33.CLI.Models.ToDestination.move_list_from(src_sq, pos, :north_east_of),
+      # ＼
+      # 　＼
+      # 　　─┘ Long
+      KifuwarabeWcsc33.CLI.Models.ToDestination.move_list_from(src_sq, pos, :south_east_of),
+      # 　　／
+      # 　／
+      # └─ Long
+      KifuwarabeWcsc33.CLI.Models.ToDestination.move_list_from(src_sq, pos, :south_west_of),
+      # ┌─ Long
+      # 　＼
+      # 　　＼
+      KifuwarabeWcsc33.CLI.Models.ToDestination.move_list_from(src_sq, pos, :north_west_of),
+    ] |> List.flatten()
   end
 
   # 手番の、ゴールド（Gold；金）
@@ -159,8 +178,25 @@ defmodule KifuwarabeWcsc33.CLI.Routes.MoveGeneration do
   #   * `pos` - ポジション（Position；局面）
   #   * `src_sq` - ソース・スクウェア（SouRCe SQuare：マス番地）
   #
-  defp make_move_of_gold(_pos, _src_sq) do
-    []
+  defp make_move_of_gold(pos, src_sq) do
+    [
+      # ∧
+      # │
+      KifuwarabeWcsc33.CLI.Models.ToDestination.from(src_sq, pos.turn, :north_of),
+      # 　─┐
+      # ／
+      KifuwarabeWcsc33.CLI.Models.ToDestination.from(src_sq, pos.turn, :north_east_of),
+      # ─＞
+      KifuwarabeWcsc33.CLI.Models.ToDestination.from(src_sq, pos.turn, :east_of),
+      # │
+      # Ｖ
+      KifuwarabeWcsc33.CLI.Models.ToDestination.from(src_sq, pos.turn, :south_of),
+      # ＜─
+      KifuwarabeWcsc33.CLI.Models.ToDestination.from(src_sq, pos.turn, :west_of),
+      # ┌─
+      # 　＼
+      KifuwarabeWcsc33.CLI.Models.ToDestination.from(src_sq, pos.turn, :north_west_of),
+    ]
   end
 
   # 手番の、シルバー（Silver；銀）
@@ -170,8 +206,24 @@ defmodule KifuwarabeWcsc33.CLI.Routes.MoveGeneration do
   #   * `pos` - ポジション（Position；局面）
   #   * `src_sq` - ソース・スクウェア（SouRCe SQuare：マス番地）
   #
-  defp make_move_of_silver(_pos, _src_sq) do
-    []
+  defp make_move_of_silver(pos, src_sq) do
+    [
+      # ∧
+      # │
+      KifuwarabeWcsc33.CLI.Models.ToDestination.from(src_sq, pos.turn, :north_of),
+      # 　─┐
+      # ／
+      KifuwarabeWcsc33.CLI.Models.ToDestination.from(src_sq, pos.turn, :north_east_of),
+      # ＼
+      # 　─┘
+      KifuwarabeWcsc33.CLI.Models.ToDestination.from(src_sq, pos.turn, :south_east_of),
+      # 　／
+      # └─
+      KifuwarabeWcsc33.CLI.Models.ToDestination.from(src_sq, pos.turn, :south_west_of),
+      # ┌─
+      # 　＼
+      KifuwarabeWcsc33.CLI.Models.ToDestination.from(src_sq, pos.turn, :north_west_of),
+    ]
   end
 
   # 手番の、ナイト（kNight；桂）
@@ -181,8 +233,17 @@ defmodule KifuwarabeWcsc33.CLI.Routes.MoveGeneration do
   #   * `pos` - ポジション（Position；局面）
   #   * `src_sq` - ソース・スクウェア（SouRCe SQuare：マス番地）
   #
-  defp make_move_of_knight(_pos, _src_sq) do
-    []
+  defp make_move_of_knight(pos, src_sq) do
+    [
+      # 　─┐
+      # ／
+      # │
+      KifuwarabeWcsc33.CLI.Models.ToDestination.from(src_sq, pos.turn, :north_north_east_of),
+      # ┌─
+      # 　＼
+      # 　　│
+      KifuwarabeWcsc33.CLI.Models.ToDestination.from(src_sq, pos.turn, :north_north_west_of),
+    ]
   end
 
   # 手番の、ランス（Lance；香）
@@ -192,8 +253,13 @@ defmodule KifuwarabeWcsc33.CLI.Routes.MoveGeneration do
   #   * `pos` - ポジション（Position；局面）
   #   * `src_sq` - ソース・スクウェア（SouRCe SQuare：マス番地）
   #
-  defp make_move_of_lance(_pos, _src_sq) do
-    []
+  defp make_move_of_lance(pos, src_sq) do
+    [
+      # ∧ Long
+      # │
+      # │
+      KifuwarabeWcsc33.CLI.Models.ToDestination.move_list_from(src_sq, pos, :north_of),
+    ] |> List.flatten()
   end
 
   # 手番の、ポーン（Pawn；歩）
@@ -203,8 +269,12 @@ defmodule KifuwarabeWcsc33.CLI.Routes.MoveGeneration do
   #   * `pos` - ポジション（Position；局面）
   #   * `src_sq` - ソース・スクウェア（SouRCe SQuare：マス番地）
   #
-  defp make_move_of_pawn(_pos, _src_sq) do
-    []
+  defp make_move_of_pawn(pos, src_sq) do
+    [
+      # ∧
+      # │
+      KifuwarabeWcsc33.CLI.Models.ToDestination.from(src_sq, pos.turn, :north_of),
+    ]
   end
 
   # 手番の、It's reasonably a プロモーテッド・ルック（Promoted Rook；成飛）. It's actually ドラゴン（Dragon；竜）
@@ -214,8 +284,33 @@ defmodule KifuwarabeWcsc33.CLI.Routes.MoveGeneration do
   #   * `pos` - ポジション（Position；局面）
   #   * `src_sq` - ソース・スクウェア（SouRCe SQuare：マス番地）
   #
-  defp make_move_of_promoted_rook(_pos, _src_sq) do
-    []
+  defp make_move_of_promoted_rook(pos, src_sq) do
+    [
+      # ∧ Long
+      # │
+      # │
+      KifuwarabeWcsc33.CLI.Models.ToDestination.move_list_from(src_sq, pos, :north_of),
+      # 　─┐
+      # ／
+      KifuwarabeWcsc33.CLI.Models.ToDestination.from(src_sq, pos.turn, :north_east_of),
+      # ────＞ Long
+      KifuwarabeWcsc33.CLI.Models.ToDestination.move_list_from(src_sq, pos, :east_of),
+      # ＼
+      # 　─┘
+      KifuwarabeWcsc33.CLI.Models.ToDestination.from(src_sq, pos.turn, :south_east_of),
+      # │
+      # │
+      # Ｖ Long
+      KifuwarabeWcsc33.CLI.Models.ToDestination.move_list_from(src_sq, pos, :south_of),
+      # 　／
+      # └─
+      KifuwarabeWcsc33.CLI.Models.ToDestination.from(src_sq, pos.turn, :south_west_of),
+      # ＜──── Long
+      KifuwarabeWcsc33.CLI.Models.ToDestination.move_list_from(src_sq, pos, :west_of),
+      # ┌─
+      # 　＼
+      KifuwarabeWcsc33.CLI.Models.ToDestination.from(src_sq, pos.turn, :north_west_of),
+    ] |> List.flatten()
   end
 
   # 手番の、It's reasonably a プロモーテッド・ビショップ（Promoted Bishop；成角）.  It's actually ホース（Horse；馬）. Ponanza calls ペガサス（Pegasus；天馬）
@@ -225,52 +320,35 @@ defmodule KifuwarabeWcsc33.CLI.Routes.MoveGeneration do
   #   * `pos` - ポジション（Position；局面）
   #   * `src_sq` - ソース・スクウェア（SouRCe SQuare：マス番地）
   #
-  defp make_move_of_promoted_bishop(_pos, _src_sq) do
-    []
-  end
-
-  # 手番の、プロモーテッド・シルバー（Promoted Silver；成銀. Or 全 in one letter）
-  #
-  # ## Parameters
-  #
-  #   * `pos` - ポジション（Position；局面）
-  #   * `src_sq` - ソース・スクウェア（SouRCe SQuare：マス番地）
-  #
-  defp make_move_of_promoted_silver(_pos, _src_sq) do
-    []
-  end
-
-  # 手番の、プロモーテッド・ナイト（Promoted kNight；成桂. Or 圭 in one letter）
-  #
-  # ## Parameters
-  #
-  #   * `pos` - ポジション（Position；局面）
-  #   * `src_sq` - ソース・スクウェア（SouRCe SQuare：マス番地）
-  #
-  defp make_move_of_promoted_knight(_pos, _src_sq) do
-    []
-  end
-
-  # 手番の、プロモーテッド・ランス（Promoted Lance；成香. Or 杏 in one letter）
-  #
-  # ## Parameters
-  #
-  #   * `pos` - ポジション（Position；局面）
-  #   * `src_sq` - ソース・スクウェア（SouRCe SQuare：マス番地）
-  #
-  defp make_move_of_promoted_lance(_pos, _src_sq) do
-    []
-  end
-
-  # 手番の、It's reasonably a プロモーテッド・ポーン（Promoted Pawn；成歩）. It's actually と（"To Kin"；と金 is 金 cursive）
-  #
-  # ## Parameters
-  #
-  #   * `pos` - ポジション（Position；局面）
-  #   * `src_sq` - ソース・スクウェア（SouRCe SQuare：マス番地）
-  #
-  defp make_move_of_promoted_pawn(_pos, _src_sq) do
-    []
+  defp make_move_of_promoted_bishop(pos, src_sq) do
+    [
+      # ∧
+      # │
+      KifuwarabeWcsc33.CLI.Models.ToDestination.from(src_sq, pos.turn, :north_of),
+      # 　　─┐ Long
+      # 　／
+      # ／
+      KifuwarabeWcsc33.CLI.Models.ToDestination.move_list_from(src_sq, pos, :north_east_of),
+      # ─＞
+      KifuwarabeWcsc33.CLI.Models.ToDestination.from(src_sq, pos.turn, :east_of),
+      # ＼
+      # 　＼
+      # 　　─┘ Long
+      KifuwarabeWcsc33.CLI.Models.ToDestination.move_list_from(src_sq, pos, :south_east_of),
+      # │
+      # Ｖ
+      KifuwarabeWcsc33.CLI.Models.ToDestination.from(src_sq, pos.turn, :south_of),
+      # 　　／
+      # 　／
+      # └─ Long
+      KifuwarabeWcsc33.CLI.Models.ToDestination.move_list_from(src_sq, pos, :south_west_of),
+      # ＜─
+      KifuwarabeWcsc33.CLI.Models.ToDestination.from(src_sq, pos.turn, :west_of),
+      # ┌─ Long
+      # 　＼
+      # 　　＼
+      KifuwarabeWcsc33.CLI.Models.ToDestination.move_list_from(src_sq, pos, :north_west_of),
+    ] |> List.flatten()
   end
 
 end
