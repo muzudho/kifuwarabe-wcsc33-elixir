@@ -25,13 +25,13 @@ defmodule KifuwarabeWcsc33.CLI.Models.Position do
               11 => :l2,
               # ２段目
               92 => :sp,
-              82 => :b2,
+              82 => :r2,
               72 => :sp,
               62 => :sp,
               52 => :sp,
               42 => :sp,
               32 => :sp,
-              22 => :r2,
+              22 => :b2,
               12 => :sp,
               # ３段目
               93 => :p2,
