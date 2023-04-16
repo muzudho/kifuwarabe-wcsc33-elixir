@@ -15,7 +15,6 @@ defmodule KifuwarabeWcsc33.CLI.Routes.DoMove do
   ## Returns
 
     0. ポジション（Position；局面）
-    1. （あれば）キャプチャード・ピース（Captured Piece；取った駒）
   
   """
   def move(pos, move) do
@@ -71,7 +70,6 @@ defmodule KifuwarabeWcsc33.CLI.Routes.DoMove do
             turn: KifuwarabeWcsc33.CLI.Mappings.ToTurn.flip(pos.turn),
             moves: pos.moves ++ [move]}
 
-    # TODO 取った駒を、棋譜に記録したい
     pos
   end
 end
