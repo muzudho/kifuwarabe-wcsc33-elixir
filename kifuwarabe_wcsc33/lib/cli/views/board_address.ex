@@ -26,6 +26,7 @@ defmodule KifuwarabeWcsc33.CLI.Views.BoardAddress do
         7 -> "g"
         8 -> "h"
         9 -> "i"
+        _ -> raise "unexpected rank:(#{rank}). source:(#{source})"
       end
 
     "#{file}#{rank_alphabet}"

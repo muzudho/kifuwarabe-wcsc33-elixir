@@ -89,7 +89,7 @@ defmodule KifuwarabeWcsc33.CLI.Mappings.ToTurn do
       # それ以外はエラー
       # ==============
       #
-      _ -> raise "unexpected piece:#{piece}"
+      _ -> raise "unexpected piece:(#{piece})"
     end
   end
 end

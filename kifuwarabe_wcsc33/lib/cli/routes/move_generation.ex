@@ -92,14 +92,29 @@ defmodule KifuwarabeWcsc33.CLI.Routes.MoveGeneration do
   #   * `src_sq` - ソース・スクウェア（SouRCe SQuare：マス番地）
   #
   defp make_move_of_king(pos, src_sq) do
+    # 先手視点で定義しろだぜ
     [
+      # ∧
+      # │
       KifuwarabeWcsc33.CLI.Models.ToDestination.from(src_sq, pos.turn, :north_of),
+      # 　─┐
+      # ／
       KifuwarabeWcsc33.CLI.Models.ToDestination.from(src_sq, pos.turn, :north_east_of),
+      # ─＞
       KifuwarabeWcsc33.CLI.Models.ToDestination.from(src_sq, pos.turn, :east_of),
+      # ＼
+      # 　─┘
       KifuwarabeWcsc33.CLI.Models.ToDestination.from(src_sq, pos.turn, :south_east_of),
+      # │
+      # Ｖ
       KifuwarabeWcsc33.CLI.Models.ToDestination.from(src_sq, pos.turn, :south_of),
+      # 　／
+      # └─
       KifuwarabeWcsc33.CLI.Models.ToDestination.from(src_sq, pos.turn, :south_west_of),
+      # ＜─
       KifuwarabeWcsc33.CLI.Models.ToDestination.from(src_sq, pos.turn, :west_of),
+      # ┌─
+      # 　＼
       KifuwarabeWcsc33.CLI.Models.ToDestination.from(src_sq, pos.turn, :north_west_of),
     ]
   end
@@ -111,8 +126,19 @@ defmodule KifuwarabeWcsc33.CLI.Routes.MoveGeneration do
   #   * `pos` - ポジション（Position；局面）
   #   * `src_sq` - ソース・スクウェア（SouRCe SQuare：マス番地）
   #
-  defp make_move_of_rook(_pos, _src_sq) do
-    []
+  defp make_move_of_rook(pos, src_sq) do
+    [
+      # ∧ ×８
+      # │
+      KifuwarabeWcsc33.CLI.Models.ToDestination.list_from(src_sq, pos, :north_of, 8),
+      # ─＞ ×８
+      KifuwarabeWcsc33.CLI.Models.ToDestination.list_from(src_sq, pos, :east_of, 8),
+      # │
+      # Ｖ ×８
+      KifuwarabeWcsc33.CLI.Models.ToDestination.list_from(src_sq, pos, :south_of, 8),
+      # ＜─ ×８
+      KifuwarabeWcsc33.CLI.Models.ToDestination.list_from(src_sq, pos, :west_of, 8),
+    ] |> List.flatten()
   end
 
   # 手番の、ビショップ（Bishop；角）
