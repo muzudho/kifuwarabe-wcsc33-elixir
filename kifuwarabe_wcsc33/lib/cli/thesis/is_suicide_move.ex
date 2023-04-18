@@ -576,8 +576,11 @@ defmodule KifuwarabeWcsc33.CLI.Thesis.IsSuicideMove do
   # │
   # │
   #
-  defp far_to_north(_pos, _src_sq, _direction_of) do
-    # IO.puts("[is_suicide_move far_to_north] direction_of:#{direction_of}")
+  defp far_to_north(pos, _src_sq, direction_of) do
+    # 手番側の先後（１手指してる想定なので、反対側が手番）
+    teban_turn = KifuwarabeWcsc33.CLI.Mappings.ToTurn.flip(pos.turn)
+
+    IO.puts("[is_suicide_move far_to_north] teban_turn:#{teban_turn} direction_of:#{direction_of}")
     # TODO 長い利き
     # TODO 空白なら再帰
     # TODO 香、飛なら利きに飛び込む。それ以外の駒なら自殺手ではない
@@ -590,8 +593,11 @@ defmodule KifuwarabeWcsc33.CLI.Thesis.IsSuicideMove do
   # 　 ／　　　 　　　 　　　＼
   # ／　　　　　　，　　 　　　 ＼
   #
-  defp far_to_north_east(_pos, _src_sq, _direction_of) do
-    # IO.puts("[is_suicide_move far_to_north_east] direction_of:#{direction_of}")
+  defp far_to_north_east(pos, _src_sq, direction_of) do
+    # 手番側の先後（１手指してる想定なので、反対側が手番）
+    teban_turn = KifuwarabeWcsc33.CLI.Mappings.ToTurn.flip(pos.turn)
+
+    IO.puts("[is_suicide_move far_to_north_east] teban_turn:#{teban_turn} direction_of:#{direction_of}")
     # TODO 長い利き
     # TODO 空白なら再帰
     # TODO 香、飛なら利きに飛び込む。それ以外の駒なら自殺手ではない
@@ -602,8 +608,11 @@ defmodule KifuwarabeWcsc33.CLI.Thesis.IsSuicideMove do
   #
   # ────＞ Long，　Long ＜────
   #
-  defp far_to_east(_pos, _src_sq, _direction_of) do
-    # IO.puts("[is_suicide_move far_to_east] direction_of:#{direction_of}")
+  defp far_to_east(pos, _src_sq, direction_of) do
+    # 手番側の先後（１手指してる想定なので、反対側が手番）
+    teban_turn = KifuwarabeWcsc33.CLI.Mappings.ToTurn.flip(pos.turn)
+
+    IO.puts("[is_suicide_move far_to_east] teban_turn:#{teban_turn} direction_of:#{direction_of}")
     # TODO 長い利き
     # TODO 空白なら再帰
     # TODO 香、飛なら利きに飛び込む。それ以外の駒なら自殺手ではない
@@ -616,8 +625,11 @@ defmodule KifuwarabeWcsc33.CLI.Thesis.IsSuicideMove do
   # 　＼　　　　 　　 ／
   # 　　─┘ Long，　└─ Long
   #
-  defp far_to_south_east(_pos, _src_sq, _direction_of) do
-    # IO.puts("[is_suicide_move far_to_south_east] direction_of:#{direction_of}")
+  defp far_to_south_east(pos, _src_sq, direction_of) do
+    # 手番側の先後（１手指してる想定なので、反対側が手番）
+    teban_turn = KifuwarabeWcsc33.CLI.Mappings.ToTurn.flip(pos.turn)
+
+    IO.puts("[is_suicide_move far_to_south_east] teban_turn:#{teban_turn} direction_of:#{direction_of}")
     # TODO 長い利き
     # TODO 空白なら再帰
     # TODO 香、飛なら利きに飛び込む。それ以外の駒なら自殺手ではない
@@ -630,8 +642,11 @@ defmodule KifuwarabeWcsc33.CLI.Thesis.IsSuicideMove do
   # │
   # Ｖ Long
   #
-  defp far_to_south(_pos, _src_sq, _direction_of) do
-    # IO.puts("[is_suicide_move far_to_south] direction_of:#{direction_of}")
+  defp far_to_south(pos, _src_sq, direction_of) do
+    # 手番側の先後（１手指してる想定なので、反対側が手番）
+    teban_turn = KifuwarabeWcsc33.CLI.Mappings.ToTurn.flip(pos.turn)
+
+    IO.puts("[is_suicide_move far_to_south] teban_turn:#{teban_turn} direction_of:#{direction_of}")
     # TODO 長い利き
     # TODO 空白なら再帰
     # TODO 香、飛なら利きに飛び込む。それ以外の駒なら自殺手ではない
