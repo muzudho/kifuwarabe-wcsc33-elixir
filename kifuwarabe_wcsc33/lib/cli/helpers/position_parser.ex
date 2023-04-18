@@ -86,7 +86,13 @@ defmodule KifuwarabeWcsc33.CLI.Helpers.PositionParser do
         # IO.puts("parse(9) moves_num:[#{moves_num}]")
 
         # 将棋盤の更新
-        pos = %{pos | moves_num: moves_num, turn: turn, board: board, hand_pieces: hand_pieces}
+        pos = %{pos |
+          moves_num: moves_num,
+          turn: turn,
+          opponent_turn: KifuwarabeWcsc33.CLI.Mappings.ToTurn.flip(turn),
+          board: board,
+          hand_pieces: hand_pieces
+        }
 
         # 残りの文字列 |> あれば、続くスペースを削除
         rest = rest |> String.trim_leading()

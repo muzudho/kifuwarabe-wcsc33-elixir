@@ -7,8 +7,10 @@ defmodule KifuwarabeWcsc33.CLI.Models.Position do
   #
   # ムーブズ・ナンバー（moves-number；何手目か）、Half-ply
   defstruct moves_num: 1,
-            # ターン（turn；手番）
+            # ターン（Turn；手番）
             turn: :sente,
+            # オポネント・ターン（Opponent Turn；相手のターン） - 手番の逆
+            opponent_turn: :gote,
             # フォーフォルド・レピティション（Fourfold repetition；千日手）
             fourfold_repetition: 0,
             # 盤上の駒

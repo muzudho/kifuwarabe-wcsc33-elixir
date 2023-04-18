@@ -68,6 +68,7 @@ defmodule KifuwarabeWcsc33.CLI.Routes.DoMove do
     # 局面更新
     pos = %{pos |
             turn: KifuwarabeWcsc33.CLI.Mappings.ToTurn.flip(pos.turn),
+            opponent_turn: pos.turn,
             moves: pos.moves ++ [move]}
 
     pos
