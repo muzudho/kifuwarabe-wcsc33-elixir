@@ -71,18 +71,19 @@ defmodule KifuwarabeWcsc33.CLI.Routes.Think do
         pos
       else
         # とりあえず、指してみる
-        previous_turn = pos.turn
         pos = pos |> KifuwarabeWcsc33.CLI.Routes.DoMove.move(best_move)
+        # 手番がひっくり返ったことに注意
 
-        # 自玉の位置を検索（指す前の手番を指定）
-        king_sq = pos |> KifuwarabeWcsc33.CLI.Finder.Square.find_king_on_board(previous_turn)
-        # IO.puts("[think choice] king_sq:#{king_sq}")
+        # 一手指したあとの、自玉の位置を検索（ここでは相手番なので、さっきの手番は逆側）
+        king_sq = pos |> KifuwarabeWcsc33.CLI.Finder.Square.find_king_on_board(pos.opponent_turn)
+        IO.puts("[think choice] king_sq:#{king_sq}")
 
         pos =
           if king_sq != nil do
 
             # TODO 自分から相手の利きへ飛び込む手（自殺手）は除外したい
             pos =
+              # （ここでは相手番なので、さっきの手番は逆側）
               if pos |> KifuwarabeWcsc33.CLI.Thesis.IsSuicideMove.is_suicide_move?(king_sq) do
                 # 自殺手だ
                 # 戻す
