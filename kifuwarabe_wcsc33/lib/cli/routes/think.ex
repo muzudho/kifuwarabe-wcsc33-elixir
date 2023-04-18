@@ -76,7 +76,7 @@ defmodule KifuwarabeWcsc33.CLI.Routes.Think do
 
         # 自玉の位置を検索（指す前の手番を指定）
         king_sq = pos |> KifuwarabeWcsc33.CLI.Finder.Square.find_king_on_board(previous_turn)
-        IO.puts("[think choice] king_sq:#{king_sq}")
+        # IO.puts("[think choice] king_sq:#{king_sq}")
 
         pos =
           if king_sq != nil do

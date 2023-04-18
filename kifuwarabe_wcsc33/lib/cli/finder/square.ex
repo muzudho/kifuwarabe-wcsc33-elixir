@@ -19,7 +19,7 @@ defmodule KifuwarabeWcsc33.CLI.Finder.Square do
         KifuwarabeWcsc33.CLI.Mappings.ToSengo.from_piece(piece) == king_sengo
       end)
 
-    IO.inspect(tuple, label: "[KifuwarabeWcsc33.CLI.Finder.Square find_king_on_board] tuple")
+    # IO.inspect(tuple, label: "[KifuwarabeWcsc33.CLI.Finder.Square find_king_on_board] tuple")
 
     if tuple != nil do
       tuple |> elem(0)
