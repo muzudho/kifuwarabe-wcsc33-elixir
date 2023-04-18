@@ -29,7 +29,7 @@ defmodule KifuwarabeWcsc33.CLI.Routes.UndoMove do
     # - ターン反転
     # - 指し手のリスト更新（最後の指し手を削除）
     pos = %{pos |
-            turn: KifuwarabeWcsc33.CLI.Mappings.ToSengo.flip(pos.turn),
+            turn: KifuwarabeWcsc33.CLI.Mappings.ToTurn.flip(pos.turn),
             moves: pos.moves |> List.delete_at(last_index)
           }
 

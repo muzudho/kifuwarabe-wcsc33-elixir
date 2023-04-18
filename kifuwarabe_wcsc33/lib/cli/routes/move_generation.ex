@@ -22,7 +22,7 @@ defmodule KifuwarabeWcsc33.CLI.Routes.MoveGeneration do
     # |> 指し手が nil なら除去
     move_list_on_board = pos.board
       |> Enum.filter(fn{_sq,piece} -> piece != :sp end)
-      |> Enum.filter(fn{_sq,piece} -> pos.turn == KifuwarabeWcsc33.CLI.Mappings.ToSengo.from_piece(piece) end)
+      |> Enum.filter(fn{_sq,piece} -> pos.turn == KifuwarabeWcsc33.CLI.Mappings.ToTurn.from_piece(piece) end)
       |> Enum.map(fn{sq,piece} -> {sq,KifuwarabeWcsc33.CLI.Mappings.ToPieceType.from_piece(piece)} end)
       |> Enum.map(fn {sq,piece_type} -> pos|>make_move_list_by_piece_on_board(sq,piece_type) end)
       |> List.flatten()
@@ -39,7 +39,7 @@ defmodule KifuwarabeWcsc33.CLI.Routes.MoveGeneration do
     # |> リストがネストしていたら、フラットにする
     # |> 指し手が nil なら除去
     move_list_on_hand = pos.hand_pieces
-      |> Enum.filter(fn{piece,_num} -> pos.turn == KifuwarabeWcsc33.CLI.Mappings.ToSengo.from_piece(piece) end)
+      |> Enum.filter(fn{piece,_num} -> pos.turn == KifuwarabeWcsc33.CLI.Mappings.ToTurn.from_piece(piece) end)
       |> Enum.filter(fn{_piece,num} -> 0 < num end)
       |> Enum.map(fn{piece,_num} -> KifuwarabeWcsc33.CLI.Mappings.ToPieceType.from_piece(piece) end)
       |> Enum.map(fn piece_type -> pos|>make_move_list_by_piece_on_hand(piece_type) end)

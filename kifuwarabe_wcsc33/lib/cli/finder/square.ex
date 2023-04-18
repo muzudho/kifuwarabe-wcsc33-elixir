@@ -16,7 +16,7 @@ defmodule KifuwarabeWcsc33.CLI.Finder.Square do
         # キング
         KifuwarabeWcsc33.CLI.Mappings.ToPieceType.from_piece(piece) == :k and
         # 指す前の手番か
-        KifuwarabeWcsc33.CLI.Mappings.ToSengo.from_piece(piece) == king_sengo
+        KifuwarabeWcsc33.CLI.Mappings.ToTurn.from_piece(piece) == king_sengo
       end)
 
     # IO.inspect(tuple, label: "[KifuwarabeWcsc33.CLI.Finder.Square find_king_on_board] tuple")
