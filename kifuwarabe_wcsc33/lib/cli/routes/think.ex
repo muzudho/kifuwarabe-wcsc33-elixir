@@ -74,25 +74,12 @@ defmodule KifuwarabeWcsc33.CLI.Routes.Think do
         previous_turn = pos.turn
         pos = pos |> KifuwarabeWcsc33.CLI.Routes.DoMove.move(best_move)
 
-        # 自玉の位置を検索
-        # TODO 盤上にあるものとする
-        tuple = pos.board |> Enum.find(fn {_sq, piece} ->
-            # 空白ではなく
-            piece != :sp and
-            # キング
-            KifuwarabeWcsc33.CLI.Mappings.ToPieceType.from_piece(piece) == :k and
-            # 指す前の手番か
-            KifuwarabeWcsc33.CLI.Mappings.ToTurn.from_piece(piece) == previous_turn
-          end)
-        
-        IO.inspect(tuple, label: "[think choice] tuple")
+        # 自玉の位置を検索（指す前の手番を指定）
+        king_sq = pos |> KifuwarabeWcsc33.CLI.Finder.Square.find_king_on_board(previous_turn)
+        IO.puts("[think choice] king_sq:#{king_sq}")
 
         pos =
-          if tuple != nil do
-            # 指した後の自玉のマス番地
-            king_sq = tuple |> elem(0)
-            # king_piece = tuple |> elem(1)
-            # IO.puts("[think choice] pos.turn:#{pos.turn} king_sq:#{king_sq} king_piece:#{king_piece}")
+          if king_sq != nil do
 
             # TODO 自分から相手の利きへ飛び込む手（自殺手）は除外したい
             pos =

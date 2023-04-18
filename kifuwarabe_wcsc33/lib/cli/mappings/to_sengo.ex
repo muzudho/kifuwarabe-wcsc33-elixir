@@ -1,4 +1,4 @@
-defmodule KifuwarabeWcsc33.CLI.Mappings.ToTurn do
+defmodule KifuwarabeWcsc33.CLI.Mappings.ToSengo do
   @moduledoc """
 
     手番

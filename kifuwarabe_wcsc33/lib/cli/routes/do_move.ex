@@ -67,7 +67,7 @@ defmodule KifuwarabeWcsc33.CLI.Routes.DoMove do
 
     # 局面更新
     pos = %{pos |
-            turn: KifuwarabeWcsc33.CLI.Mappings.ToTurn.flip(pos.turn),
+            turn: KifuwarabeWcsc33.CLI.Mappings.ToSengo.flip(pos.turn),
             moves: pos.moves ++ [move]}
 
     pos

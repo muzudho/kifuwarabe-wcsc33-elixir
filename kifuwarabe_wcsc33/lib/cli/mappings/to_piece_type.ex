@@ -113,7 +113,7 @@ defmodule KifuwarabeWcsc33.CLI.Mappings.ToPieceType do
           nil
 
         true ->
-          KifuwarabeWcsc33.CLI.Mappings.ToTurn.from_piece(target_pc)
+          KifuwarabeWcsc33.CLI.Mappings.ToSengo.from_piece(target_pc)
       end
 
     target_turn_or_nil

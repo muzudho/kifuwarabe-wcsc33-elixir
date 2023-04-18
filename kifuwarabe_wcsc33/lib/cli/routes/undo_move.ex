@@ -22,15 +22,15 @@ defmodule KifuwarabeWcsc33.CLI.Routes.UndoMove do
 
     # 最後の指し手を取得（リンクドリストなので効率が悪い）
     last_index = Enum.count(pos.moves)-1
-    move = pos.moves |> Enum.get(last_index)
+    move = pos.moves |> elem(last_index)
 
     # 局面更新
     #
     # - ターン反転
     # - 指し手のリスト更新（最後の指し手を削除）
     pos = %{pos |
-            turn: KifuwarabeWcsc33.CLI.Mappings.ToTurn.flip(pos.turn),
-            moves: Enum.delete_at(last_index)
+            turn: KifuwarabeWcsc33.CLI.Mappings.ToSengo.flip(pos.turn),
+            moves: pos.moves |> List.delete_at(last_index)
           }
 
     pos =
