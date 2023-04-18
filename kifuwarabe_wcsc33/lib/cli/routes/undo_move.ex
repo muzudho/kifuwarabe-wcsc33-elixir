@@ -15,14 +15,21 @@ defmodule KifuwarabeWcsc33.CLI.Routes.UndoMove do
 
     0. ポジション（Position；局面）
   
+  ## 雑談
+
+    - 自殺手のときアンドゥする
+
   """
   def move(pos) do
     # 相手のターン
     opponent_turn = pos.turn
 
+    # 最後の要素を削除するために、インデックスを取得しておく
+    last_index = Enum.count(pos.moves) - 1
+    IO.puts("last_index:#{last_index} pos.moves.length:#{pos.moves|>length()}")
+
     # 最後の指し手を取得（リンクドリストなので効率が悪い）
-    last_index = Enum.count(pos.moves)-1
-    move = pos.moves |> elem(last_index)
+    move = pos.moves |> List.last()
 
     # 局面更新
     #
