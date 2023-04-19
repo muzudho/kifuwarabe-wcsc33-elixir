@@ -17,7 +17,7 @@ defmodule KifuwarabeWcsc33.CLI.Mappings.ToMove do
   def from(src_sq, pos, direction_of) do
     dst_sq = KifuwarabeWcsc33.CLI.Mappings.ToDestination.from_turn_and_source(pos.turn, src_sq, direction_of)
 
-    if KifuwarabeWcsc33.CLI.Thesis.Board.in_board(dst_sq) do
+    if KifuwarabeWcsc33.CLI.Thesis.Board.is_in_board?(dst_sq) do
       # 盤上なら
 
       # 移動先の駒の先後を調べる（なければニル）
@@ -62,7 +62,7 @@ defmodule KifuwarabeWcsc33.CLI.Mappings.ToMove do
     else
       dst_sq = KifuwarabeWcsc33.CLI.Mappings.ToDestination.from_turn_and_source(pos.turn, src_sq, direction_of)
 
-      if KifuwarabeWcsc33.CLI.Thesis.Board.in_board(dst_sq) do
+      if KifuwarabeWcsc33.CLI.Thesis.Board.is_in_board?(dst_sq) do
         # 盤上なら
 
         # 移動先の駒の先後を調べる（なければニル）

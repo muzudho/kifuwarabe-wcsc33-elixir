@@ -72,7 +72,7 @@ defmodule KifuwarabeWcsc33.CLI.Thesis.IsSuicideMove do
 
     is_suicide_move =
       # 盤内で
-      if KifuwarabeWcsc33.CLI.Thesis.Board.in_board(target_sq) do
+      if KifuwarabeWcsc33.CLI.Thesis.Board.is_in_board?(target_sq) do
         # その駒は
         target_pc = pos.board[target_sq]
 
@@ -155,7 +155,7 @@ defmodule KifuwarabeWcsc33.CLI.Thesis.IsSuicideMove do
 
     is_suicide_move =
       # 盤内で
-      if KifuwarabeWcsc33.CLI.Thesis.Board.in_board(target_sq) do
+      if KifuwarabeWcsc33.CLI.Thesis.Board.is_in_board?(target_sq) do
         # その駒は
         target_pc = pos.board[target_sq]
 
@@ -237,7 +237,7 @@ defmodule KifuwarabeWcsc33.CLI.Thesis.IsSuicideMove do
 
     is_suicide_move =
       # 盤内で
-      if KifuwarabeWcsc33.CLI.Thesis.Board.in_board(target_sq) do
+      if KifuwarabeWcsc33.CLI.Thesis.Board.is_in_board?(target_sq) do
         # その駒は
         target_pc = pos.board[target_sq]
 
@@ -319,7 +319,7 @@ defmodule KifuwarabeWcsc33.CLI.Thesis.IsSuicideMove do
 
     is_suicide_move =
       # 盤内で
-      if KifuwarabeWcsc33.CLI.Thesis.Board.in_board(target_sq) do
+      if KifuwarabeWcsc33.CLI.Thesis.Board.is_in_board?(target_sq) do
         # その駒は
         target_pc = pos.board[target_sq]
 
@@ -403,7 +403,7 @@ defmodule KifuwarabeWcsc33.CLI.Thesis.IsSuicideMove do
 
     is_suicide_move =
       # 盤内で
-      if KifuwarabeWcsc33.CLI.Thesis.Board.in_board(target_sq) do
+      if KifuwarabeWcsc33.CLI.Thesis.Board.is_in_board?(target_sq) do
         # その駒は
         target_pc = pos.board[target_sq]
 
@@ -487,7 +487,7 @@ defmodule KifuwarabeWcsc33.CLI.Thesis.IsSuicideMove do
 
     is_suicide_move =
       # 盤内で
-      if KifuwarabeWcsc33.CLI.Thesis.Board.in_board(target_sq) do
+      if KifuwarabeWcsc33.CLI.Thesis.Board.is_in_board?(target_sq) do
         # その駒は
         target_pc = pos.board[target_sq]
 
@@ -569,7 +569,7 @@ defmodule KifuwarabeWcsc33.CLI.Thesis.IsSuicideMove do
 
     is_suicide_move =
       # 盤内で
-      if KifuwarabeWcsc33.CLI.Thesis.Board.in_board(target_sq) do
+      if KifuwarabeWcsc33.CLI.Thesis.Board.is_in_board?(target_sq) do
         # その駒は
         target_pc = pos.board[target_sq]
 
@@ -632,7 +632,7 @@ defmodule KifuwarabeWcsc33.CLI.Thesis.IsSuicideMove do
 
     is_suicide_move =
       # 盤内で
-      if KifuwarabeWcsc33.CLI.Thesis.Board.in_board(target_sq) do
+      if KifuwarabeWcsc33.CLI.Thesis.Board.is_in_board?(target_sq) do
         # その駒は
         target_pc = pos.board[target_sq]
 
@@ -691,7 +691,7 @@ defmodule KifuwarabeWcsc33.CLI.Thesis.IsSuicideMove do
 
     is_suicide_move =
       # 盤内で
-      if KifuwarabeWcsc33.CLI.Thesis.Board.in_board(target_sq) do
+      if KifuwarabeWcsc33.CLI.Thesis.Board.is_in_board?(target_sq) do
         # その駒は
         target_pc = pos.board[target_sq]
 
@@ -752,7 +752,7 @@ defmodule KifuwarabeWcsc33.CLI.Thesis.IsSuicideMove do
 
     is_suicide_move =
       # 盤内で
-      if KifuwarabeWcsc33.CLI.Thesis.Board.in_board(target_sq) do
+      if KifuwarabeWcsc33.CLI.Thesis.Board.is_in_board?(target_sq) do
         # その駒は
         target_pc = pos.board[target_sq]
 
@@ -813,7 +813,7 @@ defmodule KifuwarabeWcsc33.CLI.Thesis.IsSuicideMove do
 
     is_suicide_move =
       # 盤内で
-      if KifuwarabeWcsc33.CLI.Thesis.Board.in_board(target_sq) do
+      if KifuwarabeWcsc33.CLI.Thesis.Board.is_in_board?(target_sq) do
         # その駒は
         target_pc = pos.board[target_sq]
 
