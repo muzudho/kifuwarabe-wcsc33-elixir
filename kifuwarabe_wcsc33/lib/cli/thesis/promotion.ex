@@ -29,7 +29,7 @@ defmodule KifuwarabeWcsc33.CLI.Thesis.Promotion do
           # 相手の陣地に入れば、成れる
           dst_rank < 4 -> true
           # 相手の陣地に入ったかどうかに関わらず、相手の陣地から移動したら、成れる
-          7 <= src_rank -> true
+          src_rank < 4 -> true
           # それ以外だと成れない
           true -> false
         end
@@ -40,7 +40,7 @@ defmodule KifuwarabeWcsc33.CLI.Thesis.Promotion do
           # 相手の陣地に入れば、成れる
           7 <= dst_rank -> true
           # 相手の陣地に入ったかどうかに関わらず、相手の陣地から移動したら、成れる
-          src_rank < 4 -> true
+          7 <= src_rank -> true
           # それ以外だと成れない
           true -> false
 
