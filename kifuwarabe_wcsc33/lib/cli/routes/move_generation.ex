@@ -325,7 +325,7 @@ defmodule KifuwarabeWcsc33.CLI.Routes.MoveGeneration do
             if KifuwarabeWcsc33.CLI.Thesis.Board.is_in_opponent_rank1_and_2?(pos, move.destination) do
               %{ move | promote?: true }
             else
-              mode
+              move
             end
           end)
 
@@ -369,7 +369,7 @@ defmodule KifuwarabeWcsc33.CLI.Routes.MoveGeneration do
             if KifuwarabeWcsc33.CLI.Thesis.Board.is_in_opponent_rank1?(pos, move.destination) do
               %{ move | promote?: true }
             else
-              mode
+              move
             end
           end)
 
@@ -410,7 +410,7 @@ defmodule KifuwarabeWcsc33.CLI.Routes.MoveGeneration do
             if KifuwarabeWcsc33.CLI.Thesis.Board.is_in_opponent_rank1?(pos, move.destination) do
               %{ move | promote?: true }
             else
-              mode
+              move
             end
           end)
 
