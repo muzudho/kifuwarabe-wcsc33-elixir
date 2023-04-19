@@ -647,7 +647,7 @@ defmodule KifuwarabeWcsc33.CLI.Thesis.IsSuicideMove do
             # IO.puts("[is_suicide_move far_to_north] direction_of:#{direction_of} target_sq:#{target_sq} target_pc:#{target_pc} target_turn:#{target_turn} target_pt:#{target_pt}")
 
             # 利きに飛び込むか？
-            is_effect?.()
+            is_effect?.(target_pt)
             # 利きに飛び込むか？　先手視点で定義しろだぜ
             case target_pt do
               # ルック（Rook；飛車）
@@ -714,7 +714,7 @@ defmodule KifuwarabeWcsc33.CLI.Thesis.IsSuicideMove do
             # IO.puts("[is_suicide_move far_to_north_east] direction_of:#{direction_of} target_sq:#{target_sq} target_pc:#{target_pc} target_turn:#{target_turn} target_pt:#{target_pt}")
 
             # 利きに飛び込むか？
-            is_effect?.()
+            is_effect?.(target_pt)
             # 利きに飛び込むか？　先手視点で定義しろだぜ
             case target_pt do
               # ビショップ（Bishop；角）
@@ -777,7 +777,7 @@ defmodule KifuwarabeWcsc33.CLI.Thesis.IsSuicideMove do
             # IO.puts("[is_suicide_move far_to_east] direction_of:#{direction_of} target_sq:#{target_sq} target_pc:#{target_pc} target_turn:#{target_turn} target_pt:#{target_pt}")
 
             # 利きに飛び込むか？
-            is_effect?.()
+            is_effect?.(target_pt)
             # 利きに飛び込むか？　先手視点で定義しろだぜ
             case target_pt do
               # ルック（Rook；飛車）
@@ -842,7 +842,7 @@ defmodule KifuwarabeWcsc33.CLI.Thesis.IsSuicideMove do
             # IO.puts("[is_suicide_move far_to_south_east] direction_of:#{direction_of} target_sq:#{target_sq} target_pc:#{target_pc} target_turn:#{target_turn} target_pt:#{target_pt}")
 
             # 利きに飛び込むか？
-            is_effect?.()
+            is_effect?.(target_pt)
             # 利きに飛び込むか？　先手視点で定義しろだぜ
             case target_pt do
               # ビショップ（Bishop；角）
@@ -907,7 +907,7 @@ defmodule KifuwarabeWcsc33.CLI.Thesis.IsSuicideMove do
             # IO.puts("[is_suicide_move far_to_south] direction_of:#{direction_of} target_sq:#{target_sq} target_pc:#{target_pc} target_turn:#{target_turn} target_pt:#{target_pt}")
 
             # 利きに飛び込むか？
-            is_effect?.()
+            is_effect?.(target_pt)
             # 利きに飛び込むか？　先手視点で定義しろだぜ
             case target_pt do
               # ルック（Rook；飛車）
