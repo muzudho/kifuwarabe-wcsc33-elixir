@@ -321,8 +321,13 @@ defmodule KifuwarabeWcsc33.CLI.Routes.MoveGeneration do
     # 行き先のない駒は、成り駒に変換したい
     move_list_without_promote =
       move_list_without_promote
-        |> Enum.filter(fn (move) -> KifuwarabeWcsc33.CLI.Thesis.Board.is_in_opponent_rank1_and_2?(pos, move.destination) end)
-        |> Enum.map(fn (move) -> %{ move | promote?: true } end)
+        |> Enum.map(fn (move) ->
+            if KifuwarabeWcsc33.CLI.Thesis.Board.is_in_opponent_rank1_and_2?(pos, move.destination) do
+              %{ move | promote?: true }
+            else
+              mode
+            end
+          end)
 
     # （あれば）成る手を追加
     move_list_with_promote =
@@ -360,8 +365,13 @@ defmodule KifuwarabeWcsc33.CLI.Routes.MoveGeneration do
     # 行き先のない駒は、成り駒に変換したい
     move_list_without_promote =
       move_list_without_promote
-        |> Enum.filter(fn (move) -> KifuwarabeWcsc33.CLI.Thesis.Board.is_in_opponent_rank1?(pos, move.destination) end)
-        |> Enum.map(fn (move) -> %{ move | promote?: true } end)
+        |> Enum.map(fn (move) ->
+            if KifuwarabeWcsc33.CLI.Thesis.Board.is_in_opponent_rank1?(pos, move.destination) do
+              %{ move | promote?: true }
+            else
+              mode
+            end
+          end)
 
     # （あれば）成る手を追加
     move_list_with_promote =
@@ -396,8 +406,13 @@ defmodule KifuwarabeWcsc33.CLI.Routes.MoveGeneration do
     # 行き先のない駒は、成り駒に変換したい
     move_list_without_promote =
       move_list_without_promote
-        |> Enum.filter(fn (move) -> KifuwarabeWcsc33.CLI.Thesis.Board.is_in_opponent_rank1?(pos, move.destination) end)
-        |> Enum.map(fn (move) -> %{ move | promote?: true } end)
+        |> Enum.map(fn (move) ->
+            if KifuwarabeWcsc33.CLI.Thesis.Board.is_in_opponent_rank1?(pos, move.destination) do
+              %{ move | promote?: true }
+            else
+              mode
+            end
+          end)
 
     # （あれば）成る手を追加
     move_list_with_promote =
