@@ -145,20 +145,32 @@ defmodule KifuwarabeWcsc33.CLI.Routes.MoveGeneration do
   #
   defp make_move_of_rook(pos, src_sq) do
     # IO.puts("[move_generation make_move_of_rook] pos.turn:#{pos.turn} src_sq:#{src_sq}")
-    [
-      # ∧ Long
-      # │
-      # │
-      KifuwarabeWcsc33.CLI.Mappings.ToMove.list_from(src_sq, pos, :north_of),
-      # ────＞ Long
-      KifuwarabeWcsc33.CLI.Mappings.ToMove.list_from(src_sq, pos, :east_of),
-      # │
-      # │
-      # Ｖ Long
-      KifuwarabeWcsc33.CLI.Mappings.ToMove.list_from(src_sq, pos, :south_of),
-      # ＜──── Long
-      KifuwarabeWcsc33.CLI.Mappings.ToMove.list_from(src_sq, pos, :west_of),
-    ] |> List.flatten()
+
+    # 成らず
+    move_list_without_promote =
+      [
+        # ∧ Long
+        # │
+        # │
+        KifuwarabeWcsc33.CLI.Mappings.ToMove.list_from(src_sq, pos, :north_of),
+        # ────＞ Long
+        KifuwarabeWcsc33.CLI.Mappings.ToMove.list_from(src_sq, pos, :east_of),
+        # │
+        # │
+        # Ｖ Long
+        KifuwarabeWcsc33.CLI.Mappings.ToMove.list_from(src_sq, pos, :south_of),
+        # ＜──── Long
+        KifuwarabeWcsc33.CLI.Mappings.ToMove.list_from(src_sq, pos, :west_of),
+      ] |> List.flatten()
+
+    # 成る手
+    move_list_with_promote =
+      move_list_without_promote
+        |> Enum.filter(fn (move) -> KifuwarabeWcsc33.CLI.Thesis.Promotion.can_promote?(pos, move.source, move.destination) end)
+        |> Enum.map(fn (move) -> KifuwarabeWcsc33.CLI.Mappings.ToPromote.promote(move) end)
+        |> List.flatten()
+
+    move_list_without_promote ++ move_list_with_promote
   end
 
   # 手番の、ビショップ（Bishop；角）
@@ -244,7 +256,7 @@ defmodule KifuwarabeWcsc33.CLI.Routes.MoveGeneration do
       # ┌─
       # 　＼
       KifuwarabeWcsc33.CLI.Mappings.ToMove.from(src_sq, pos, :north_west_of),
-    ]
+    ] |> List.flatten() # 成りがあるかも
   end
 
   # 手番の、ナイト（kNight；桂）
@@ -265,7 +277,7 @@ defmodule KifuwarabeWcsc33.CLI.Routes.MoveGeneration do
       # 　＼
       # 　　│
       KifuwarabeWcsc33.CLI.Mappings.ToMove.from(src_sq, pos, :north_north_west_of),
-    ]
+    ] |> List.flatten() # 成りがあるかも
   end
 
   # 手番の、ランス（Lance；香）
@@ -282,7 +294,7 @@ defmodule KifuwarabeWcsc33.CLI.Routes.MoveGeneration do
       # │
       # │
       KifuwarabeWcsc33.CLI.Mappings.ToMove.list_from(src_sq, pos, :north_of),
-    ] |> List.flatten()
+    ] |> List.flatten() |> List.flatten() # 成りがあるかも
   end
 
   # 手番の、ポーン（Pawn；歩）
@@ -298,7 +310,7 @@ defmodule KifuwarabeWcsc33.CLI.Routes.MoveGeneration do
       # ∧
       # │
       KifuwarabeWcsc33.CLI.Mappings.ToMove.from(src_sq, pos, :north_of),
-    ]
+    ] |> List.flatten() # 成りがあるかも
   end
 
   # 手番の、It's reasonably a プロモーテッド・ルック（Promoted Rook；成飛）. It's actually ドラゴン（Dragon；竜）

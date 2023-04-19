@@ -8,6 +8,7 @@ defmodule KifuwarabeWcsc33.CLI.Finder.Square do
   ## Returns
 
     0. 玉のいるマス、またはニル
+    
   """
   def find_king_on_board(pos, king_sengo) do
     tuple = pos.board |> Enum.find(fn {_sq, piece} ->

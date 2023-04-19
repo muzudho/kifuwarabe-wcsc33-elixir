@@ -73,4 +73,5 @@ defmodule KifuwarabeWcsc33.CLI.Models.Squares do
     north_north_west_of: 8,
   }
   def relative_offset, do: @fn_data
+
 end

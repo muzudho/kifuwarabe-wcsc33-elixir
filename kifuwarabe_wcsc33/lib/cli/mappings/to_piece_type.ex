@@ -98,7 +98,7 @@ defmodule KifuwarabeWcsc33.CLI.Mappings.ToPieceType do
   ## Parameters
 
     * `pos` - ポジション（Position；局面）
-    * `dst_sq` - デスティネーションスクウェア（DeSTination SQuare：移動先のマス番地）
+    * `dst_sq` - デスティネーション・スクウェア（DeSTination SQuare：移動先のマス番地）
 
   """
   def get_it_or_nil_from_destination(pos, dst_sq) do

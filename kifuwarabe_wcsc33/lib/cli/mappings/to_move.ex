@@ -27,6 +27,7 @@ defmodule KifuwarabeWcsc33.CLI.Mappings.ToMove do
         # 自駒とぶつかるなら
         nil
       else
+        # 進める
         move = KifuwarabeWcsc33.CLI.Models.Move.new()
         move = %{ move | source: src_sq, destination: dst_sq}
         move
