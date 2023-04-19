@@ -301,7 +301,7 @@ defmodule KifuwarabeWcsc33.CLI.Thesis.IsSuicideMove do
   #
   defp in_north(pos, src_sq, direction_of, is_effect?) do
     # 対象のマスが（１手指してる想定なので、反対側が手番）
-    target_sq = KifuwarabeWcsc33.CLI.Mappings.ToDestination.from_turn_and_source(pos.opponent_turn, src_sq, :north_of)
+    target_sq = KifuwarabeWcsc33.CLI.Mappings.ToDestination.from_turn_and_source(pos.opponent_turn, src_sq, direction_of)
     IO.write("[is_suicide_move in_north] target_sq:#{target_sq}")
 
     is_suicide_move =

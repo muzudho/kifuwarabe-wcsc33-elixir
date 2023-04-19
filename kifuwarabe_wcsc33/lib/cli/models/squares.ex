@@ -33,8 +33,8 @@ defmodule KifuwarabeWcsc33.CLI.Models.Squares do
     # 　／
     # 55
     north_east_of: -11,
-    # 55 ──＞ 54
-    east_of: -1,
+    # 55 ──＞ 45
+    east_of: -10,
     # 55
     # 　＼
     # 　　─┘
