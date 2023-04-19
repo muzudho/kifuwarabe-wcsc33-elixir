@@ -17,62 +17,275 @@ defmodule KifuwarabeWcsc33.CLI.Thesis.IsSuicideMove do
   #   論理値型は関数名の末尾に ? を付ける？
   #
   def is_suicide_move?(pos, src_sq) do
-    # TODO 玉の利き、飛車の利き、角の利き、桂の前後逆の利きを調べる
+
+    # 利きに飛び込むか？　先手視点で定義しろだぜ
+    is_effect_in_north? = fn (target_pt)->
+        case target_pt do
+          # キング（King；玉）
+          :k -> true
+          # ルック（Rook；飛車）
+          :r -> true
+          # ビショップ（Bishop；角）
+          :b -> false
+          # ゴールド（Gold；金）
+          :g -> true
+          # シルバー（Silver；銀）
+          :s -> true
+          # ナイト（kNight；桂）
+          :n -> false
+          # ランス（Lance；香）
+          :l -> true
+          # ポーン（Pawn；歩）
+          :p -> true
+          # 玉は成れません
+          # :pk
+          # It's reasonably a プロモーテッド・ルック（Promoted Rook；成飛）. It's actually ドラゴン（Dragon；竜）
+          :pr -> true
+          # It's reasonably a プロモーテッド・ビショップ（Promoted Bishop；成角）.  It's actually ホース（Horse；馬）. Ponanza calls ペガサス（Pegasus；天馬）
+          :pb -> true
+          # 金は成れません
+          # :pg
+          # プロモーテッド・シルバー（Promoted Silver；成銀. Or 全 in one letter）
+          :ps -> true
+          # プロモーテッド・ナイト（Promoted kNight；成桂. Or 圭 in one letter）
+          :pn -> true
+          # プロモーテッド・ランス（Promoted Lance；成香. Or 杏 in one letter）
+          :pl -> true
+          # It's reasonably a プロモーテッド・ポーン（Promoted Pawn；成歩）. It's actually と（"To"；と is 金 cursive）
+          :pp -> true
+          _ -> raise "unexpected target_piece_type:#{target_pt}"
+        end
+      end
+
+    # 利きに飛び込むか？　先手視点で定義しろだぜ
+    is_effect_in_north_east? = fn (target_pt)->
+        case target_pt do
+          # キング（King；玉）
+          :k -> true
+          # ルック（Rook；飛車）
+          :r -> false
+          # ビショップ（Bishop；角）
+          :b -> true
+          # ゴールド（Gold；金）
+          :g -> true
+          # シルバー（Silver；銀）
+          :s -> true
+          # ナイト（kNight；桂）
+          :n -> false
+          # ランス（Lance；香）
+          :l -> false
+          # ポーン（Pawn；歩）
+          :p -> false
+          # 玉は成れません
+          # :pk
+          # It's reasonably a プロモーテッド・ルック（Promoted Rook；成飛）. It's actually ドラゴン（Dragon；竜）
+          :pr -> true
+          # It's reasonably a プロモーテッド・ビショップ（Promoted Bishop；成角）.  It's actually ホース（Horse；馬）. Ponanza calls ペガサス（Pegasus；天馬）
+          :pb -> true
+          # 金は成れません
+          # :pg
+          # プロモーテッド・シルバー（Promoted Silver；成銀. Or 全 in one letter）
+          :ps -> true
+          # プロモーテッド・ナイト（Promoted kNight；成桂. Or 圭 in one letter）
+          :pn -> true
+          # プロモーテッド・ランス（Promoted Lance；成香. Or 杏 in one letter）
+          :pl -> true
+          # It's reasonably a プロモーテッド・ポーン（Promoted Pawn；成歩）. It's actually と（"To"；と is 金 cursive）
+          :pp -> true
+          _ -> raise "unexpected target_piece_type:#{target_pt}"
+        end
+      end
+
+    # 利きに飛び込むか？　先手視点で定義しろだぜ
+    is_effect_in_east? = fn (target_pt)->
+        case target_pt do
+          # キング（King；玉）
+          :k -> true
+          # ルック（Rook；飛車）
+          :r -> true
+          # ビショップ（Bishop；角）
+          :b -> false
+          # ゴールド（Gold；金）
+          :g -> true
+          # シルバー（Silver；銀）
+          :s -> false
+          # ナイト（kNight；桂）
+          :n -> false
+          # ランス（Lance；香）
+          :l -> false
+          # ポーン（Pawn；歩）
+          :p -> false
+          # 玉は成れません
+          # :pk
+          # It's reasonably a プロモーテッド・ルック（Promoted Rook；成飛）. It's actually ドラゴン（Dragon；竜）
+          :pr -> true
+          # It's reasonably a プロモーテッド・ビショップ（Promoted Bishop；成角）.  It's actually ホース（Horse；馬）. Ponanza calls ペガサス（Pegasus；天馬）
+          :pb -> true
+          # 金は成れません
+          # :pg
+          # プロモーテッド・シルバー（Promoted Silver；成銀. Or 全 in one letter）
+          :ps -> true
+          # プロモーテッド・ナイト（Promoted kNight；成桂. Or 圭 in one letter）
+          :pn -> true
+          # プロモーテッド・ランス（Promoted Lance；成香. Or 杏 in one letter）
+          :pl -> true
+          # It's reasonably a プロモーテッド・ポーン（Promoted Pawn；成歩）. It's actually と（"To"；と is 金 cursive）
+          :pp -> true
+          _ -> raise "unexpected target_piece_type:#{target_pt}"
+        end
+      end
+
+    # 利きに飛び込むか？　先手視点で定義しろだぜ
+    is_effect_in_south_east? = fn (target_pt)->
+        case target_pt do
+          # キング（King；玉）
+          :k -> true
+          # ルック（Rook；飛車）
+          :r -> false
+          # ビショップ（Bishop；角）
+          :b -> true
+          # ゴールド（Gold；金）
+          :g -> false
+          # シルバー（Silver；銀）
+          :s -> true
+          # ナイト（kNight；桂）
+          :n -> false
+          # ランス（Lance；香）
+          :l -> false
+          # ポーン（Pawn；歩）
+          :p -> false
+          # 玉は成れません
+          # :pk
+          # It's reasonably a プロモーテッド・ルック（Promoted Rook；成飛）. It's actually ドラゴン（Dragon；竜）
+          :pr -> true
+          # It's reasonably a プロモーテッド・ビショップ（Promoted Bishop；成角）.  It's actually ホース（Horse；馬）. Ponanza calls ペガサス（Pegasus；天馬）
+          :pb -> true
+          # 金は成れません
+          # :pg
+          # プロモーテッド・シルバー（Promoted Silver；成銀. Or 全 in one letter）
+          :ps -> false
+          # プロモーテッド・ナイト（Promoted kNight；成桂. Or 圭 in one letter）
+          :pn -> false
+          # プロモーテッド・ランス（Promoted Lance；成香. Or 杏 in one letter）
+          :pl -> false
+          # It's reasonably a プロモーテッド・ポーン（Promoted Pawn；成歩）. It's actually と（"To"；と is 金 cursive）
+          :pp -> false
+          _ -> raise "unexpected target_piece_type:#{target_pt}"
+        end
+      end
+
+    # 利きに飛び込むか？　先手視点で定義しろだぜ
+    is_effect_in_north_north_east? = fn (target_pt)->
+        case target_pt do
+          # キング（King；玉）
+          :k -> false
+          # ルック（Rook；飛車）
+          :r -> false
+          # ビショップ（Bishop；角）
+          :b -> false
+          # ゴールド（Gold；金）
+          :g -> false
+          # シルバー（Silver；銀）
+          :s -> false
+          # ナイト（kNight；桂）
+          :n -> true
+          # ランス（Lance；香）
+          :l -> false
+          # ポーン（Pawn；歩）
+          :p -> false
+          # 玉は成れません
+          # :pk
+          # It's reasonably a プロモーテッド・ルック（Promoted Rook；成飛）. It's actually ドラゴン（Dragon；竜）
+          :pr -> false
+          # It's reasonably a プロモーテッド・ビショップ（Promoted Bishop；成角）.  It's actually ホース（Horse；馬）. Ponanza calls ペガサス（Pegasus；天馬）
+          :pb -> false
+          # 金は成れません
+          # :pg
+          # プロモーテッド・シルバー（Promoted Silver；成銀. Or 全 in one letter）
+          :ps -> false
+          # プロモーテッド・ナイト（Promoted kNight；成桂. Or 圭 in one letter）
+          :pn -> false
+          # プロモーテッド・ランス（Promoted Lance；成香. Or 杏 in one letter）
+          :pl -> false
+          # It's reasonably a プロモーテッド・ポーン（Promoted Pawn；成歩）. It's actually と（"To"；と is 金 cursive）
+          :pp -> false
+          _ -> raise "unexpected target_piece_type:#{target_pt}"
+        end
+      end
+
+    # 利きに飛び込むか？　先手視点で定義しろだぜ
+    is_effect_in_south? = fn (target_pt) ->
+        case target_pt do
+          # キング（King；玉）
+          :k -> true
+          # ルック（Rook；飛車）
+          :r -> true
+          # ビショップ（Bishop；角）
+          :b -> false
+          # ゴールド（Gold；金）
+          :g -> true
+          # シルバー（Silver；銀）
+          :s -> false
+          # ナイト（kNight；桂）
+          :n -> false
+          # ランス（Lance；香）
+          :l -> false
+          # ポーン（Pawn；歩）
+          :p -> false
+          # 玉は成れません
+          # :pk
+          # It's reasonably a プロモーテッド・ルック（Promoted Rook；成飛）. It's actually ドラゴン（Dragon；竜）
+          :pr -> true
+          # It's reasonably a プロモーテッド・ビショップ（Promoted Bishop；成角）.  It's actually ホース（Horse；馬）. Ponanza calls ペガサス（Pegasus；天馬）
+          :pb -> true
+          # 金は成れません
+          # :pg
+          # プロモーテッド・シルバー（Promoted Silver；成銀. Or 全 in one letter）
+          :ps -> true
+          # プロモーテッド・ナイト（Promoted kNight；成桂. Or 圭 in one letter）
+          :pn -> true
+          # プロモーテッド・ランス（Promoted Lance；成香. Or 杏 in one letter）
+          :pl -> true
+          # It's reasonably a プロモーテッド・ポーン（Promoted Pawn；成歩）. It's actually と（"To"；と is 金 cursive）
+          :pp -> true
+          _ -> raise "unexpected target_piece_type:#{target_pt}"
+        end
+      end
 
     is_suicide_move =
       cond do
         # ∧
         # │
-        pos |> in_north(src_sq, :north_of, fn ()->
-            true
-          end) -> true
+        pos |> in_north(src_sq, :north_of, is_effect_in_north?) -> true
         # 　─┐
         # ／
-        pos |> in_north_east(src_sq, :north_east_of, fn ()->
-            true
-          end) -> true
+        pos |> in_north_east(src_sq, :north_east_of, is_effect_in_north_east?) -> true
         #
         # ──＞
-        pos |> in_east(src_sq, :east_of, fn ()->
-            true
-          end) -> true
+        pos |> in_east(src_sq, :east_of, is_effect_in_east?) -> true
         # ＼
         # 　─┘
-        pos |> in_south_east(src_sq, :south_east_of, fn ()->
-            true
-          end) -> true
+        pos |> in_south_east(src_sq, :south_east_of, is_effect_in_south_east?) -> true
         # │
         # Ｖ
-        pos |> in_south(src_sq, :south_of, fn () ->
-            true
-          end) -> true
+        pos |> in_south(src_sq, :south_of, is_effect_in_south?) -> true
         # 　／
         # └─
-        pos |> in_south_east(src_sq, :south_west_of, fn ()->
-            true
-          end) -> true
+        pos |> in_south_east(src_sq, :south_west_of, is_effect_in_south_east?) -> true
         #
         # ＜──
-        pos |> in_east(src_sq, :west_of, fn ()->
-            true
-          end) -> true
+        pos |> in_east(src_sq, :west_of, is_effect_in_east?) -> true
         # ┌─
         # 　＼
-        pos |> in_north_east(src_sq, :north_west_of, fn ()->
-            true
-          end) -> true
+        pos |> in_north_east(src_sq, :north_west_of, is_effect_in_north_east?) -> true
         # 　─┐
         # ／
         # │
-        pos |> in_north_north_east(src_sq, :north_north_east_of, fn ()->
-            true
-          end) -> true
+        pos |> in_north_north_east(src_sq, :north_north_east_of, is_effect_in_north_north_east?) -> true
         # ┌─
         # 　＼
         # 　　│
-        pos |> in_north_north_east(src_sq, :north_north_west_of, fn ()->
-            true
-          end) -> true
+        pos |> in_north_north_east(src_sq, :north_north_west_of, is_effect_in_north_north_east?) -> true
         #
         # その他
         true -> false
@@ -109,44 +322,8 @@ defmodule KifuwarabeWcsc33.CLI.Thesis.IsSuicideMove do
             # 駒種類は
             target_pt = KifuwarabeWcsc33.CLI.Mappings.ToPieceType.from_piece(target_pc)
 
-            # 自殺手になるか？
-            is_effect?.()
-            # 先手視点で定義しろだぜ
-            case target_pt do
-              # キング（King；玉）
-              :k -> true
-              # ルック（Rook；飛車）
-              :r -> true
-              # ビショップ（Bishop；角）
-              :b -> false
-              # ゴールド（Gold；金）
-              :g -> true
-              # シルバー（Silver；銀）
-              :s -> true
-              # ナイト（kNight；桂）
-              :n -> false
-              # ランス（Lance；香）
-              :l -> true
-              # ポーン（Pawn；歩）
-              :p -> true
-              # 玉は成れません
-              # :pk
-              # It's reasonably a プロモーテッド・ルック（Promoted Rook；成飛）. It's actually ドラゴン（Dragon；竜）
-              :pr -> true
-              # It's reasonably a プロモーテッド・ビショップ（Promoted Bishop；成角）.  It's actually ホース（Horse；馬）. Ponanza calls ペガサス（Pegasus；天馬）
-              :pb -> true
-              # 金は成れません
-              # :pg
-              # プロモーテッド・シルバー（Promoted Silver；成銀. Or 全 in one letter）
-              :ps -> true
-              # プロモーテッド・ナイト（Promoted kNight；成桂. Or 圭 in one letter）
-              :pn -> true
-              # プロモーテッド・ランス（Promoted Lance；成香. Or 杏 in one letter）
-              :pl -> true
-              # It's reasonably a プロモーテッド・ポーン（Promoted Pawn；成歩）. It's actually と（"To"；と is 金 cursive）
-              :pp -> true
-              _ -> raise "unexpected target_piece_type:#{target_pt}"
-            end
+            # 利きに飛び込むか？
+            is_effect?.(target_pt)
           else
             # 自駒
             false
@@ -199,44 +376,8 @@ defmodule KifuwarabeWcsc33.CLI.Thesis.IsSuicideMove do
             # 駒種類は
             target_pt = KifuwarabeWcsc33.CLI.Mappings.ToPieceType.from_piece(target_pc)
 
-            # 自殺手になるか？
-            is_effect?.()
-            # 先手視点で定義しろだぜ
-            case target_pt do
-              # キング（King；玉）
-              :k -> true
-              # ルック（Rook；飛車）
-              :r -> false
-              # ビショップ（Bishop；角）
-              :b -> true
-              # ゴールド（Gold；金）
-              :g -> true
-              # シルバー（Silver；銀）
-              :s -> true
-              # ナイト（kNight；桂）
-              :n -> false
-              # ランス（Lance；香）
-              :l -> false
-              # ポーン（Pawn；歩）
-              :p -> false
-              # 玉は成れません
-              # :pk
-              # It's reasonably a プロモーテッド・ルック（Promoted Rook；成飛）. It's actually ドラゴン（Dragon；竜）
-              :pr -> true
-              # It's reasonably a プロモーテッド・ビショップ（Promoted Bishop；成角）.  It's actually ホース（Horse；馬）. Ponanza calls ペガサス（Pegasus；天馬）
-              :pb -> true
-              # 金は成れません
-              # :pg
-              # プロモーテッド・シルバー（Promoted Silver；成銀. Or 全 in one letter）
-              :ps -> true
-              # プロモーテッド・ナイト（Promoted kNight；成桂. Or 圭 in one letter）
-              :pn -> true
-              # プロモーテッド・ランス（Promoted Lance；成香. Or 杏 in one letter）
-              :pl -> true
-              # It's reasonably a プロモーテッド・ポーン（Promoted Pawn；成歩）. It's actually と（"To"；と is 金 cursive）
-              :pp -> true
-              _ -> raise "unexpected target_piece_type:#{target_pt}"
-            end
+            # 利きに飛び込むか？
+            is_effect?.(target_pt)
           else
             # 自駒
             false
@@ -288,44 +429,8 @@ defmodule KifuwarabeWcsc33.CLI.Thesis.IsSuicideMove do
             # 駒種類は
             target_pt = KifuwarabeWcsc33.CLI.Mappings.ToPieceType.from_piece(target_pc)
 
-            # 自殺手になるか？
-            is_effect?.()
-            # 先手視点で定義しろだぜ
-            case target_pt do
-              # キング（King；玉）
-              :k -> true
-              # ルック（Rook；飛車）
-              :r -> true
-              # ビショップ（Bishop；角）
-              :b -> false
-              # ゴールド（Gold；金）
-              :g -> true
-              # シルバー（Silver；銀）
-              :s -> false
-              # ナイト（kNight；桂）
-              :n -> false
-              # ランス（Lance；香）
-              :l -> false
-              # ポーン（Pawn；歩）
-              :p -> false
-              # 玉は成れません
-              # :pk
-              # It's reasonably a プロモーテッド・ルック（Promoted Rook；成飛）. It's actually ドラゴン（Dragon；竜）
-              :pr -> true
-              # It's reasonably a プロモーテッド・ビショップ（Promoted Bishop；成角）.  It's actually ホース（Horse；馬）. Ponanza calls ペガサス（Pegasus；天馬）
-              :pb -> true
-              # 金は成れません
-              # :pg
-              # プロモーテッド・シルバー（Promoted Silver；成銀. Or 全 in one letter）
-              :ps -> true
-              # プロモーテッド・ナイト（Promoted kNight；成桂. Or 圭 in one letter）
-              :pn -> true
-              # プロモーテッド・ランス（Promoted Lance；成香. Or 杏 in one letter）
-              :pl -> true
-              # It's reasonably a プロモーテッド・ポーン（Promoted Pawn；成歩）. It's actually と（"To"；と is 金 cursive）
-              :pp -> true
-              _ -> raise "unexpected target_piece_type:#{target_pt}"
-            end
+            # 利きに飛び込むか？
+            is_effect?.(target_pt)
           else
             # 自駒
             false
@@ -377,44 +482,8 @@ defmodule KifuwarabeWcsc33.CLI.Thesis.IsSuicideMove do
             # 駒種類は
             target_pt = KifuwarabeWcsc33.CLI.Mappings.ToPieceType.from_piece(target_pc)
 
-            # 自殺手になるか？
-            is_effect?.()
-            # 先手視点で定義しろだぜ
-            case target_pt do
-              # キング（King；玉）
-              :k -> true
-              # ルック（Rook；飛車）
-              :r -> false
-              # ビショップ（Bishop；角）
-              :b -> true
-              # ゴールド（Gold；金）
-              :g -> false
-              # シルバー（Silver；銀）
-              :s -> true
-              # ナイト（kNight；桂）
-              :n -> false
-              # ランス（Lance；香）
-              :l -> false
-              # ポーン（Pawn；歩）
-              :p -> false
-              # 玉は成れません
-              # :pk
-              # It's reasonably a プロモーテッド・ルック（Promoted Rook；成飛）. It's actually ドラゴン（Dragon；竜）
-              :pr -> true
-              # It's reasonably a プロモーテッド・ビショップ（Promoted Bishop；成角）.  It's actually ホース（Horse；馬）. Ponanza calls ペガサス（Pegasus；天馬）
-              :pb -> true
-              # 金は成れません
-              # :pg
-              # プロモーテッド・シルバー（Promoted Silver；成銀. Or 全 in one letter）
-              :ps -> false
-              # プロモーテッド・ナイト（Promoted kNight；成桂. Or 圭 in one letter）
-              :pn -> false
-              # プロモーテッド・ランス（Promoted Lance；成香. Or 杏 in one letter）
-              :pl -> false
-              # It's reasonably a プロモーテッド・ポーン（Promoted Pawn；成歩）. It's actually と（"To"；と is 金 cursive）
-              :pp -> false
-              _ -> raise "unexpected target_piece_type:#{target_pt}"
-            end
+            # 利きに飛び込むか？
+            is_effect?.(target_pt)
           else
             # 自駒
             false
@@ -468,44 +537,8 @@ defmodule KifuwarabeWcsc33.CLI.Thesis.IsSuicideMove do
             # 駒種類は
             target_pt = KifuwarabeWcsc33.CLI.Mappings.ToPieceType.from_piece(target_pc)
 
-            # 自殺手になるか？
-            is_effect?.()
-            # 先手視点で定義しろだぜ
-            case target_pt do
-              # キング（King；玉）
-              :k -> true
-              # ルック（Rook；飛車）
-              :r -> true
-              # ビショップ（Bishop；角）
-              :b -> false
-              # ゴールド（Gold；金）
-              :g -> true
-              # シルバー（Silver；銀）
-              :s -> false
-              # ナイト（kNight；桂）
-              :n -> false
-              # ランス（Lance；香）
-              :l -> false
-              # ポーン（Pawn；歩）
-              :p -> false
-              # 玉は成れません
-              # :pk
-              # It's reasonably a プロモーテッド・ルック（Promoted Rook；成飛）. It's actually ドラゴン（Dragon；竜）
-              :pr -> true
-              # It's reasonably a プロモーテッド・ビショップ（Promoted Bishop；成角）.  It's actually ホース（Horse；馬）. Ponanza calls ペガサス（Pegasus；天馬）
-              :pb -> true
-              # 金は成れません
-              # :pg
-              # プロモーテッド・シルバー（Promoted Silver；成銀. Or 全 in one letter）
-              :ps -> true
-              # プロモーテッド・ナイト（Promoted kNight；成桂. Or 圭 in one letter）
-              :pn -> true
-              # プロモーテッド・ランス（Promoted Lance；成香. Or 杏 in one letter）
-              :pl -> true
-              # It's reasonably a プロモーテッド・ポーン（Promoted Pawn；成歩）. It's actually と（"To"；と is 金 cursive）
-              :pp -> true
-              _ -> raise "unexpected target_piece_type:#{target_pt}"
-            end
+            # 利きに飛び込むか？
+            is_effect?.(target_pt)
           else
             # 自駒
             false
@@ -559,44 +592,8 @@ defmodule KifuwarabeWcsc33.CLI.Thesis.IsSuicideMove do
             # 駒種類は
             target_pt = KifuwarabeWcsc33.CLI.Mappings.ToPieceType.from_piece(target_pc)
 
-            # 自殺手になるか？
-            is_effect?.()
-            # 先手視点で定義しろだぜ
-            case target_pt do
-              # キング（King；玉）
-              :k -> false
-              # ルック（Rook；飛車）
-              :r -> false
-              # ビショップ（Bishop；角）
-              :b -> false
-              # ゴールド（Gold；金）
-              :g -> false
-              # シルバー（Silver；銀）
-              :s -> false
-              # ナイト（kNight；桂）
-              :n -> true
-              # ランス（Lance；香）
-              :l -> false
-              # ポーン（Pawn；歩）
-              :p -> false
-              # 玉は成れません
-              # :pk
-              # It's reasonably a プロモーテッド・ルック（Promoted Rook；成飛）. It's actually ドラゴン（Dragon；竜）
-              :pr -> false
-              # It's reasonably a プロモーテッド・ビショップ（Promoted Bishop；成角）.  It's actually ホース（Horse；馬）. Ponanza calls ペガサス（Pegasus；天馬）
-              :pb -> false
-              # 金は成れません
-              # :pg
-              # プロモーテッド・シルバー（Promoted Silver；成銀. Or 全 in one letter）
-              :ps -> false
-              # プロモーテッド・ナイト（Promoted kNight；成桂. Or 圭 in one letter）
-              :pn -> false
-              # プロモーテッド・ランス（Promoted Lance；成香. Or 杏 in one letter）
-              :pl -> false
-              # It's reasonably a プロモーテッド・ポーン（Promoted Pawn；成歩）. It's actually と（"To"；と is 金 cursive）
-              :pp -> false
-              _ -> raise "unexpected target_piece_type:#{target_pt}"
-            end
+            # 利きに飛び込むか？
+            is_effect?.(target_pt)
           else
             # 自駒
             false
@@ -649,9 +646,9 @@ defmodule KifuwarabeWcsc33.CLI.Thesis.IsSuicideMove do
 
             # IO.puts("[is_suicide_move far_to_north] direction_of:#{direction_of} target_sq:#{target_sq} target_pc:#{target_pc} target_turn:#{target_turn} target_pt:#{target_pt}")
 
-            # 自殺手になるか？
+            # 利きに飛び込むか？
             is_effect?.()
-            # 先手視点で定義しろだぜ
+            # 利きに飛び込むか？　先手視点で定義しろだぜ
             case target_pt do
               # ルック（Rook；飛車）
               :r -> true
@@ -716,9 +713,9 @@ defmodule KifuwarabeWcsc33.CLI.Thesis.IsSuicideMove do
 
             # IO.puts("[is_suicide_move far_to_north_east] direction_of:#{direction_of} target_sq:#{target_sq} target_pc:#{target_pc} target_turn:#{target_turn} target_pt:#{target_pt}")
 
-            # 自殺手になるか？
+            # 利きに飛び込むか？
             is_effect?.()
-            # 先手視点で定義しろだぜ
+            # 利きに飛び込むか？　先手視点で定義しろだぜ
             case target_pt do
               # ビショップ（Bishop；角）
               :b -> true
@@ -779,9 +776,9 @@ defmodule KifuwarabeWcsc33.CLI.Thesis.IsSuicideMove do
 
             # IO.puts("[is_suicide_move far_to_east] direction_of:#{direction_of} target_sq:#{target_sq} target_pc:#{target_pc} target_turn:#{target_turn} target_pt:#{target_pt}")
 
-            # 自殺手になるか？
+            # 利きに飛び込むか？
             is_effect?.()
-            # 先手視点で定義しろだぜ
+            # 利きに飛び込むか？　先手視点で定義しろだぜ
             case target_pt do
               # ルック（Rook；飛車）
               :r -> true
@@ -844,9 +841,9 @@ defmodule KifuwarabeWcsc33.CLI.Thesis.IsSuicideMove do
 
             # IO.puts("[is_suicide_move far_to_south_east] direction_of:#{direction_of} target_sq:#{target_sq} target_pc:#{target_pc} target_turn:#{target_turn} target_pt:#{target_pt}")
 
-            # 自殺手になるか？
+            # 利きに飛び込むか？
             is_effect?.()
-            # 先手視点で定義しろだぜ
+            # 利きに飛び込むか？　先手視点で定義しろだぜ
             case target_pt do
               # ビショップ（Bishop；角）
               :b -> true
@@ -909,9 +906,9 @@ defmodule KifuwarabeWcsc33.CLI.Thesis.IsSuicideMove do
 
             # IO.puts("[is_suicide_move far_to_south] direction_of:#{direction_of} target_sq:#{target_sq} target_pc:#{target_pc} target_turn:#{target_turn} target_pt:#{target_pt}")
 
-            # 自殺手になるか？
+            # 利きに飛び込むか？
             is_effect?.()
-            # 先手視点で定義しろだぜ
+            # 利きに飛び込むか？　先手視点で定義しろだぜ
             case target_pt do
               # ルック（Rook；飛車）
               :r -> true
