@@ -69,7 +69,7 @@ defmodule KifuwarabeWcsc33.CLI.Routes.UndoMove do
             # 移動元マスは、動かした駒になる
             move.source => if move.promote? do
               # TODO （成った駒は）成らずに戻す
-              KifuwarabeWcsc33.CLI.Mappings.ToPromote.demote(pos.board[move.destination])
+              KifuwarabeWcsc33.CLI.Mappings.ToPiece.demote(pos.board[move.destination])
             else
               pos.board[move.destination]
             end,

@@ -15,3 +15,11 @@ position startpos moves 2h3h 9a9b 1i1h 4a4b 3h4h 6a5b 6i6h 8b7b 5g5f 4b3b 9i9h 7
 ```plaintext
 5skn1/1bs6/1pP1Ngrpl/l1GP2P1p/L4p3/1PS1pP1P1/2B1G4/3K2S1g/9 b N4Prnl3p 1
 ```
+
+## 桂成で成れずにエラー
+
+👇 `8e9g+` でエラー  
+
+```plaintext
+position startpos moves 4i4h 7c7d 2h3h 8b7b 9i9h 7b6b 1i1h 9c9d 3g3f 1a1b 6i6h 2b1a 3h3g 5a5b 5i5h 6a5a 4g4f 3c3d 8h9i 5c5d 3g4g 5b5c 9i8h 4a4b 8h9i 6b5b 3f3e 5c6b 2g2f 5b5c 8g8f 6b7c 3i2h 9a9b 9i8h 1a2b 8h9i 8a9c 9i8h 9c8e 6g6f 4b3b 2h3g
+```
