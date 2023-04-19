@@ -58,7 +58,12 @@ defmodule KifuwarabeWcsc33.CLI.Routes.DoMove do
             # 移動元マスは、空マスになる
             move.source => :sp,
             # 移動先マスへ、移動元マスの駒を置く
-            move.destination => pos.board[move.source]
+            move.destination => if move.promote? do
+              # TODO （成るなら）成る
+              KifuwarabeWcsc33.CLI.Mappings.ToPromote.promote(pos.board[move.source])
+            else
+              pos.board[move.source]
+            end
           }
         }
 
