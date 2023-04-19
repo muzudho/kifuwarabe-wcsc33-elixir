@@ -72,7 +72,8 @@ defmodule KifuwarabeWcsc33.CLI.Routes.Think do
 
       else
         # とりあえず、指してみる
-        IO.puts("[think choice] best_move:#{KifuwarabeWcsc33.CLI.Views.Move.as_code(best_move)}")
+        best_move_code = KifuwarabeWcsc33.CLI.Views.Move.as_code(best_move)
+        IO.puts("[think choice] best_move:#{best_move_code}")
         pos = pos |> KifuwarabeWcsc33.CLI.Routes.DoMove.move(best_move)
         # 手番がひっくり返ったことに注意
         IO.puts(KifuwarabeWcsc33.CLI.Views.Position.stringify(pos))
@@ -90,6 +91,7 @@ defmodule KifuwarabeWcsc33.CLI.Routes.Think do
               if pos |> KifuwarabeWcsc33.CLI.Thesis.IsSuicideMove.is_suicide_move?(king_sq) do
                 # 自殺手だ
                 # 戻す
+                IO.puts("[think choice] #{best_move_code} is suicide move. Undo move")
                 pos = pos |> KifuwarabeWcsc33.CLI.Routes.UndoMove.move()
 
                 # Recursive
@@ -99,6 +101,7 @@ defmodule KifuwarabeWcsc33.CLI.Routes.Think do
                 pos |> choice(move_list)
                 pos
               else
+                IO.puts("[think choice] #{best_move_code} is no suicide move. Ok")
                 pos
               end
             pos
