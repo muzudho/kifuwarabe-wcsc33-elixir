@@ -72,10 +72,13 @@ defmodule KifuwarabeWcsc33.CLI.Routes.Think do
     else
       # とりあえず、指してみる
       best_move_code = KifuwarabeWcsc33.CLI.Views.Move.as_code(best_move)
-      IO.puts("[think choice] best_move:#{best_move_code}")
       pos = pos |> KifuwarabeWcsc33.CLI.Routes.DoMove.move(best_move)
       # 手番がひっくり返ったことに注意
-      IO.puts(KifuwarabeWcsc33.CLI.Views.Position.stringify(pos))
+      IO.puts(
+        """
+          [think choice] Do #{best_move_code}.
+
+        """ <> KifuwarabeWcsc33.CLI.Views.Position.stringify(pos))
 
       # 一手指したあとの、自玉の位置を検索（ここでは相手番なので、さっきの手番は逆側）
       king_sq = pos |> KifuwarabeWcsc33.CLI.Finder.Square.find_king_on_board(pos.opponent_turn)
@@ -88,10 +91,13 @@ defmodule KifuwarabeWcsc33.CLI.Routes.Think do
         if pos |> KifuwarabeWcsc33.CLI.Thesis.IsSuicideMove.is_suicide_move?(king_sq) do
           # 自殺手だ
           # 戻す
-          IO.puts("[think choice] #{best_move_code} is suicide move. Undo move")
           pos = pos |> KifuwarabeWcsc33.CLI.Routes.UndoMove.move()
           # TODO 消す。盤表示
-          IO.puts(KifuwarabeWcsc33.CLI.Views.Position.stringify(pos))
+          IO.puts(
+            """
+              [think choice] Undo #{best_move_code}. It is suicide move.
+
+            """ <> KifuwarabeWcsc33.CLI.Views.Position.stringify(pos))
 
           # Recursive
           # =========
