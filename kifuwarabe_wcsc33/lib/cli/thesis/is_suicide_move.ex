@@ -346,7 +346,7 @@ defmodule KifuwarabeWcsc33.CLI.Thesis.IsSuicideMove do
             end
 
           # （空きマスなら）長い利き
-          pos |> far_to_north(
+          pos |> far_to(
             target_sq,
             direction_of,
             is_effect_2?)
@@ -412,7 +412,7 @@ defmodule KifuwarabeWcsc33.CLI.Thesis.IsSuicideMove do
             end
 
           # （空きマスなら）長い利き
-          pos |> far_to_north_east(
+          pos |> far_to(
             target_sq,
             direction_of,
             is_effect_2?)
@@ -478,7 +478,7 @@ defmodule KifuwarabeWcsc33.CLI.Thesis.IsSuicideMove do
             end
 
           # （空きマスなら）長い利き
-          pos |> far_to_east(
+          pos |> far_to(
             target_sq,
             direction_of,
             is_effect_2?)
@@ -544,7 +544,7 @@ defmodule KifuwarabeWcsc33.CLI.Thesis.IsSuicideMove do
             end
 
           # （空きマスなら）長い利き
-          pos |> far_to_south_east(
+          pos |> far_to(
             target_sq,
             direction_of,
             is_effect_2?)
@@ -612,7 +612,7 @@ defmodule KifuwarabeWcsc33.CLI.Thesis.IsSuicideMove do
             end
 
           # （空きマスなら）長い利き
-          pos |> far_to_south(
+          pos |> far_to(
             target_sq,
             direction_of,
             is_effect_2?)
@@ -680,17 +680,14 @@ defmodule KifuwarabeWcsc33.CLI.Thesis.IsSuicideMove do
     is_suicide_move
   end
 
-
-  # 北側の遠くのマス
   #
-  # ∧ Long
-  # │
-  # │
+  # 長い利きのマス
+  # ============
   #
-  defp far_to_north(pos, src_sq, direction_of, is_effect_2?) do
+  defp far_to(pos, src_sq, direction_of, is_effect_2?) do
     # 対象のマスが（１手指してる想定なので、反対側が手番）
     target_sq = KifuwarabeWcsc33.CLI.Mappings.ToDestination.from_turn_and_source(pos.opponent_turn, src_sq, direction_of)
-    IO.write("[is_suicide_move far_to_north] target_sq:#{target_sq}")
+    IO.write("[is_suicide_move far_to] target_sq:#{target_sq}")
 
     is_suicide_move =
       # 盤内で
@@ -721,229 +718,7 @@ defmodule KifuwarabeWcsc33.CLI.Thesis.IsSuicideMove do
 
         else
           # （空きマスなら）長い利き
-          pos |> far_to_north(
-            target_sq,
-            direction_of,
-            is_effect_2?)
-        end
-
-      else
-        # 盤外なら自殺手にはならない
-        false
-      end
-
-    IO.puts(" is_suicide_move:#{is_suicide_move}")
-
-    is_suicide_move
-  end
-
-  # 北東側のマス、または北西側のマス（共用）
-  #
-  # 　 　─┐ Long　　Long ┌─
-  # 　 ／　　　 　　　 　　　＼
-  # ／　　　　　　，　　 　　　 ＼
-  #
-  defp far_to_north_east(pos, src_sq, direction_of, is_effect_2?) do
-    # 対象のマスが（１手指してる想定なので、反対側が手番）
-    target_sq = KifuwarabeWcsc33.CLI.Mappings.ToDestination.from_turn_and_source(pos.opponent_turn, src_sq, direction_of)
-    IO.write("[is_suicide_move far_to_north_east] target_sq:#{target_sq}")
-
-    is_suicide_move =
-      # 盤内で
-      if KifuwarabeWcsc33.CLI.Thesis.Board.is_in_board?(target_sq) do
-        # その駒は
-        target_pc = pos.board[target_sq]
-        IO.write(" target_pc:#{target_pc}")
-
-        # 空マスではなく
-        if target_pc != :sp do
-          # 先後が
-          target_turn = KifuwarabeWcsc33.CLI.Mappings.ToTurn.from_piece(target_pc)
-          IO.write(" target_turn:#{target_turn}")
-
-          # 相手番で（一手指した後を想定し、手番は相手）
-          if target_turn == pos.turn do
-            # 駒種類は
-            target_pt = KifuwarabeWcsc33.CLI.Mappings.ToPieceType.from_piece(target_pc)
-            IO.write(" target_pt:#{target_pt}")
-
-            # 利きに飛び込むか？
-            is_effect_2?.(target_pt)
-
-          else
-            # 自駒
-            false
-          end
-
-        else
-          # （空きマスなら）長い利き
-          pos |> far_to_north_east(
-            target_sq,
-            direction_of,
-            is_effect_2?)
-        end
-
-      else
-        # 盤外なら自殺手にはならない
-        false
-      end
-
-    IO.puts(" is_suicide_move:#{is_suicide_move}")
-
-    is_suicide_move
-  end
-
-  # 東側のマス、または西側のマス（共用）
-  #
-  # ────＞ Long，　Long ＜────
-  #
-  defp far_to_east(pos, src_sq, direction_of, is_effect_2?) do
-    # 対象のマスが（１手指してる想定なので、反対側が手番）
-    target_sq = KifuwarabeWcsc33.CLI.Mappings.ToDestination.from_turn_and_source(pos.opponent_turn, src_sq, direction_of)
-    IO.write("[is_suicide_move far_to_east] target_sq:#{target_sq}")
-
-    is_suicide_move =
-      # 盤内で
-      if KifuwarabeWcsc33.CLI.Thesis.Board.is_in_board?(target_sq) do
-        # その駒は
-        target_pc = pos.board[target_sq]
-        IO.write(" target_pc:#{target_pc}")
-
-        # 空マスではなく
-        if target_pc != :sp do
-          # 先後が
-          target_turn = KifuwarabeWcsc33.CLI.Mappings.ToTurn.from_piece(target_pc)
-          IO.write(" target_turn:#{target_turn}")
-
-          # 相手番で（一手指した後を想定し、手番は相手）
-          if target_turn == pos.turn do
-            # 駒種類は
-            target_pt = KifuwarabeWcsc33.CLI.Mappings.ToPieceType.from_piece(target_pc)
-            IO.write(" target_pt:#{target_pt}")
-
-            # 利きに飛び込むか？
-            is_effect_2?.(target_pt)
-
-          else
-            # 自駒
-            false
-          end
-
-        else
-          # （空きマスなら）長い利き
-          pos |> far_to_east(
-            target_sq,
-            direction_of,
-            is_effect_2?)
-        end
-
-      else
-        # 盤外なら自殺手にはならない
-        false
-      end
-
-    IO.puts(" is_suicide_move:#{is_suicide_move}")
-
-    is_suicide_move
-  end
-
-  # 南東側のマス、または南西側のマス（共用）
-  #
-  # ＼　　　　　　 　　 ／
-  # 　＼　　　　 　　 ／
-  # 　　─┘ Long，　└─ Long
-  #
-  defp far_to_south_east(pos, src_sq, direction_of, is_effect_2?) do
-    # 対象のマスが（１手指してる想定なので、反対側が手番）
-    target_sq = KifuwarabeWcsc33.CLI.Mappings.ToDestination.from_turn_and_source(pos.opponent_turn, src_sq, direction_of)
-    IO.write("[is_suicide_move far_to_south_east] target_sq:#{target_sq}")
-
-    is_suicide_move =
-      # 盤内で
-      if KifuwarabeWcsc33.CLI.Thesis.Board.is_in_board?(target_sq) do
-        # その駒は
-        target_pc = pos.board[target_sq]
-        IO.write(" target_pc:#{target_pc}")
-
-        # 空マスではなく
-        if target_pc != :sp do
-          # 先後が
-          target_turn = KifuwarabeWcsc33.CLI.Mappings.ToTurn.from_piece(target_pc)
-          IO.write(" target_turn:#{target_turn}")
-
-          # 相手番で（一手指した後を想定し、手番は相手）
-          if target_turn == pos.turn do
-            # 駒種類は
-            target_pt = KifuwarabeWcsc33.CLI.Mappings.ToPieceType.from_piece(target_pc)
-            IO.write(" target_pt:#{target_pt}")
-
-            # 利きに飛び込むか？
-            is_effect_2?.(target_pt)
-
-          else
-            # 自駒
-            false
-          end
-
-        else
-          # （空きマスなら）長い利き
-          pos |> far_to_south_east(
-            target_sq,
-            direction_of,
-            is_effect_2?)
-        end
-
-      else
-        # 盤外なら自殺手にはならない
-        false
-      end
-
-    IO.puts(" is_suicide_move:#{is_suicide_move}")
-
-    is_suicide_move
-  end
-
-  # 南側のマス
-  #
-  # │
-  # │
-  # Ｖ Long
-  #
-  defp far_to_south(pos, src_sq, direction_of, is_effect_2?) do
-    # 対象のマスが（１手指してる想定なので、反対側が手番）
-    target_sq = KifuwarabeWcsc33.CLI.Mappings.ToDestination.from_turn_and_source(pos.opponent_turn, src_sq, direction_of)
-    IO.write("[is_suicide_move far_to_south] target_sq:#{target_sq}")
-
-    is_suicide_move =
-      # 盤内で
-      if KifuwarabeWcsc33.CLI.Thesis.Board.is_in_board?(target_sq) do
-        # その駒は
-        target_pc = pos.board[target_sq]
-        IO.write(" target_pc:#{target_pc}")
-
-        # 空マスではなく
-        if target_pc != :sp do
-          # 先後が
-          target_turn = KifuwarabeWcsc33.CLI.Mappings.ToTurn.from_piece(target_pc)
-          IO.write(" target_turn:#{target_turn}")
-
-          # 相手番で（一手指した後を想定し、手番は相手）
-          if target_turn == pos.turn do
-            # 駒種類は
-            target_pt = KifuwarabeWcsc33.CLI.Mappings.ToPieceType.from_piece(target_pc)
-            IO.write(" target_pt:#{target_pt}")
-
-            # 利きに飛び込むか？
-            is_effect_2?.(target_pt)
-
-          else
-            # 自駒
-            false
-          end
-
-        else
-          # （空きマスなら）長い利き（１手指してる想定なので、反対側が手番）
-          pos |> far_to_south(
+          pos |> far_to(
             target_sq,
             direction_of,
             is_effect_2?)
