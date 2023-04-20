@@ -43,8 +43,8 @@ defmodule KifuwarabeWcsc33.CLI.Models.Squares do
     # 55
     # │
     # Ｖ
-    # 54
-    south_of: -1,
+    # 56
+    south_of: 1,
     # 　　　55
     # 　　／
     # 　└─

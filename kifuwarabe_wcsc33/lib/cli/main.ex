@@ -105,6 +105,10 @@ defmodule KifuwarabeWcsc33.CLI.Main do
 
           # 局面は、丸ごと差し替えだ
           pos = KifuwarabeWcsc33.CLI.Helpers.PositionParser.parse(input)
+
+          # TODO 消す。盤表示
+          IO.puts(KifuwarabeWcsc33.CLI.Views.Position.stringify(pos))
+
           {pos}
 
         first_token == "go" ->

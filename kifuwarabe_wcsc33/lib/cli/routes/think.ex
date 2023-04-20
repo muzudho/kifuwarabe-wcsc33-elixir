@@ -90,6 +90,8 @@ defmodule KifuwarabeWcsc33.CLI.Routes.Think do
           # 戻す
           IO.puts("[think choice] #{best_move_code} is suicide move. Undo move")
           pos = pos |> KifuwarabeWcsc33.CLI.Routes.UndoMove.move()
+          # TODO 消す。盤表示
+          IO.puts(KifuwarabeWcsc33.CLI.Views.Position.stringify(pos))
 
           # Recursive
           # =========
