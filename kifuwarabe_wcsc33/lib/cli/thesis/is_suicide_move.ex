@@ -321,6 +321,7 @@ defmodule KifuwarabeWcsc33.CLI.Thesis.IsSuicideMove do
           if target_turn == pos.turn do
             # 駒種類は
             target_pt = KifuwarabeWcsc33.CLI.Mappings.ToPieceType.from_piece(target_pc)
+            IO.write(" target_pt:#{target_pt}")
 
             # 利きに飛び込むか？
             is_effect?.(target_pt)
@@ -332,8 +333,7 @@ defmodule KifuwarabeWcsc33.CLI.Thesis.IsSuicideMove do
         else
           # （空きマスなら）長い利き
           pos |> far_to_north(
-            # （１手指してる想定なので、反対側が手番）
-            KifuwarabeWcsc33.CLI.Mappings.ToDestination.from_turn_and_source(pos.opponent_turn, src_sq, direction_of),
+            target_sq,
             direction_of,
             is_effect?)
         end
@@ -375,6 +375,7 @@ defmodule KifuwarabeWcsc33.CLI.Thesis.IsSuicideMove do
           if target_turn == pos.turn do
             # 駒種類は
             target_pt = KifuwarabeWcsc33.CLI.Mappings.ToPieceType.from_piece(target_pc)
+            IO.write(" target_pt:#{target_pt}")
 
             # 利きに飛び込むか？
             is_effect?.(target_pt)
@@ -386,8 +387,7 @@ defmodule KifuwarabeWcsc33.CLI.Thesis.IsSuicideMove do
         else
           # （空きマスなら）長い利き
           pos |> far_to_north_east(
-            # （１手指してる想定なので、反対側が手番）
-            KifuwarabeWcsc33.CLI.Mappings.ToDestination.from_turn_and_source(pos.opponent_turn, src_sq, direction_of),
+            target_sq,
             direction_of,
             is_effect?)
         end
@@ -428,6 +428,7 @@ defmodule KifuwarabeWcsc33.CLI.Thesis.IsSuicideMove do
           if target_turn == pos.turn do
             # 駒種類は
             target_pt = KifuwarabeWcsc33.CLI.Mappings.ToPieceType.from_piece(target_pc)
+            IO.write(" target_pt:#{target_pt}")
 
             # 利きに飛び込むか？
             is_effect?.(target_pt)
@@ -439,8 +440,7 @@ defmodule KifuwarabeWcsc33.CLI.Thesis.IsSuicideMove do
         else
           # （空きマスなら）長い利き
           pos |> far_to_east(
-            # （１手指してる想定なので、反対側が手番）
-            KifuwarabeWcsc33.CLI.Mappings.ToDestination.from_turn_and_source(pos.opponent_turn, src_sq, direction_of),
+            target_sq,
             direction_of,
             is_effect?)
         end
@@ -481,6 +481,7 @@ defmodule KifuwarabeWcsc33.CLI.Thesis.IsSuicideMove do
           if target_turn == pos.turn do
             # 駒種類は
             target_pt = KifuwarabeWcsc33.CLI.Mappings.ToPieceType.from_piece(target_pc)
+            IO.write(" target_pt:#{target_pt}")
 
             # 利きに飛び込むか？
             is_effect?.(target_pt)
@@ -492,8 +493,7 @@ defmodule KifuwarabeWcsc33.CLI.Thesis.IsSuicideMove do
         else
           # （空きマスなら）長い利き
           pos |> far_to_south_east(
-            # （１手指してる想定なので、反対側が手番）
-            KifuwarabeWcsc33.CLI.Mappings.ToDestination.from_turn_and_source(pos.opponent_turn, src_sq, direction_of),
+            target_sq,
             direction_of,
             is_effect?)
         end
@@ -536,6 +536,7 @@ defmodule KifuwarabeWcsc33.CLI.Thesis.IsSuicideMove do
           if target_turn == pos.turn do
             # 駒種類は
             target_pt = KifuwarabeWcsc33.CLI.Mappings.ToPieceType.from_piece(target_pc)
+            IO.write(" target_pt:#{target_pt}")
 
             # 利きに飛び込むか？
             is_effect?.(target_pt)
@@ -547,8 +548,7 @@ defmodule KifuwarabeWcsc33.CLI.Thesis.IsSuicideMove do
         else
           # （空きマスなら）長い利き
           pos |> far_to_south(
-            # （１手指してる想定なので、反対側が手番）
-            KifuwarabeWcsc33.CLI.Mappings.ToDestination.from_turn_and_source(pos.opponent_turn, src_sq, direction_of),
+            target_sq,
             direction_of,
             is_effect?)
         end
@@ -591,6 +591,7 @@ defmodule KifuwarabeWcsc33.CLI.Thesis.IsSuicideMove do
           if target_turn == pos.turn do
             # 駒種類は
             target_pt = KifuwarabeWcsc33.CLI.Mappings.ToPieceType.from_piece(target_pc)
+            IO.write(" target_pt:#{target_pt}")
 
             # 利きに飛び込むか？
             is_effect?.(target_pt)
@@ -643,8 +644,7 @@ defmodule KifuwarabeWcsc33.CLI.Thesis.IsSuicideMove do
           if target_turn == pos.turn do
             # 駒種類は
             target_pt = KifuwarabeWcsc33.CLI.Mappings.ToPieceType.from_piece(target_pc)
-
-            # IO.puts("[is_suicide_move far_to_north] direction_of:#{direction_of} target_sq:#{target_sq} target_pc:#{target_pc} target_turn:#{target_turn} target_pt:#{target_pt}")
+            IO.write(" target_pt:#{target_pt}")
 
             # 利きに飛び込むか？
             is_effect?.(target_pt)
@@ -654,6 +654,8 @@ defmodule KifuwarabeWcsc33.CLI.Thesis.IsSuicideMove do
               :r -> true
               # ランス（Lance；香）
               :l -> true
+              # It's reasonably a プロモーテッド・ルック（Promoted Rook；成飛）. It's actually ドラゴン（Dragon；竜）
+              :pr -> true
               # それ以外の駒
               _ -> false
             end
@@ -666,8 +668,7 @@ defmodule KifuwarabeWcsc33.CLI.Thesis.IsSuicideMove do
         else
           # （空きマスなら）長い利き
           pos |> far_to_north(
-            # （１手指してる想定なので、反対側が手番）
-            KifuwarabeWcsc33.CLI.Mappings.ToDestination.from_turn_and_source(pos.opponent_turn, src_sq, direction_of),
+            target_sq,
             direction_of,
             is_effect?)
         end
@@ -710,8 +711,7 @@ defmodule KifuwarabeWcsc33.CLI.Thesis.IsSuicideMove do
           if target_turn == pos.turn do
             # 駒種類は
             target_pt = KifuwarabeWcsc33.CLI.Mappings.ToPieceType.from_piece(target_pc)
-
-            # IO.puts("[is_suicide_move far_to_north_east] direction_of:#{direction_of} target_sq:#{target_sq} target_pc:#{target_pc} target_turn:#{target_turn} target_pt:#{target_pt}")
+            IO.write(" target_pt:#{target_pt}")
 
             # 利きに飛び込むか？
             is_effect?.(target_pt)
@@ -719,6 +719,8 @@ defmodule KifuwarabeWcsc33.CLI.Thesis.IsSuicideMove do
             case target_pt do
               # ビショップ（Bishop；角）
               :b -> true
+              # It's reasonably a プロモーテッド・ビショップ（Promoted Bishop；成角）.  It's actually ホース（Horse；馬）. Ponanza calls ペガサス（Pegasus；天馬）
+              :pb -> true
               # それ以外の駒
               _ -> false
             end
@@ -731,8 +733,7 @@ defmodule KifuwarabeWcsc33.CLI.Thesis.IsSuicideMove do
         else
           # （空きマスなら）長い利き
           pos |> far_to_north_east(
-            # （１手指してる想定なので、反対側が手番）
-            KifuwarabeWcsc33.CLI.Mappings.ToDestination.from_turn_and_source(pos.opponent_turn, src_sq, direction_of),
+            target_sq,
             direction_of,
             is_effect?)
         end
@@ -773,8 +774,7 @@ defmodule KifuwarabeWcsc33.CLI.Thesis.IsSuicideMove do
           if target_turn == pos.turn do
             # 駒種類は
             target_pt = KifuwarabeWcsc33.CLI.Mappings.ToPieceType.from_piece(target_pc)
-
-            # IO.puts("[is_suicide_move far_to_east] direction_of:#{direction_of} target_sq:#{target_sq} target_pc:#{target_pc} target_turn:#{target_turn} target_pt:#{target_pt}")
+            IO.write(" target_pt:#{target_pt}")
 
             # 利きに飛び込むか？
             is_effect?.(target_pt)
@@ -782,6 +782,8 @@ defmodule KifuwarabeWcsc33.CLI.Thesis.IsSuicideMove do
             case target_pt do
               # ルック（Rook；飛車）
               :r -> true
+              # It's reasonably a プロモーテッド・ルック（Promoted Rook；成飛）. It's actually ドラゴン（Dragon；竜）
+              :pr -> true
               # それ以外の駒
               _ -> false
             end
@@ -794,8 +796,7 @@ defmodule KifuwarabeWcsc33.CLI.Thesis.IsSuicideMove do
         else
           # （空きマスなら）長い利き
           pos |> far_to_east(
-            # （１手指してる想定なので、反対側が手番）
-            KifuwarabeWcsc33.CLI.Mappings.ToDestination.from_turn_and_source(pos.opponent_turn, src_sq, direction_of),
+            target_sq,
             direction_of,
             is_effect?)
         end
@@ -838,8 +839,7 @@ defmodule KifuwarabeWcsc33.CLI.Thesis.IsSuicideMove do
           if target_turn == pos.turn do
             # 駒種類は
             target_pt = KifuwarabeWcsc33.CLI.Mappings.ToPieceType.from_piece(target_pc)
-
-            # IO.puts("[is_suicide_move far_to_south_east] direction_of:#{direction_of} target_sq:#{target_sq} target_pc:#{target_pc} target_turn:#{target_turn} target_pt:#{target_pt}")
+            IO.write(" target_pt:#{target_pt}")
 
             # 利きに飛び込むか？
             is_effect?.(target_pt)
@@ -847,6 +847,8 @@ defmodule KifuwarabeWcsc33.CLI.Thesis.IsSuicideMove do
             case target_pt do
               # ビショップ（Bishop；角）
               :b -> true
+              # It's reasonably a プロモーテッド・ビショップ（Promoted Bishop；成角）.  It's actually ホース（Horse；馬）. Ponanza calls ペガサス（Pegasus；天馬）
+              :pb -> true
               # それ以外の駒
               _ -> false
             end
@@ -859,8 +861,7 @@ defmodule KifuwarabeWcsc33.CLI.Thesis.IsSuicideMove do
         else
           # （空きマスなら）長い利き
           pos |> far_to_south_east(
-            # （１手指してる想定なので、反対側が手番）
-            KifuwarabeWcsc33.CLI.Mappings.ToDestination.from_turn_and_source(pos.opponent_turn, src_sq, direction_of),
+            target_sq,
             direction_of,
             is_effect?)
         end
@@ -903,8 +904,7 @@ defmodule KifuwarabeWcsc33.CLI.Thesis.IsSuicideMove do
           if target_turn == pos.turn do
             # 駒種類は
             target_pt = KifuwarabeWcsc33.CLI.Mappings.ToPieceType.from_piece(target_pc)
-
-            # IO.puts("[is_suicide_move far_to_south] direction_of:#{direction_of} target_sq:#{target_sq} target_pc:#{target_pc} target_turn:#{target_turn} target_pt:#{target_pt}")
+            IO.write(" target_pt:#{target_pt}")
 
             # 利きに飛び込むか？
             is_effect?.(target_pt)
@@ -912,6 +912,8 @@ defmodule KifuwarabeWcsc33.CLI.Thesis.IsSuicideMove do
             case target_pt do
               # ルック（Rook；飛車）
               :r -> true
+              # It's reasonably a プロモーテッド・ルック（Promoted Rook；成飛）. It's actually ドラゴン（Dragon；竜）
+              :pr -> true
               # それ以外の駒
               _ -> false
             end
@@ -924,7 +926,7 @@ defmodule KifuwarabeWcsc33.CLI.Thesis.IsSuicideMove do
         else
           # （空きマスなら）長い利き（１手指してる想定なので、反対側が手番）
           pos |> far_to_south(
-            KifuwarabeWcsc33.CLI.Mappings.ToDestination.from_turn_and_source(pos.opponent_turn, src_sq, direction_of),
+            target_sq,
             direction_of,
             is_effect?)
         end
