@@ -331,11 +331,25 @@ defmodule KifuwarabeWcsc33.CLI.Thesis.IsSuicideMove do
           end
 
         else
+          is_effect_2? = fn (target_pt) ->
+              # 利きに飛び込むか？　先手視点で定義しろだぜ
+              case target_pt do
+                # ルック（Rook；飛車）
+                :r -> true
+                # ランス（Lance；香）
+                :l -> true
+                # It's reasonably a プロモーテッド・ルック（Promoted Rook；成飛）. It's actually ドラゴン（Dragon；竜）
+                :pr -> true
+                # それ以外の駒
+                _ -> false
+              end
+            end
+
           # （空きマスなら）長い利き
           pos |> far_to_north(
             target_sq,
             direction_of,
-            is_effect?)
+            is_effect_2?)
         end
 
       else
@@ -385,11 +399,23 @@ defmodule KifuwarabeWcsc33.CLI.Thesis.IsSuicideMove do
           end
 
         else
+          is_effect_2? = fn (target_pt) ->
+              # 利きに飛び込むか？　先手視点で定義しろだぜ
+              case target_pt do
+                # ビショップ（Bishop；角）
+                :b -> true
+                # It's reasonably a プロモーテッド・ビショップ（Promoted Bishop；成角）.  It's actually ホース（Horse；馬）. Ponanza calls ペガサス（Pegasus；天馬）
+                :pb -> true
+                # それ以外の駒
+                _ -> false
+              end
+            end
+
           # （空きマスなら）長い利き
           pos |> far_to_north_east(
             target_sq,
             direction_of,
-            is_effect?)
+            is_effect_2?)
         end
 
       else
@@ -438,11 +464,24 @@ defmodule KifuwarabeWcsc33.CLI.Thesis.IsSuicideMove do
           end
 
         else
+
+          is_effect_2? = fn (target_pt) ->
+              # 利きに飛び込むか？　先手視点で定義しろだぜ
+              case target_pt do
+                # ルック（Rook；飛車）
+                :r -> true
+                # It's reasonably a プロモーテッド・ルック（Promoted Rook；成飛）. It's actually ドラゴン（Dragon；竜）
+                :pr -> true
+                # それ以外の駒
+                _ -> false
+              end
+            end
+
           # （空きマスなら）長い利き
           pos |> far_to_east(
             target_sq,
             direction_of,
-            is_effect?)
+            is_effect_2?)
         end
 
       else
@@ -491,11 +530,24 @@ defmodule KifuwarabeWcsc33.CLI.Thesis.IsSuicideMove do
           end
 
         else
+
+          is_effect_2? = fn (target_pt) ->
+              # 利きに飛び込むか？　先手視点で定義しろだぜ
+              case target_pt do
+                # ビショップ（Bishop；角）
+                :b -> true
+                # It's reasonably a プロモーテッド・ビショップ（Promoted Bishop；成角）.  It's actually ホース（Horse；馬）. Ponanza calls ペガサス（Pegasus；天馬）
+                :pb -> true
+                # それ以外の駒
+                _ -> false
+              end
+            end
+
           # （空きマスなら）長い利き
           pos |> far_to_south_east(
             target_sq,
             direction_of,
-            is_effect?)
+            is_effect_2?)
         end
 
       else
@@ -546,11 +598,24 @@ defmodule KifuwarabeWcsc33.CLI.Thesis.IsSuicideMove do
           end
 
         else
+
+          is_effect_2? = fn (target_pt) ->
+              # 利きに飛び込むか？　先手視点で定義しろだぜ
+              case target_pt do
+                # ルック（Rook；飛車）
+                :r -> true
+                # It's reasonably a プロモーテッド・ルック（Promoted Rook；成飛）. It's actually ドラゴン（Dragon；竜）
+                :pr -> true
+                # それ以外の駒
+                _ -> false
+              end
+            end
+
           # （空きマスなら）長い利き
           pos |> far_to_south(
             target_sq,
             direction_of,
-            is_effect?)
+            is_effect_2?)
         end
 
       else
@@ -622,7 +687,7 @@ defmodule KifuwarabeWcsc33.CLI.Thesis.IsSuicideMove do
   # │
   # │
   #
-  defp far_to_north(pos, src_sq, direction_of, is_effect?) do
+  defp far_to_north(pos, src_sq, direction_of, is_effect_2?) do
     # 対象のマスが（１手指してる想定なので、反対側が手番）
     target_sq = KifuwarabeWcsc33.CLI.Mappings.ToDestination.from_turn_and_source(pos.opponent_turn, src_sq, direction_of)
     IO.write("[is_suicide_move far_to_north] target_sq:#{target_sq}")
@@ -647,18 +712,7 @@ defmodule KifuwarabeWcsc33.CLI.Thesis.IsSuicideMove do
             IO.write(" target_pt:#{target_pt}")
 
             # 利きに飛び込むか？
-            is_effect?.(target_pt)
-            # 利きに飛び込むか？　先手視点で定義しろだぜ
-            case target_pt do
-              # ルック（Rook；飛車）
-              :r -> true
-              # ランス（Lance；香）
-              :l -> true
-              # It's reasonably a プロモーテッド・ルック（Promoted Rook；成飛）. It's actually ドラゴン（Dragon；竜）
-              :pr -> true
-              # それ以外の駒
-              _ -> false
-            end
+            is_effect_2?.(target_pt)
 
           else
             # 自駒
@@ -670,7 +724,7 @@ defmodule KifuwarabeWcsc33.CLI.Thesis.IsSuicideMove do
           pos |> far_to_north(
             target_sq,
             direction_of,
-            is_effect?)
+            is_effect_2?)
         end
 
       else
@@ -689,7 +743,7 @@ defmodule KifuwarabeWcsc33.CLI.Thesis.IsSuicideMove do
   # 　 ／　　　 　　　 　　　＼
   # ／　　　　　　，　　 　　　 ＼
   #
-  defp far_to_north_east(pos, src_sq, direction_of, is_effect?) do
+  defp far_to_north_east(pos, src_sq, direction_of, is_effect_2?) do
     # 対象のマスが（１手指してる想定なので、反対側が手番）
     target_sq = KifuwarabeWcsc33.CLI.Mappings.ToDestination.from_turn_and_source(pos.opponent_turn, src_sq, direction_of)
     IO.write("[is_suicide_move far_to_north_east] target_sq:#{target_sq}")
@@ -714,16 +768,7 @@ defmodule KifuwarabeWcsc33.CLI.Thesis.IsSuicideMove do
             IO.write(" target_pt:#{target_pt}")
 
             # 利きに飛び込むか？
-            is_effect?.(target_pt)
-            # 利きに飛び込むか？　先手視点で定義しろだぜ
-            case target_pt do
-              # ビショップ（Bishop；角）
-              :b -> true
-              # It's reasonably a プロモーテッド・ビショップ（Promoted Bishop；成角）.  It's actually ホース（Horse；馬）. Ponanza calls ペガサス（Pegasus；天馬）
-              :pb -> true
-              # それ以外の駒
-              _ -> false
-            end
+            is_effect_2?.(target_pt)
 
           else
             # 自駒
@@ -735,7 +780,7 @@ defmodule KifuwarabeWcsc33.CLI.Thesis.IsSuicideMove do
           pos |> far_to_north_east(
             target_sq,
             direction_of,
-            is_effect?)
+            is_effect_2?)
         end
 
       else
@@ -752,7 +797,7 @@ defmodule KifuwarabeWcsc33.CLI.Thesis.IsSuicideMove do
   #
   # ────＞ Long，　Long ＜────
   #
-  defp far_to_east(pos, src_sq, direction_of, is_effect?) do
+  defp far_to_east(pos, src_sq, direction_of, is_effect_2?) do
     # 対象のマスが（１手指してる想定なので、反対側が手番）
     target_sq = KifuwarabeWcsc33.CLI.Mappings.ToDestination.from_turn_and_source(pos.opponent_turn, src_sq, direction_of)
     IO.write("[is_suicide_move far_to_east] target_sq:#{target_sq}")
@@ -777,16 +822,7 @@ defmodule KifuwarabeWcsc33.CLI.Thesis.IsSuicideMove do
             IO.write(" target_pt:#{target_pt}")
 
             # 利きに飛び込むか？
-            is_effect?.(target_pt)
-            # 利きに飛び込むか？　先手視点で定義しろだぜ
-            case target_pt do
-              # ルック（Rook；飛車）
-              :r -> true
-              # It's reasonably a プロモーテッド・ルック（Promoted Rook；成飛）. It's actually ドラゴン（Dragon；竜）
-              :pr -> true
-              # それ以外の駒
-              _ -> false
-            end
+            is_effect_2?.(target_pt)
 
           else
             # 自駒
@@ -798,7 +834,7 @@ defmodule KifuwarabeWcsc33.CLI.Thesis.IsSuicideMove do
           pos |> far_to_east(
             target_sq,
             direction_of,
-            is_effect?)
+            is_effect_2?)
         end
 
       else
@@ -817,7 +853,7 @@ defmodule KifuwarabeWcsc33.CLI.Thesis.IsSuicideMove do
   # 　＼　　　　 　　 ／
   # 　　─┘ Long，　└─ Long
   #
-  defp far_to_south_east(pos, src_sq, direction_of, is_effect?) do
+  defp far_to_south_east(pos, src_sq, direction_of, is_effect_2?) do
     # 対象のマスが（１手指してる想定なので、反対側が手番）
     target_sq = KifuwarabeWcsc33.CLI.Mappings.ToDestination.from_turn_and_source(pos.opponent_turn, src_sq, direction_of)
     IO.write("[is_suicide_move far_to_south_east] target_sq:#{target_sq}")
@@ -842,16 +878,7 @@ defmodule KifuwarabeWcsc33.CLI.Thesis.IsSuicideMove do
             IO.write(" target_pt:#{target_pt}")
 
             # 利きに飛び込むか？
-            is_effect?.(target_pt)
-            # 利きに飛び込むか？　先手視点で定義しろだぜ
-            case target_pt do
-              # ビショップ（Bishop；角）
-              :b -> true
-              # It's reasonably a プロモーテッド・ビショップ（Promoted Bishop；成角）.  It's actually ホース（Horse；馬）. Ponanza calls ペガサス（Pegasus；天馬）
-              :pb -> true
-              # それ以外の駒
-              _ -> false
-            end
+            is_effect_2?.(target_pt)
 
           else
             # 自駒
@@ -863,7 +890,7 @@ defmodule KifuwarabeWcsc33.CLI.Thesis.IsSuicideMove do
           pos |> far_to_south_east(
             target_sq,
             direction_of,
-            is_effect?)
+            is_effect_2?)
         end
 
       else
@@ -882,7 +909,7 @@ defmodule KifuwarabeWcsc33.CLI.Thesis.IsSuicideMove do
   # │
   # Ｖ Long
   #
-  defp far_to_south(pos, src_sq, direction_of, is_effect?) do
+  defp far_to_south(pos, src_sq, direction_of, is_effect_2?) do
     # 対象のマスが（１手指してる想定なので、反対側が手番）
     target_sq = KifuwarabeWcsc33.CLI.Mappings.ToDestination.from_turn_and_source(pos.opponent_turn, src_sq, direction_of)
     IO.write("[is_suicide_move far_to_south] target_sq:#{target_sq}")
@@ -907,16 +934,7 @@ defmodule KifuwarabeWcsc33.CLI.Thesis.IsSuicideMove do
             IO.write(" target_pt:#{target_pt}")
 
             # 利きに飛び込むか？
-            is_effect?.(target_pt)
-            # 利きに飛び込むか？　先手視点で定義しろだぜ
-            case target_pt do
-              # ルック（Rook；飛車）
-              :r -> true
-              # It's reasonably a プロモーテッド・ルック（Promoted Rook；成飛）. It's actually ドラゴン（Dragon；竜）
-              :pr -> true
-              # それ以外の駒
-              _ -> false
-            end
+            is_effect_2?.(target_pt)
 
           else
             # 自駒
@@ -928,7 +946,7 @@ defmodule KifuwarabeWcsc33.CLI.Thesis.IsSuicideMove do
           pos |> far_to_south(
             target_sq,
             direction_of,
-            is_effect?)
+            is_effect_2?)
         end
 
       else
