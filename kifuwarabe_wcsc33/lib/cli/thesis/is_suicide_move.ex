@@ -368,7 +368,8 @@ defmodule KifuwarabeWcsc33.CLI.Thesis.IsSuicideMove do
   end
 
   #
-  # 隣を調べていく
+  # 指定の方向のマスを調べていく
+  # ========================
   #
   defp adjacent(pos, src_sq, direction_of, is_effect?, is_long_effect, is_effect_2?) do
     # 対象のマスが（１手指してる想定なので、反対側が手番）
