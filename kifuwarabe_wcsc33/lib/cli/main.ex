@@ -60,14 +60,15 @@ defmodule KifuwarabeWcsc33.CLI.Main do
     # IO.puts("input:" <> input)
 
     # |> 文字列を空白で区切ってリストにする
-    input_tokens = input |> String.split(" ")
-    # IO.puts("input_tokens:" <> Enum.join(input_tokens, ""))
+    rest_tokens = input |> String.split(" ")
+    # IO.puts("rest_tokens:" <> Enum.join(rest_tokens, ""))
 
     # 先頭の要素を取る
     # ==============
     #
-    # Elixier ではリストへの添え字アクセスは遅い。先頭の要素を取るのが高速なので、 hd という操作がある
-    first_token = hd(input_tokens)
+    # Elixier ではリストへの添え字アクセスは遅い。先頭の要素を取るのが高速なので、 hd という操作がある。 tl は、２番目以下の要素のリスト
+    first_token = hd(rest_tokens)
+    rest_tokens = tl(rest_tokens)
     # IO.puts("first_token:" <> first_token)
 
     #
@@ -132,13 +133,49 @@ defmodule KifuwarabeWcsc33.CLI.Main do
           {pos}
 
         # 以下は、USIプロトコルにないコマンド
+        # ==============================
         #
-        # `pos` - ポジション表示
+        # * `pos` - ポジション表示
+        #
         first_token == "pos" ->
           # > | quit  | (ターミナルから私へ) 将棋盤を表示して
           # < | 　　　 | (私からターミナルへ) 将棋盤を表示
 
+          # 盤表示
           IO.puts(KifuwarabeWcsc33.CLI.Views.Position.stringify(pos))
+
+          {pos}
+
+        #
+        # * `do` - 一手指す
+        #
+        # ## Examples
+        #
+        #   do 7g7f
+        #   -- ----
+        #   0  1
+        #
+        first_token == "do" ->
+
+          IO.inspect(rest_tokens, label: "[main usi_loop] rest_tokens")
+          best_move_str = hd(rest_tokens)
+          # rest_tokens = tl(rest_tokens)
+          IO.puts("[main usi_loop] best_move:#{best_move_str}")
+
+          # コードを、指し手へ変換
+          {_rest, best_move} = KifuwarabeWcsc33.CLI.Mappings.ToMove.from_code_line(best_move_str)
+
+          # 一手指す
+          pos = pos |> KifuwarabeWcsc33.CLI.Routes.DoMove.do_it(best_move)
+
+          # 盤表示
+          best_move_str = KifuwarabeWcsc33.CLI.Views.Move.as_code(best_move)
+          IO.puts(
+            """
+            [main usi_loop] Do #{best_move_str}.
+
+            """ <> KifuwarabeWcsc33.CLI.Views.Position.stringify(pos))
+
           {pos}
 
         # Otherwise

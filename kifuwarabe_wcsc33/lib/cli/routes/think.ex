@@ -72,7 +72,7 @@ defmodule KifuwarabeWcsc33.CLI.Routes.Think do
     else
       # とりあえず、指してみる
       best_move_code = KifuwarabeWcsc33.CLI.Views.Move.as_code(best_move)
-      pos = pos |> KifuwarabeWcsc33.CLI.Routes.DoMove.move(best_move)
+      pos = pos |> KifuwarabeWcsc33.CLI.Routes.DoMove.do_it(best_move)
       # 手番がひっくり返ったことに注意
       IO.puts(
         """
@@ -91,7 +91,7 @@ defmodule KifuwarabeWcsc33.CLI.Routes.Think do
         if pos |> KifuwarabeWcsc33.CLI.Thesis.IsSuicideMove.is_suicide_move?(king_sq) do
           # 自殺手だ
           # 戻す
-          pos = pos |> KifuwarabeWcsc33.CLI.Routes.UndoMove.move()
+          pos = pos |> KifuwarabeWcsc33.CLI.Routes.UndoMove.do_it()
           # TODO 消す。盤表示
           IO.puts(
             """

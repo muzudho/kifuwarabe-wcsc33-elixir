@@ -96,6 +96,153 @@ defmodule KifuwarabeWcsc33.CLI.Mappings.ToMove do
     end
   end
 
+  @doc """
+
+    コードから、ムーブ・オブジェクトを生成
+
+  ## Parameters
+
+    * `rest` - レスト（Rest；残り）の、文字列
+
+  ## Returns
+
+    0. レスト（Rest；残り） - の、文字列
+    1. ムーブ（Move；指し手）
+
+  """
+  def from_code_line(rest) do
+
+    move = KifuwarabeWcsc33.CLI.Models.Move.new()
+
+    # 移動元
+    # =====
+    #
+    # * 最初の２文字は、「打った駒の種類」か、「移動元マス」
+    #
+
+    # １文字目は、「大文字英字」か、「筋の数字」
+    # 先頭の１文字切り出し
+    first_char = rest |> String.at(0)
+    # IO.puts("parse_moves_string_and_update_position first_char:[#{first_char}]")
+    rest = rest |> String.slice(1..-1)
+
+    {rest, move} =
+      cond do
+        # 数字が出てきたら -> 「ファイル（File；筋）の数字」
+        Regex.match?(~r/^\d$/, first_char) ->
+          file = String.to_integer(first_char)
+
+          # 「ランク（Rank；段）の小文字アルファベット」
+          # 先頭の１文字切り出し
+          second_char = rest |> String.at(0)
+          # IO.puts("parse_moves_string_and_update_position second_char:[#{second_char}]")
+          rest = rest |> String.slice(1..-1)
+
+          rank =
+            case second_char do
+              "a" -> 1
+              "b" -> 2
+              "c" -> 3
+              "d" -> 4
+              "e" -> 5
+              "f" -> 6
+              "g" -> 7
+              "h" -> 8
+              "i" -> 9
+            end
+
+          move = %{move | source: 10 * file + rank}
+          # IO.inspect(move, label: "parse(12) The move is")
+
+          {rest, move}
+
+        # それ以外は「打つ駒」
+        true ->
+          # 1文字目が駒だったら打
+          move =
+            case first_char do
+              "R" -> %{move | drop_piece_type: :r}
+              "B" -> %{move | drop_piece_type: :b}
+              "G" -> %{move | drop_piece_type: :g}
+              "S" -> %{move | drop_piece_type: :s}
+              "N" -> %{move | drop_piece_type: :n}
+              "L" -> %{move | drop_piece_type: :l}
+              "P" -> %{move | drop_piece_type: :p}
+            end
+
+          # 2文字目は必ず「*」なはずなので読み飛ばす。
+          second_char = rest |> String.at(0)
+
+          if second_char != "*" do
+            raise "unexpected second_char:#{second_char}"
+          end
+
+          # IO.puts("parse_piece_type_on_hands first_char:[#{first_char}]")
+          rest = rest |> String.slice(1..-1)
+
+          # IO.inspect(move, label: "parse(12) The move is")
+          # IO.puts("parse_moves_string_and_update_position rest:[#{rest}]")
+
+          {rest, move}
+      end
+
+    # 移動先
+    # =====
+    #
+    # * ３文字目は「ファイル（File；筋）の数字」
+    # * ４文字目は「ランク（Rank；段）のアルファベット」
+    #
+
+    # 先頭の１文字切り出し
+    third_char = rest |> String.at(0)
+    # IO.puts("parse_moves_string_and_update_position third_char:[#{third_char}]")
+    rest = rest |> String.slice(1..-1)
+
+    # きっと数字だろ
+    file = String.to_integer(third_char)
+
+    # 先頭の１文字切り出し
+    fourth_char = rest |> String.at(0)
+    # IO.puts("parse_moves_string_and_update_position fourth_char:[#{fourth_char}]")
+    rest = rest |> String.slice(1..-1)
+
+    # きっと英数字小文字だろ
+    rank =
+      case fourth_char do
+        "a" -> 1
+        "b" -> 2
+        "c" -> 3
+        "d" -> 4
+        "e" -> 5
+        "f" -> 6
+        "g" -> 7
+        "h" -> 8
+        "i" -> 9
+      end
+
+    move = %{move | destination: 10 * file + rank}
+    # IO.inspect(move, label: "parse(13) The move is")
+
+    # 成り
+    # ====
+    #
+    # * ５文字目に + があれば「プロモート（Promote；成り）
+    #
+
+    {rest, move} =
+      if rest |> String.at(0) == "+" do
+        # 先頭の１文字切り出し
+        rest = rest |> String.slice(1..-1)
+        %{move | promote?: true}
+
+        {rest, move}
+      else
+        {rest, move}
+      end
+
+    {rest, move}
+  end
+
   def(new()) do
     struct!(KifuwarabeWcsc33.CLI.Models.PieceDirection)
   end

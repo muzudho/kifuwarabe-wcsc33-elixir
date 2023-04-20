@@ -20,7 +20,7 @@ defmodule KifuwarabeWcsc33.CLI.Routes.UndoMove do
     - 自殺手のときアンドゥする
 
   """
-  def move(pos) do
+  def do_it(pos) do
     # 相手のターン
     opponent_turn = pos.turn
 

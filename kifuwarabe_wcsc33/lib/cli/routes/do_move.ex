@@ -17,7 +17,7 @@ defmodule KifuwarabeWcsc33.CLI.Routes.DoMove do
     0. ポジション（Position；局面）
   
   """
-  def move(pos, move) do
+  def do_it(pos, move) do
     pos =
       if move.drop_piece_type != nil do
         # 打つ駒と、減った枚数

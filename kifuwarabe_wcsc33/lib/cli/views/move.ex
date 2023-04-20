@@ -1,4 +1,8 @@
 defmodule KifuwarabeWcsc33.CLI.Views.Move do
+
+  #
+  # コード化
+  #
   def as_code(move) do
     # 投了判定
     # =======
