@@ -76,7 +76,7 @@ defmodule KifuwarabeWcsc33.CLI.Routes.Think do
       # 手番がひっくり返ったことに注意
       IO.puts(
         """
-          [think choice] Do #{best_move_code}.
+        [think choice] Do #{best_move_code}.
 
         """ <> KifuwarabeWcsc33.CLI.Views.Position.stringify(pos))
 
@@ -95,7 +95,7 @@ defmodule KifuwarabeWcsc33.CLI.Routes.Think do
           # TODO 消す。盤表示
           IO.puts(
             """
-              [think choice] Undo #{best_move_code}. It is suicide move.
+            [think choice] Undo #{best_move_code}. It is suicide move.
 
             """ <> KifuwarabeWcsc33.CLI.Views.Position.stringify(pos))
 
