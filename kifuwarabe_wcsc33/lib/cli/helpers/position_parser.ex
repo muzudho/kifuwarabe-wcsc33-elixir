@@ -316,8 +316,8 @@ defmodule KifuwarabeWcsc33.CLI.Helpers.PositionParser do
 
   # 指定局面の手番の解析
   #
-  # w （Whiteの頭文字）なら、せんて（Sente；先手）
-  # b （Blackの頭文字）なら、ごて（Gote；後手）
+  # b （Blackの頭文字）なら、▲せんて（Sente；先手）
+  # w （Whiteの頭文字）なら、▽ごて（Gote；後手）
   defp parse_turn(rest) do
     # ２文字取る
     first_chars = rest |> String.slice(0..1)
@@ -326,8 +326,8 @@ defmodule KifuwarabeWcsc33.CLI.Helpers.PositionParser do
 
     turn =
       case first_chars do
-        "w " -> :sente
-        "b " -> :gote
+        "b " -> :sente
+        "w " -> :gote
         _ -> raise "unexpected first_chars:#{first_chars}"
       end
 
