@@ -58,6 +58,21 @@ defmodule KifuwarabeWcsc33.CLI.Thesis.IsSuicideMove do
       end
 
     # 利きに飛び込むか？　先手視点で定義しろだぜ
+    is_effect_in_north_2? = fn (target_pt) ->
+        case target_pt do
+          # ルック（Rook；飛車）
+          :r -> true
+          # ランス（Lance；香）
+          :l -> true
+          # It's reasonably a プロモーテッド・ルック（Promoted Rook；成飛）. It's actually ドラゴン（Dragon；竜）
+          :pr -> true
+          # それ以外の駒
+          _ -> false
+        end
+      end
+
+
+    # 利きに飛び込むか？　先手視点で定義しろだぜ
     is_effect_in_north_east? = fn (target_pt)->
         case target_pt do
           # キング（King；玉）
@@ -252,40 +267,98 @@ defmodule KifuwarabeWcsc33.CLI.Thesis.IsSuicideMove do
         end
       end
 
+    # 利きに飛び込むか？　先手視点で定義しろだぜ
+    is_effect_in_north_east_2? = fn (target_pt) ->
+        case target_pt do
+          # ビショップ（Bishop；角）
+          :b -> true
+          # It's reasonably a プロモーテッド・ビショップ（Promoted Bishop；成角）.  It's actually ホース（Horse；馬）. Ponanza calls ペガサス（Pegasus；天馬）
+          :pb -> true
+          # それ以外の駒
+          _ -> false
+        end
+      end
+
+    # 利きに飛び込むか？　先手視点で定義しろだぜ
+    is_effect_in_east_2? = fn (target_pt) ->
+        case target_pt do
+          # ルック（Rook；飛車）
+          :r -> true
+          # It's reasonably a プロモーテッド・ルック（Promoted Rook；成飛）. It's actually ドラゴン（Dragon；竜）
+          :pr -> true
+          # それ以外の駒
+          _ -> false
+        end
+      end
+
+    # 利きに飛び込むか？　先手視点で定義しろだぜ
+    is_effect_in_south_east_2? = fn (target_pt) ->
+        case target_pt do
+          # ビショップ（Bishop；角）
+          :b -> true
+          # It's reasonably a プロモーテッド・ビショップ（Promoted Bishop；成角）.  It's actually ホース（Horse；馬）. Ponanza calls ペガサス（Pegasus；天馬）
+          :pb -> true
+          # それ以外の駒
+          _ -> false
+        end
+      end
+
+    # 利きに飛び込むか？　先手視点で定義しろだぜ
+    is_effect_in_south_2? = fn (target_pt) ->
+        case target_pt do
+          # ルック（Rook；飛車）
+          :r -> true
+          # It's reasonably a プロモーテッド・ルック（Promoted Rook；成飛）. It's actually ドラゴン（Dragon；竜）
+          :pr -> true
+          # それ以外の駒
+          _ -> false
+        end
+      end
+
     is_suicide_move =
       cond do
+        # 北側のマス
         # ∧
         # │
-        pos |> in_north(src_sq, :north_of, is_effect_in_north?) -> true
+        pos |> adjacent(src_sq, :north_of, is_effect_in_north?, true, is_effect_in_north_2?) -> true
+        # 北東側のマス
         # 　─┐
         # ／
-        pos |> in_north_east(src_sq, :north_east_of, is_effect_in_north_east?) -> true
+        pos |> adjacent(src_sq, :north_east_of, is_effect_in_north_east?, true, is_effect_in_north_east_2?) -> true
+        # 東側のマス
         #
         # ──＞
-        pos |> in_east(src_sq, :east_of, is_effect_in_east?) -> true
+        pos |> adjacent(src_sq, :east_of, is_effect_in_east?, true, is_effect_in_east_2?) -> true
+        # 南東側のマス
         # ＼
         # 　─┘
-        pos |> in_south_east(src_sq, :south_east_of, is_effect_in_south_east?) -> true
+        pos |> adjacent(src_sq, :south_east_of, is_effect_in_south_east?, true, is_effect_in_south_east_2?) -> true
+        # 南側のマス
         # │
         # Ｖ
-        pos |> in_south(src_sq, :south_of, is_effect_in_south?) -> true
+        pos |> adjacent(src_sq, :south_of, is_effect_in_south?, true, is_effect_in_south_2?) -> true
+        # 南西側のマス
         # 　／
         # └─
-        pos |> in_south_east(src_sq, :south_west_of, is_effect_in_south_east?) -> true
+        pos |> adjacent(src_sq, :south_west_of, is_effect_in_south_east?, true, is_effect_in_south_east_2?) -> true
+        # 西側のマス
         #
         # ＜──
-        pos |> in_east(src_sq, :west_of, is_effect_in_east?) -> true
+        pos |> adjacent(src_sq, :west_of, is_effect_in_east?, true, is_effect_in_east_2?) -> true
+        # 北西側のマス
         # ┌─
         # 　＼
-        pos |> in_north_east(src_sq, :north_west_of, is_effect_in_north_east?) -> true
+        pos |> adjacent(src_sq, :north_west_of, is_effect_in_north_east?, true, is_effect_in_north_east_2?) -> true
+        # 北北東側のマス
         # 　─┐
         # ／
         # │
-        pos |> in_north_north_east(src_sq, :north_north_east_of, is_effect_in_north_north_east?) -> true
+        pos |> adjacent(src_sq, :north_north_east_of, is_effect_in_north_north_east?, false, nil) -> true
+        # 北北西側のマス
         # ┌─
         # 　＼
         # 　　│
-        pos |> in_north_north_east(src_sq, :north_north_west_of, is_effect_in_north_north_east?) -> true
+        pos |> adjacent(src_sq, :north_north_west_of, is_effect_in_north_north_east?, false, nil) -> true
         #
         # その他
         true -> false
@@ -294,15 +367,13 @@ defmodule KifuwarabeWcsc33.CLI.Thesis.IsSuicideMove do
     is_suicide_move
   end
 
-  # 北側のマス
   #
-  # ∧
-  # │
+  # 隣を調べていく
   #
-  defp in_north(pos, src_sq, direction_of, is_effect?) do
+  defp adjacent(pos, src_sq, direction_of, is_effect?, is_long_effect, is_effect_2?) do
     # 対象のマスが（１手指してる想定なので、反対側が手番）
     target_sq = KifuwarabeWcsc33.CLI.Mappings.ToDestination.from_turn_and_source(pos.opponent_turn, src_sq, direction_of)
-    IO.write("[is_suicide_move in_north] target_sq:#{target_sq}")
+    IO.write("[is_suicide_move adjacent] target_sq:#{target_sq}")
 
     is_suicide_move =
       # 盤内で
@@ -331,343 +402,16 @@ defmodule KifuwarabeWcsc33.CLI.Thesis.IsSuicideMove do
           end
 
         else
-          is_effect_2? = fn (target_pt) ->
-              # 利きに飛び込むか？　先手視点で定義しろだぜ
-              case target_pt do
-                # ルック（Rook；飛車）
-                :r -> true
-                # ランス（Lance；香）
-                :l -> true
-                # It's reasonably a プロモーテッド・ルック（Promoted Rook；成飛）. It's actually ドラゴン（Dragon；竜）
-                :pr -> true
-                # それ以外の駒
-                _ -> false
-              end
-            end
-
-          # （空きマスなら）長い利き
-          pos |> far_to(
-            target_sq,
-            direction_of,
-            is_effect_2?)
-        end
-
-      else
-        # 盤外なら自殺手にはならない
-        false
-      end
-
-    IO.puts(" is_suicide_move:#{is_suicide_move}")
-
-    is_suicide_move
-  end
-
-  # 北東側のマス、または北西側のマス（共用）
-  #
-  # 　─┐　┌─
-  # ／　，　 ＼
-  #
-  defp in_north_east(pos, src_sq, direction_of, is_effect?) do
-    # 対象のマスが（１手指してる想定なので、反対側が手番）
-    target_sq = KifuwarabeWcsc33.CLI.Mappings.ToDestination.from_turn_and_source(pos.opponent_turn, src_sq, direction_of)
-    IO.write("[is_suicide_move in_north_east] target_sq:#{target_sq}")
-
-    is_suicide_move =
-      # 盤内で
-      if KifuwarabeWcsc33.CLI.Thesis.Board.is_in_board?(target_sq) do
-        # その駒は
-        target_pc = pos.board[target_sq]
-        IO.write(" target_pc:#{target_pc}")
-
-        # 空マスではなく
-        if target_pc != :sp do
-          # 先後が
-          target_turn = KifuwarabeWcsc33.CLI.Mappings.ToTurn.from_piece(target_pc)
-          IO.write(" target_turn:#{target_turn}")
-
-          # 相手番で（一手指した後を想定し、手番は相手）
-          if target_turn == pos.turn do
-            # 駒種類は
-            target_pt = KifuwarabeWcsc33.CLI.Mappings.ToPieceType.from_piece(target_pc)
-            IO.write(" target_pt:#{target_pt}")
-
-            # 利きに飛び込むか？
-            is_effect?.(target_pt)
+          if is_long_effect do
+            # （空きマスなら）長い利き
+            pos |> far_to(
+              target_sq,
+              direction_of,
+              is_effect_2?)
           else
-            # 自駒
+            # 桂馬に長い利きは無い
             false
           end
-
-        else
-          is_effect_2? = fn (target_pt) ->
-              # 利きに飛び込むか？　先手視点で定義しろだぜ
-              case target_pt do
-                # ビショップ（Bishop；角）
-                :b -> true
-                # It's reasonably a プロモーテッド・ビショップ（Promoted Bishop；成角）.  It's actually ホース（Horse；馬）. Ponanza calls ペガサス（Pegasus；天馬）
-                :pb -> true
-                # それ以外の駒
-                _ -> false
-              end
-            end
-
-          # （空きマスなら）長い利き
-          pos |> far_to(
-            target_sq,
-            direction_of,
-            is_effect_2?)
-        end
-
-      else
-        # 盤外なら自殺手にはならない
-        false
-      end
-
-    IO.puts(" is_suicide_move:#{is_suicide_move}")
-
-    is_suicide_move
-  end
-
-  # 東側のマス、または西側のマス（共用）
-  #
-  # ──＞，　＜──
-  #
-  defp in_east(pos, src_sq, direction_of, is_effect?) do
-    # 対象のマスが（１手指してる想定なので、反対側が手番）
-    target_sq = KifuwarabeWcsc33.CLI.Mappings.ToDestination.from_turn_and_source(pos.opponent_turn, src_sq, direction_of)
-    IO.write("[is_suicide_move in_east] target_sq:#{target_sq}")
-
-    is_suicide_move =
-      # 盤内で
-      if KifuwarabeWcsc33.CLI.Thesis.Board.is_in_board?(target_sq) do
-        # その駒は
-        target_pc = pos.board[target_sq]
-        IO.write(" target_pc:#{target_pc}")
-
-        # 空マスではなく
-        if target_pc != :sp do
-          # 先後が
-          target_turn = KifuwarabeWcsc33.CLI.Mappings.ToTurn.from_piece(target_pc)
-          IO.write(" target_turn:#{target_turn}")
-
-          # 相手番で（一手指した後を想定し、手番は相手）
-          if target_turn == pos.turn do
-            # 駒種類は
-            target_pt = KifuwarabeWcsc33.CLI.Mappings.ToPieceType.from_piece(target_pc)
-            IO.write(" target_pt:#{target_pt}")
-
-            # 利きに飛び込むか？
-            is_effect?.(target_pt)
-          else
-            # 自駒
-            false
-          end
-
-        else
-
-          is_effect_2? = fn (target_pt) ->
-              # 利きに飛び込むか？　先手視点で定義しろだぜ
-              case target_pt do
-                # ルック（Rook；飛車）
-                :r -> true
-                # It's reasonably a プロモーテッド・ルック（Promoted Rook；成飛）. It's actually ドラゴン（Dragon；竜）
-                :pr -> true
-                # それ以外の駒
-                _ -> false
-              end
-            end
-
-          # （空きマスなら）長い利き
-          pos |> far_to(
-            target_sq,
-            direction_of,
-            is_effect_2?)
-        end
-
-      else
-        # 盤外なら自殺手にはならない
-        false
-      end
-
-    IO.puts(" is_suicide_move:#{is_suicide_move}")
-
-    is_suicide_move
-  end
-
-  # 南東側のマス、または南西側のマス（共用）
-  #
-  # ＼　　　　 ／
-  # 　─┘，　└─
-  defp in_south_east(pos, src_sq, direction_of, is_effect?) do
-    # 対象のマスが（１手指してる想定なので、反対側が手番）
-    target_sq = KifuwarabeWcsc33.CLI.Mappings.ToDestination.from_turn_and_source(pos.opponent_turn, src_sq, direction_of)
-    IO.write("[is_suicide_move in_south_east] target_sq:#{target_sq}")
-
-    is_suicide_move =
-      # 盤内で
-      if KifuwarabeWcsc33.CLI.Thesis.Board.is_in_board?(target_sq) do
-        # その駒は
-        target_pc = pos.board[target_sq]
-        IO.write(" target_pc:#{target_pc}")
-
-        # 空マスではなく
-        if target_pc != :sp do
-          # 先後が
-          target_turn = KifuwarabeWcsc33.CLI.Mappings.ToTurn.from_piece(target_pc)
-          IO.write(" target_turn:#{target_turn}")
-
-          # 相手番で（一手指した後を想定し、手番は相手）
-          if target_turn == pos.turn do
-            # 駒種類は
-            target_pt = KifuwarabeWcsc33.CLI.Mappings.ToPieceType.from_piece(target_pc)
-            IO.write(" target_pt:#{target_pt}")
-
-            # 利きに飛び込むか？
-            is_effect?.(target_pt)
-          else
-            # 自駒
-            false
-          end
-
-        else
-
-          is_effect_2? = fn (target_pt) ->
-              # 利きに飛び込むか？　先手視点で定義しろだぜ
-              case target_pt do
-                # ビショップ（Bishop；角）
-                :b -> true
-                # It's reasonably a プロモーテッド・ビショップ（Promoted Bishop；成角）.  It's actually ホース（Horse；馬）. Ponanza calls ペガサス（Pegasus；天馬）
-                :pb -> true
-                # それ以外の駒
-                _ -> false
-              end
-            end
-
-          # （空きマスなら）長い利き
-          pos |> far_to(
-            target_sq,
-            direction_of,
-            is_effect_2?)
-        end
-
-      else
-        # 盤外なら自殺手にはならない
-        false
-      end
-
-    IO.puts(" is_suicide_move:#{is_suicide_move}")
-
-    is_suicide_move
-  end
-
-
-  # 南側のマス
-  #
-  # │
-  # Ｖ
-  #
-  defp in_south(pos, src_sq, direction_of, is_effect?) do
-    # 対象のマスが（１手指してる想定なので、反対側が手番）
-    target_sq = KifuwarabeWcsc33.CLI.Mappings.ToDestination.from_turn_and_source(pos.opponent_turn, src_sq, direction_of)
-    IO.write("[is_suicide_move in_south] target_sq:#{target_sq}")
-
-    is_suicide_move =
-      # 盤内で
-      if KifuwarabeWcsc33.CLI.Thesis.Board.is_in_board?(target_sq) do
-        # その駒は
-        target_pc = pos.board[target_sq]
-        IO.write(" target_pc:#{target_pc}")
-
-        # 空マスではなく
-        if target_pc != :sp do
-          # 先後が
-          target_turn = KifuwarabeWcsc33.CLI.Mappings.ToTurn.from_piece(target_pc)
-          IO.write(" target_turn:#{target_turn}")
-
-          # 相手番で（一手指した後を想定し、手番は相手）
-          if target_turn == pos.turn do
-            # 駒種類は
-            target_pt = KifuwarabeWcsc33.CLI.Mappings.ToPieceType.from_piece(target_pc)
-            IO.write(" target_pt:#{target_pt}")
-
-            # 利きに飛び込むか？
-            is_effect?.(target_pt)
-          else
-            # 自駒
-            false
-          end
-
-        else
-
-          is_effect_2? = fn (target_pt) ->
-              # 利きに飛び込むか？　先手視点で定義しろだぜ
-              case target_pt do
-                # ルック（Rook；飛車）
-                :r -> true
-                # It's reasonably a プロモーテッド・ルック（Promoted Rook；成飛）. It's actually ドラゴン（Dragon；竜）
-                :pr -> true
-                # それ以外の駒
-                _ -> false
-              end
-            end
-
-          # （空きマスなら）長い利き
-          pos |> far_to(
-            target_sq,
-            direction_of,
-            is_effect_2?)
-        end
-
-      else
-        # 盤外なら自殺手にはならない
-        false
-      end
-
-    IO.puts(" is_suicide_move:#{is_suicide_move}")
-
-    is_suicide_move
-  end
-
-  # 北北東側のマス、または北北西側のマス（共用）
-  #
-  # 　─┐　┌─
-  # ／　　　 ＼
-  # │　， 　　│
-  #
-  defp in_north_north_east(pos, src_sq, direction_of, is_effect?) do
-    # 対象のマスが（１手指してる想定なので、反対側が手番）
-    target_sq = KifuwarabeWcsc33.CLI.Mappings.ToDestination.from_turn_and_source(pos.opponent_turn, src_sq, direction_of)
-    IO.write("[is_suicide_move in_north_north_east] target_sq:#{target_sq}")
-
-    is_suicide_move =
-      # 盤内で
-      if KifuwarabeWcsc33.CLI.Thesis.Board.is_in_board?(target_sq) do
-        # その駒は
-        target_pc = pos.board[target_sq]
-        IO.write(" target_pc:#{target_pc}")
-
-        # 空マスではなく
-        if target_pc != :sp do
-          # 先後が
-          target_turn = KifuwarabeWcsc33.CLI.Mappings.ToTurn.from_piece(target_pc)
-          IO.write(" target_turn:#{target_turn}")
-
-          # 相手番で（一手指した後を想定し、手番は相手）
-          if target_turn == pos.turn do
-            # 駒種類は
-            target_pt = KifuwarabeWcsc33.CLI.Mappings.ToPieceType.from_piece(target_pc)
-            IO.write(" target_pt:#{target_pt}")
-
-            # 利きに飛び込むか？
-            is_effect?.(target_pt)
-          else
-            # 自駒
-            false
-          end
-
-        else
-          # （空きマスなら）桂馬に長い利きはない
-          false
         end
 
       else
