@@ -31,3 +31,11 @@ position startpos moves 4i4h 7c7d 2h3h 8b7b 9i9h 7b6b 1i1h 9c9d 3g3f 1a1b 6i6h 2
 ```plaintext
 position startpos moves 1i1h 1a1b 2h3h 2b1a 3h2h 9a9b 7i7h 1c1d 2h3h 4a4b 8h7i 1b1c 6g6f 6a7b 7i6h 1a2b 5i4h 7b6b 6h7i 2b1a 7i8h 1a2b 3h2h 8b7b 2h3h 1d1e 8h7i 7b8b 7i8h 2b1a 8h7i 3a2b 9i9h 7a7b 7i6h 9c9d 6i7i 9b9c 7g7f 8c8d 7h6i 8b9b 3h2h 1c1d 4i3h 5a4a 6h5i 9b8b 6i7h 8b8c 5i6h 7b6a 4g4f 2a1c 6h5i 4a3a 9g9f 2c2d 4h4g 2b2c 5i4h 3a4a 8i9g 1a2b 3g3f 6b5b 7f7e 2b3a 9g8e 1e1f 4h3g 6a6b 9h9g 8d8e 3g2f 6b5a 7i8i 8c8d 2f3e 1d1e 7h6i 9d9e 8i8h 3a2b 7e7d 8d9d 3e4d 9d8d 4d3e 2b3a 3h4h 8d9d 3e4d 5a6b 4d5e 6b7a 8g8f 9e9f 2i3g 3a2b 5e4d 9d9e 2h3h 1f1g+ 4d5e 8e8f 8h7g 2b1a 7g8g 2d2e 7d7c 9e8e 3h2h
 ```
+
+## 桂馬が成ったのに、局面データを見ると成ってない
+
+👇 `2e3g+` を指す
+
+```plaintext
+position startpos moves 6g6f 9a9b 8g8f 8b7b 9i9h 7b8b 2h1h 8b7b 8h9i 1a1b 6i5h 7a8b 3g3f 7b7a 7i8h 4a3b 2g2f 6c6d 6f6e 2b1a 5g5f 3a4b 5i4h 8c8d 4h5i 6a6b 1h2h 1a2b 1i1h 7a6a 4i4h 8b7a 5i4i 2b3a 4h3h 6b6c 4i4h 6a6b 2h2g 3c3d 2g2h 5a6a 2h2g 3d3e 3h3g 2a3c 3i3h 3c2e 4g4f 6b5b 8h7i 3a2b 5h5i 5c5d 9i8h 5b6b 4h5h 2b3a 5i4i 3a2b 5h5i 7a7b 7i6h 2b3c 3g4g 6b5b 4g3g 4b3a 3h4g 3a4b 6h7i 2e3g+
+```

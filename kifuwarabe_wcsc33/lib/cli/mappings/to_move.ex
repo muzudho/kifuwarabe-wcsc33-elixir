@@ -233,7 +233,7 @@ defmodule KifuwarabeWcsc33.CLI.Mappings.ToMove do
       if rest |> String.at(0) == "+" do
         # 先頭の１文字切り出し
         rest = rest |> String.slice(1..-1)
-        %{move | promote?: true}
+        move = %{move | promote?: true}
 
         {rest, move}
       else
