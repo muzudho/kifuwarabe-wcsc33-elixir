@@ -29,6 +29,9 @@ defmodule KifuwarabeWcsc33.CLI.Routes.MoveGeneration do
       |> Enum.filter(fn(move) -> !is_nil(move) end)
       # 難しい書き方 |> Enum.filter(& !is_nil(&1))
 
+    # TODO 消す。打つ手のデバッグ
+    IO.puts("[move_generation make_move_list] lance_and_pawn drop dst_sq_list:#{KifuwarabeWcsc33.CLI.Models.Squares.get_list_of_squares_where_i_can_place_lance_and_pawn(pos)}")
+
     #
     # 打つ手のリスト
     # ============
