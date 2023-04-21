@@ -14,16 +14,14 @@ defmodule KifuwarabeWcsc33.CLI.Routes.MoveGeneration do
     # 盤上の自駒
     # =========
     #
-    # |> スペース（:sp；空マス）は除去
-    # |> 手番の駒だけ残す
+    # |> スペース（:sp；空マス）は除去。かつ、手番の駒だけ残す
     # |> ピース（Piece；先後付きの駒種類）から、先後を消し、ピース・タイプ（Piece Type；駒種類）に変換する
     # |> マス番地と駒種類から、指し手生成
     # |> リストがネストしていたら、フラットにする
     # |> 指し手が nil なら除去
     move_list_on_board = pos.board
-      |> Enum.filter(fn{_sq,piece} -> piece != :sp end)
-      |> Enum.filter(fn{_sq,piece} -> pos.turn == KifuwarabeWcsc33.CLI.Mappings.ToTurn.from_piece(piece) end)
-      |> Enum.map(fn{sq,piece} -> {sq,KifuwarabeWcsc33.CLI.Mappings.ToPieceType.from_piece(piece)} end)
+      |> Enum.filter(fn{_sq,piece} -> piece != :sp and pos.turn == KifuwarabeWcsc33.CLI.Mappings.ToTurn.from_piece(piece) end)
+      |> Enum.map(fn{sq,piece} -> {sq, KifuwarabeWcsc33.CLI.Mappings.ToPieceType.from_piece(piece)} end)
       |> Enum.map(fn {sq,piece_type} -> pos|>make_move_list_by_piece_on_board(sq,piece_type) end)
       |> List.flatten()
       |> Enum.filter(fn(move) -> !is_nil(move) end)
@@ -36,18 +34,17 @@ defmodule KifuwarabeWcsc33.CLI.Routes.MoveGeneration do
     # 打つ手のリスト
     # ============
     #
+    # |> 手番側、かつ、１つ以上持っている駒種類だけ残す
+    # |> 駒の数を消す。ピース（Piece；先後付きの駒種類）から、先後を消し、ピース・タイプ（Piece Type；駒種類）に変換する。駒種類から、指し手生成
+    # |> リストがネストしていたら、フラットにする
+    # |> 指し手が nil なら除去
     move_list_on_hand = pos.hand_pieces
-      # 手番側、かつ、１つ以上持っている駒種類だけ残す
       |> Enum.filter(fn{piece,num} -> pos.turn == KifuwarabeWcsc33.CLI.Mappings.ToTurn.from_piece(piece) and 0 < num end)
-      # 駒の数を消す。ピース（Piece；先後付きの駒種類）から、先後を消し、ピース・タイプ（Piece Type；駒種類）に変換する
       |> Enum.map(fn{piece,_num} ->
           KifuwarabeWcsc33.CLI.Mappings.ToPieceType.from_piece(piece)
-            # 駒種類から、指し手生成
             |> make_move_list_on_hand(pos)
         end)
-      # リストがネストしていたら、フラットにする
       |> List.flatten()
-      # 指し手が nil なら除去
       |> Enum.filter(fn(move) -> !is_nil(move) end)
 
     # IO.inspect(move_list_on_hand, label: "[move_generation make_move_list] move_list_on_hand")

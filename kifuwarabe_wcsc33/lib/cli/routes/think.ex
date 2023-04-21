@@ -21,11 +21,11 @@ defmodule KifuwarabeWcsc33.CLI.Routes.Think do
 
     # とりあえず、現局面で指せる手（合法手）を全部列挙しようぜ
     move_list = KifuwarabeWcsc33.CLI.Routes.MoveGeneration.make_move_list(pos)
-    # IO.inspect(move_list, label: "[Think go] move_list")
-    # Enum.map(move_list, fn(move) ->
-    #     move_code = KifuwarabeWcsc33.CLI.Views.Move.as_code(move)
-    #     IO.puts("[Think go] move_code: (#{move_code})")
-    #   end)
+    # IO.inspect(move_list, label: "[Think go] raw move_list")
+    Enum.map(move_list, fn(move) ->
+        move_code = KifuwarabeWcsc33.CLI.Views.Move.as_code(move)
+        IO.puts("[Think go] move_code: (#{move_code})")
+      end)
 
     # シャッフルする
     move_list = move_list |> Enum.shuffle()
