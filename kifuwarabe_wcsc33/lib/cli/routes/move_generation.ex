@@ -29,21 +29,22 @@ defmodule KifuwarabeWcsc33.CLI.Routes.MoveGeneration do
       |> Enum.filter(fn(move) -> !is_nil(move) end)
       # 難しい書き方 |> Enum.filter(& !is_nil(&1))
 
-    # 持ち駒
-    # ======
     #
-    # |> 手番の駒だけ残す
-    # |> １つ以上持っている駒種類だけ残す
-    # |> ピース（Piece；先後付きの駒種類）から、先後を消し、ピース・タイプ（Piece Type；駒種類）に変換する。駒の数も消す
-    # |> 駒種類から、指し手生成
-    # |> リストがネストしていたら、フラットにする
-    # |> 指し手が nil なら除去
+    # 打つ手のリスト
+    # ============
+    #
     move_list_on_hand = pos.hand_pieces
-      |> Enum.filter(fn{piece,_num} -> pos.turn == KifuwarabeWcsc33.CLI.Mappings.ToTurn.from_piece(piece) end)
-      |> Enum.filter(fn{_piece,num} -> 0 < num end)
-      |> Enum.map(fn{piece,_num} -> KifuwarabeWcsc33.CLI.Mappings.ToPieceType.from_piece(piece) end)
-      |> Enum.map(fn piece_type -> pos|>make_move_list_by_piece_on_hand(piece_type) end)
+      # 手番側、かつ、１つ以上持っている駒種類だけ残す
+      |> Enum.filter(fn{piece,num} -> pos.turn == KifuwarabeWcsc33.CLI.Mappings.ToTurn.from_piece(piece) and 0 < num end)
+      # 駒の数を消す。ピース（Piece；先後付きの駒種類）から、先後を消し、ピース・タイプ（Piece Type；駒種類）に変換する
+      |> Enum.map(fn{piece,_num} ->
+          KifuwarabeWcsc33.CLI.Mappings.ToPieceType.from_piece(piece)
+            # 駒種類から、指し手生成
+            |> make_move_list_on_hand(pos)
+        end)
+      # リストがネストしていたら、フラットにする
       |> List.flatten()
+      # 指し手が nil なら除去
       |> Enum.filter(fn(move) -> !is_nil(move) end)
 
     # IO.inspect(move_list_on_hand, label: "[move_generation make_move_list] move_list_on_hand")
@@ -514,142 +515,44 @@ defmodule KifuwarabeWcsc33.CLI.Routes.MoveGeneration do
   #
   # ## Parameters
   #
-  #   * `pos` - ポジション（Position；局面）
   #   * `piece_type` - ピース・タイプ（Piece Type；先後付きの駒種類）
-  #
-  defp make_move_list_by_piece_on_hand(pos, piece_type) do
-    case piece_type do
-      # 対局中は、玉は打てません
-      # :k
-      # ルック（Rook；飛車）
-      :r -> pos |> make_move_of_rook_on_hand()
-      # ビショップ（Bishop；角）
-      :b -> pos |> make_move_of_bishop_on_hand()
-      # ゴールド（Gold；金）
-      :g -> pos |> make_move_of_gold_on_hand()
-      # シルバー（Silver；銀）
-      :s -> pos |> make_move_of_silver_on_hand()
-      # ナイト（kNight；桂）
-      :n -> pos |> make_move_of_knight_on_hand()
-      # ランス（Lance；香）
-      :l -> pos |> make_move_of_lance_on_hand()
-      # ポーン（Pawn；歩）
-      :p -> pos |> make_move_of_pawn_on_hand()
-      #
-      # それ以外はエラー
-      # ==============
-      #
-      _ -> raise "unexpected piece_type:#{piece_type}"
-    end
-  end
-
-  # ルック（Rook；飛車）
-  #
-  # ## Parameters
-  #
   #   * `pos` - ポジション（Position；局面）
-  #   * `piece_type` - ピース・タイプ（Piece Type；先後付きの駒種類）
   #
-  defp make_move_of_rook_on_hand(_pos) do
-    KifuwarabeWcsc33.CLI.Models.Squares.all_squares |> make_drop_moves(:r)
-  end
-
-  # ビショップ（Bishop；角）
+  # ## Returns
   #
-  # ## Parameters
+  # 0. ムーブ・リスト
   #
-  #   * `pos` - ポジション（Position；局面）
-  #   * `piece_type` - ピース・タイプ（Piece Type；先後付きの駒種類）
-  #
-  defp make_move_of_bishop_on_hand(_pos) do
-    KifuwarabeWcsc33.CLI.Models.Squares.all_squares |> make_drop_moves(:b)
-  end
-
-  # ゴールド（Gold；金）
-  #
-  # ## Parameters
-  #
-  #   * `pos` - ポジション（Position；局面）
-  #   * `piece_type` - ピース・タイプ（Piece Type；先後付きの駒種類）
-  #
-  defp make_move_of_gold_on_hand(_pos) do
-    KifuwarabeWcsc33.CLI.Models.Squares.all_squares |> make_drop_moves(:g)
-  end
-
-  # シルバー（Silver；銀）
-  #
-  # ## Parameters
-  #
-  #   * `pos` - ポジション（Position；局面）
-  #   * `piece_type` - ピース・タイプ（Piece Type；先後付きの駒種類）
-  #
-  defp make_move_of_silver_on_hand(_pos) do
-    KifuwarabeWcsc33.CLI.Models.Squares.all_squares |> make_drop_moves(:s)
-  end
-
-  # ナイト（kNight；桂）
-  #
-  # ## Parameters
-  #
-  #   * `pos` - ポジション（Position；局面）
-  #   * `piece_type` - ピース・タイプ（Piece Type；先後付きの駒種類）
-  #
-  defp make_move_of_knight_on_hand(pos) do
+  defp make_move_list_on_hand(piece_type, pos) do
+    # デスティネーション・スクウェアーズ（Destination Squares；移動先のマスのリスト）
     destination_squares =
-      if pos.turn == :sente do
-        KifuwarabeWcsc33.CLI.Models.Squares.sente_knight_drop_squares
-      else
-        KifuwarabeWcsc33.CLI.Models.Squares.gote_knight_drop_squares
+      case piece_type do
+        # 対局中は、玉は打てません
+        # :k
+        # ルック（Rook；飛車）
+        :r -> KifuwarabeWcsc33.CLI.Models.Squares.all_squares
+        # ビショップ（Bishop；角）
+        :b -> KifuwarabeWcsc33.CLI.Models.Squares.all_squares
+        # ゴールド（Gold；金）
+        :g -> KifuwarabeWcsc33.CLI.Models.Squares.all_squares
+        # シルバー（Silver；銀）
+        :s -> KifuwarabeWcsc33.CLI.Models.Squares.all_squares
+        # ナイト（kNight；桂）
+        :n -> KifuwarabeWcsc33.CLI.Models.Squares.get_list_of_squares_where_i_can_place_knight(pos)
+        # ランス（Lance；香）
+        :l -> KifuwarabeWcsc33.CLI.Models.Squares.get_list_of_squares_where_i_can_place_lance_and_pawn(pos)
+        # ポーン（Pawn；歩）
+        :p -> KifuwarabeWcsc33.CLI.Models.Squares.get_list_of_squares_where_i_can_place_lance_and_pawn(pos)
+        #
+        # それ以外はエラー
+        # ==============
+        #
+        _ -> raise "unexpected piece_type:(#{piece_type})"
       end
 
-    destination_squares |> make_drop_moves(:g)
-  end
-  
-  # ランス（Lance；香）
-  #
-  # ## Parameters
-  #
-  #   * `pos` - ポジション（Position；局面）
-  #   * `piece_type` - ピース・タイプ（Piece Type；先後付きの駒種類）
-  #
-  defp make_move_of_lance_on_hand(pos) do
-    destination_squares =
-      if pos.turn == :sente do
-        # 歩と香は同じ
-        KifuwarabeWcsc33.CLI.Models.Squares.sente_lance_and_pawn_drop_squares
-      else
-        KifuwarabeWcsc33.CLI.Models.Squares.gote_lance_and_pawn_drop_squares
-      end
-
-    destination_squares |> make_drop_moves(:g)
-  end
-
-  # ポーン（Pawn；歩）
-  #
-  # TODO 二歩チェック
-  #
-  # ## Parameters
-  #
-  #   * `pos` - ポジション（Position；局面）
-  #   * `piece_type` - ピース・タイプ（Piece Type；先後付きの駒種類）
-  #
-  defp make_move_of_pawn_on_hand(pos) do
-    destination_squares =
-      if pos.turn == :sente do
-        KifuwarabeWcsc33.CLI.Models.Squares.sente_lance_and_pawn_drop_squares
-      else
-        KifuwarabeWcsc33.CLI.Models.Squares.gote_lance_and_pawn_drop_squares
-      end
-
-    destination_squares |> make_drop_moves(:g)
-  end
-
-  # 打つ指し手に変換
-  defp make_drop_moves(destination_squares, piece_type) do
     destination_squares
       |> Enum.map(fn (dst_sq) ->
-          move = KifuwarabeWcsc33.CLI.Models.Move.new()
-          %{ move | drop_piece_type: piece_type, destination: dst_sq}
+            move = KifuwarabeWcsc33.CLI.Models.Move.new()
+            %{ move | drop_piece_type: piece_type, destination: dst_sq}
           end)
   end
 

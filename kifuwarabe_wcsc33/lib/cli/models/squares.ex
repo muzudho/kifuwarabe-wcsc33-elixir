@@ -74,4 +74,26 @@ defmodule KifuwarabeWcsc33.CLI.Models.Squares do
   }
   def relative_offset, do: @fn_data
 
+  #
+  # 桂を置けるマスのリストを取得
+  #
+  def get_list_of_squares_where_i_can_place_knight(pos) do
+    if pos.turn == :sente do
+      KifuwarabeWcsc33.CLI.Models.Squares.sente_knight_drop_squares
+    else
+      KifuwarabeWcsc33.CLI.Models.Squares.gote_knight_drop_squares
+    end
+  end
+
+  #
+  # 香または歩を置けるマスのリストを取得
+  #
+  def get_list_of_squares_where_i_can_place_lance_and_pawn(pos) do
+    if pos.turn == :sente do
+      KifuwarabeWcsc33.CLI.Models.Squares.sente_lance_and_pawn_drop_squares
+    else
+      KifuwarabeWcsc33.CLI.Models.Squares.gote_lance_and_pawn_drop_squares
+    end
+  end
+
 end
