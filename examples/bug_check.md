@@ -39,3 +39,11 @@ position startpos moves 1i1h 1a1b 2h3h 2b1a 3h2h 9a9b 7i7h 1c1d 2h3h 4a4b 8h7i 1
 ```plaintext
 position startpos moves 6g6f 9a9b 8g8f 8b7b 9i9h 7b8b 2h1h 8b7b 8h9i 1a1b 6i5h 7a8b 3g3f 7b7a 7i8h 4a3b 2g2f 6c6d 6f6e 2b1a 5g5f 3a4b 5i4h 8c8d 4h5i 6a6b 1h2h 1a2b 1i1h 7a6a 4i4h 8b7a 5i4i 2b3a 4h3h 6b6c 4i4h 6a6b 2h2g 3c3d 2g2h 5a6a 2h2g 3d3e 3h3g 2a3c 3i3h 3c2e 4g4f 6b5b 8h7i 3a2b 5h5i 5c5d 9i8h 5b6b 4h5h 2b3a 5i4i 3a2b 5h5i 7a7b 7i6h 2b3c 3g4g 6b5b 4g3g 4b3a 3h4g 3a4b 6h7i 2e3g+
 ```
+
+## 何で持ち駒打たんの？
+
+👇 解析後は持ち駒の数があるが、対局中に、持ち駒の数が０個になってる  
+
+```plaintext
+position sfen +L+P1+N5/6s1l/6g1n/2p4p1/5pk2/4PP1P1/+BS1p1G3/9/+b2KS3+p b RGSNL4Prgnl5p 1
+```

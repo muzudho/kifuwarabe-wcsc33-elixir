@@ -116,6 +116,7 @@ defmodule KifuwarabeWcsc33.CLI.Mappings.ToMove do
 
   """
   def from_code_line(rest) do
+    IO.puts("[to_move from_code_line] rest:[#{rest}]")
 
     move = KifuwarabeWcsc33.CLI.Models.Move.new()
 
@@ -173,6 +174,7 @@ defmodule KifuwarabeWcsc33.CLI.Mappings.ToMove do
               "N" -> %{move | drop_piece_type: :n}
               "L" -> %{move | drop_piece_type: :l}
               "P" -> %{move | drop_piece_type: :p}
+              _ -> raise "unexpected first_char:#{first_char}"
             end
 
           # 2文字目は必ず「*」なはずなので読み飛ばす。
