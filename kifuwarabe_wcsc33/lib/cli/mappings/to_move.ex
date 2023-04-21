@@ -47,7 +47,7 @@ defmodule KifuwarabeWcsc33.CLI.Mappings.ToMove do
     * `src_sq` - ソース・スクウェア（SouRCe SQuare：マス番地）
     * `pos` - ポジション（Position；局面）
     * `direction_of` - ディレクション・オブ（Direction of；向き）
-    * `step` - ステップ（Step；何回目）。1～8。繰り返し回数
+    * `origin_src_sq` - （再帰をするときの）１番最初の移動元マス
     * `move_list` - ムーブ・リスト（Move List；指し手のリスト）
 
   ## Returns
@@ -55,44 +55,49 @@ defmodule KifuwarabeWcsc33.CLI.Mappings.ToMove do
     0. ムーブ・リスト（Move List；指し手のリスト）
 
   """
-  def list_from(src_sq, pos, direction_of, step \\ 1, move_list \\ []) do
-    # - 盤を8マス以上まっすぐ進むと盤外に飛び出るので、おわり
-    if 8<step do
-      move_list
-    else
-      dst_sq = KifuwarabeWcsc33.CLI.Mappings.ToDestination.from_turn_and_source(pos.turn, src_sq, direction_of)
+  def list_from(src_sq, pos, direction_of, origin_src_sq \\ nil, move_list \\ []) do
+    # 盤外に出ると終わる
+    dst_sq = KifuwarabeWcsc33.CLI.Mappings.ToDestination.from_turn_and_source(pos.turn, src_sq, direction_of)
 
-      if KifuwarabeWcsc33.CLI.Thesis.Board.is_in_board?(dst_sq) do
-        # 盤上なら
+    if KifuwarabeWcsc33.CLI.Thesis.Board.is_in_board?(dst_sq) do
+      # 盤上なら
 
-        # 移動先の駒の先後を調べる（なければニル）
-        target_turn_or_nil = pos |> KifuwarabeWcsc33.CLI.Mappings.ToPieceType.get_it_or_nil_from_destination(dst_sq)
+      # 移動先の駒の先後を調べる（なければニル）
+      target_turn_or_nil = pos |> KifuwarabeWcsc33.CLI.Mappings.ToPieceType.get_it_or_nil_from_destination(dst_sq)
 
-        if target_turn_or_nil == nil || target_turn_or_nil != pos.turn do
-          # 空マス、または、相手駒にぶつかったら、指し手は生成する
-          move = KifuwarabeWcsc33.CLI.Models.Move.new()
-          move = %{ move | source: src_sq, destination: dst_sq}
+      if target_turn_or_nil == nil || target_turn_or_nil != pos.turn do
+        # 空マス、または、相手駒にぶつかったら、指し手は生成する
 
-          move_list = move_list ++ [move]
-          # IO.inspect(move_list, label: "[to_destination move_list_from] move_list")
-
-          if target_turn_or_nil == nil do
-            # 空マスなら、まだ指し手を増やす
-            list_from(src_sq, pos, direction_of, step+1, move_list)
+        origin_src_sq = if origin_src_sq != nil do
+            origin_src_sq
           else
-            # 相手駒にぶつかったら、指し手は増やさない
-            move_list
+            src_sq
           end
 
+        move = KifuwarabeWcsc33.CLI.Models.Move.new()
+        move = %{ move |
+          source: origin_src_sq,
+          destination: dst_sq
+        }
+
+        move_list = move_list ++ [move]
+        # IO.inspect(move_list, label: "[to_destination move_list_from] move_list")
+
+        if target_turn_or_nil == nil do
+          # 移動先が空マスなら、移動先から続けて指し手を増やす
+          list_from(dst_sq, pos, direction_of, origin_src_sq, move_list)
         else
-          # 自駒にぶつかったら、指し手は増やさない
+          # 相手駒にぶつかったら、指し手は増やさない
           move_list
         end
+
       else
-        # 盤外なら
+        # 自駒にぶつかったら、指し手は増やさない
         move_list
       end
-
+    else
+      # 盤外に出た（単調に進むから、いつか必ず盤外に出るから、再帰は必ず終わる）
+      move_list
     end
   end
 
