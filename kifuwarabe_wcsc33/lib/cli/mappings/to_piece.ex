@@ -323,13 +323,13 @@ defmodule KifuwarabeWcsc33.CLI.Mappings.ToPiece do
       # 金は成れません
       # :pg2
       # プロモーテッド・シルバー（Promoted Silver；成銀. Or 全 in one letter）
-      :ps2 -> :s2
+      :ps2 -> :s1
       # プロモーテッド・ナイト（Promoted kNight；成桂. Or 圭 in one letter）
-      :pn2 -> :n2
+      :pn2 -> :n1
       # プロモーテッド・ランス（Promoted Lance；成香. Or 杏 in one letter）
-      :pl2 -> :l2
+      :pl2 -> :l1
       # It's reasonably a プロモーテッド・ポーン（Promoted Pawn；成歩）. It's actually と（"To"；と is 金 cursive）
-      :pp2 -> :p2
+      :pp2 -> :p1
       #
       # その他
       # =====

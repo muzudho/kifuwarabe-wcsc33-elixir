@@ -391,7 +391,7 @@ defmodule KifuwarabeWcsc33.CLI.Views.Position do
         captured_pt_text =
           if captured_pt != nil do
             piece_type_text = KifuwarabeWcsc33.CLI.Views.PieceType.stringify_upper_case(captured_pt)
-            IO.puts("[position stringify_record] piece_type_text:(#{piece_type_text})")
+            # IO.puts("[position stringify_record] piece_type_text:(#{piece_type_text})")
             "<#{piece_type_text}>"
           else
             ""

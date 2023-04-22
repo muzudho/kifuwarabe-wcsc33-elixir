@@ -24,7 +24,7 @@ defmodule KifuwarabeWcsc33.CLI.Routes.Think do
     # IO.inspect(move_list, label: "[Think go] raw move_list")
     Enum.map(move_list, fn(move) ->
         move_code = KifuwarabeWcsc33.CLI.Views.Move.as_code(move)
-        IO.puts("[Think go] move_code: (#{move_code})")
+        IO.puts("[Think go] move list: (#{move_code})")
       end)
 
     # シャッフルする
