@@ -27,65 +27,56 @@ defmodule KifuwarabeWcsc33.CLI.Routes.MoveElimination do
         opponent_king_sq = pos.location_of_kings[opponent_king_pc]
         # IO.puts("[think choice] turned. opponent_king_sq:#{opponent_king_sq}")
 
-        {rest_move_list, pos, cleanup_move_list} =
-          if opponent_king_sq == nil do
-            # 指す前の自玉がいないケース（詰将棋でもやっているのだろう）。自殺手判定を即終了
-            IO.puts("[think choice] there is not king")
-            {rest_move_list, pos, cleanup_move_list}
+        # 指す前の自玉がいないケース（詰将棋でもやっているのだろう）ではない前提として、存在判定を省く
+
+        # とりあえず、１手指してみる
+        move_code = KifuwarabeWcsc33.CLI.Views.Move.as_code(move)
+        pos = pos |> KifuwarabeWcsc33.CLI.Routes.DoMove.do_it(move)
+        #
+        # 手番がひっくり返ったことに注意
+        # ~~~~~~~~~~~~~~~~~~~~~~~~~~
+        #
+
+        #IO.puts(
+        #  """
+        #  [think choice] Done #{move_code}.
+        #
+        #  """ <> KifuwarabeWcsc33.CLI.Views.Position.stringify(pos))
+
+        {cleanup_move_list} =
+          if pos |> KifuwarabeWcsc33.CLI.Thesis.IsMated.is_mated?(opponent_king_sq) do
+            #
+            # 自殺手だ
+            #
+            IO.puts("[think choice] this is suicide move. undo")
+
+            {cleanup_move_list}
           else
-            IO.puts("[think choice] there is king")
-
-            # とりあえず、１手指してみる
-            move_code = KifuwarabeWcsc33.CLI.Views.Move.as_code(move)
-            pos = pos |> KifuwarabeWcsc33.CLI.Routes.DoMove.do_it(move)
             #
-            # 手番がひっくり返ったことに注意
-            # ~~~~~~~~~~~~~~~~~~~~~~~~~~
+            # 自殺手ではない手だ
             #
+            IO.puts("[think choice] #{move_code} is no suicide move. Ok")
+            cleanup_move_list = cleanup_move_list ++ [move]
 
-            #IO.puts(
-            #  """
-            #  [think choice] Done #{move_code}.
-            #
-            #  """ <> KifuwarabeWcsc33.CLI.Views.Position.stringify(pos))
-
-            {cleanup_move_list} =
-              if pos |> KifuwarabeWcsc33.CLI.Thesis.IsMated.is_mated?(opponent_king_sq) do
-                #
-                # 自殺手だ
-                #
-                IO.puts("[think choice] this is suicide move. undo")
-
-                {cleanup_move_list}
-              else
-                #
-                # 自殺手ではない手だ
-                #
-                IO.puts("[think choice] #{move_code} is no suicide move. Ok")
-                cleanup_move_list = cleanup_move_list ++ [move]
-
-                {cleanup_move_list}
-              end
-
-            # 手を戻す
-            pos = pos |> KifuwarabeWcsc33.CLI.Routes.UndoMove.do_it()
-            # 盤表示
-            #IO.puts(
-            #  """
-            #  [think choice] Undone #{best_move_code}. It is suicide move.
-            #
-            #  """ <> KifuwarabeWcsc33.CLI.Views.Position.stringify(pos))
-
-            # Recursive
-            # =========
-            #
-            # - 消去法を続ける
-            {rest_move_list, pos, cleanup_move_list} = reduce_suicide_move(rest_move_list, pos, cleanup_move_list)
-
-            # 再帰の帰り道
-            {rest_move_list, pos, cleanup_move_list}
+            {cleanup_move_list}
           end
 
+        # 手を戻す
+        pos = pos |> KifuwarabeWcsc33.CLI.Routes.UndoMove.do_it()
+        # 盤表示
+        #IO.puts(
+        #  """
+        #  [think choice] Undone #{best_move_code}. It is suicide move.
+        #
+        #  """ <> KifuwarabeWcsc33.CLI.Views.Position.stringify(pos))
+
+        # Recursive
+        # =========
+        #
+        # - 消去法を続ける
+        {rest_move_list, pos, cleanup_move_list} = reduce_suicide_move(rest_move_list, pos, cleanup_move_list)
+
+        # 再帰の帰り道
         {rest_move_list, pos, cleanup_move_list}
       end
 
