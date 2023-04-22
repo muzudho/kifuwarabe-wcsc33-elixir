@@ -50,14 +50,14 @@ defmodule KifuwarabeWcsc33.CLI.Routes.MoveElimination do
             #
             # 自殺手だ
             #
-            IO.puts("[think choice] #{move_code} is suicide move. undo")
+            IO.puts("[think choice] Undo. Because #{move_code} is suicide move. friend_turn:#{friend_turn} friend_king_sq:#{friend_king_sq}")
 
             {cleanup_move_list}
           else
             #
             # 自殺手ではない手だ
             #
-            IO.puts("[think choice] #{move_code} is no suicide move. Ok")
+            IO.puts("[think choice] Ok. Because #{move_code} is no suicide move. friend_turn:#{friend_turn} friend_king_sq:#{friend_king_sq}")
             cleanup_move_list = cleanup_move_list ++ [move]
 
             {cleanup_move_list}

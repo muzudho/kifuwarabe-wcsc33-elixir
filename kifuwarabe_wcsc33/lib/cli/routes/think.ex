@@ -36,6 +36,13 @@ defmodule KifuwarabeWcsc33.CLI.Routes.Think do
     friend_king_pc = KifuwarabeWcsc33.CLI.Mappings.ToPiece.from_turn_and_piece_type(pos.turn, :k)
     friend_king_sq = pos.location_of_kings[friend_king_pc]
 
+    # TODO デバッグ消す
+    searched_friend_king_sq = KifuwarabeWcsc33.CLI.Finder.Square.find_king_on_board(pos, pos.turn)
+    IO.puts("[think go] DEBUG king sq. friend_king_sq:#{friend_king_sq} searched_friend_king_sq:#{searched_friend_king_sq}")
+    if friend_king_sq != searched_friend_king_sq do
+      raise "[think go] error king sq. friend_king_sq:#{friend_king_sq} searched_friend_king_sq:#{searched_friend_king_sq}"
+    end
+
     {move_list, pos} =
       if friend_king_sq == nil do
         # 指す前の自玉がいないケース（詰将棋でもやっているのだろう）では、自殺手判定はやらない
