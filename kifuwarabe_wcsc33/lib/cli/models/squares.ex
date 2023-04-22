@@ -72,6 +72,30 @@ defmodule KifuwarabeWcsc33.CLI.Models.Squares do
     end
   end
 
+  # 列の各マス
+  @file1 for rank <- 1..9, do: 1*10+rank
+  @file2 for rank <- 1..9, do: 2*10+rank
+  @file3 for rank <- 1..9, do: 3*10+rank
+  @file4 for rank <- 1..9, do: 4*10+rank
+  @file5 for rank <- 1..9, do: 5*10+rank
+  @file6 for rank <- 1..9, do: 6*10+rank
+  @file7 for rank <- 1..9, do: 7*10+rank
+  @file8 for rank <- 1..9, do: 8*10+rank
+  @file9 for rank <- 1..9, do: 9*10+rank
+  def get_squares_by_file(file) do
+    case file do
+      1 -> @file1
+      2 -> @file2
+      3 -> @file3
+      4 -> @file4
+      5 -> @file5
+      6 -> @file6
+      7 -> @file7
+      8 -> @file8
+      9 -> @file9
+    end
+  end
+
   # マップ定数の定義
   # 先手から見た数にしろだぜ。
   # 将棋盤は反時計回りに９０°回転すると考えれば、マス番地は読みやすくなるだろう。
@@ -159,11 +183,74 @@ defmodule KifuwarabeWcsc33.CLI.Models.Squares do
   # 0. スクウェア・リスト（Square List；マス番地のリスト）
   #
   def get_list_of_squares_where_i_can_place_pawn(pos) do
-    {target_pc, file_squares_list} =
+
+    # [ｎファイルの全マスのリスト]
+    #
+    # 👇 例えば、1列のケースでは、 * 印のマスが該当
+    #
+    #   9  8  7  6  5  4  3  2  1
+    # +--+--+--+--+--+--+--+--+--+
+    # |  |  |  |  |  |  |  |  | *| a
+    # +--+--+--+--+--+--+--+--+--+
+    # |  |  |  |  |  |  |  |  | *| b
+    # +--+--+--+--+--+--+--+--+--+
+    # |  |  |  |  |  |  |  |  | *| c
+    # +--+--+--+--+--+--+--+--+--+
+    # |  |  |  |  |  |  |  |  | *| d
+    # +--+--+--+--+--+--+--+--+--+
+    # |  |  |  |  |  |  |  |  | *| e
+    # +--+--+--+--+--+--+--+--+--+
+    # |  |  |  |  |  |  |  |  | *| f
+    # +--+--+--+--+--+--+--+--+--+
+    # |  |  |  |  |  |  |  |  | *| g
+    # +--+--+--+--+--+--+--+--+--+
+    # |  |  |  |  |  |  |  |  | *| h
+    # +--+--+--+--+--+--+--+--+--+
+    # |  |  |  |  |  |  |  |  | *| i
+    # +--+--+--+--+--+--+--+--+--+
+    #
+    squares_by_file = [
+      KifuwarabeWcsc33.CLI.Models.Squares.get_squares_by_file(1),
+      KifuwarabeWcsc33.CLI.Models.Squares.get_squares_by_file(2),
+      KifuwarabeWcsc33.CLI.Models.Squares.get_squares_by_file(3),
+      KifuwarabeWcsc33.CLI.Models.Squares.get_squares_by_file(4),
+      KifuwarabeWcsc33.CLI.Models.Squares.get_squares_by_file(5),
+      KifuwarabeWcsc33.CLI.Models.Squares.get_squares_by_file(6),
+      KifuwarabeWcsc33.CLI.Models.Squares.get_squares_by_file(7),
+      KifuwarabeWcsc33.CLI.Models.Squares.get_squares_by_file(8),
+      KifuwarabeWcsc33.CLI.Models.Squares.get_squares_by_file(9),
+    ]
+
+    {target_pc, squares_can_drop} =
       if pos.turn == :sente do
         target_pc = :p1
 
-        file_squares_list = [
+        # [歩を打てるマスのリスト]
+        #
+        # 👇 例えば、先手で1列のケースでは、 * 印のマスが該当
+        #
+        #   9  8  7  6  5  4  3  2  1
+        # +--+--+--+--+--+--+--+--+--+
+        # |  |  |  |  |  |  |  |  |  | a
+        # +--+--+--+--+--+--+--+--+--+
+        # |  |  |  |  |  |  |  |  | *| b
+        # +--+--+--+--+--+--+--+--+--+
+        # |  |  |  |  |  |  |  |  | *| c
+        # +--+--+--+--+--+--+--+--+--+
+        # |  |  |  |  |  |  |  |  | *| d
+        # +--+--+--+--+--+--+--+--+--+
+        # |  |  |  |  |  |  |  |  | *| e
+        # +--+--+--+--+--+--+--+--+--+
+        # |  |  |  |  |  |  |  |  | *| f
+        # +--+--+--+--+--+--+--+--+--+
+        # |  |  |  |  |  |  |  |  | *| g
+        # +--+--+--+--+--+--+--+--+--+
+        # |  |  |  |  |  |  |  |  | *| h
+        # +--+--+--+--+--+--+--+--+--+
+        # |  |  |  |  |  |  |  |  | *| i
+        # +--+--+--+--+--+--+--+--+--+
+        #
+        squares_can_drop = [
           KifuwarabeWcsc33.CLI.Models.Squares.get_sente_pawn_drop_squares_by_file(1),
           KifuwarabeWcsc33.CLI.Models.Squares.get_sente_pawn_drop_squares_by_file(2),
           KifuwarabeWcsc33.CLI.Models.Squares.get_sente_pawn_drop_squares_by_file(3),
@@ -175,11 +262,11 @@ defmodule KifuwarabeWcsc33.CLI.Models.Squares do
           KifuwarabeWcsc33.CLI.Models.Squares.get_sente_pawn_drop_squares_by_file(9),
         ]
 
-        {target_pc, file_squares_list}
+        {target_pc, squares_can_drop}
       else
         target_pc = :p2
 
-        file_squares_list = [
+        squares_can_drop = [
           KifuwarabeWcsc33.CLI.Models.Squares.get_gote_pawn_drop_squares_by_file(1),
           KifuwarabeWcsc33.CLI.Models.Squares.get_gote_pawn_drop_squares_by_file(2),
           KifuwarabeWcsc33.CLI.Models.Squares.get_gote_pawn_drop_squares_by_file(3),
@@ -191,14 +278,17 @@ defmodule KifuwarabeWcsc33.CLI.Models.Squares do
           KifuwarabeWcsc33.CLI.Models.Squares.get_gote_pawn_drop_squares_by_file(9),
         ]
 
-        {target_pc, file_squares_list}
+        {target_pc, squares_can_drop}
       end
 
+    # {ｎファイルの全マスのリスト, 歩を打てるマスのリスト} のリストを作る
+    zipped_list = Enum.zip(squares_by_file, squares_can_drop)
+
     # Square List
-    file_squares_list
-      |> Enum.map(fn (squares) ->
-          if squares |> KifuwarabeWcsc33.CLI.Thesis.Board.is_there_piece?(target_pc, pos.board) do
-            squares
+    zipped_list
+      |> Enum.map(fn ({squares_by_file, squares_can_drop}) ->
+          if squares_by_file |> KifuwarabeWcsc33.CLI.Thesis.Board.is_there_piece?(target_pc, pos.board) do
+            squares_can_drop
           else
             []
           end
