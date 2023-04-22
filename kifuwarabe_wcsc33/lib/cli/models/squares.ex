@@ -154,30 +154,56 @@ defmodule KifuwarabeWcsc33.CLI.Models.Squares do
   #
   # TODO 二歩チェックを付けたい
   #
+  # ## Returns
+  #
+  # 0. スクウェア・リスト（Square List；マス番地のリスト）
+  #
   def get_list_of_squares_where_i_can_place_pawn(pos) do
-    if pos.turn == :sente do
-      [] ++
-        KifuwarabeWcsc33.CLI.Models.Squares.get_sente_pawn_drop_squares_by_file(1) ++
-        KifuwarabeWcsc33.CLI.Models.Squares.get_sente_pawn_drop_squares_by_file(2) ++
-        KifuwarabeWcsc33.CLI.Models.Squares.get_sente_pawn_drop_squares_by_file(3) ++
-        KifuwarabeWcsc33.CLI.Models.Squares.get_sente_pawn_drop_squares_by_file(4) ++
-        KifuwarabeWcsc33.CLI.Models.Squares.get_sente_pawn_drop_squares_by_file(5) ++
-        KifuwarabeWcsc33.CLI.Models.Squares.get_sente_pawn_drop_squares_by_file(6) ++
-        KifuwarabeWcsc33.CLI.Models.Squares.get_sente_pawn_drop_squares_by_file(7) ++
-        KifuwarabeWcsc33.CLI.Models.Squares.get_sente_pawn_drop_squares_by_file(8) ++
-        KifuwarabeWcsc33.CLI.Models.Squares.get_sente_pawn_drop_squares_by_file(9)
-    else
-      [] ++
-        KifuwarabeWcsc33.CLI.Models.Squares.get_gote_pawn_drop_squares_by_file(1) ++
-        KifuwarabeWcsc33.CLI.Models.Squares.get_gote_pawn_drop_squares_by_file(2) ++
-        KifuwarabeWcsc33.CLI.Models.Squares.get_gote_pawn_drop_squares_by_file(3) ++
-        KifuwarabeWcsc33.CLI.Models.Squares.get_gote_pawn_drop_squares_by_file(4) ++
-        KifuwarabeWcsc33.CLI.Models.Squares.get_gote_pawn_drop_squares_by_file(5) ++
-        KifuwarabeWcsc33.CLI.Models.Squares.get_gote_pawn_drop_squares_by_file(6) ++
-        KifuwarabeWcsc33.CLI.Models.Squares.get_gote_pawn_drop_squares_by_file(7) ++
-        KifuwarabeWcsc33.CLI.Models.Squares.get_gote_pawn_drop_squares_by_file(8) ++
-        KifuwarabeWcsc33.CLI.Models.Squares.get_gote_pawn_drop_squares_by_file(9) 
-    end
+    {target_pc, file_squares_list} =
+      if pos.turn == :sente do
+        target_pc = :p1
+
+        file_squares_list = [
+          KifuwarabeWcsc33.CLI.Models.Squares.get_sente_pawn_drop_squares_by_file(1),
+          KifuwarabeWcsc33.CLI.Models.Squares.get_sente_pawn_drop_squares_by_file(2),
+          KifuwarabeWcsc33.CLI.Models.Squares.get_sente_pawn_drop_squares_by_file(3),
+          KifuwarabeWcsc33.CLI.Models.Squares.get_sente_pawn_drop_squares_by_file(4),
+          KifuwarabeWcsc33.CLI.Models.Squares.get_sente_pawn_drop_squares_by_file(5),
+          KifuwarabeWcsc33.CLI.Models.Squares.get_sente_pawn_drop_squares_by_file(6),
+          KifuwarabeWcsc33.CLI.Models.Squares.get_sente_pawn_drop_squares_by_file(7),
+          KifuwarabeWcsc33.CLI.Models.Squares.get_sente_pawn_drop_squares_by_file(8),
+          KifuwarabeWcsc33.CLI.Models.Squares.get_sente_pawn_drop_squares_by_file(9),
+        ]
+
+        {target_pc, file_squares_list}
+      else
+        target_pc = :p2
+
+        file_squares_list = [
+          KifuwarabeWcsc33.CLI.Models.Squares.get_gote_pawn_drop_squares_by_file(1),
+          KifuwarabeWcsc33.CLI.Models.Squares.get_gote_pawn_drop_squares_by_file(2),
+          KifuwarabeWcsc33.CLI.Models.Squares.get_gote_pawn_drop_squares_by_file(3),
+          KifuwarabeWcsc33.CLI.Models.Squares.get_gote_pawn_drop_squares_by_file(4),
+          KifuwarabeWcsc33.CLI.Models.Squares.get_gote_pawn_drop_squares_by_file(5),
+          KifuwarabeWcsc33.CLI.Models.Squares.get_gote_pawn_drop_squares_by_file(6),
+          KifuwarabeWcsc33.CLI.Models.Squares.get_gote_pawn_drop_squares_by_file(7),
+          KifuwarabeWcsc33.CLI.Models.Squares.get_gote_pawn_drop_squares_by_file(8),
+          KifuwarabeWcsc33.CLI.Models.Squares.get_gote_pawn_drop_squares_by_file(9),
+        ]
+
+        {target_pc, file_squares_list}
+      end
+
+    # Square List
+    file_squares_list
+      |> Enum.map(fn (squares) ->
+          if squares |> KifuwarabeWcsc33.CLI.Thesis.Board.is_there_piece?(target_pc, pos.board) do
+            squares
+          else
+            []
+          end
+        end)
+      |> List.flatten()
   end
 
 end

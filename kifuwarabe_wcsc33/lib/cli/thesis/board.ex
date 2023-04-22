@@ -99,4 +99,11 @@ defmodule KifuwarabeWcsc33.CLI.Thesis.Board do
     end
   end
 
+  #
+  # 指定マスに、指定の駒があるか？
+  #
+  def is_there_piece?(squares, piece, board) do
+    squares |> Enum.any?(fn (sq) -> board[sq]==piece end)
+  end
+
 end
