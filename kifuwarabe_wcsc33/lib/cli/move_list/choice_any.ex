@@ -56,7 +56,7 @@ defmodule KifuwarabeWcsc33.CLI.MoveList.ChoiceAny do
         #    IO.puts("[Think go] TODO Uchifudume check")
         #
         #    # TODO さらに相手の局面で指し手生成、全部の手を指してみて、１つでも指せる手があるか調べる
-        #    _second_move_list = KifuwarabeWcsc33.CLI.Routes.MoveGeneration.make_move_list(pos)
+        #    _second_move_list = KifuwarabeWcsc33.CLI.MoveGeneration.MakeList.do_it(pos)
         #    # TODO 自殺手を除去
         #
         #  else

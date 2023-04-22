@@ -1,4 +1,4 @@
-defmodule KifuwarabeWcsc33.CLI.Routes.UndoMove do
+defmodule KifuwarabeWcsc33.CLI.MoveGeneration.UndoMove do
   @moduledoc """
     局面ができる
   """

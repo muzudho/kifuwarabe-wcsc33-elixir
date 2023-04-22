@@ -467,7 +467,7 @@ defmodule KifuwarabeWcsc33.CLI.Helpers.PositionParser do
     # IO.inspect(move, label: "[parse_moves_string_and_update_position] parse move")
 
     # 局面更新（実際、指してみる）
-    pos = pos |> KifuwarabeWcsc33.CLI.Routes.DoMove.do_it(move)
+    pos = pos |> KifuwarabeWcsc33.CLI.MoveGeneration.DoMove.do_it(move)
 
     # 区切り
     # ======

@@ -1,4 +1,4 @@
-defmodule KifuwarabeWcsc33.CLI.Routes.DoMove do
+defmodule KifuwarabeWcsc33.CLI.MoveGeneration.DoMove do
   @moduledoc """
     局面ができる
   """

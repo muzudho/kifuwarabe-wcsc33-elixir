@@ -1,4 +1,4 @@
-defmodule KifuwarabeWcsc33.CLI.Routes.MoveGeneration do
+defmodule KifuwarabeWcsc33.CLI.MoveGeneration.MakeList do
   @moduledoc """
     指し手生成
   """
@@ -14,7 +14,7 @@ defmodule KifuwarabeWcsc33.CLI.Routes.MoveGeneration do
     0. ムーブ・リスト（Move List；指し手のリスト） - 投了を含まない
 
   """
-  def make_move_list(pos) do
+  def do_it(pos) do
     # 盤上の自駒
     # =========
     #
@@ -50,7 +50,7 @@ defmodule KifuwarabeWcsc33.CLI.Routes.MoveGeneration do
         |> List.flatten()
         |> Enum.filter(fn(move) -> !is_nil(move) end)
 
-    # IO.inspect(move_list_on_hand, label: "[move_generation make_move_list] move_list_on_hand")
+    # IO.inspect(move_list_on_hand, label: "[MakeList do_it] move_list_on_hand")
 
     move_list_on_board ++ move_list_on_hand
   end

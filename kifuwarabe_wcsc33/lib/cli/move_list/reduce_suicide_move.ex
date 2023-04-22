@@ -74,7 +74,7 @@ defmodule KifuwarabeWcsc33.CLI.MoveList.ReduceSuicideMove do
 
         # とりあえず、１手指してみる
         move_code = KifuwarabeWcsc33.CLI.Views.Move.as_code(move)
-        pos = pos |> KifuwarabeWcsc33.CLI.Routes.DoMove.do_it(move)
+        pos = pos |> KifuwarabeWcsc33.CLI.MoveGeneration.DoMove.do_it(move)
 
         #
         # 手番がひっくり返ったことに注意
@@ -112,7 +112,7 @@ defmodule KifuwarabeWcsc33.CLI.MoveList.ReduceSuicideMove do
           end
 
         # 手を戻す
-        pos = pos |> KifuwarabeWcsc33.CLI.Routes.UndoMove.do_it()
+        pos = pos |> KifuwarabeWcsc33.CLI.MoveGeneration.UndoMove.do_it()
 
         #
         # ひっくり返っていた手番が元に戻っていることに注意

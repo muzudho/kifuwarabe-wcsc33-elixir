@@ -117,7 +117,7 @@ defmodule KifuwarabeWcsc33.CLI.Main do
           # < | bestmove xxxx   | (私からGUIへ) (指し手を返す)
 
           # 現局面から、最善手を１つ選ぶ
-          best_move = KifuwarabeWcsc33.CLI.Routes.Think.go(pos)
+          best_move = KifuwarabeWcsc33.CLI.USI.Go.do_it(pos)
           best_move_as_str = KifuwarabeWcsc33.CLI.Views.Move.as_code(best_move)
 
           IO.puts("bestmove #{best_move_as_str}")
@@ -166,7 +166,7 @@ defmodule KifuwarabeWcsc33.CLI.Main do
           {_rest, best_move} = KifuwarabeWcsc33.CLI.Mappings.ToMove.from_code_line(best_move_str)
 
           # 一手指す
-          pos = pos |> KifuwarabeWcsc33.CLI.Routes.DoMove.do_it(best_move)
+          pos = pos |> KifuwarabeWcsc33.CLI.MoveGeneration.DoMove.do_it(best_move)
 
           # 盤表示
           best_move_str = KifuwarabeWcsc33.CLI.Views.Move.as_code(best_move)
