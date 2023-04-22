@@ -64,8 +64,14 @@ position startpos moves 5i6h 6a7b 6i5i 4a5b 9g9f 9a9b 9i9g 4c4d 1i1h 5a4a 7g7f 4
 
 # 異常終了
 
-👇 下図からの次の一手 `go`  
+👇 下図からの次の一手 `go` 。成り駒がちゃんと作れてない？  
 
 ```plaintext
 position sfen 7lk/7l1/7lK/7r1/9/9/9/9/9 b Pr2b4g4s4nl17p 1 moves P*4g B*5e
+```
+
+# 王手放置
+
+```plaintext
+1g1G4b/1s2+N+P3/+Pp3GNkl/2p1s1rp1/lPPP+bS2p/n3g3P/p2l4L/6+s2/3+n1PKP1 b R4Pp 1
 ```

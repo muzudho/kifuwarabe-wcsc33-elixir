@@ -9,6 +9,10 @@ defmodule KifuwarabeWcsc33.CLI.Routes.MoveGeneration do
 
     * `pos` - ポジション（Position；局面）
 
+  ## Returns
+
+    0. ムーブ・リスト（Move List；指し手のリスト） - 投了を含まない
+
   """
   def make_move_list(pos) do
     # 盤上の自駒

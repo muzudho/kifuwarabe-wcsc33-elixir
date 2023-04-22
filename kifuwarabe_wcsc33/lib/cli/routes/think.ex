@@ -85,77 +85,51 @@ defmodule KifuwarabeWcsc33.CLI.Routes.Think do
         {pos, move_list, best_move}
 
       else
-        # とりあえず、指してみる
-        best_move_code = KifuwarabeWcsc33.CLI.Views.Move.as_code(best_move)
-        pos = pos |> KifuwarabeWcsc33.CLI.Routes.DoMove.do_it(best_move)
-        #
-        # 手番がひっくり返ったことに注意
-        # ~~~~~~~~~~~~~~~~~~~~~~~~~~
-        #
-        #IO.puts(
-        #  """
-        #  [think choice] Done #{best_move_code}.
-        #
-        #  """ <> KifuwarabeWcsc33.CLI.Views.Position.stringify(pos))
 
-        # 一手指したあとの、自玉の位置を検索（ここでは相手番なので、さっきの手番は逆側）
-        opponent_king_pc = KifuwarabeWcsc33.CLI.Mappings.ToPiece.from_turn_and_piece_type(pos.opponent_turn, :k)
+        # 自玉は、１手指すと、相手玉になる
+        opponent_king_pc = KifuwarabeWcsc33.CLI.Mappings.ToPiece.from_turn_and_piece_type(pos.turn, :k)
         opponent_king_sq = pos.location_of_kings[opponent_king_pc]
-        # opponent_king_sq = pos |> KifuwarabeWcsc33.CLI.Finder.Square.find_king_on_board(pos.opponent_turn)
-        # IO.puts("[think choice] turned. opponent_king_sq:#{opponent_king_sq}")
 
-        if opponent_king_sq != nil do
-          IO.puts("[think choice] there is king")
+        {move_list, pos} =
+          if opponent_king_sq == nil do
+            # 指す前の自玉がいないケース（詰将棋でもやっているのだろう）では、自殺手判定はやらない
+            IO.puts("[think choice] there is not king")
+            {move_list, pos}
+          else
+            IO.puts("[think choice] there is king")
+            #
+            # 自殺手の除去ルーチン
+            # =================
+            #
+            {rest_move_list, pos, cleanup_move_list} = KifuwarabeWcsc33.CLI.Routes.MoveElimination.reduce_suicide_move(move_list, pos)
+            IO.puts("[think choice] rest_move_list.length:#{rest_move_list |> length()}")
 
-          # TODO 自分から相手の利きへ飛び込む手（自殺手）は除外したい
-          # （ここでは相手番なので、さっきの手番は逆側）
-          {pos, move_list, best_move} =
-            if pos |> KifuwarabeWcsc33.CLI.Thesis.IsMated.is_mated?(opponent_king_sq) do
-              # 自殺手だ
-              IO.puts("[think choice] this is suicide move. undo")
-              # 戻す
-              pos = pos |> KifuwarabeWcsc33.CLI.Routes.UndoMove.do_it()
-              # TODO 消す。盤表示
-              #IO.puts(
-              #  """
-              #  [think choice] Undone #{best_move_code}. It is suicide move.
-              #
-              #  """ <> KifuwarabeWcsc33.CLI.Views.Position.stringify(pos))
+            {cleanup_move_list, pos}
+          end
 
-              # Recursive
-              # =========
-              #
-              # - ベストムーブか、投了のどちらかを取得するまで続ける
-              pos |> choice(move_list)
-            else
-              IO.puts("[think choice] #{best_move_code} is no suicide move. Ok")
-              {pos, move_list, best_move}
-            end
 
-          ## TODO もし、歩を打ったときで、かつ、そこが相手の玉頭なら、打ち歩詰めチェックをしたい
-          #if best_move.drop_piece_type == :p do
-          #  opponent_king_pc = KifuwarabeWcsc33.CLI.Mappings.ToPiece.from_turn_and_piece_type(pos.opponent_turn, :k)
-          #  opponent_king_sq = pos.location_of_kings[opponent_king_pc]
-          #  opponent_king_north_sq = KifuwarabeWcsc33.CLI.Mappings.ToDestination.from_turn_and_source(pos.opponent_turn, opponent_king_sq, :north_of)
-          #  if best_move.destination == opponent_king_north_sq do
-          #    IO.puts("[Think go] TODO Uchifudume check")
-          #
-          #    # TODO さらに相手の局面で指し手生成、全部の手を指してみて、１つでも指せる手があるか調べる
-          #
-          #  else
-          #    # 打ち歩詰めではない
-          #  end
-          #else
-          #  # 打ち歩詰めではない
-          #end
 
-          {pos, move_list, best_move}
+
+        # TODO もし、歩を打ったときで、かつ、そこが相手の玉頭なら、打ち歩詰めチェックをしたい
+        if best_move.drop_piece_type == :p do
+          opponent_king_pc = KifuwarabeWcsc33.CLI.Mappings.ToPiece.from_turn_and_piece_type(pos.opponent_turn, :k)
+          opponent_king_sq = pos.location_of_kings[opponent_king_pc]
+          opponent_king_north_sq = KifuwarabeWcsc33.CLI.Mappings.ToDestination.from_turn_and_source(pos.opponent_turn, opponent_king_sq, :north_of)
+          if best_move.destination == opponent_king_north_sq do
+            IO.puts("[Think go] TODO Uchifudume check")
+        
+            # TODO さらに相手の局面で指し手生成、全部の手を指してみて、１つでも指せる手があるか調べる
+            _second_move_list = KifuwarabeWcsc33.CLI.Routes.MoveGeneration.make_move_list(pos)
+            # TODO 自殺手を除去
+        
+          else
+            # 打ち歩詰めではない
+          end
         else
-          # 自玉がいないケース（詰将棋でもやっているのだろう）
-          IO.puts("[think choice] there is not king")
-          {pos, move_list, best_move}
+          # 打ち歩詰めではない
         end
 
+        {pos, move_list, best_move}
       end
 
     {pos, move_list, best_move}

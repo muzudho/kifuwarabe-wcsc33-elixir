@@ -49,8 +49,8 @@ defmodule KifuwarabeWcsc33.CLI.Helpers.PositionParser do
           pos = %{pos |
             location_of_kings: %{
               # 玉は盤上に無いかもしれないので
-              :k1 => 0,
-              :k2 => 0,
+              :k1 => nil,
+              :k2 => nil,
             }
           }
 
