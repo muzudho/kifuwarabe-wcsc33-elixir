@@ -120,7 +120,7 @@ defmodule KifuwarabeWcsc33.CLI.Helpers.PositionParser do
         {rest, pos} = rest |> parse_moves_string_and_update_position(pos)
 
         # IO.inspect(pos.moves, label: "parse(12) The Moves is")
-        # IO.inspect(pos.captured_pieces, label: "parse(12) The Captured pieces is")
+        # IO.inspect(pos.captured_piece_types, label: "parse(12) The Captured pieces is")
 
         {rest, pos}
       else

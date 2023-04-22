@@ -12,11 +12,11 @@ defmodule KifuwarabeWcsc33.CLI.Views.Position do
     hand2 = pos |> stringify_hand2()
     body = pos |> stringify_body()
     hand1 = pos |> stringify_hand1()
-    moves = pos |> stringify_moves()
+    record = pos |> stringify_record()
 
     """
 
-    """ <> header <> hand2 <> body <> hand1 <> moves
+    """ <> header <> hand2 <> body <> hand1 <> record
   end
 
   # 盤表示のヘッダー
@@ -382,14 +382,28 @@ defmodule KifuwarabeWcsc33.CLI.Views.Position do
   end
 
   # 棋譜の表示
-  defp stringify_moves(pos) do
+  defp stringify_record(pos) do
     # IO.inspect(pos.moves)
-    move_list = Enum.map(pos.moves, fn (move) -> " #{KifuwarabeWcsc33.CLI.Views.Move.as_code(move)}" end)
-    # IO.inspect(move_list)
 
-    move_list_as_str = move_list |> Enum.join()
+    record = Enum.zip(pos.moves, pos.captured_piece_types)
 
-    "moves" <> move_list_as_str <> """
+    record_element_text_list = record |> Enum.map(fn ({move, captured_pt}) ->
+        captured_pt_text =
+          if captured_pt != nil do
+            piece_type_text = KifuwarabeWcsc33.CLI.Views.PieceType.stringify_upper_case(captured_pt)
+            IO.puts("[position stringify_record] piece_type_text:(#{piece_type_text})")
+            "<#{piece_type_text}>"
+          else
+            ""
+          end
+
+        " #{KifuwarabeWcsc33.CLI.Views.Move.as_code(move)}#{captured_pt_text}"
+      end)
+    # IO.inspect(record_element_text_list)
+
+    record_text = record_element_text_list |> Enum.join()
+
+    "record" <> record_text <> """
 
     """
   end

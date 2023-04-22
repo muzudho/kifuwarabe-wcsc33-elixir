@@ -27,7 +27,7 @@ defmodule KifuwarabeWcsc33.CLI.Routes.UndoMove do
 
     # 最後の指し手を取得（リンクドリストなので効率が悪い）
     move = pos.moves |> List.last()
-    captured_pt = pos.captured_pieces |> List.last()
+    captured_pt = pos.captured_piece_types |> List.last()
 
     # 局面更新
     #
@@ -37,7 +37,7 @@ defmodule KifuwarabeWcsc33.CLI.Routes.UndoMove do
             turn: KifuwarabeWcsc33.CLI.Mappings.ToTurn.flip(pos.turn),
             opponent_turn: pos.turn,
             moves: pos.moves |> List.delete_at(last_index),
-            captured_pieces: pos.captured_pieces |> List.delete_at(last_index)
+            captured_piece_types: pos.captured_piece_types |> List.delete_at(last_index)
           }
 
     # 更新された局面を返す

@@ -90,7 +90,7 @@ defmodule KifuwarabeWcsc33.CLI.Routes.DoMove do
             turn: KifuwarabeWcsc33.CLI.Mappings.ToTurn.flip(pos.turn),
             opponent_turn: pos.turn,
             moves: pos.moves ++ [move],
-            captured_pieces: pos.captured_pieces ++ [captured_pt]}
+            captured_piece_types: pos.captured_piece_types ++ [captured_pt]}
 
     pos
   end
