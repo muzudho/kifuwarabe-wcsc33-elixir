@@ -4,13 +4,61 @@ defmodule KifuwarabeWcsc33.CLI.Routes.MoveElimination do
 
     指し手のリストから、自殺手を除去
 
+  ## Parameters
+
+    * `move_list` - ムーブ・リスト（Move List；指し手のリスト）
+    * `pos` - ポジション（Position；局面）
+
   ## Returns
 
-    0. レスト・ムーブ・リスト（Rest Move List；残りの指し手のリスト） - まだ判定していない残りの指し手
-    1. クリーンナップ・ムーブ・リスト（Clean-up Move List；掃除済みの指し手のリスト） - 自殺手を除去済み
+    0. ムーブ・リスト（Move List；指し手のリスト）
+    1. `pos` - ポジション（Position；局面）
 
   """
-  def reduce_suicide_move(rest_move_list, pos, cleanup_move_list \\ []) do
+  def reduce_suicide_move(move_list, pos) do
+    # 自玉
+    friend_king_pc = KifuwarabeWcsc33.CLI.Mappings.ToPiece.from_turn_and_piece_type(pos.turn, :k)
+    friend_king_sq = pos.location_of_kings[friend_king_pc]
+
+    ## TODO デバッグ消す
+    #searched_friend_king_sq = KifuwarabeWcsc33.CLI.Finder.Square.find_king_on_board(pos, pos.turn)
+    #IO.puts("[think go] DEBUG king sq. friend_king_sq:#{friend_king_sq} searched_friend_king_sq:#{searched_friend_king_sq}")
+    #if friend_king_sq != searched_friend_king_sq do
+    #  raise "[think go] error king sq. friend_king_sq:#{friend_king_sq} searched_friend_king_sq:#{searched_friend_king_sq}"
+    #end
+
+    if friend_king_sq == nil do
+      # 指す前の自玉がいないケース（詰将棋でもやっているのだろう）では、自殺手判定はやらない
+      IO.puts("[think go] there is not friend king")
+      {move_list, pos}
+    else
+      IO.puts("[think go] there is friend king. sq:#{friend_king_sq} pc:#{friend_king_pc}")
+      #
+      # 自殺手の除去ルーチン
+      # =================
+      #
+      {_rest_move_list_is_empty, pos, cleanup_move_list} = reduce_suicide_move_2(move_list, pos)
+      # IO.puts("[think go] rest_move_list.length:#{rest_move_list_is_empty |> length()} (Expected: 0)")
+
+      {cleanup_move_list, pos}
+    end
+  end
+
+  #
+  #  指し手のリストから、自殺手を除去
+  #
+  # ## Parameters
+  #
+  #  * `rest_move_list` - レスト・ムーブ・リスト（Rest Move List；残りの指し手のリスト） - まだ判定していない残りの指し手
+  #  * `pos` - ポジション（Position；局面）
+  #  * `cleanup_move_list` - クリーンナップ・ムーブ・リスト（Clean-up Move List；掃除済みの指し手のリスト） - 自殺手を除去済み
+  #
+  # ## Returns
+  #
+  #  0. レスト・ムーブ・リスト（Rest Move List；残りの指し手のリスト） - まだ判定していない残りの指し手
+  #  1. クリーンナップ・ムーブ・リスト（Clean-up Move List；掃除済みの指し手のリスト） - 自殺手を除去済み
+  #
+  defp reduce_suicide_move_2(rest_move_list, pos, cleanup_move_list \\ []) do
 
     {rest_move_list, pos, cleanup_move_list} =
       if rest_move_list |> length() < 1 do
@@ -82,7 +130,7 @@ defmodule KifuwarabeWcsc33.CLI.Routes.MoveElimination do
         # =========
         #
         # - 消去法を続ける
-        {rest_move_list, pos, cleanup_move_list} = reduce_suicide_move(rest_move_list, pos, cleanup_move_list)
+        {rest_move_list, pos, cleanup_move_list} = reduce_suicide_move_2(rest_move_list, pos, cleanup_move_list)
 
         # 再帰の帰り道
         {rest_move_list, pos, cleanup_move_list}
