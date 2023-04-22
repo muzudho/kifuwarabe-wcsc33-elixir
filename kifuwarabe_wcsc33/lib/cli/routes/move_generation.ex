@@ -548,6 +548,11 @@ defmodule KifuwarabeWcsc33.CLI.Routes.MoveGeneration do
         _ -> raise "unexpected piece_type:(#{piece_type})"
       end
 
+    destination_squares =
+      destination_squares
+        # スペース（Space；空マス）にしか打てない（駒が置いてあるところには打てない）
+        |> Enum.filter( fn (sq) -> pos.board[sq] == :sp end)
+
     destination_squares
       |> Enum.map(fn (dst_sq) ->
             move = KifuwarabeWcsc33.CLI.Models.Move.new()

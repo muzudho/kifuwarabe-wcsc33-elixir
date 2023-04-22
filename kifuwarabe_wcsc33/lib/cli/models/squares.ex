@@ -282,16 +282,16 @@ defmodule KifuwarabeWcsc33.CLI.Models.Squares do
       end
 
     # {ｎファイルの全マスのリスト, 歩を打てるマスのリスト} のリストを作る
-    zipped_list = Enum.zip(squares_by_file, squares_can_drop)
+    input_result_pair_list = Enum.zip(squares_by_file, squares_can_drop)
 
     # Square List
-    zipped_list
-      |> Enum.map(fn ({squares_by_file, squares_can_drop}) ->
-          if squares_by_file |> KifuwarabeWcsc33.CLI.Thesis.Board.is_there_piece?(target_pc, pos.board) do
+    input_result_pair_list
+      |> Enum.map(fn ({input_squares, output_squares}) ->
+          if input_squares |> KifuwarabeWcsc33.CLI.Thesis.Board.is_there_piece?(target_pc, pos.board) do
             # 二歩になるから置けない
             []
           else
-            squares_can_drop
+            output_squares
           end
         end)
       |> List.flatten()
