@@ -68,7 +68,7 @@ defmodule KifuwarabeWcsc33.CLI.Helpers.PositionParser do
         # IO.puts("parse(6) turn:#{turn} rest:#{rest}")
 
         # 駒台の解析
-        {rest, hand_pieces} = rest |> parse_hands(%{})
+        {rest, hand_pieces} = rest |> parse_hands(KifuwarabeWcsc33.CLI.Models.Position.new_hand_pieces()) # TODO 空マップ %{} のような書き方ができるのか？ 要素数が不完全なんじゃないか？
         IO.inspect(hand_pieces, label: "parse(7) The Hand pieces is")
         IO.puts("parse(8) rest:#{rest}")
 
