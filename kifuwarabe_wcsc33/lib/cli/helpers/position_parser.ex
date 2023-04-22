@@ -25,83 +25,88 @@ defmodule KifuwarabeWcsc33.CLI.Helpers.PositionParser do
   """
   def parse(line) do
     # IO.puts("parse(1) line:#{line}")
+    rest = line
 
     # 局面データ（初期値は平手初期局面）
     pos = KifuwarabeWcsc33.CLI.Models.Position.new()
 
-    rest =
-      if line |> String.starts_with?("position startpos") do
+    {rest, pos} =
+      cond do
         # 平手初期局面をセット（初期値のまま）
+        rest |> String.starts_with?("position startpos") ->
+          # `position startpos` を除去 |> あれば、続くスペースを削除
+          rest = rest |> String.slice(String.length("position startpos")..-1) |> String.trim_leading()
+          {rest, pos}
 
-        # `position startpos` を除去 |> あれば、続くスペースを削除
-        line |> String.slice(String.length("position startpos")..-1) |> String.trim_leading()
-      else
-        # pass
-        line
+        # 途中局面をセット
+        rest |> String.starts_with?("position sfen") ->
+          # `position startpos` を除去 |> あれば、続くスペースを削除
+          rest = line |> String.slice(String.length("position sfen")..-1) |> String.trim_leading()
+
+          # IO.puts("parse(3) rest:#{rest}")
+
+          # 将棋盤の初期化
+          pos = %{pos |
+            location_of_kings: [
+              # 玉は盤上に無いかもしれないので
+              k1: 0,
+              k2: 0,
+            ]
+          }
+
+          # 盤面部分を解析。「９一」番地からスタート
+          {rest, _sq, board} = rest |> map_string_to_board(91, %{})
+          # rest = tuple |> elem(0)
+          # sq = tuple |> elem(1)
+          # board = tuple |> elem(2)
+          # IO.inspect(board, label: "parse(4) The board is")
+          # IO.puts("parse(5) rest:#{rest}")
+
+          if map_size(board) != 81 do
+            raise "unexpected board cell count:#{length(board)}"
+          end
+
+          # 手番の解析
+          {rest, turn} = rest |> parse_turn()
+          # IO.puts("parse(6) turn:#{turn} rest:#{rest}")
+
+          # 駒台の解析
+          {rest, hand_pieces} = rest |> parse_hands(KifuwarabeWcsc33.CLI.Models.Position.new_hand_pieces()) # TODO 空マップ %{} のような書き方ができるのか？ 要素数が不完全なんじゃないか？
+          IO.inspect(hand_pieces, label: "parse(7) The Hand pieces is")
+          IO.puts("parse(8) rest:#{rest}")
+
+          # 次の手は何手目か、を表す数字だが、「将棋所」は「この数字は必ず１にしています」という仕様なので
+          # 「将棋所」しか使わないのなら、「1」しかこない、というプログラムにしてしまうのも手だ
+          first_char = rest |> String.at(0)
+          rest = rest |> String.slice(1..-1)
+
+          if first_char != "1" do
+            raise "unexpected first_char:#{first_char}"
+          end
+
+          # IO.puts("parse first_char:[#{first_char}]")
+          moves_num = String.to_integer(first_char)
+          # IO.puts("parse(9) moves_num:[#{moves_num}]")
+
+          # 将棋盤の更新
+          pos = %{pos |
+            moves_num: moves_num,
+            turn: turn,
+            opponent_turn: KifuwarabeWcsc33.CLI.Mappings.ToTurn.flip(turn),
+            board: board,
+            hand_pieces: hand_pieces
+          }
+
+          # 残りの文字列 |> あれば、続くスペースを削除
+          rest = rest |> String.trim_leading()
+
+          {rest, pos}
+
+        true ->
+          raise "unexpected position command line:#{line}"
       end
 
     # IO.puts("parse(2) rest:#{rest}")
-
-    {rest, pos} =
-      if rest |> String.starts_with?("position sfen") do
-        # 途中局面をセット
-
-        # `position startpos` を除去 |> あれば、続くスペースを削除
-        rest = line |> String.slice(String.length("position sfen")..-1) |> String.trim_leading()
-
-        # IO.puts("parse(3) rest:#{rest}")
-
-        # 盤面部分を解析。「９一」番地からスタート
-        {rest, _sq, board} = rest |> map_string_to_board(91, %{})
-        # rest = tuple |> elem(0)
-        # sq = tuple |> elem(1)
-        # board = tuple |> elem(2)
-        # IO.inspect(board, label: "parse(4) The board is")
-        # IO.puts("parse(5) rest:#{rest}")
-
-        if map_size(board) != 81 do
-          raise "unexpected board cell count:#{length(board)}"
-        end
-
-        # 手番の解析
-        {rest, turn} = rest |> parse_turn()
-        # IO.puts("parse(6) turn:#{turn} rest:#{rest}")
-
-        # 駒台の解析
-        {rest, hand_pieces} = rest |> parse_hands(KifuwarabeWcsc33.CLI.Models.Position.new_hand_pieces()) # TODO 空マップ %{} のような書き方ができるのか？ 要素数が不完全なんじゃないか？
-        IO.inspect(hand_pieces, label: "parse(7) The Hand pieces is")
-        IO.puts("parse(8) rest:#{rest}")
-
-        # 次の手は何手目か、を表す数字だが、「将棋所」は「この数字は必ず１にしています」という仕様なので
-        # 「将棋所」しか使わないのなら、「1」しかこない、というプログラムにしてしまうのも手だ
-        first_char = rest |> String.at(0)
-        rest = rest |> String.slice(1..-1)
-
-        if first_char != "1" do
-          raise "unexpected first_char:#{first_char}"
-        end
-
-        # IO.puts("parse first_char:[#{first_char}]")
-        moves_num = String.to_integer(first_char)
-        # IO.puts("parse(9) moves_num:[#{moves_num}]")
-
-        # 将棋盤の更新
-        pos = %{pos |
-          moves_num: moves_num,
-          turn: turn,
-          opponent_turn: KifuwarabeWcsc33.CLI.Mappings.ToTurn.flip(turn),
-          board: board,
-          hand_pieces: hand_pieces
-        }
-
-        # 残りの文字列 |> あれば、続くスペースを削除
-        rest = rest |> String.trim_leading()
-
-        {rest, pos}
-      else
-        # pass
-        {rest, pos}
-      end
 
     # ５文字取る
     first_5chars = rest |> String.slice(0..4)
