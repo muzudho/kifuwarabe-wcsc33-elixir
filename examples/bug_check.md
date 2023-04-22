@@ -61,3 +61,11 @@ position startpos moves 8g8f 9c9d 4i3h 4a5b 7g7f 9a9b 5i6h 3c3d 8h5e 6c6d 6h7h 5
 ```plaintext
 position startpos moves 5i6h 6a7b 6i5i 4a5b 9g9f 9a9b 9i9g 4c4d 1i1h 5a4a 7g7f 4d4e 7i7h 4a4b 2h5h 4b4c 7h7g 7c7d 7g6f 7b7c 7f7e 5b5a 3g3f 7a7b 3i3h 9c9d 6h7i 7c8d 8h7g 8a9c 5h8h 7b6a 6f6e 5c5d 4i3i 4e4f 3i2h 5a5b 7i7h 4c3d 8g8f 5b4b 8f8e 8b6b 6e6d 3d4c 5i6h 6a7b 8e8d 8c8d 4g4f 3a3b 7g4d 6c6d 6h5h 6d6e P*8e P*4g 8h8f 8d8e G*6a 4b5b 6g6f S*8c 4d5c+ 4c3d 2g2f 9d9e 5h4g 6b6c 3h2g 5b6b 7h8h P*4e 5c5b 3b4c 1g1f 6b5c 8h7g 1c1d 6a6b 8c8d 8f7f 7b8a 7g8g 6c8c 2i1g 8c7c 6b6a 5c5b 4g5f B*7h 8g9h 7c7a 2g3h 4c3b 7f7g 3b4c 6a5a 1a1c 3h4g 2b3a P*8c 4e4f 4g4f 8a7b 7g8g 7h6i 3f3e 3d2d P*4b 6i4g 8c8b+ 5b6c 7e7d 8d7c 4f4e 3a2b 8b7b 7a9a S*7a 4g3f+ 7b6b 3f5h 2h2i 5d5e 5a4a 5h5g P*5h 6c5c 5f4f 5g3i 8g3g 5c4d 2i1i P*4g 8i7g 4c5b 4e3f P*7e 6f6e 4g4h+ 9h9i 4h3h 3f4g 3i1g P*8f N*8g 9i8i 5b6a 8i7h 5e5f 1i2h 3h3i 2h1g 3i2i 7a8b+ 5f5g+ B*4e 6a6b 4f5e P*5f 4e7b 6b6c 3g3f 4d5d 7b8c+ 7c6d 7h8g 5g6h 8b8a 6d5c N*4d 3c3d 3f3h 9e9f 3h3f 2i3i 4d3b+ 2b4d 8a9a 9f9g+ 8g9g
 ```
+
+# 異常終了
+
+👇 下図からの次の一手 `go`  
+
+```plaintext
+position sfen 7lk/7l1/7lK/7r1/9/9/9/9/9 b Pr2b4g4s4nl17p 1 moves P*4g B*5e
+```

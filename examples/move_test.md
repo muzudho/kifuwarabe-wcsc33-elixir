@@ -59,3 +59,9 @@ position sfen 8k/9/9/9/9/9/7+r1/9/8K b Brb4g4s4n4l18p 1
 ```plaintext
 position sfen 8k/9/9/9/9/9/7+r1/9/8K b R1b4g4s4n4l18p 1
 ```
+
+# 打ち歩詰めしないことのテスト
+
+```plaintext
+position sfen 7lk/7l1/7lK/7r1/9/9/9/9/9 b Pr2b4g4s4nl17p 1
+```

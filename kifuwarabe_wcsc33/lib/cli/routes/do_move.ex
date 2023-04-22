@@ -51,6 +51,7 @@ defmodule KifuwarabeWcsc33.CLI.Routes.DoMove do
 
         # （移動先にある）ピース（PieCe；先後付きの駒種類）。無ければ空マス
         target_pc = pos.board[move.destination]
+        IO.puts("[do_move] move.destination #{move.destination} square.")
 
         # * `captured_pt` - 取ったピース・タイプ（Piece Type；駒の種類）
         {pos, captured_pt} =
@@ -67,6 +68,7 @@ defmodule KifuwarabeWcsc33.CLI.Routes.DoMove do
 
             # 局面更新
             IO.puts("[do_move] Captured #{target_pc} piece to #{hand_pc} piece.")
+            IO.puts("[do_move] How many #{hand_pc} pieces? It is #{pos.hand_pieces[hand_pc]} pieces.")
             num = pos.hand_pieces[hand_pc] + 1
             pos = %{ pos |
                     hand_pieces: %{ pos.hand_pieces |
