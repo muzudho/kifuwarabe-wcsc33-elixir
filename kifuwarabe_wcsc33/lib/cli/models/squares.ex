@@ -19,18 +19,57 @@ defmodule KifuwarabeWcsc33.CLI.Models.Squares do
   @fn_data for file <- 1..9, rank <- 2..9, do: 10*file+rank
   def gote_lance_drop_squares, do: @fn_data
 
-  # 持ち駒の先手歩の置けるマス
-  # TODO 二歩チェックしたい
-  @fn_data for file <- 1..9, rank <- 1..8, do: 10*file+rank
-  def get_sente_pawn_drop_squares() do
-    @fn_data
+  # 持ち駒の先手歩の置けるマス（列ごと）
+  #
+  # ## 雑談
+  #
+  #   Elixirのワンライナーの書き方、ワケ分かんないからやらない
+  #
+  @file1 for rank <- 1..8, do: 1*10+rank
+  @file2 for rank <- 1..8, do: 2*10+rank
+  @file3 for rank <- 1..8, do: 3*10+rank
+  @file4 for rank <- 1..8, do: 4*10+rank
+  @file5 for rank <- 1..8, do: 5*10+rank
+  @file6 for rank <- 1..8, do: 6*10+rank
+  @file7 for rank <- 1..8, do: 7*10+rank
+  @file8 for rank <- 1..8, do: 8*10+rank
+  @file9 for rank <- 1..8, do: 9*10+rank
+  def get_sente_pawn_drop_squares_by_file(file) do
+    case file do
+      1 -> @file1
+      2 -> @file2
+      3 -> @file3
+      4 -> @file4
+      5 -> @file5
+      6 -> @file6
+      7 -> @file7
+      8 -> @file8
+      9 -> @file9
+    end
   end
 
-  # 持ち駒の後手歩の置けるマス
-  # TODO 二歩チェックしたい
-  @fn_data for file <- 1..9, rank <- 2..9, do: 10*file+rank
-  def get_gote_pawn_drop_squares() do
-    @fn_data
+  # 持ち駒の後手歩の置けるマス（列ごと）
+  @file1 for rank <- 2..9, do: 1*10+rank
+  @file2 for rank <- 2..9, do: 2*10+rank
+  @file3 for rank <- 2..9, do: 3*10+rank
+  @file4 for rank <- 2..9, do: 4*10+rank
+  @file5 for rank <- 2..9, do: 5*10+rank
+  @file6 for rank <- 2..9, do: 6*10+rank
+  @file7 for rank <- 2..9, do: 7*10+rank
+  @file8 for rank <- 2..9, do: 8*10+rank
+  @file9 for rank <- 2..9, do: 9*10+rank
+  def get_gote_pawn_drop_squares_by_file(file) do
+    case file do
+      1 -> @file1
+      2 -> @file2
+      3 -> @file3
+      4 -> @file4
+      5 -> @file5
+      6 -> @file6
+      7 -> @file7
+      8 -> @file8
+      9 -> @file9
+    end
   end
 
   # マップ定数の定義
@@ -117,9 +156,27 @@ defmodule KifuwarabeWcsc33.CLI.Models.Squares do
   #
   def get_list_of_squares_where_i_can_place_pawn(pos) do
     if pos.turn == :sente do
-      KifuwarabeWcsc33.CLI.Models.Squares.get_sente_pawn_drop_squares()
+      [] ++
+        KifuwarabeWcsc33.CLI.Models.Squares.get_sente_pawn_drop_squares_by_file(1) ++
+        KifuwarabeWcsc33.CLI.Models.Squares.get_sente_pawn_drop_squares_by_file(2) ++
+        KifuwarabeWcsc33.CLI.Models.Squares.get_sente_pawn_drop_squares_by_file(3) ++
+        KifuwarabeWcsc33.CLI.Models.Squares.get_sente_pawn_drop_squares_by_file(4) ++
+        KifuwarabeWcsc33.CLI.Models.Squares.get_sente_pawn_drop_squares_by_file(5) ++
+        KifuwarabeWcsc33.CLI.Models.Squares.get_sente_pawn_drop_squares_by_file(6) ++
+        KifuwarabeWcsc33.CLI.Models.Squares.get_sente_pawn_drop_squares_by_file(7) ++
+        KifuwarabeWcsc33.CLI.Models.Squares.get_sente_pawn_drop_squares_by_file(8) ++
+        KifuwarabeWcsc33.CLI.Models.Squares.get_sente_pawn_drop_squares_by_file(9)
     else
-      KifuwarabeWcsc33.CLI.Models.Squares.get_gote_pawn_drop_squares()
+      [] ++
+        KifuwarabeWcsc33.CLI.Models.Squares.get_gote_pawn_drop_squares_by_file(1) ++
+        KifuwarabeWcsc33.CLI.Models.Squares.get_gote_pawn_drop_squares_by_file(2) ++
+        KifuwarabeWcsc33.CLI.Models.Squares.get_gote_pawn_drop_squares_by_file(3) ++
+        KifuwarabeWcsc33.CLI.Models.Squares.get_gote_pawn_drop_squares_by_file(4) ++
+        KifuwarabeWcsc33.CLI.Models.Squares.get_gote_pawn_drop_squares_by_file(5) ++
+        KifuwarabeWcsc33.CLI.Models.Squares.get_gote_pawn_drop_squares_by_file(6) ++
+        KifuwarabeWcsc33.CLI.Models.Squares.get_gote_pawn_drop_squares_by_file(7) ++
+        KifuwarabeWcsc33.CLI.Models.Squares.get_gote_pawn_drop_squares_by_file(8) ++
+        KifuwarabeWcsc33.CLI.Models.Squares.get_gote_pawn_drop_squares_by_file(9) 
     end
   end
 
