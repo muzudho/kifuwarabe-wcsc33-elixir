@@ -13,10 +13,11 @@ defmodule KifuwarabeWcsc33.CLI.Views.Position do
     body = pos |> stringify_body()
     hand1 = pos |> stringify_hand1()
     record = pos |> stringify_record()
+    location_of_kings = pos |> stringify_location_of_kings()
 
     """
 
-    """ <> header <> hand2 <> body <> hand1 <> record
+    """ <> header <> hand2 <> body <> hand1 <> location_of_kings <> record
   end
 
   # 盤表示のヘッダー
@@ -403,7 +404,16 @@ defmodule KifuwarabeWcsc33.CLI.Views.Position do
 
     record_text = record_element_text_list |> Enum.join()
 
-    "record" <> record_text <> """
+    """
+    record #{record_text}
+
+    """
+  end
+
+  # 玉のいるマス番地
+  defp stringify_location_of_kings(pos) do
+    """
+    king_sq ^#{pos.location_of_kings[:sente]} v#{pos.location_of_kings[:gote]}
 
     """
   end

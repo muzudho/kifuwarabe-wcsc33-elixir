@@ -1,7 +1,9 @@
-defmodule KifuwarabeWcsc33.CLI.Thesis.IsSuicideMove do
+defmodule KifuwarabeWcsc33.CLI.Thesis.IsMated do
   @moduledoc """
 
-  玉の自殺手ですか？
+  自玉が相手の利きに飛び込んでいますか？
+
+  * 自殺手判定に使う
 
   """
 
@@ -16,7 +18,7 @@ defmodule KifuwarabeWcsc33.CLI.Thesis.IsSuicideMove do
   #
   #   論理値型は関数名の末尾に ? を付ける？
   #
-  def is_suicide_move?(pos, src_sq) do
+  def is_mated?(pos, src_sq) do
 
     # 利きに飛び込むか？　先手視点で定義しろだぜ
     is_effect_in_north? = fn (target_pt)->

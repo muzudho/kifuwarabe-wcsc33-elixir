@@ -30,20 +30,30 @@ defmodule KifuwarabeWcsc33.CLI.Routes.Think do
     # シャッフルする
     move_list = move_list |> Enum.shuffle()
 
+    # TODO 相手玉の場所
+    #
+    # - 打ち歩詰めチェックに使う
+    # opponent_king_sq = KifuwarabeWcsc33.CLI.Finder.Square.find_king_on_board(pos, pos.opponent_turn)
+
     # IO.puts(
     #   """
     #   [think go] Current position.
-    # 
+    #
     #   """ <> KifuwarabeWcsc33.CLI.Views.Position.stringify(pos))
 
-    # 最善手を選ぶ
+    # 最善手を選ぶ（投了でなければ、詰んでいないということ）
     {_pos, _move_list, best_move} = pos |> choice(move_list)
+
+    # TODO もし、歩を打ったときで、かつ、そこが相手の玉頭なら、打ち歩詰めチェックをしたい
+    if best_move.drop_piece_type == :p do
+      IO.puts("[Think go] TODO Uchifudume check")
+    end
 
     # IO.puts("[Think go] best_move:#{KifuwarabeWcsc33.CLI.Views.Move.as_code(best_move)}")
     best_move
   end
 
-  # 最善手を選ぶ
+  # 最善手（その手を指すと詰む手以外）を選ぶ。無ければ投了を返す
   #
   # - 候補手は１つずつ減らしていく
   #
@@ -94,7 +104,7 @@ defmodule KifuwarabeWcsc33.CLI.Routes.Think do
 
         # TODO 自分から相手の利きへ飛び込む手（自殺手）は除外したい
         # （ここでは相手番なので、さっきの手番は逆側）
-        if pos |> KifuwarabeWcsc33.CLI.Thesis.IsSuicideMove.is_suicide_move?(king_sq) do
+        if pos |> KifuwarabeWcsc33.CLI.Thesis.IsMated.is_mated?(king_sq) do
           # 自殺手だ
           # 戻す
           pos = pos |> KifuwarabeWcsc33.CLI.Routes.UndoMove.do_it()
