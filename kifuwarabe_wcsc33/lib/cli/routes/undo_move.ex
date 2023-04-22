@@ -41,52 +41,48 @@ defmodule KifuwarabeWcsc33.CLI.Routes.UndoMove do
             moves: pos.moves |> List.delete_at(last_index)
           }
 
-    pos =
-      if move.drop_piece_type != nil do
-        # 打った駒と、減る前の枚数
-        drop_piece = KifuwarabeWcsc33.CLI.Mappings.ToPiece.from_turn_and_piece_type(pos.turn, move.drop_piece_type)
-        num = pos.hand_pieces[drop_piece] + 1
-        # 局面更新
-        pos = %{ pos |
-          # 将棋盤更新
-          board: %{ pos.board |
+    # 更新された局面を返す
+    if move.drop_piece_type != nil do
+      # 打った駒と、減る前の枚数
+      drop_piece = KifuwarabeWcsc33.CLI.Mappings.ToPiece.from_turn_and_piece_type(pos.turn, move.drop_piece_type)
+      num = pos.hand_pieces[drop_piece] + 1
+      # 局面更新
+      %{ pos |
+        # 将棋盤更新
+        board: %{ pos.board |
             # 置いた先を、空マスにする
             move.destination => :sp
           },
-          # 駒台更新
-          hand_pieces: %{ pos.hand_pieces |
+        # 駒台更新
+        hand_pieces: %{ pos.hand_pieces |
             # 枚数を１増やす
             drop_piece => num
           }
-        }
+      }
 
-        pos
-      else
-        # 局面更新
-        pos = %{ pos |
-          # 将棋盤更新
-          board: %{ pos.board |
-            # 移動元マスは、動かした駒になる
-            move.source => if move.promote? do
+    else
+      # 局面更新
+      %{ pos |
+        # 将棋盤更新
+        board: %{ pos.board |
+          # 移動元マスは、動かした駒になる
+          move.source => if move.promote? do
               # TODO （成った駒は）成らずに戻す
               KifuwarabeWcsc33.CLI.Mappings.ToPiece.demote(pos.board[move.destination])
             else
               pos.board[move.destination]
             end,
-            # 移動先マスは、取った駒（なければ空マス）になる
-            move.destination =>
-              if move.captured != nil do
-                KifuwarabeWcsc33.CLI.Mappings.ToPiece.from_turn_and_piece_type(opponent_turn, move.captured)
-              else
-                :sp
-              end
-          }
+          # 移動先マスは、取った駒（なければ空マス）になる
+          move.destination =>
+            if move.captured != nil do
+              KifuwarabeWcsc33.CLI.Mappings.ToPiece.from_turn_and_piece_type(opponent_turn, move.captured)
+            else
+              :sp
+            end
         }
+      }
 
-        pos
-      end
+    end
 
-    # 更新された局面を返す
-    pos
   end
 end

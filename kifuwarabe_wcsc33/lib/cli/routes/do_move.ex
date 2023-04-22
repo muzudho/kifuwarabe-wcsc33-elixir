@@ -24,7 +24,7 @@ defmodule KifuwarabeWcsc33.CLI.Routes.DoMove do
         drop_piece = KifuwarabeWcsc33.CLI.Mappings.ToPiece.from_turn_and_piece_type(pos.turn, move.drop_piece_type)
         num = pos.hand_pieces[drop_piece] - 1
         # 局面更新
-        pos = %{ pos |
+        %{ pos |
           # 将棋盤更新
           board: %{ pos.board |
             # 持ち駒を置く
@@ -37,7 +37,6 @@ defmodule KifuwarabeWcsc33.CLI.Routes.DoMove do
           }
         }
 
-        pos
       else
         # 移動先にある駒。無ければ空マス
         target = pos.board[move.destination]
@@ -52,7 +51,7 @@ defmodule KifuwarabeWcsc33.CLI.Routes.DoMove do
           end
 
         # 局面更新
-        pos = %{ pos |
+        %{ pos |
           # 将棋盤更新
           board: %{ pos.board |
             # 移動元マスは、空マスになる
@@ -67,7 +66,6 @@ defmodule KifuwarabeWcsc33.CLI.Routes.DoMove do
           }
         }
 
-        pos
       end
 
     # 局面更新

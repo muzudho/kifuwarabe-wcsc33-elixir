@@ -53,28 +53,28 @@ defmodule KifuwarabeWcsc33.CLI.Views.Position do
   #
   #    k  r  b  g  s  n  l  p
   #  +--+--+--+--+--+--+--+--+
-  #  | 0| 0| 0| 0| 0| 0| 0| 0|
+  #  | 1| 1| 1| 1| 1| 1| 1| 1|
   #  +--+--+--+--+--+--+--+--+
   #
+  #   * 0 は空欄になる
+  #
   defp stringify_hand2(pos) do
-    # IO.inspect(pos.hand_pieces, label: "stringify_hand2 pos.hand_pieces")
-
     # キング（King；玉）
-    k = String.pad_leading("#{pos.hand_pieces[:k2]}", 2, " ")
+    k = :k2 |> stringify_cell(pos)
     # ルック（Rook；飛車）
-    r = String.pad_leading("#{pos.hand_pieces[:r2]}", 2, " ")
+    r = :r2 |> stringify_cell(pos)
     # ビショップ（Bishop；角）
-    b = String.pad_leading("#{pos.hand_pieces[:b2]}", 2, " ")
+    b = :b2 |> stringify_cell(pos)
     # ゴールド（Gold；金）
-    g = String.pad_leading("#{pos.hand_pieces[:g2]}", 2, " ")
+    g = :g2 |> stringify_cell(pos)
     # シルバー（Silver；銀）
-    s = String.pad_leading("#{pos.hand_pieces[:s2]}", 2, " ")
+    s = :s2 |> stringify_cell(pos)
     # ナイト（kNight；桂）
-    n = String.pad_leading("#{pos.hand_pieces[:n2]}", 2, " ")
+    n = :n2 |> stringify_cell(pos)
     # ランス（Lance；香）
-    l = String.pad_leading("#{pos.hand_pieces[:l2]}", 2, " ")
+    l = :l2 |> stringify_cell(pos)
     # ポーン（Pawn；歩）
-    p = String.pad_leading("#{pos.hand_pieces[:p2]}", 2, " ")
+    p = :p2 |> stringify_cell(pos)
 
     """
       k  r  b  g  s  n  l  p
@@ -95,29 +95,28 @@ defmodule KifuwarabeWcsc33.CLI.Views.Position do
   #
   #         K  R  B  G  S  N  L  P
   #       +--+--+--+--+--+--+--+--+
-  #       | 0| 0| 0| 0| 0| 0| 0| 0|
+  #       | 1| 1| 1| 1| 1| 1| 1| 1|
   #       +--+--+--+--+--+--+--+--+
   #
+  #   * 0 は空欄になる
+  #
   defp stringify_hand1(pos) do
-    # IO.inspect(pos.hand_pieces, label: "stringify_hand1 pos.hand_pieces")
-
     # キング（King；玉）
-    k = String.pad_leading("#{pos.hand_pieces[:k1]}", 2, " ")
+    k = :k1 |> stringify_cell(pos)
     # ルック（Rook；飛車）
-    r = String.pad_leading("#{pos.hand_pieces[:r1]}", 2, " ")
+    r = :r1 |> stringify_cell(pos)
     # ビショップ（Bishop；角）
-    b = String.pad_leading("#{pos.hand_pieces[:b1]}", 2, " ")
+    b = :b1 |> stringify_cell(pos)
     # ゴールド（Gold；金）
-    g = String.pad_leading("#{pos.hand_pieces[:g1]}", 2, " ")
+    g = :g1 |> stringify_cell(pos)
     # シルバー（Silver；銀）
-    s = String.pad_leading("#{pos.hand_pieces[:s1]}", 2, " ")
+    s = :s1 |> stringify_cell(pos)
     # ナイト（kNight；桂）
-    n = String.pad_leading("#{pos.hand_pieces[:n1]}", 2, " ")
+    n = :n1 |> stringify_cell(pos)
     # ランス（Lance；香）
-    l = String.pad_leading("#{pos.hand_pieces[:l1]}", 2, " ")
+    l = :l1 |> stringify_cell(pos)
     # ポーン（Pawn；歩）
-    p = String.pad_leading("#{pos.hand_pieces[:p1]}", 2, " ")
-
+    p = :p1 |> stringify_cell(pos)
     """
          K  R  B  G  S  N  L  P
        +--+--+--+--+--+--+--+--+
@@ -125,6 +124,19 @@ defmodule KifuwarabeWcsc33.CLI.Views.Position do
        +--+--+--+--+--+--+--+--+
 
     """
+  end
+
+  #
+  # 持ち駒の数のセル
+  #
+  #   * 0 は空欄になる
+  #
+  defp stringify_cell(piece_type, pos) do
+    if 0 < pos.hand_pieces[piece_type] do
+      String.pad_leading("#{pos.hand_pieces[:k2]}", 2, " ")
+    else
+      "  "
+    end
   end
 
   # 盤表示

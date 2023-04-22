@@ -67,9 +67,10 @@ defmodule KifuwarabeWcsc33.CLI.Helpers.PositionParser do
         {rest, turn} = rest |> parse_turn()
         # IO.puts("parse(6) turn:#{turn} rest:#{rest}")
 
-        # 駒台（持ち駒の数）の解析
-        {rest, hand_pieces} = rest |> parse_hands(%{})
-        # IO.inspect(hand_pieces, label: "parse(7) The hand_pieces is")
+        # 駒台の解析
+        # * `hp` - ハンド・ピースズ（Hand Pieces；持ち駒の数）
+        {rest, hp} = rest |> parse_hands(%{})
+        # IO.inspect(hp, label: "parse(7) The Hand pieces is")
         # IO.puts("parse(8) rest:#{rest}")
 
         # 次の手は何手目か、を表す数字だが、「将棋所」は「この数字は必ず１にしています」という仕様なので
@@ -91,7 +92,7 @@ defmodule KifuwarabeWcsc33.CLI.Helpers.PositionParser do
           turn: turn,
           opponent_turn: KifuwarabeWcsc33.CLI.Mappings.ToTurn.flip(turn),
           board: board,
-          hand_pieces: hand_pieces
+          hand_pieces: hp
         }
 
         # 残りの文字列 |> あれば、続くスペースを削除
@@ -357,15 +358,10 @@ defmodule KifuwarabeWcsc33.CLI.Helpers.PositionParser do
       # 先頭の２文字 "- " を切り捨て
       rest = rest |> String.slice(2..-1)
 
-      # IO.puts("parse_hands no-hands rest:#{rest}")
       {rest, hand_pieces}
     else
       # 持ち駒あり
-      {rest, hand_pieces} = rest |> parse_piece_type_on_hands(0, hand_pieces)
-      # IO.inspect(hand_pieces, label: "parse_hands hand_pieces")
-      # IO.puts("parse_hands rest:#{rest}")
-
-      {rest, hand_pieces}
+      rest |> parse_piece_type_on_hands(0, hand_pieces)
     end
   end
 
@@ -432,9 +428,7 @@ defmodule KifuwarabeWcsc33.CLI.Helpers.PositionParser do
 
       # Recursive
       # =========
-      {rest, hand_pieces} = rest |> parse_piece_type_on_hands(number, hand_pieces)
-      # 結果を上に投げ上げるだけ
-      {rest, hand_pieces}
+      rest |> parse_piece_type_on_hands(number, hand_pieces)
     end
   end
 
