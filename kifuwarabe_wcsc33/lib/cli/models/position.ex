@@ -154,10 +154,10 @@ defmodule KifuwarabeWcsc33.CLI.Models.Position do
             # キャプチャード・ピースズ（Captured pieces；取った駒のリスト）（先後の情報なし、成りの情報付き）
             captured_piece_types: [],
             # 玉のいるマス番地（玉のいるマス番地をよく探すので）
-            location_of_kings: [
-              sente: 59,
-              gote: 51
-            ]
+            location_of_kings: %{
+              :k1 => 59,
+              :k2 => 51
+            }
 
   # Elixir のリスト、リンクドリストだ、ランダム・アクセス遅そう、使いたくねー
   # defstruct piece_list:

@@ -61,17 +61,20 @@ defmodule KifuwarabeWcsc33.CLI.Routes.UndoMove do
       }
 
     else
+      # 動かした駒が玉なら
+      played_piece = if move.promote? do
+          # TODO （成った駒は）成らずに戻す
+          KifuwarabeWcsc33.CLI.Mappings.ToPiece.demote(pos.board[move.destination])
+        else
+          pos.board[move.destination]
+        end
+
       # 局面更新
-      %{ pos |
+      pos = %{ pos |
         # 将棋盤更新
         board: %{ pos.board |
           # 移動元マスは、動かした駒になる
-          move.source => if move.promote? do
-              # TODO （成った駒は）成らずに戻す
-              KifuwarabeWcsc33.CLI.Mappings.ToPiece.demote(pos.board[move.destination])
-            else
-              pos.board[move.destination]
-            end,
+          move.source => played_piece,
 
           # 移動先マスは、取った駒（なければ空マス）になる
           move.destination =>
@@ -84,6 +87,20 @@ defmodule KifuwarabeWcsc33.CLI.Routes.UndoMove do
         }
       }
 
+      # 局面更新
+      pos =
+        if played_piece == :k1 or played_piece == :k2 do
+          # 玉のいるマス更新
+          %{ pos |
+            location_of_kings: %{ pos.location_of_kings |
+              played_piece => move.destination
+            }
+          }
+        else
+          pos
+        end
+
+      pos
     end
 
   end

@@ -413,7 +413,7 @@ defmodule KifuwarabeWcsc33.CLI.Views.Position do
   # 玉のいるマス番地
   defp stringify_location_of_kings(pos) do
     """
-    king_sq ^#{pos.location_of_kings[:sente]} v#{pos.location_of_kings[:gote]}
+    king_sq ^#{pos.location_of_kings[:k1]} v#{pos.location_of_kings[:k2]}
 
     """
   end

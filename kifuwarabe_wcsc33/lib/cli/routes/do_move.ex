@@ -82,6 +82,20 @@ defmodule KifuwarabeWcsc33.CLI.Routes.DoMove do
             {pos, nil}
           end
 
+        # 動かした駒が玉なら
+        played_piece = pos.board[move.source]
+        pos =
+          if played_piece == :k1 or played_piece == :k2 do
+            # 玉のいるマス更新
+            %{ pos |
+              location_of_kings: %{ pos.location_of_kings |
+                played_piece => move.destination
+              }
+            }
+          else
+            pos
+          end
+
         # 局面更新
         pos =
           %{ pos |
@@ -92,7 +106,7 @@ defmodule KifuwarabeWcsc33.CLI.Routes.DoMove do
               # 移動先マスへ、移動元マスの駒を置く
               move.destination => if move.promote? do
                 # TODO （成るなら）成る
-                KifuwarabeWcsc33.CLI.Mappings.ToPiece.promote(pos.board[move.source])
+                KifuwarabeWcsc33.CLI.Mappings.ToPiece.promote(played_piece)
               else
                 pos.board[move.source]
               end

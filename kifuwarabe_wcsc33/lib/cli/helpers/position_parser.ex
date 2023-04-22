@@ -47,11 +47,11 @@ defmodule KifuwarabeWcsc33.CLI.Helpers.PositionParser do
 
           # 将棋盤の初期化
           pos = %{pos |
-            location_of_kings: [
+            location_of_kings: %{
               # 玉は盤上に無いかもしれないので
-              k1: 0,
-              k2: 0,
-            ]
+              :k1 => 0,
+              :k2 => 0,
+            }
           }
 
           # 盤面部分を解析。「９一」番地からスタート
