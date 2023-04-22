@@ -132,8 +132,10 @@ defmodule KifuwarabeWcsc33.CLI.Views.Position do
   #   * 0 は空欄になる
   #
   defp stringify_cell(piece_type, pos) do
-    if 0 < pos.hand_pieces[piece_type] do
-      String.pad_leading("#{pos.hand_pieces[:k2]}", 2, " ")
+    num = pos.hand_pieces[piece_type]
+
+    if 0 < num do
+      String.pad_leading("#{num}", 2, " ")
     else
       "  "
     end

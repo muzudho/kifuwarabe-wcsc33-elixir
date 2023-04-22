@@ -26,7 +26,7 @@ defmodule KifuwarabeWcsc33.CLI.Routes.UndoMove do
 
     # 最後の要素を削除するために、インデックスを取得しておく
     last_index = Enum.count(pos.moves) - 1
-    IO.puts("last_index:#{last_index} pos.moves.length:#{pos.moves|>length()}")
+    # IO.puts("last_index:#{last_index} pos.moves.length:#{pos.moves|>length()}")
 
     # 最後の指し手を取得（リンクドリストなので効率が悪い）
     move = pos.moves |> List.last()
