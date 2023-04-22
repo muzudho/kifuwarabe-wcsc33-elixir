@@ -14,7 +14,7 @@ defmodule KifuwarabeWcsc33.CLI.Views.Piece do
     "n"
     ...
   """
-  def as_code(pc_text) do
+  def from_code(pc_text) do
     case pc_text do
       #
       # ▲せんて（Sente；先手） or したて（Shitate；下手）

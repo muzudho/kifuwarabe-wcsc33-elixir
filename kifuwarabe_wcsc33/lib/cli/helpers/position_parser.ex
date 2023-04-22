@@ -275,7 +275,7 @@ defmodule KifuwarabeWcsc33.CLI.Helpers.PositionParser do
               second_char = rest |> String.at(0)
 
               promoted_piece =
-                KifuwarabeWcsc33.CLI.Views.Piece.as_code(first_char <> second_char)
+                KifuwarabeWcsc33.CLI.Views.Piece.from_code(first_char <> second_char)
 
               board = Map.merge(board, %{sq => promoted_piece})
               # 右列へ１つ移動（-10）
@@ -295,7 +295,7 @@ defmodule KifuwarabeWcsc33.CLI.Helpers.PositionParser do
 
             # それ以外
             true ->
-              piece = KifuwarabeWcsc33.CLI.Views.Piece.as_code(first_char)
+              piece = KifuwarabeWcsc33.CLI.Views.Piece.from_code(first_char)
 
               board = Map.merge(board, %{sq => piece})
               # 右列へ１つ移動（-10）
@@ -404,7 +404,7 @@ defmodule KifuwarabeWcsc33.CLI.Helpers.PositionParser do
 
           true ->
             # ピース（Piece；先後付きの駒種類）
-            piece = KifuwarabeWcsc33.CLI.Views.Piece.as_code(first_char)
+            piece = KifuwarabeWcsc33.CLI.Views.Piece.from_code(first_char)
 
             # 枚数指定がないなら 1
             number =
