@@ -70,7 +70,7 @@ defmodule KifuwarabeWcsc33.CLI.Helpers.PositionParser do
         # 駒台の解析
         {rest, hand_pieces} = rest |> parse_hands(%{})
         IO.inspect(hand_pieces, label: "parse(7) The Hand pieces is")
-        # IO.puts("parse(8) rest:#{rest}")
+        IO.puts("parse(8) rest:#{rest}")
 
         # 次の手は何手目か、を表す数字だが、「将棋所」は「この数字は必ず１にしています」という仕様なので
         # 「将棋所」しか使わないのなら、「1」しかこない、というプログラムにしてしまうのも手だ
@@ -349,7 +349,7 @@ defmodule KifuwarabeWcsc33.CLI.Helpers.PositionParser do
   defp parse_hands(rest, hand_pieces) do
     # 先頭の１文字（取りださない）
     first_char = rest |> String.at(0)
-    # IO.puts("[parse_hands] first_char:[#{first_char}]")
+    IO.puts("[parse_hands] first_char:[#{first_char}]")
 
     if first_char == "-" do
       # 持ち駒１つもなし
@@ -382,12 +382,12 @@ defmodule KifuwarabeWcsc33.CLI.Helpers.PositionParser do
   defp parse_piece_type_on_hands(rest, number, hand_pieces) do
     # 先頭の１文字切り出し
     first_char = rest |> String.at(0)
-    # IO.puts("[parse_piece_type_on_hands] first_char:[#{first_char}]")
+    IO.puts("[parse_piece_type_on_hands] first_char:[#{first_char}]")
     rest = rest |> String.slice(1..-1)
 
     if first_char == " " do
       # Base case
-      # IO.puts("[parse_piece_type_on_hands] Terminate")
+      IO.puts("[parse_piece_type_on_hands] Terminate")
       # 何も成果を増やさず終了
       {rest, hand_pieces}
     else
@@ -397,7 +397,7 @@ defmodule KifuwarabeWcsc33.CLI.Helpers.PositionParser do
           Regex.match?(~r/^\d$/, first_char) ->
             # ２つ目の数字は一の位なので、以前の数は十の位なので、10倍する
             number = 10 * number + String.to_integer(first_char)
-            # IO.puts("[parse_piece_type_on_hands] number:#{number}")
+            IO.puts("[parse_piece_type_on_hands] number:#{number}")
 
             {rest, number, hand_pieces}
 
@@ -413,11 +413,11 @@ defmodule KifuwarabeWcsc33.CLI.Helpers.PositionParser do
                 number
               end
 
-            # IO.puts("[parse_piece_type_on_hands] number:#{number} piece:#{piece}")
+            IO.puts("[parse_piece_type_on_hands] number:#{number} piece:#{piece}")
 
             # 持ち駒データ追加
             hand_pieces = Map.merge(hand_pieces, %{piece => number})
-            # IO.inspect(hand_pieces, label: "[parse_piece_type_on_hands] hand_pieces:")
+            IO.inspect(hand_pieces, label: "[parse_piece_type_on_hands] hand_pieces:")
 
             # 数をリセット
             number = 0
@@ -449,7 +449,7 @@ defmodule KifuwarabeWcsc33.CLI.Helpers.PositionParser do
     # コードを、指し手へ変換
     {rest, move} = KifuwarabeWcsc33.CLI.Mappings.ToMove.from_code_line(rest)
 
-    # IO.inspect(move, label: "parse move")
+    IO.inspect(move, label: "parse move")
 
     # 局面更新（実際、指してみる）
     pos = pos |> KifuwarabeWcsc33.CLI.Routes.DoMove.do_it(move)
@@ -461,15 +461,15 @@ defmodule KifuwarabeWcsc33.CLI.Helpers.PositionParser do
     #
     rest = rest |> String.trim_leading()
 
-    {rest, pos} =
-      if rest |> String.length() < 1 do
-        # Base case
-        {rest, pos}
-      else
-        # Recursive
-        rest |> parse_moves_string_and_update_position(pos)
-      end
+    if rest |> String.length() < 1 do
+      # Base case
+      {rest, pos}
+    else
+      # Recursive
+      {rest, pos} = rest |> parse_moves_string_and_update_position(pos)
 
-    {rest, pos}
+      # 再帰の帰り道でも、値を返します
+      {rest, pos}
+    end
   end
 end
