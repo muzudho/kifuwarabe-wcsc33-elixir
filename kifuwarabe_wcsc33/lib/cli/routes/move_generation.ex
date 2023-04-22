@@ -538,9 +538,9 @@ defmodule KifuwarabeWcsc33.CLI.Routes.MoveGeneration do
         # ナイト（kNight；桂）
         :n -> KifuwarabeWcsc33.CLI.Models.Squares.get_list_of_squares_where_i_can_place_knight(pos)
         # ランス（Lance；香）
-        :l -> KifuwarabeWcsc33.CLI.Models.Squares.get_list_of_squares_where_i_can_place_lance_and_pawn(pos)
+        :l -> KifuwarabeWcsc33.CLI.Models.Squares.get_list_of_squares_where_i_can_place_lance(pos)
         # ポーン（Pawn；歩）
-        :p -> KifuwarabeWcsc33.CLI.Models.Squares.get_list_of_squares_where_i_can_place_lance_and_pawn(pos)
+        :p -> KifuwarabeWcsc33.CLI.Models.Squares.get_list_of_squares_where_i_can_place_pawn(pos)
         #
         # それ以外はエラー
         # ==============

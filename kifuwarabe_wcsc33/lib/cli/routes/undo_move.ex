@@ -27,6 +27,7 @@ defmodule KifuwarabeWcsc33.CLI.Routes.UndoMove do
 
     # 最後の指し手を取得（リンクドリストなので効率が悪い）
     move = pos.moves |> List.last()
+    # (あれば)取った駒を取得（先後の情報無し、成りの情報付き）
     captured_pt = pos.captured_piece_types |> List.last()
 
     # 局面更新

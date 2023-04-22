@@ -11,13 +11,23 @@ defmodule KifuwarabeWcsc33.CLI.Models.Squares do
   @fn_data for file <- 1..9, rank <- 3..9, do: 10*file+rank
   def gote_knight_drop_squares, do: @fn_data
 
-  # 持ち駒の先手香と歩の置けるマス
+  # 持ち駒の先手香の置けるマス
   @fn_data for file <- 1..9, rank <- 1..8, do: 10*file+rank
-  def sente_lance_and_pawn_drop_squares, do: @fn_data
+  def sente_lance_drop_squares, do: @fn_data
 
-  # 持ち駒の後手香と歩の置けるマス
+  # 持ち駒の先手歩の置けるマス
+  # TODO 二歩チェックしたい
+  @fn_data for file <- 1..9, rank <- 1..8, do: 10*file+rank
+  def sente_pawn_drop_squares, do: @fn_data
+
+  # 持ち駒の後手香の置けるマス
   @fn_data for file <- 1..9, rank <- 2..9, do: 10*file+rank
-  def gote_lance_and_pawn_drop_squares, do: @fn_data
+  def gote_lance_drop_squares, do: @fn_data
+
+  # 持ち駒の後手歩の置けるマス
+  # TODO 二歩チェックしたい
+  @fn_data for file <- 1..9, rank <- 2..9, do: 10*file+rank
+  def gote_pawn_drop_squares, do: @fn_data
 
   # マップ定数の定義
   # 先手から見た数にしろだぜ。
@@ -86,13 +96,26 @@ defmodule KifuwarabeWcsc33.CLI.Models.Squares do
   end
 
   #
-  # 香または歩を置けるマスのリストを取得
+  # 香を置けるマスのリストを取得
   #
-  def get_list_of_squares_where_i_can_place_lance_and_pawn(pos) do
+  def get_list_of_squares_where_i_can_place_lance(pos) do
     if pos.turn == :sente do
-      KifuwarabeWcsc33.CLI.Models.Squares.sente_lance_and_pawn_drop_squares
+      KifuwarabeWcsc33.CLI.Models.Squares.sente_lance_drop_squares
     else
-      KifuwarabeWcsc33.CLI.Models.Squares.gote_lance_and_pawn_drop_squares
+      KifuwarabeWcsc33.CLI.Models.Squares.gote_lance_drop_squares
+    end
+  end
+
+  #
+  # 歩を置けるマスのリストを取得
+  #
+  # TODO 二歩チェックを付けたい
+  #
+  def get_list_of_squares_where_i_can_place_pawn(pos) do
+    if pos.turn == :sente do
+      KifuwarabeWcsc33.CLI.Models.Squares.sente_pawn_drop_squares
+    else
+      KifuwarabeWcsc33.CLI.Models.Squares.gote_pawn_drop_squares
     end
   end
 
