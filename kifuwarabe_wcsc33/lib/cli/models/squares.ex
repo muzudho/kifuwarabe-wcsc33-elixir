@@ -288,9 +288,10 @@ defmodule KifuwarabeWcsc33.CLI.Models.Squares do
     zipped_list
       |> Enum.map(fn ({squares_by_file, squares_can_drop}) ->
           if squares_by_file |> KifuwarabeWcsc33.CLI.Thesis.Board.is_there_piece?(target_pc, pos.board) do
-            squares_can_drop
-          else
+            # 二歩になるから置けない
             []
+          else
+            squares_can_drop
           end
         end)
       |> List.flatten()
