@@ -376,26 +376,26 @@ defmodule KifuwarabeWcsc33.CLI.Thesis.IsMated do
   defp adjacent(pos, src_sq, direction_of, is_effect?, is_long_effect, is_effect_2?) do
     # 対象のマスが（１手指してる想定なので、反対側が手番）
     target_sq = KifuwarabeWcsc33.CLI.Mappings.ToDestination.from_turn_and_source(pos.opponent_turn, src_sq, direction_of)
-    IO.write("[is_suicide_move adjacent] target_sq:#{target_sq}")
+    # IO.write("[is_suicide_move adjacent] target_sq:#{target_sq}")
 
     is_suicide_move =
       # 盤内で
       if KifuwarabeWcsc33.CLI.Thesis.Board.is_in_board?(target_sq) do
         # その駒は
         target_pc = pos.board[target_sq]
-        IO.write(" target_pc:#{target_pc}")
+        # IO.write(" target_pc:#{target_pc}")
 
         # 空マスではなく
         if target_pc != :sp do
           # 先後が
           target_turn = KifuwarabeWcsc33.CLI.Mappings.ToTurn.from_piece(target_pc)
-          IO.write(" target_turn:#{target_turn}")
+          # IO.write(" target_turn:#{target_turn}")
 
           # 相手番で（一手指した後を想定し、手番は相手）
           if target_turn == pos.turn do
             # 駒種類は
             target_pt = KifuwarabeWcsc33.CLI.Mappings.ToPieceType.from_piece(target_pc)
-            IO.write(" target_pt:#{target_pt}")
+            # IO.write(" target_pt:#{target_pt}")
 
             # 利きに飛び込むか？
             is_effect?.(target_pt)
@@ -422,7 +422,7 @@ defmodule KifuwarabeWcsc33.CLI.Thesis.IsMated do
         false
       end
 
-    IO.puts(" is_suicide_move:#{is_suicide_move}")
+    # IO.puts(" is_suicide_move:#{is_suicide_move}")
 
     is_suicide_move
   end
@@ -434,26 +434,26 @@ defmodule KifuwarabeWcsc33.CLI.Thesis.IsMated do
   defp far_to(pos, src_sq, direction_of, is_effect_2?) do
     # 対象のマスが（１手指してる想定なので、反対側が手番）
     target_sq = KifuwarabeWcsc33.CLI.Mappings.ToDestination.from_turn_and_source(pos.opponent_turn, src_sq, direction_of)
-    IO.write("[is_suicide_move far_to] target_sq:#{target_sq}")
+    # IO.write("[is_suicide_move far_to] target_sq:#{target_sq}")
 
     is_suicide_move =
       # 盤内で
       if KifuwarabeWcsc33.CLI.Thesis.Board.is_in_board?(target_sq) do
         # その駒は
         target_pc = pos.board[target_sq]
-        IO.write(" target_pc:#{target_pc}")
+        # IO.write(" target_pc:#{target_pc}")
 
         # 空マスではなく
         if target_pc != :sp do
           # 先後が
           target_turn = KifuwarabeWcsc33.CLI.Mappings.ToTurn.from_piece(target_pc)
-          IO.write(" target_turn:#{target_turn}")
+          # IO.write(" target_turn:#{target_turn}")
 
           # 相手番で（一手指した後を想定し、手番は相手）
           if target_turn == pos.turn do
             # 駒種類は
             target_pt = KifuwarabeWcsc33.CLI.Mappings.ToPieceType.from_piece(target_pc)
-            IO.write(" target_pt:#{target_pt}")
+            # IO.write(" target_pt:#{target_pt}")
 
             # 利きに飛び込むか？
             is_effect_2?.(target_pt)
@@ -476,7 +476,7 @@ defmodule KifuwarabeWcsc33.CLI.Thesis.IsMated do
         false
       end
 
-    IO.puts(" is_suicide_move:#{is_suicide_move}")
+    # IO.puts(" is_suicide_move:#{is_suicide_move}")
 
     is_suicide_move
   end
