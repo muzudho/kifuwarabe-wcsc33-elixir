@@ -90,10 +90,10 @@ defmodule KifuwarabeWcsc33.CLI.Routes.UndoMove do
       # 局面更新
       pos =
         if played_piece == :k1 or played_piece == :k2 do
-          # 玉のいるマス更新
+          # 玉のいるマスを（移動元マスへ）更新
           %{ pos |
             location_of_kings: %{ pos.location_of_kings |
-              played_piece => move.destination
+              played_piece => move.source
             }
           }
         else
