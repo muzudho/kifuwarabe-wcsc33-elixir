@@ -37,7 +37,7 @@ defmodule KifuwarabeWcsc33.CLI.Thesis.Board do
     if pos.turn == :sente do
       7 <= KifuwarabeWcsc33.CLI.Mappings.ToSquare.rank(sq)
     else
-      KifuwarabeWcsc33.CLI.Mappings.ToSquare.rank(sq) < 3
+      KifuwarabeWcsc33.CLI.Mappings.ToSquare.rank(sq) < 4
     end
   end
 
@@ -53,7 +53,7 @@ defmodule KifuwarabeWcsc33.CLI.Thesis.Board do
   """
   def is_in_opponent_territory?(pos, sq) do
     if pos.turn == :sente do
-      KifuwarabeWcsc33.CLI.Mappings.ToSquare.rank(sq) < 3
+      KifuwarabeWcsc33.CLI.Mappings.ToSquare.rank(sq) < 4
     else
       7 <= KifuwarabeWcsc33.CLI.Mappings.ToSquare.rank(sq)
     end
@@ -73,7 +73,7 @@ defmodule KifuwarabeWcsc33.CLI.Thesis.Board do
   """
   def is_in_opponent_rank1_and_2?(pos, sq) do
     if pos.turn == :sente do
-      KifuwarabeWcsc33.CLI.Mappings.ToSquare.rank(sq) < 2
+      KifuwarabeWcsc33.CLI.Mappings.ToSquare.rank(sq) < 3
     else
       8 <= KifuwarabeWcsc33.CLI.Mappings.ToSquare.rank(sq)
     end
@@ -93,7 +93,7 @@ defmodule KifuwarabeWcsc33.CLI.Thesis.Board do
   """
   def is_in_opponent_rank1?(pos, sq) do
     if pos.turn == :sente do
-      KifuwarabeWcsc33.CLI.Mappings.ToSquare.rank(sq) < 1
+      KifuwarabeWcsc33.CLI.Mappings.ToSquare.rank(sq) < 2
     else
       9 <= KifuwarabeWcsc33.CLI.Mappings.ToSquare.rank(sq)
     end

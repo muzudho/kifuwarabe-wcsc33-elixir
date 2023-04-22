@@ -68,9 +68,8 @@ defmodule KifuwarabeWcsc33.CLI.Helpers.PositionParser do
         # IO.puts("parse(6) turn:#{turn} rest:#{rest}")
 
         # 駒台の解析
-        # * `hp` - ハンド・ピースズ（Hand Pieces；持ち駒の数）
-        {rest, hp} = rest |> parse_hands(%{})
-        # IO.inspect(hp, label: "parse(7) The Hand pieces is")
+        {rest, hand_pieces} = rest |> parse_hands(%{})
+        IO.inspect(hand_pieces, label: "parse(7) The Hand pieces is")
         # IO.puts("parse(8) rest:#{rest}")
 
         # 次の手は何手目か、を表す数字だが、「将棋所」は「この数字は必ず１にしています」という仕様なので
@@ -92,7 +91,7 @@ defmodule KifuwarabeWcsc33.CLI.Helpers.PositionParser do
           turn: turn,
           opponent_turn: KifuwarabeWcsc33.CLI.Mappings.ToTurn.flip(turn),
           board: board,
-          hand_pieces: hp
+          hand_pieces: hand_pieces
         }
 
         # 残りの文字列 |> あれば、続くスペースを削除
