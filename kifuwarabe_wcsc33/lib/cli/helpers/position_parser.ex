@@ -449,7 +449,8 @@ defmodule KifuwarabeWcsc33.CLI.Helpers.PositionParser do
     # コードを、指し手へ変換
     {rest, move} = KifuwarabeWcsc33.CLI.Mappings.ToMove.from_code_line(rest)
 
-    IO.inspect(move, label: "parse move")
+    IO.puts("[parse_moves_string_and_update_position] rest:#{rest}")
+    IO.inspect(move, label: "[parse_moves_string_and_update_position] parse move")
 
     # 局面更新（実際、指してみる）
     pos = pos |> KifuwarabeWcsc33.CLI.Routes.DoMove.do_it(move)

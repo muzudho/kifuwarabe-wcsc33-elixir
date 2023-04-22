@@ -116,7 +116,7 @@ defmodule KifuwarabeWcsc33.CLI.Mappings.ToMove do
 
   """
   def from_code_line(rest) do
-    IO.puts("[to_move from_code_line] rest:[#{rest}]")
+    # IO.puts("[to_move from_code_line] rest:[#{rest}]")
 
     move = KifuwarabeWcsc33.CLI.Models.Move.new()
 

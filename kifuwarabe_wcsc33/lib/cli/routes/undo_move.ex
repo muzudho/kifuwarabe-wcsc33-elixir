@@ -21,9 +21,6 @@ defmodule KifuwarabeWcsc33.CLI.Routes.UndoMove do
 
   """
   def do_it(pos) do
-    # 相手のターン
-    opponent_turn = pos.turn
-
     # 最後の要素を削除するために、インデックスを取得しておく
     last_index = Enum.count(pos.moves) - 1
     # IO.puts("last_index:#{last_index} pos.moves.length:#{pos.moves|>length()}")
@@ -72,10 +69,12 @@ defmodule KifuwarabeWcsc33.CLI.Routes.UndoMove do
             else
               pos.board[move.destination]
             end,
+
           # 移動先マスは、取った駒（なければ空マス）になる
           move.destination =>
             if move.captured != nil do
-              KifuwarabeWcsc33.CLI.Mappings.ToPiece.from_turn_and_piece_type(opponent_turn, move.captured)
+              # 駒種類に先後を付ける
+              KifuwarabeWcsc33.CLI.Mappings.ToPiece.from_turn_and_piece_type(pos.opponent_turn, move.captured)
             else
               :sp
             end

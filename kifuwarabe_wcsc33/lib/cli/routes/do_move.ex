@@ -38,14 +38,16 @@ defmodule KifuwarabeWcsc33.CLI.Routes.DoMove do
         }
 
       else
-        # 移動先にある駒。無ければ空マス
-        target = pos.board[move.destination]
+        # （移動先にある）ピース（PieCe；先後付きの駒種類）。無ければ空マス
+        target_pc = pos.board[move.destination]
 
-        # 駒があれば取る
         move =
-          if target != :sp do
+          # 駒があれば取る
+          if target_pc != :sp do
+            # 取ったピース・タイプ（Piece Type；駒の種類）
+            captured_pt = KifuwarabeWcsc33.CLI.Mappings.ToPieceType.from_piece(target_pc)
             # 指し手更新
-            %{ move | captured: KifuwarabeWcsc33.CLI.Mappings.ToPieceType.from_piece(target)}
+            %{ move | captured: captured_pt}
           else
             move
           end

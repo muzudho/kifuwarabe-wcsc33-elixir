@@ -42,13 +42,13 @@ position startpos moves 6g6f 9a9b 8g8f 8b7b 9i9h 7b8b 2h1h 8b7b 8h9i 1a1b 6i5h 7
 
 ## 何で持ち駒打たんの？
 
-👇 持ち駒無いと思ってる
+👇 指定局面の持ち駒は数えられる  
 
 ```plaintext
 position sfen +L+P1+N5/6s1l/6g1n/2p4p1/5pk2/4PP1P1/+BS1p1G3/9/+b2KS3+p b RGSNL4Prgnl5p 1
 ```
 
-👇 持ち駒無いと思ってる
+👇 持ち駒無いと思ってる  
 
 ```plaintext
 position startpos moves 8g8f 9c9d 4i3h 4a5b 7g7f 9a9b 5i6h 3c3d 8h5e 6c6d 6h7h 5b6b 5e4f 8c8d 1i1h 3a3b 2g2f 6b7b 7h6h 3b3c 9g9f 5a6b 8i9g 5c5d 5g5f 6b6c 9f9e 6a5a 4f2d 2c2d 6i5i 1a1b 2f2e 2b3a 6h5h 9d9e 6g6f 3c2b 7f7e 3a4b 3g3f 8a9c 6f6e 6c6b 3f3e 4b3c 2i3g 3c4d 5h4i 4d3c 4i4h 7c7d 2h2f 5a4a 3i2h 3c7g+ 3e3d 2d2e 2h2g 6b6a 4h4i 4a3a 3g4e 7b7c 3d3c+ 7g7f 5i5h 2b1a 3c2b 2e2f 2b3b 8b4b 2g1f 1c1d 1f1e 6a7b 4g4f 2f2g 9g8e 7f6f 3b2a 7b6c 5h5g 3a2b 3h3i 2b2a 7i6h 6c5b 6h7g 5b5a 3i2i 4b2b 4i3h 7d7e 1e1d 7c6c 8e7c+ 2b5b 7c8c 7e7f 3h3g 1b1d 5g6g 6f3i 9i9h 3i2h
