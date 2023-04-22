@@ -22,10 +22,10 @@ defmodule KifuwarabeWcsc33.CLI.Routes.MoveElimination do
         move = hd(rest_move_list)
         rest_move_list = rest_move_list |> List.delete_at(0)
 
-        # 自玉は、１手指すと、相手玉になる
-        opponent_king_pc = KifuwarabeWcsc33.CLI.Mappings.ToPiece.from_turn_and_piece_type(pos.turn, :k)
-        opponent_king_sq = pos.location_of_kings[opponent_king_pc]
-        # IO.puts("[think choice] turned. opponent_king_sq:#{opponent_king_sq}")
+        # 自玉
+        friend_king_pc = KifuwarabeWcsc33.CLI.Mappings.ToPiece.from_turn_and_piece_type(pos.turn, :k)
+        friend_king_sq = pos.location_of_kings[friend_king_pc]
+        # IO.puts("[think choice] friend_king_sq:#{friend_king_sq}")
 
         # 指す前の自玉がいないケース（詰将棋でもやっているのだろう）ではない前提として、存在判定を省く
 
@@ -44,7 +44,7 @@ defmodule KifuwarabeWcsc33.CLI.Routes.MoveElimination do
         #  """ <> KifuwarabeWcsc33.CLI.Views.Position.stringify(pos))
 
         {cleanup_move_list} =
-          if pos |> KifuwarabeWcsc33.CLI.Thesis.IsMated.is_mated?(opponent_king_sq) do
+          if pos |> KifuwarabeWcsc33.CLI.Thesis.IsMated.is_mated?(friend_king_sq) do
             #
             # 自殺手だ
             #

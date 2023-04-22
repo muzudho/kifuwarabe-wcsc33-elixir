@@ -86,17 +86,17 @@ defmodule KifuwarabeWcsc33.CLI.Routes.Think do
 
       else
 
-        # 自玉は、１手指すと、相手玉になる
-        opponent_king_pc = KifuwarabeWcsc33.CLI.Mappings.ToPiece.from_turn_and_piece_type(pos.turn, :k)
-        opponent_king_sq = pos.location_of_kings[opponent_king_pc]
+        # 自玉
+        friend_king_pc = KifuwarabeWcsc33.CLI.Mappings.ToPiece.from_turn_and_piece_type(pos.turn, :k)
+        friend_king_sq = pos.location_of_kings[friend_king_pc]
 
         {move_list, pos} =
-          if opponent_king_sq == nil do
+          if friend_king_sq == nil do
             # 指す前の自玉がいないケース（詰将棋でもやっているのだろう）では、自殺手判定はやらない
-            IO.puts("[think choice] there is not king")
+            IO.puts("[think choice] there is not friend king")
             {move_list, pos}
           else
-            IO.puts("[think choice] there is king")
+            IO.puts("[think choice] there is friend king. sq:#{friend_king_sq} pc:#{friend_king_pc}")
             #
             # 自殺手の除去ルーチン
             # =================
