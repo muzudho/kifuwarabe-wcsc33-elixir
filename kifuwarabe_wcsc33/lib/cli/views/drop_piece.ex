@@ -1,5 +1,5 @@
 defmodule KifuwarabeWcsc33.CLI.Views.DropPiece do
-  def as_code(piece_type) do
+  def as_code_filter_hand(piece_type) do
       case piece_type do
         # キング（King；玉）. 対局中は使わない
         :k -> "K*"
