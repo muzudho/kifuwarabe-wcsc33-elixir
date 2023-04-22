@@ -22,21 +22,21 @@ defmodule KifuwarabeWcsc33.CLI.Routes.MoveElimination do
         move = hd(rest_move_list)
         rest_move_list = rest_move_list |> List.delete_at(0)
 
-        # 自玉
-        friend_turn = pos.turn
-        friend_king_pc = KifuwarabeWcsc33.CLI.Mappings.ToPiece.from_turn_and_piece_type(friend_turn, :k)
-        friend_king_sq = pos.location_of_kings[friend_king_pc]
-        IO.puts("[move_elimination reduce_suicide_move] friend_king sq:#{friend_king_sq} pc:#{friend_king_pc}")
-
         # 指す前の自玉がいないケース（詰将棋でもやっているのだろう）ではない前提として、存在判定を省く
 
         # とりあえず、１手指してみる
         move_code = KifuwarabeWcsc33.CLI.Views.Move.as_code(move)
         pos = pos |> KifuwarabeWcsc33.CLI.Routes.DoMove.do_it(move)
+
         #
         # 手番がひっくり返ったことに注意
-        # ~~~~~~~~~~~~~~~~~~~~~~~~~~
+        # ==========================
         #
+        # - 移動後の自玉
+        #
+        opponent_king_pc = KifuwarabeWcsc33.CLI.Mappings.ToPiece.from_turn_and_piece_type(pos.opponent_turn, :k)
+        opponent_king_sq = pos.location_of_kings[opponent_king_pc]
+        # IO.puts("[move_elimination reduce_suicide_move] king sq:#{opponent_king_sq} pc:#{opponent_king_pc}")
 
         #IO.puts(
         #  """
@@ -46,18 +46,18 @@ defmodule KifuwarabeWcsc33.CLI.Routes.MoveElimination do
 
         {cleanup_move_list} =
           # 自玉は今 opponent_turn 側
-          if pos |> KifuwarabeWcsc33.CLI.Thesis.IsMated.is_mated?(friend_turn, friend_king_sq) do
+          if pos |> KifuwarabeWcsc33.CLI.Thesis.IsMated.is_mated?(pos.opponent_turn, opponent_king_sq) do
             #
             # 自殺手だ
             #
-            IO.puts("[think choice] Undo. Because #{move_code} is suicide move. friend_turn:#{friend_turn} friend_king_sq:#{friend_king_sq}")
+            IO.puts("[think choice] Undo. Because #{move_code} is suicide move. king turn:#{pos.opponent_turn} pc:#{opponent_king_pc} sq:#{opponent_king_sq}")
 
             {cleanup_move_list}
           else
             #
             # 自殺手ではない手だ
             #
-            IO.puts("[think choice] Ok. Because #{move_code} is no suicide move. friend_turn:#{friend_turn} friend_king_sq:#{friend_king_sq}")
+            IO.puts("[think choice] Ok. Because #{move_code} is no suicide move. king turn:#{pos.opponent_turn} pc:#{opponent_king_pc} sq:#{opponent_king_sq}")
             cleanup_move_list = cleanup_move_list ++ [move]
 
             {cleanup_move_list}
@@ -65,6 +65,12 @@ defmodule KifuwarabeWcsc33.CLI.Routes.MoveElimination do
 
         # 手を戻す
         pos = pos |> KifuwarabeWcsc33.CLI.Routes.UndoMove.do_it()
+
+        #
+        # ひっくり返っていた手番が元に戻っていることに注意
+        # =========================================
+        #
+
         # 盤表示
         #IO.puts(
         #  """
