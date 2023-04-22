@@ -6,7 +6,7 @@ defmodule KifuwarabeWcsc33.CLI.Views.Piece do
 
   ## 引数
 
-    * `pt` - ピース・タイプ（Piece Type；駒種類）の文字列。例参照。この関数では、スペース（Space；空きマス）は判定しません
+    * `pc_text` - ピース（PieCe；先後付きの駒種類）の文字列。例参照。この関数では、スペース（Space；空きマス）は判定しません
 
   ## 例
 
@@ -14,8 +14,8 @@ defmodule KifuwarabeWcsc33.CLI.Views.Piece do
     "n"
     ...
   """
-  def as_code(pt) do
-    case pt do
+  def as_code(pc_text) do
+    case pc_text do
       #
       # ▲せんて（Sente；先手） or したて（Shitate；下手）
       # ============================================
@@ -92,7 +92,7 @@ defmodule KifuwarabeWcsc33.CLI.Views.Piece do
       # それ以外はエラー
       # ==============
       #
-      _ -> raise "unexpected pt:#{pt}"
+      _ -> raise "unexpected pieec text:#{pc_text}"
     end
   end
 end
