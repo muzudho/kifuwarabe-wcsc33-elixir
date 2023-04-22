@@ -119,7 +119,8 @@ defmodule KifuwarabeWcsc33.CLI.Helpers.PositionParser do
         # 指し手読取と、局面更新
         {rest, pos} = rest |> parse_moves_string_and_update_position(pos)
 
-        # IO.inspect(moves, label: "parse(12) The move_list is")
+        # IO.inspect(pos.moves, label: "parse(12) The Moves is")
+        # IO.inspect(pos.captured_pieces, label: "parse(12) The Captured pieces is")
 
         {rest, pos}
       else

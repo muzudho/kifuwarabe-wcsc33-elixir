@@ -18,55 +18,70 @@ defmodule KifuwarabeWcsc33.CLI.Routes.DoMove do
   
   """
   def do_it(pos, move) do
-    pos =
+    {pos, captured_pt} =
       if move.drop_piece_type != nil do
+        #
+        # 打った
+        # =====
+        #
         # 打つ駒と、減った枚数
         drop_piece = KifuwarabeWcsc33.CLI.Mappings.ToPiece.from_turn_and_piece_type(pos.turn, move.drop_piece_type)
         num = pos.hand_pieces[drop_piece] - 1
         # 局面更新
-        %{ pos |
-          # 将棋盤更新
-          board: %{ pos.board |
-            # 持ち駒を置く
-            move.destination => drop_piece
-          },
-          # 駒台更新
-          hand_pieces: %{ pos.hand_pieces |
-            # 枚数を１減らす
-            drop_piece => num
+        pos =
+          %{ pos |
+            # 将棋盤更新
+            board: %{ pos.board |
+              # 持ち駒を置く
+              move.destination => drop_piece
+            },
+            # 駒台更新
+            hand_pieces: %{ pos.hand_pieces |
+              # 枚数を１減らす
+              drop_piece => num
+            }
           }
-        }
 
+        {pos, nil}
       else
+        #
+        # 盤上の駒を動かした
+        # ===============
+        #
+
         # （移動先にある）ピース（PieCe；先後付きの駒種類）。無ければ空マス
         target_pc = pos.board[move.destination]
 
-        move =
-          # 駒があれば取る
+        # 取ったピース・タイプ（Piece Type；駒の種類）
+        captured_pt =
           if target_pc != :sp do
-            # 取ったピース・タイプ（Piece Type；駒の種類）
-            captured_pt = KifuwarabeWcsc33.CLI.Mappings.ToPieceType.from_piece(target_pc)
-            # 指し手更新
-            %{ move | captured: captured_pt}
+            #
+            # 駒を取った
+            # =========
+            #
+            KifuwarabeWcsc33.CLI.Mappings.ToPieceType.from_piece(target_pc)
           else
-            move
+            nil
           end
 
         # 局面更新
-        %{ pos |
-          # 将棋盤更新
-          board: %{ pos.board |
-            # 移動元マスは、空マスになる
-            move.source => :sp,
-            # 移動先マスへ、移動元マスの駒を置く
-            move.destination => if move.promote? do
-              # TODO （成るなら）成る
-              KifuwarabeWcsc33.CLI.Mappings.ToPiece.promote(pos.board[move.source])
-            else
-              pos.board[move.source]
-            end
+        pos =
+          %{ pos |
+            # 将棋盤更新
+            board: %{ pos.board |
+              # 移動元マスは、空マスになる
+              move.source => :sp,
+              # 移動先マスへ、移動元マスの駒を置く
+              move.destination => if move.promote? do
+                # TODO （成るなら）成る
+                KifuwarabeWcsc33.CLI.Mappings.ToPiece.promote(pos.board[move.source])
+              else
+                pos.board[move.source]
+              end
+            }
           }
-        }
+
+        {pos, captured_pt}
 
       end
 
@@ -74,7 +89,8 @@ defmodule KifuwarabeWcsc33.CLI.Routes.DoMove do
     pos = %{pos |
             turn: KifuwarabeWcsc33.CLI.Mappings.ToTurn.flip(pos.turn),
             opponent_turn: pos.turn,
-            moves: pos.moves ++ [move]}
+            moves: pos.moves ++ [move],
+            captured_pieces: pos.captured_pieces ++ [captured_pt]}
 
     pos
   end

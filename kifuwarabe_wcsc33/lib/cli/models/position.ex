@@ -150,7 +150,9 @@ defmodule KifuwarabeWcsc33.CLI.Models.Position do
               :p2 => 0
             },
             # ムーブズ（Moves；指し手のリスト）
-            moves: []
+            moves: [],
+            # キャプチャード・ピースズ（Captured pieces；取った駒のリスト）
+            captured_pieces: []
 
   # Elixir のリスト、リンクドリストだ、ランダム・アクセス遅そう、使いたくねー
   # defstruct piece_list:

@@ -8,11 +8,11 @@ defmodule KifuwarabeWcsc33.CLI.Views.Position do
 
   """
   def stringify(pos) do
-    header = pos|>stringify_header()
-    hand2 = pos|>    stringify_hand2()
-    body = pos|>    stringify_body()
-    hand1 = pos |>     stringify_hand1()
-    moves = pos |>    stringify_moves()
+    header = pos |> stringify_header()
+    hand2 = pos |> stringify_hand2()
+    body = pos |> stringify_body()
+    hand1 = pos |> stringify_hand1()
+    moves = pos |> stringify_moves()
 
     """
 
@@ -384,7 +384,7 @@ defmodule KifuwarabeWcsc33.CLI.Views.Position do
   # 棋譜の表示
   defp stringify_moves(pos) do
     # IO.inspect(pos.moves)
-    move_list = Enum.map(pos.moves, fn move -> " #{KifuwarabeWcsc33.CLI.Views.Move.as_code(move)}" end)
+    move_list = Enum.map(pos.moves, fn (move) -> " #{KifuwarabeWcsc33.CLI.Views.Move.as_code(move)}" end)
     # IO.inspect(move_list)
 
     move_list_as_str = move_list |> Enum.join()

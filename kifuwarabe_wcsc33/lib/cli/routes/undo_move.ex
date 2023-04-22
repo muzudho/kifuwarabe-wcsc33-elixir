@@ -27,6 +27,7 @@ defmodule KifuwarabeWcsc33.CLI.Routes.UndoMove do
 
     # 最後の指し手を取得（リンクドリストなので効率が悪い）
     move = pos.moves |> List.last()
+    captured_pt = pos.captured_pieces |> List.last()
 
     # 局面更新
     #
@@ -35,7 +36,8 @@ defmodule KifuwarabeWcsc33.CLI.Routes.UndoMove do
     pos = %{pos |
             turn: KifuwarabeWcsc33.CLI.Mappings.ToTurn.flip(pos.turn),
             opponent_turn: pos.turn,
-            moves: pos.moves |> List.delete_at(last_index)
+            moves: pos.moves |> List.delete_at(last_index),
+            captured_pieces: pos.captured_pieces |> List.delete_at(last_index)
           }
 
     # 更新された局面を返す
@@ -72,9 +74,9 @@ defmodule KifuwarabeWcsc33.CLI.Routes.UndoMove do
 
           # 移動先マスは、取った駒（なければ空マス）になる
           move.destination =>
-            if move.captured != nil do
-              # 駒種類に先後を付ける
-              KifuwarabeWcsc33.CLI.Mappings.ToPiece.from_turn_and_piece_type(pos.opponent_turn, move.captured)
+            if captured_pt != nil do
+              # 取った駒種類に先後を付ける
+              KifuwarabeWcsc33.CLI.Mappings.ToPiece.from_turn_and_piece_type(pos.opponent_turn, captured_pt)
             else
               :sp
             end
