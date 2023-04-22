@@ -1,4 +1,4 @@
-defmodule KifuwarabeWcsc33.CLI.Routes.MoveElimination do
+defmodule KifuwarabeWcsc33.CLI.MoveList.ReduceSuicideMove do
 
   @doc """
 
@@ -15,7 +15,7 @@ defmodule KifuwarabeWcsc33.CLI.Routes.MoveElimination do
     1. `pos` - ポジション（Position；局面）
 
   """
-  def reduce_suicide_move(move_list, pos) do
+  def do_it(move_list, pos) do
     # 自玉
     friend_king_pc = KifuwarabeWcsc33.CLI.Mappings.ToPiece.from_turn_and_piece_type(pos.turn, :k)
     friend_king_sq = pos.location_of_kings[friend_king_pc]

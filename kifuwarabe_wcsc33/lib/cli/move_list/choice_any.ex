@@ -1,4 +1,4 @@
-defmodule KifuwarabeWcsc33.CLI.Routes.MoveChoice do
+defmodule KifuwarabeWcsc33.CLI.MoveList.ChoiceAny do
   @moduledoc """
     指し手のリストから１手選ぶ
   """
@@ -18,12 +18,12 @@ defmodule KifuwarabeWcsc33.CLI.Routes.MoveChoice do
   # 1. ムーブ・リスト（Move List；指し手のリスト）
   # 2. ベスト・ムーブ（Best Move；最善手）
   #
-  def choice_any(pos, move_list) do
+  def do_it(pos, move_list) do
 
     # {pos, move_list, best_move}
     if move_list |> length() < 1 do
       # 合法手が無ければ計算停止
-      IO.puts("[think choice_any] empty move list. stop")
+      IO.puts("[ChoiceAny do_it] empty move list. stop")
 
       {pos, move_list, nil}
     else
@@ -38,13 +38,13 @@ defmodule KifuwarabeWcsc33.CLI.Routes.MoveChoice do
 
       if best_move.destination == nil do
         # 投了なら、再帰
-        IO.puts("[think choice_any] no destination. it is a resign")
+        IO.puts("[ChoiceAny do_it] no destination. it is a resign")
 
         #
         # Recursive
         # =========
         #
-        choice_any(pos, move_list)
+        do_it(pos, move_list)
 
       else
         ## TODO もし、歩を打ったときで、かつ、そこが相手の玉頭なら、打ち歩詰めチェックをしたい

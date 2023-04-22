@@ -31,7 +31,7 @@ defmodule KifuwarabeWcsc33.CLI.Routes.Think do
     # 自殺手を除去したい
     # ================
     #
-    {move_list, pos} = KifuwarabeWcsc33.CLI.Routes.MoveElimination.reduce_suicide_move(move_list, pos)
+    {move_list, pos} = KifuwarabeWcsc33.CLI.MoveList.ReduceSuicideMove.do_it(move_list, pos)
 
     #
     # 指し手一覧
@@ -53,7 +53,7 @@ defmodule KifuwarabeWcsc33.CLI.Routes.Think do
     #   """ <> KifuwarabeWcsc33.CLI.Views.Position.stringify(pos))
 
     # 最善手を選ぶ（投了でなければ、詰んでいないということ）
-    {_pos, _move_list, best_move} = pos |> KifuwarabeWcsc33.CLI.Routes.MoveChoice.choice_any(move_list)
+    {_pos, _move_list, best_move} = pos |> KifuwarabeWcsc33.CLI.MoveList.ChoiceAny.do_it(move_list)
 
     best_move =
       if best_move == nil do
