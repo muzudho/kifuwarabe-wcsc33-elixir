@@ -48,7 +48,7 @@ defmodule KifuwarabeWcsc33.CLI.Routes.MoveElimination do
             #
             # 自殺手だ
             #
-            IO.puts("[think choice] this is suicide move. undo")
+            IO.puts("[think choice] #{move_code} is suicide move. undo")
 
             {cleanup_move_list}
           else

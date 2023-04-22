@@ -73,5 +73,9 @@ position sfen 7lk/7l1/7lK/7r1/9/9/9/9/9 b Pr2b4g4s4nl17p 1 moves P*4g B*5e
 # 王手放置
 
 ```plaintext
-1g1G4b/1s2+N+P3/+Pp3GNkl/2p1s1rp1/lPPP+bS2p/n3g3P/p2l4L/6+s2/3+n1PKP1 b R4Pp 1
+position sfen 1g1G4b/1s2+N+P3/+Pp3GNkl/2p1s1rp1/lPPP+bS2p/n3g3P/p2l4L/6+s2/3+n1PKP1 b R4Pp 1
+```
+
+```plaintext
+position sfen lns1+B2n1/2gk2sbl/p1p6/3r3pp/1p2g2PP/1SP1ppP2/PP1RPPG1N/L2P5/1N1KG1S1L w Pp 1
 ```

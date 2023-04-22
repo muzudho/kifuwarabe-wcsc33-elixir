@@ -136,6 +136,14 @@ defmodule KifuwarabeWcsc33.CLI.Helpers.PositionParser do
 
     # IO.puts("parse(13) rest:#{rest}")
 
+    # 玉の場所は覚えておきたい
+    pos = %{ pos |
+      location_of_kings: %{ pos.location_of_kings |
+        :k1 => KifuwarabeWcsc33.CLI.Finder.Square.find_king_on_board(pos, :sente),
+        :k2 => KifuwarabeWcsc33.CLI.Finder.Square.find_king_on_board(pos, :gote),
+      }
+    }
+
     pos
   end
 
@@ -301,8 +309,8 @@ defmodule KifuwarabeWcsc33.CLI.Helpers.PositionParser do
             # それ以外
             true ->
               piece = KifuwarabeWcsc33.CLI.Views.Piece.from_code(first_char)
-
               board = Map.merge(board, %{sq => piece})
+
               # 右列へ１つ移動（-10）
               sq = sq - 10
 
