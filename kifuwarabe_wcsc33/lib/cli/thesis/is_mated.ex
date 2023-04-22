@@ -18,7 +18,7 @@ defmodule KifuwarabeWcsc33.CLI.Thesis.IsMated do
   #
   #   論理値型は関数名の末尾に ? を付ける？
   #
-  def is_mated?(pos, src_sq) do
+  def is_mated?(pos, king_turn, src_sq) do
 
     #
     # 利きに飛び込むか？　先手視点で定義しろだぜ
@@ -492,45 +492,45 @@ defmodule KifuwarabeWcsc33.CLI.Thesis.IsMated do
         # 北側のマス
         # ∧
         # │
-        pos |> adjacent(src_sq, :north_of, is_effect_in_north?, true, is_effect_in_north_2?) -> true
+        pos |> adjacent(king_turn, src_sq, :north_of, is_effect_in_north?, true, is_effect_in_north_2?) -> true
         # 北東側のマス
         # 　─┐
         # ／
-        pos |> adjacent(src_sq, :north_east_of, is_effect_in_north_east?, true, is_effect_in_north_east_2?) -> true
+        pos |> adjacent(king_turn, src_sq, :north_east_of, is_effect_in_north_east?, true, is_effect_in_north_east_2?) -> true
         # 東側のマス
         #
         # ──＞
-        pos |> adjacent(src_sq, :east_of, is_effect_in_east?, true, is_effect_in_east_2?) -> true
+        pos |> adjacent(king_turn, src_sq, :east_of, is_effect_in_east?, true, is_effect_in_east_2?) -> true
         # 南東側のマス
         # ＼
         # 　─┘
-        pos |> adjacent(src_sq, :south_east_of, is_effect_in_south_east?, true, is_effect_in_south_east_2?) -> true
+        pos |> adjacent(king_turn, src_sq, :south_east_of, is_effect_in_south_east?, true, is_effect_in_south_east_2?) -> true
         # 南側のマス
         # │
         # Ｖ
-        pos |> adjacent(src_sq, :south_of, is_effect_in_south?, true, is_effect_in_south_2?) -> true
+        pos |> adjacent(king_turn, src_sq, :south_of, is_effect_in_south?, true, is_effect_in_south_2?) -> true
         # 南西側のマス
         # 　／
         # └─
-        pos |> adjacent(src_sq, :south_west_of, is_effect_in_south_east?, true, is_effect_in_south_east_2?) -> true
+        pos |> adjacent(king_turn, src_sq, :south_west_of, is_effect_in_south_east?, true, is_effect_in_south_east_2?) -> true
         # 西側のマス
         #
         # ＜──
-        pos |> adjacent(src_sq, :west_of, is_effect_in_east?, true, is_effect_in_east_2?) -> true
+        pos |> adjacent(king_turn, src_sq, :west_of, is_effect_in_east?, true, is_effect_in_east_2?) -> true
         # 北西側のマス
         # ┌─
         # 　＼
-        pos |> adjacent(src_sq, :north_west_of, is_effect_in_north_east?, true, is_effect_in_north_east_2?) -> true
+        pos |> adjacent(king_turn, src_sq, :north_west_of, is_effect_in_north_east?, true, is_effect_in_north_east_2?) -> true
         # 北北東側のマス
         # 　─┐
         # ／
         # │
-        pos |> adjacent(src_sq, :north_north_east_of, is_effect_in_north_north_east?, false, nil) -> true
+        pos |> adjacent(king_turn, src_sq, :north_north_east_of, is_effect_in_north_north_east?, false, nil) -> true
         # 北北西側のマス
         # ┌─
         # 　＼
         # 　　│
-        pos |> adjacent(src_sq, :north_north_west_of, is_effect_in_north_north_east?, false, nil) -> true
+        pos |> adjacent(king_turn, src_sq, :north_north_west_of, is_effect_in_north_north_east?, false, nil) -> true
         #
         # その他
         true -> false
@@ -543,9 +543,9 @@ defmodule KifuwarabeWcsc33.CLI.Thesis.IsMated do
   # 指定の方向のマスを調べていく
   # ========================
   #
-  defp adjacent(pos, src_sq, direction_of, is_effect?, is_long_effect, is_effect_2?) do
+  defp adjacent(pos, king_turn, src_sq, direction_of, is_effect?, is_long_effect, is_effect_2?) do
     # 対象のマスが（１手指してる想定なので、反対側が手番）
-    target_sq = KifuwarabeWcsc33.CLI.Mappings.ToDestination.from_turn_and_source(pos.opponent_turn, src_sq, direction_of)
+    target_sq = KifuwarabeWcsc33.CLI.Mappings.ToDestination.from_turn_and_source(king_turn, src_sq, direction_of)
     # IO.write("[is_suicide_move adjacent] target_sq:#{target_sq}")
 
     is_suicide_move =
@@ -578,6 +578,7 @@ defmodule KifuwarabeWcsc33.CLI.Thesis.IsMated do
           if is_long_effect do
             # （空きマスなら）長い利き
             pos |> far_to(
+              king_turn,
               target_sq,
               direction_of,
               is_effect_2?)
@@ -601,9 +602,9 @@ defmodule KifuwarabeWcsc33.CLI.Thesis.IsMated do
   # 長い利きのマス
   # ============
   #
-  defp far_to(pos, src_sq, direction_of, is_effect_2?) do
+  defp far_to(pos, king_turn, src_sq, direction_of, is_effect_2?) do
     # 対象のマスが（１手指してる想定なので、反対側が手番）
-    target_sq = KifuwarabeWcsc33.CLI.Mappings.ToDestination.from_turn_and_source(pos.opponent_turn, src_sq, direction_of)
+    target_sq = KifuwarabeWcsc33.CLI.Mappings.ToDestination.from_turn_and_source(king_turn, src_sq, direction_of)
     # IO.write("[is_suicide_move far_to] target_sq:#{target_sq}")
 
     is_suicide_move =
@@ -636,6 +637,7 @@ defmodule KifuwarabeWcsc33.CLI.Thesis.IsMated do
         else
           # （空きマスなら）長い利き
           pos |> far_to(
+            king_turn,
             target_sq,
             direction_of,
             is_effect_2?)

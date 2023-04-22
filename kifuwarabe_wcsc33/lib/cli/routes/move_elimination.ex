@@ -15,7 +15,7 @@ defmodule KifuwarabeWcsc33.CLI.Routes.MoveElimination do
     {rest_move_list, pos, cleanup_move_list} =
       if rest_move_list |> length() < 1 do
         # 合法手が無ければ投了
-        IO.puts("[think choice] empty move list")
+        IO.puts("[move_elimination reduce_suicide_move] empty move list")
         {rest_move_list, pos, cleanup_move_list}
       else
         # 合法手が１つ以上あれば、先頭の手を選ぶ。先頭の手は削除する
@@ -23,9 +23,10 @@ defmodule KifuwarabeWcsc33.CLI.Routes.MoveElimination do
         rest_move_list = rest_move_list |> List.delete_at(0)
 
         # 自玉
-        friend_king_pc = KifuwarabeWcsc33.CLI.Mappings.ToPiece.from_turn_and_piece_type(pos.turn, :k)
+        friend_turn = pos.turn
+        friend_king_pc = KifuwarabeWcsc33.CLI.Mappings.ToPiece.from_turn_and_piece_type(friend_turn, :k)
         friend_king_sq = pos.location_of_kings[friend_king_pc]
-        # IO.puts("[think choice] friend_king_sq:#{friend_king_sq}")
+        IO.puts("[move_elimination reduce_suicide_move] friend_king sq:#{friend_king_sq} pc:#{friend_king_pc}")
 
         # 指す前の自玉がいないケース（詰将棋でもやっているのだろう）ではない前提として、存在判定を省く
 
@@ -44,7 +45,8 @@ defmodule KifuwarabeWcsc33.CLI.Routes.MoveElimination do
         #  """ <> KifuwarabeWcsc33.CLI.Views.Position.stringify(pos))
 
         {cleanup_move_list} =
-          if pos |> KifuwarabeWcsc33.CLI.Thesis.IsMated.is_mated?(friend_king_sq) do
+          # 自玉は今 opponent_turn 側
+          if pos |> KifuwarabeWcsc33.CLI.Thesis.IsMated.is_mated?(friend_turn, friend_king_sq) do
             #
             # 自殺手だ
             #
