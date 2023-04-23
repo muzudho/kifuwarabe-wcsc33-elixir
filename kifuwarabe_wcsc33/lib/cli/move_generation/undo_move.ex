@@ -37,6 +37,7 @@ defmodule KifuwarabeWcsc33.CLI.MoveGeneration.UndoMove do
     pos = %{pos |
             turn: KifuwarabeWcsc33.CLI.Mappings.ToTurn.flip(pos.turn),
             opponent_turn: pos.turn,
+            # リストの最後の要素を削除。リストのサイズを揃える
             moves: pos.moves |> List.delete_at(last_index),
             captured_piece_types: pos.captured_piece_types |> List.delete_at(last_index)
           }

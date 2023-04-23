@@ -18,7 +18,7 @@ defmodule KifuwarabeWcsc33.CLI.USI.Go do
   def do_it(pos) do
 
     # 探索
-    {_pos, best_move, _value} = KifuwarabeWcsc33.CLI.Search.Alpha.do_it(pos)
+    {pos, best_move, _value} = KifuwarabeWcsc33.CLI.Search.Alpha.do_it(pos)
 
     best_move =
       if best_move == nil do
@@ -28,7 +28,7 @@ defmodule KifuwarabeWcsc33.CLI.USI.Go do
         best_move
       end
 
-    best_move
+    {pos, best_move}
   end
 
 end

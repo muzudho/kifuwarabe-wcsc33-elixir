@@ -79,3 +79,14 @@ position sfen 1g1G4b/1s2+N+P3/+Pp3GNkl/2p1s1rp1/lPPP+bS2p/n3g3P/p2l4L/6+s2/3+n1P
 ```plaintext
 position sfen lns1+B2n1/2gk2sbl/p1p6/3r3pp/1p2g2PP/1SP1ppP2/PP1RPPG1N/L2P5/1N1KG1S1L w Pp 1
 ```
+
+# 異常終了_20230423
+
+👇 サーチ部で強制終了 ----> サーチの Undo move 忘れ  
+
+```plaintext
+position startpos moves 7i7h 3c3d 6i7i 2b7g+ 5i6i 7g6g
+
+# このあと
+go
+```

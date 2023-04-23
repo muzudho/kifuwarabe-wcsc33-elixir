@@ -17,13 +17,19 @@ defmodule KifuwarabeWcsc33.CLI.MoveGeneration.DoMove do
     0. ポジション（Position；局面）
   
   """
-  def do_it(pos, move) do
+  def do_it(pos, move, is_debug \\ false) do
+
+    if is_debug do
+      IO.puts("[do_move] Debug mode.")
+    end
+
     {pos, captured_pt} =
       if move.drop_piece_type != nil do
         #
         # 打った
         # =====
         #
+
         # 打つ駒と、減った枚数
         drop_piece = KifuwarabeWcsc33.CLI.Mappings.ToPiece.from_turn_and_piece_type(pos.turn, move.drop_piece_type)
         num = pos.hand_pieces[drop_piece] - 1
@@ -49,9 +55,16 @@ defmodule KifuwarabeWcsc33.CLI.MoveGeneration.DoMove do
         # ===============
         #
 
+        if is_debug do
+          IO.puts("[do_move] move.destination: #{move.destination} square.")
+        end
+
         # （移動先にある）ピース（PieCe；先後付きの駒種類）。無ければ空マス
         target_pc = pos.board[move.destination]
-        # IO.puts("[do_move] move.destination #{move.destination} square.")
+
+        if is_debug do
+          IO.puts("[do_move] target_pc: #{target_pc} piece.")
+        end
 
         # * `captured_pt` - 取ったピース・タイプ（Piece Type；駒の種類）
         {pos, captured_pt} =
@@ -63,13 +76,18 @@ defmodule KifuwarabeWcsc33.CLI.MoveGeneration.DoMove do
 
             # 取った駒種類（成りの情報を含む）
             captured_pt = KifuwarabeWcsc33.CLI.Mappings.ToPieceType.from_piece(target_pc)
+            
             # 持ち駒種類（先後付き）（成りの情報を含まない）
             hand_pc = KifuwarabeWcsc33.CLI.Mappings.ToPiece.from_captured_piece_to_hand(target_pc)
 
-            # 局面更新
-            # IO.puts("[do_move] Captured #{target_pc} piece to #{hand_pc} piece.")
-            # IO.puts("[do_move] How many #{hand_pc} pieces? It is #{pos.hand_pieces[hand_pc]} pieces.")
+            if is_debug do
+              IO.puts("[do_move] Captured #{target_pc} piece to #{hand_pc} piece.")
+              IO.puts("[do_move] How many #{hand_pc} pieces? It is #{pos.hand_pieces[hand_pc]} pieces.")
+            end
+
             num = pos.hand_pieces[hand_pc] + 1
+
+            # 局面更新
             pos = %{ pos |
                     hand_pieces: %{ pos.hand_pieces |
                                     hand_pc => num
@@ -79,22 +97,61 @@ defmodule KifuwarabeWcsc33.CLI.MoveGeneration.DoMove do
             {pos, captured_pt}
 
           else
+
+            if is_debug do
+              IO.puts("[do_move] not captured piece.")
+            end
+
             {pos, nil}
           end
 
+        if is_debug do
+          IO.puts("[do_move] move.source: #{move.source} square.")
+        end
+
+        #
+        # 動かす駒
+        # =======
+        #
+        piece_before_play = pos.board[move.source]
+
+        if is_debug do
+          IO.puts("[do_move] piece_before_play: #{piece_before_play} piece.")
+          if piece_before_play == :sp do
+            raise "[do_move] can not move space. piece is :sp"
+          end
+        end
+
+        #
         # 動かした駒が玉なら
-        played_piece = pos.board[move.source]
+        # ===============
+        #
         pos =
-          if played_piece == :k1 or played_piece == :k2 do
+          if piece_before_play == :k1 or piece_before_play == :k2 do
             # 玉のいるマス更新
             %{ pos |
               location_of_kings: %{ pos.location_of_kings |
-                played_piece => move.destination
+                piece_before_play => move.destination
               }
             }
           else
             pos
           end
+
+        if is_debug do
+          IO.puts("[do_move] king_sq ^:#{pos.location_of_kings[:k1]} v:#{pos.location_of_kings[:k2]}")
+        end
+
+        piece_after_play = if move.promote? do
+            # （成るなら）成る
+            KifuwarabeWcsc33.CLI.Mappings.ToPiece.promote(piece_before_play)
+          else
+            piece_before_play
+          end
+
+        if is_debug do
+          IO.puts("[do_move] piece_after_play: #{piece_after_play} piece.")
+        end
 
         # 局面更新
         pos =
@@ -104,12 +161,7 @@ defmodule KifuwarabeWcsc33.CLI.MoveGeneration.DoMove do
               # 移動元マスは、空マスになる
               move.source => :sp,
               # 移動先マスへ、移動元マスの駒を置く
-              move.destination => if move.promote? do
-                # TODO （成るなら）成る
-                KifuwarabeWcsc33.CLI.Mappings.ToPiece.promote(played_piece)
-              else
-                pos.board[move.source]
-              end
+              move.destination => piece_after_play
             }
           }
 
@@ -121,6 +173,7 @@ defmodule KifuwarabeWcsc33.CLI.MoveGeneration.DoMove do
     pos = %{pos |
             turn: KifuwarabeWcsc33.CLI.Mappings.ToTurn.flip(pos.turn),
             opponent_turn: pos.turn,
+            # リストのサイズを合わせたいので、 captured_piece_types にはニルでも入れる
             moves: pos.moves ++ [move],
             captured_piece_types: pos.captured_piece_types ++ [captured_pt]}
 

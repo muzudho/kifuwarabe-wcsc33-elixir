@@ -41,6 +41,10 @@ defmodule KifuwarabeWcsc33.CLI.Search.Alpha do
     # =========
     #
 
+    # IO.puts("[Think go] BELOW, MOVE LIST")
+    # # TODO 消す。盤表示
+    # IO.puts(KifuwarabeWcsc33.CLI.Views.Position.stringify(pos))
+
     move_list |> Enum.map(fn(move) ->
         move_code = KifuwarabeWcsc33.CLI.Views.Move.as_code(move)
         IO.puts("[Think go] move list: (#{move_code})")
@@ -68,7 +72,7 @@ defmodule KifuwarabeWcsc33.CLI.Search.Alpha do
   # ## Parameters
   #
   # * `pos` - ポジション（Position；局面）
-  # * `move_list` - ムーブ・リスト（Move List；指し手のリスト）
+  # * `[move | move_list]` - リストの先頭要素を、ムーブ（Move；指し手）、残りの要素を ムーブ・リスト（Move List；指し手のリスト）とする書き方。レデュース（Reduce；減らす）という技法
   # * `sibling_best_move` - シブリング・ベスト・ムーブ（Sibling Best Move；兄弟局面の中での最善手）
   # * `sibling_best_value` - シブリング・ベスト・バリュー（Sibling Best Value；兄弟局面の中での最高点）
   #
@@ -78,26 +82,20 @@ defmodule KifuwarabeWcsc33.CLI.Search.Alpha do
   # 1. ムーブ・リスト（Move List；指し手のリスト） - 投了は含まない
   # 2. ベスト・ムーブ（Best Move；最善手） - 無ければニル
   #
-  def choice_best(pos, move_list, sibling_best_move \\ nil, sibling_best_value \\ -32768) do
+  def choice_best(pos, [move | move_list], sibling_best_move \\ nil, sibling_best_value \\ -32768) do
 
-    if move_list |> length() < 1 or sibling_best_move != nil do # TODO デバッグ消す
+    if move == nil do
       #
       # Base case
       # =========
       #
-      # - 合法手が無くなったところで停止
+      # - 指し手が無ければ停止
       #
-      IO.puts("[Alpha choice_best] empty move list. stop")
+      IO.puts("[Alpha choice_best] move is nil. stop")
 
       # 再帰の帰り道
       {pos, sibling_best_move, sibling_best_value}
     else
-      #
-      # 指し手のリストの先頭の要素について
-      # =============================
-      #
-      move = hd(move_list)
-      move_list = move_list |> List.delete_at(0)
 
       #
       # とりあえず、１手指してみる
@@ -107,7 +105,27 @@ defmodule KifuwarabeWcsc33.CLI.Search.Alpha do
       #
       move_code = KifuwarabeWcsc33.CLI.Views.Move.as_code(move)
       IO.puts("[Alpha choice_best] move:#{move_code}")
-      pos = pos |> KifuwarabeWcsc33.CLI.MoveGeneration.DoMove.do_it(move)
+
+      # # TODO 消す。盤表示
+      # IO.puts("[Alpha choice_best] Before move")
+      # IO.puts(KifuwarabeWcsc33.CLI.Views.Position.stringify(pos))
+
+      # if move_code |> String.length() > 4 do
+      #   # TODO 成りの手で強制終了したから確かめてみる
+      #   # TODO 消す。盤表示
+      #   IO.puts("[Alpha choice_best] attention!")
+      #   IO.puts(KifuwarabeWcsc33.CLI.Views.Position.stringify(pos))
+      #   IO.puts("[Alpha choice_best] TO DEBUG")
+      # end
+
+      pos = pos |> KifuwarabeWcsc33.CLI.MoveGeneration.DoMove.do_it(move, move_code |> String.length() > 4)
+
+      # if move_code |> String.length() > 4 do
+      #   # TODO 成りの手で強制終了したから確かめてみる
+      #   IO.puts("[Alpha choice_best] promote?")
+      #   # TODO 消す。盤表示
+      #   IO.puts(KifuwarabeWcsc33.CLI.Views.Position.stringify(pos))
+      # end
 
       #
       # 候補手を指した後の局面に、バリュー（Value；局面評価値）を付ける
@@ -121,6 +139,14 @@ defmodule KifuwarabeWcsc33.CLI.Search.Alpha do
       #     この尺度を使う場合、整数を使う（実数を使わない）
       #
       value = - lets_position_value()
+
+      #
+      # 忘れずに、１手戻す
+      # ===============
+      #
+      # - 手番がひっくり返ることに注意
+      #
+      pos = pos |> KifuwarabeWcsc33.CLI.MoveGeneration.UndoMove.do_it()
 
       #
       # アルファー・アップデート
@@ -139,12 +165,24 @@ defmodule KifuwarabeWcsc33.CLI.Search.Alpha do
           {sibling_best_move, sibling_best_value}
         end
 
-      #
-      # Recursive
-      # =========
-      #
-      choice_best(pos, move_list, sibling_best_move, sibling_best_value)
+      if move_list |> length() < 1 do
+        #
+        # Base case
+        # =========
+        #
+        # - 合法手が残ってなければ停止
+        #
+        IO.puts("[Alpha choice_best] empty move list. stop")
 
+        # 再帰の帰り道
+        {pos, sibling_best_move, sibling_best_value}
+      else
+        #
+        # Recursive
+        # =========
+        #
+        choice_best(pos, move_list, sibling_best_move, sibling_best_value)
+      end
     end
   end
 
