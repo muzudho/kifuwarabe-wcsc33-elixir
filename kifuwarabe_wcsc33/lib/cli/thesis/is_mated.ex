@@ -46,13 +46,13 @@ defmodule KifuwarabeWcsc33.CLI.Thesis.IsMated do
           :l -> true
           # ポーン（Pawn；歩）
           :p -> true
-          # 玉は成れません
+          # 成り玉なんて無いぜ
           # :pk
           # It's reasonably a プロモーテッド・ルック（Promoted Rook；成飛）. It's actually ドラゴン（Dragon；竜）
           :pr -> true
           # It's reasonably a プロモーテッド・ビショップ（Promoted Bishop；成角）.  It's actually ホース（Horse；馬）. Ponanza calls ペガサス（Pegasus；天馬）
           :pb -> true
-          # 金は成れません
+          # 裏返った金なんて無いぜ
           # :pg
           # プロモーテッド・シルバー（Promoted Silver；成銀. Or 全 in one letter）
           :ps -> true
@@ -89,13 +89,13 @@ defmodule KifuwarabeWcsc33.CLI.Thesis.IsMated do
           :l -> true
           # ポーン（Pawn；歩）
           :p -> false
-          # 玉は成れません
+          # 成り玉なんて無いぜ
           # :pk
           # It's reasonably a プロモーテッド・ルック（Promoted Rook；成飛）. It's actually ドラゴン（Dragon；竜）
           :pr -> true
           # It's reasonably a プロモーテッド・ビショップ（Promoted Bishop；成角）.  It's actually ホース（Horse；馬）. Ponanza calls ペガサス（Pegasus；天馬）
           :pb -> false
-          # 金は成れません
+          # 裏返った金なんて無いぜ
           # :pg
           # プロモーテッド・シルバー（Promoted Silver；成銀. Or 全 in one letter）
           :ps -> false
@@ -131,13 +131,13 @@ defmodule KifuwarabeWcsc33.CLI.Thesis.IsMated do
           :l -> false
           # ポーン（Pawn；歩）
           :p -> false
-          # 玉は成れません
+          # 成り玉なんて無いぜ
           # :pk
           # It's reasonably a プロモーテッド・ルック（Promoted Rook；成飛）. It's actually ドラゴン（Dragon；竜）
           :pr -> true
           # It's reasonably a プロモーテッド・ビショップ（Promoted Bishop；成角）.  It's actually ホース（Horse；馬）. Ponanza calls ペガサス（Pegasus；天馬）
           :pb -> true
-          # 金は成れません
+          # 裏返った金なんて無いぜ
           # :pg
           # プロモーテッド・シルバー（Promoted Silver；成銀. Or 全 in one letter）
           :ps -> true
@@ -174,13 +174,13 @@ defmodule KifuwarabeWcsc33.CLI.Thesis.IsMated do
           :l -> false
           # ポーン（Pawn；歩）
           :p -> false
-          # 玉は成れません
+          # 成り玉なんて無いぜ
           # :pk
           # It's reasonably a プロモーテッド・ルック（Promoted Rook；成飛）. It's actually ドラゴン（Dragon；竜）
           :pr -> false
           # It's reasonably a プロモーテッド・ビショップ（Promoted Bishop；成角）.  It's actually ホース（Horse；馬）. Ponanza calls ペガサス（Pegasus；天馬）
           :pb -> true
-          # 金は成れません
+          # 裏返った金なんて無いぜ
           # :pg
           # プロモーテッド・シルバー（Promoted Silver；成銀. Or 全 in one letter）
           :ps -> false
@@ -216,13 +216,13 @@ defmodule KifuwarabeWcsc33.CLI.Thesis.IsMated do
           :l -> false
           # ポーン（Pawn；歩）
           :p -> false
-          # 玉は成れません
+          # 成り玉なんて無いぜ
           # :pk
           # It's reasonably a プロモーテッド・ルック（Promoted Rook；成飛）. It's actually ドラゴン（Dragon；竜）
           :pr -> true
           # It's reasonably a プロモーテッド・ビショップ（Promoted Bishop；成角）.  It's actually ホース（Horse；馬）. Ponanza calls ペガサス（Pegasus；天馬）
           :pb -> true
-          # 金は成れません
+          # 裏返った金なんて無いぜ
           # :pg
           # プロモーテッド・シルバー（Promoted Silver；成銀. Or 全 in one letter）
           :ps -> true
@@ -257,13 +257,13 @@ defmodule KifuwarabeWcsc33.CLI.Thesis.IsMated do
           :l -> false
           # ポーン（Pawn；歩）
           :p -> false
-          # 玉は成れません
+          # 成り玉なんて無いぜ
           # :pk
           # It's reasonably a プロモーテッド・ルック（Promoted Rook；成飛）. It's actually ドラゴン（Dragon；竜）
           :pr -> true
           # It's reasonably a プロモーテッド・ビショップ（Promoted Bishop；成角）.  It's actually ホース（Horse；馬）. Ponanza calls ペガサス（Pegasus；天馬）
           :pb -> false
-          # 金は成れません
+          # 裏返った金なんて無いぜ
           # :pg
           # プロモーテッド・シルバー（Promoted Silver；成銀. Or 全 in one letter）
           :ps -> false
@@ -298,13 +298,13 @@ defmodule KifuwarabeWcsc33.CLI.Thesis.IsMated do
           :l -> false
           # ポーン（Pawn；歩）
           :p -> false
-          # 玉は成れません
+          # 成り玉なんて無いぜ
           # :pk
           # It's reasonably a プロモーテッド・ルック（Promoted Rook；成飛）. It's actually ドラゴン（Dragon；竜）
           :pr -> true
           # It's reasonably a プロモーテッド・ビショップ（Promoted Bishop；成角）.  It's actually ホース（Horse；馬）. Ponanza calls ペガサス（Pegasus；天馬）
           :pb -> true
-          # 金は成れません
+          # 裏返った金なんて無いぜ
           # :pg
           # プロモーテッド・シルバー（Promoted Silver；成銀. Or 全 in one letter）
           :ps -> false
@@ -341,13 +341,13 @@ defmodule KifuwarabeWcsc33.CLI.Thesis.IsMated do
           :l -> false
           # ポーン（Pawn；歩）
           :p -> false
-          # 玉は成れません
+          # 成り玉なんて無いぜ
           # :pk
           # It's reasonably a プロモーテッド・ルック（Promoted Rook；成飛）. It's actually ドラゴン（Dragon；竜）
           :pr -> false
           # It's reasonably a プロモーテッド・ビショップ（Promoted Bishop；成角）.  It's actually ホース（Horse；馬）. Ponanza calls ペガサス（Pegasus；天馬）
           :pb -> true
-          # 金は成れません
+          # 裏返った金なんて無いぜ
           # :pg
           # プロモーテッド・シルバー（Promoted Silver；成銀. Or 全 in one letter）
           :ps -> false
@@ -383,13 +383,13 @@ defmodule KifuwarabeWcsc33.CLI.Thesis.IsMated do
           :l -> false
           # ポーン（Pawn；歩）
           :p -> false
-          # 玉は成れません
+          # 成り玉なんて無いぜ
           # :pk
           # It's reasonably a プロモーテッド・ルック（Promoted Rook；成飛）. It's actually ドラゴン（Dragon；竜）
           :pr -> true
           # It's reasonably a プロモーテッド・ビショップ（Promoted Bishop；成角）.  It's actually ホース（Horse；馬）. Ponanza calls ペガサス（Pegasus；天馬）
           :pb -> true
-          # 金は成れません
+          # 裏返った金なんて無いぜ
           # :pg
           # プロモーテッド・シルバー（Promoted Silver；成銀. Or 全 in one letter）
           :ps -> true
@@ -425,13 +425,13 @@ defmodule KifuwarabeWcsc33.CLI.Thesis.IsMated do
           :l -> false
           # ポーン（Pawn；歩）
           :p -> false
-          # 玉は成れません
+          # 成り玉なんて無いぜ
           # :pk
           # It's reasonably a プロモーテッド・ルック（Promoted Rook；成飛）. It's actually ドラゴン（Dragon；竜）
           :pr -> true
           # It's reasonably a プロモーテッド・ビショップ（Promoted Bishop；成角）.  It's actually ホース（Horse；馬）. Ponanza calls ペガサス（Pegasus；天馬）
           :pb -> false
-          # 金は成れません
+          # 裏返った金なんて無いぜ
           # :pg
           # プロモーテッド・シルバー（Promoted Silver；成銀. Or 全 in one letter）
           :ps -> false
@@ -467,13 +467,13 @@ defmodule KifuwarabeWcsc33.CLI.Thesis.IsMated do
           :l -> false
           # ポーン（Pawn；歩）
           :p -> false
-          # 玉は成れません
+          # 成り玉なんて無いぜ
           # :pk
           # It's reasonably a プロモーテッド・ルック（Promoted Rook；成飛）. It's actually ドラゴン（Dragon；竜）
           :pr -> false
           # It's reasonably a プロモーテッド・ビショップ（Promoted Bishop；成角）.  It's actually ホース（Horse；馬）. Ponanza calls ペガサス（Pegasus；天馬）
           :pb -> false
-          # 金は成れません
+          # 裏返った金なんて無いぜ
           # :pg
           # プロモーテッド・シルバー（Promoted Silver；成銀. Or 全 in one letter）
           :ps -> false

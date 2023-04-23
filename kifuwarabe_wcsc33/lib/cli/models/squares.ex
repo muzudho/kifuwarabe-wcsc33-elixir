@@ -25,8 +25,8 @@ defmodule KifuwarabeWcsc33.CLI.Models.Squares do
   # | *| *| *| *| *| *| *| *| *| i
   # +--+--+--+--+--+--+--+--+--+
   #
-  @fn_data for file <- 1..9, rank <- 1..9, do: 10*file+rank
-  def all_squares, do: @fn_data
+  @all_squares for file <- 1..9, rank <- 1..9, do: 10*file+rank
+  def all_squares, do: @all_squares
 
   # 持ち駒の先手桂馬の置けるマス
   # ========================

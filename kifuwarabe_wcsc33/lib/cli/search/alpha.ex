@@ -106,26 +106,7 @@ defmodule KifuwarabeWcsc33.CLI.Search.Alpha do
       move_code = KifuwarabeWcsc33.CLI.Views.Move.as_code(move)
       IO.puts("[Alpha choice_best] move:#{move_code}")
 
-      # # TODO 消す。盤表示
-      # IO.puts("[Alpha choice_best] Before move")
-      # IO.puts(KifuwarabeWcsc33.CLI.Views.Position.stringify(pos))
-
-      # if move_code |> String.length() > 4 do
-      #   # TODO 成りの手で強制終了したから確かめてみる
-      #   # TODO 消す。盤表示
-      #   IO.puts("[Alpha choice_best] attention!")
-      #   IO.puts(KifuwarabeWcsc33.CLI.Views.Position.stringify(pos))
-      #   IO.puts("[Alpha choice_best] TO DEBUG")
-      # end
-
-      pos = pos |> KifuwarabeWcsc33.CLI.MoveGeneration.DoMove.do_it(move, move_code |> String.length() > 4)
-
-      # if move_code |> String.length() > 4 do
-      #   # TODO 成りの手で強制終了したから確かめてみる
-      #   IO.puts("[Alpha choice_best] promote?")
-      #   # TODO 消す。盤表示
-      #   IO.puts(KifuwarabeWcsc33.CLI.Views.Position.stringify(pos))
-      # end
+      pos = pos |> KifuwarabeWcsc33.CLI.MoveGeneration.DoMove.do_it(move)
 
       #
       # 候補手を指した後の局面に、バリュー（Value；局面評価値）を付ける

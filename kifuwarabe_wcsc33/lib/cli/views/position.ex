@@ -325,13 +325,13 @@ defmodule KifuwarabeWcsc33.CLI.Views.Position do
       :l1 -> " L"
       # ポーン（Pawn；歩）
       :p1 -> " P"
-      # 玉は成れません
+      # 成り玉なんて無いぜ
       # :pk
       # It's reasonably a プロモーテッド・ルック（Promoted Rook；成飛）. It's actually ドラゴン（Dragon；竜）
       :pr1 -> "+R"
       # It's reasonably a プロモーテッド・ビショップ（Promoted Bishop；成角）.  It's actually ホース（Horse；馬）. Ponanza calls ペガサス（Pegasus；天馬）
       :pb1 -> "+B"
-      # 金は成れません
+      # 裏返った金なんて無いぜ
       # :pg
       # プロモーテッド・シルバー（Promoted Silver；成銀. Or 全 in one letter）
       :ps1 -> "+S"
@@ -361,13 +361,13 @@ defmodule KifuwarabeWcsc33.CLI.Views.Position do
       :l2 -> " l"
       # ポーン（Pawn；歩）
       :p2 -> " p"
-      # 玉は成れません
+      # 成り玉なんて無いぜ
       # :pk
       # It's reasonably a プロモーテッド・ルック（Promoted Rook；成飛）. It's actually ドラゴン（Dragon；竜）
       :pr2 -> "+r"
       # It's reasonably a プロモーテッド・ビショップ（Promoted Bishop；成角）.  It's actually ホース（Horse；馬）. Ponanza calls ペガサス（Pegasus；天馬）
       :pb2 -> "+b"
-      # 金は成れません
+      # 裏返った金なんて無いぜ
       # :pg
       # プロモーテッド・シルバー（Promoted Silver；成銀. Or 全 in one letter）
       :ps2 -> "+s"

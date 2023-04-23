@@ -157,7 +157,15 @@ defmodule KifuwarabeWcsc33.CLI.Models.Position do
             location_of_kings: %{
               :k1 => 59,
               :k2 => 51
-            }
+            },
+            #
+            # TODO 駒得評価値
+            # =========
+            #
+            #   - 古典的アルゴリズムで用いられる、思考部で使う
+            #   - 現局面の手番の局面評価値
+            #
+            material_value: 0
 
   # Elixir のリスト、リンクドリストだ、ランダム・アクセス遅そう、使いたくねー
   # defstruct piece_list:

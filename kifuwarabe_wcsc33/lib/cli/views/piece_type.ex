@@ -17,13 +17,13 @@ defmodule KifuwarabeWcsc33.CLI.Views.PieceType do
       :l -> "L"
       # ポーン（Pawn；歩）
       :p -> "P"
-      # 玉は成れません
+      # 成り玉なんて無いぜ
       # :pk
       # It's reasonably a プロモーテッド・ルック（Promoted Rook；成飛）. It's actually ドラゴン（Dragon；竜）
       :pr -> "+R"
       # It's reasonably a プロモーテッド・ビショップ（Promoted Bishop；成角）.  It's actually ホース（Horse；馬）. Ponanza calls ペガサス（Pegasus；天馬）
       :pb -> "+B"
-      # 金は成れません
+      # 裏返った金なんて無いぜ
       # :pg
       # プロモーテッド・シルバー（Promoted Silver；成銀. Or 全 in one letter）
       :ps -> "+S"
