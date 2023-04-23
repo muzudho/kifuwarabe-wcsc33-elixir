@@ -24,8 +24,16 @@ defmodule KifuwarabeWcsc33.CLI.USI.Go do
 
       """ <> KifuwarabeWcsc33.CLI.Views.Position.stringify(pos))
 
+    #
     # 探索
-    {pos, best_move, value} = KifuwarabeWcsc33.CLI.Search.Alpha.do_it(pos, 1)
+    # ====
+    #
+    # - depth=1 は Ok。すいすい指す
+    # - depth=2 で待ち時間が生じる。序盤で１手 1～16秒（持ち駒を持っていると、とたんに遅くなる）
+    #
+    # depth = 1
+    depth = 2
+    {pos, best_move, value} = KifuwarabeWcsc33.CLI.Search.Alpha.do_it(pos, depth)
 
     IO.puts("[Go do_it] value:#{value}")
 
