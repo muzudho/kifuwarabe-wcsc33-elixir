@@ -75,19 +75,12 @@ defmodule KifuwarabeWcsc33.CLI.MoveGeneration.DoMove do
             #
             # 駒を取ると、駒得評価値が動く
             #
-            # - この評価値は（この関数の最後に手番がひっくり返るから）予め、相手プレイヤーの評価値として算出しておく
+            # - 駒を取れば必ず駒得だから、正の数（加算）になるはず
             #
-            # 相手が後手なら、正負をひっくり返す
-            sign =
-              if pos.opponent_turn == :gote do
-                -1
-              else
-                1
-              end
 
             # 変動した評価値を加算
-            new_materials_value = pos.materials_value + sign * KifuwarabeWcsc33.CLI.Helpers.MaterialsValueCalc.get_value_by_piece_type(captured_pt)
-            # IO.puts("[do_move do_it] pos.materials_value:#{pos.materials_value} new_materials_value")
+            new_materials_value = pos.materials_value + KifuwarabeWcsc33.CLI.Helpers.MaterialsValueCalc.get_value_by_piece_type(captured_pt)
+            # IO.puts("[do_move do_it] captured piece. m:#{KifuwarabeWcsc33.CLI.Views.Move.as_code(move)} mat_val:#{pos.materials_value} new_mat_val:#{new_materials_value}")
 
             # 持ち駒種類（先後付き）（成りの情報を含まない）
             hand_pc = KifuwarabeWcsc33.CLI.Mappings.ToPiece.from_captured_piece_to_hand(target_pc)
@@ -119,11 +112,30 @@ defmodule KifuwarabeWcsc33.CLI.MoveGeneration.DoMove do
         # 動かした後の駒
         # ============
         #
-        piece_after_play = if move.promote? do
+        {piece_after_play, new_materials_value} =
+          if move.promote? do
             # （成るなら）成る
-            KifuwarabeWcsc33.CLI.Mappings.ToPiece.promote(piece_before_play)
+            piece_after_play = KifuwarabeWcsc33.CLI.Mappings.ToPiece.promote(piece_before_play)
+
+            # ## 雑談
+            #
+            # 駒を成ると、駒得評価値が動く
+            #
+            # - 駒を成っても「駒得」ではないが、評価値として加算するのは、よくある
+            #
+            materials_value_difference = KifuwarabeWcsc33.CLI.Helpers.MaterialsValueCalc.get_value_by_piece_type(
+                KifuwarabeWcsc33.CLI.Mappings.ToPieceType.from_piece(piece_after_play)
+              ) -
+              KifuwarabeWcsc33.CLI.Helpers.MaterialsValueCalc.get_value_by_piece_type(
+                KifuwarabeWcsc33.CLI.Mappings.ToPieceType.from_piece(piece_before_play)
+              )
+
+            new_materials_value = pos.materials_value + materials_value_difference
+            # IO.puts("[do_move do_it] promotion. move:#{KifuwarabeWcsc33.CLI.Views.Move.as_code(move)} pos.materials_value:#{pos.materials_value} new_materials_value")
+
+            {piece_after_play, new_materials_value}
           else
-            piece_before_play
+            {piece_before_play, pos.materials_value}
           end
 
         #
@@ -141,27 +153,6 @@ defmodule KifuwarabeWcsc33.CLI.MoveGeneration.DoMove do
           else
             pos
           end
-
-        # ## 雑談
-        #
-        # 駒を成ると、駒得評価値が動く
-        #
-        # - この評価値は（この関数の最後に手番がひっくり返るから）予め、相手プレイヤーの評価値として算出しておく
-        #
-        # 相手が後手なら、正負をひっくり返す
-        sign =
-          if pos.opponent_turn == :gote do
-            -1
-          else
-            1
-          end
-        materials_value_difference = KifuwarabeWcsc33.CLI.Helpers.MaterialsValueCalc.get_value_by_piece_type(
-            KifuwarabeWcsc33.CLI.Mappings.ToPieceType.from_piece(piece_after_play)
-          ) -
-          KifuwarabeWcsc33.CLI.Helpers.MaterialsValueCalc.get_value_by_piece_type(
-            KifuwarabeWcsc33.CLI.Mappings.ToPieceType.from_piece(piece_before_play)
-          )
-        new_materials_value = pos.materials_value + sign * materials_value_difference
 
         # 局面更新
         pos =
@@ -189,7 +180,10 @@ defmodule KifuwarabeWcsc33.CLI.MoveGeneration.DoMove do
             opponent_turn: pos.turn,
             # リストのサイズを合わせたいので、 captured_piece_types にはニルでも入れる
             moves: pos.moves ++ [move],
-            captured_piece_types: pos.captured_piece_types ++ [captured_pt]}
+            captured_piece_types: pos.captured_piece_types ++ [captured_pt],
+            # 正負を逆転する
+            materials_value: - pos.materials_value
+          }
 
     pos
   end

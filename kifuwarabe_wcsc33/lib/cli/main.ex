@@ -168,8 +168,8 @@ defmodule KifuwarabeWcsc33.CLI.Main do
           # 一手指す
           pos = pos |> KifuwarabeWcsc33.CLI.MoveGeneration.DoMove.do_it(best_move)
 
-          # 盤表示
           best_move_str = KifuwarabeWcsc33.CLI.Views.Move.as_code(best_move)
+          # 盤表示
           IO.puts(
             """
             [main usi_loop] Do #{best_move_str}.

@@ -20,7 +20,7 @@ defmodule KifuwarabeWcsc33.CLI.Helpers.MaterialsValueCalc do
   """
   def count(pos) do
 
-    # 先手が良ければプラス、後手が良ければマイナスとする
+    # 手番が良ければプラス、手番が悪ければマイナスとする
 
     # 全てのマス番地について
     # |> 駒に変換
@@ -33,7 +33,12 @@ defmodule KifuwarabeWcsc33.CLI.Helpers.MaterialsValueCalc do
         |> Enum.filter(fn (piece) -> piece != :sp end)
         |> Enum.map(fn (piece) ->
             piece_turn = KifuwarabeWcsc33.CLI.Mappings.ToTurn.from_piece(piece)
-            sign = get_sign(piece_turn, pos)
+            sign =
+              if piece_turn == pos.turn do
+                1
+              else
+                -1
+              end
             piece_type = KifuwarabeWcsc33.CLI.Mappings.ToPieceType.from_piece(piece)
             value = sign * get_value_by_piece_type(piece_type)
             # IO.puts("[materials_value_calc] piece_type:#{piece_type} value:#{value}")
@@ -50,7 +55,12 @@ defmodule KifuwarabeWcsc33.CLI.Helpers.MaterialsValueCalc do
             num = elem(piece_and_num, 1)
             piece = elem(piece_and_num, 0)
             piece_turn = KifuwarabeWcsc33.CLI.Mappings.ToTurn.from_piece(piece)
-            sign = get_sign(piece_turn, pos)
+            sign =
+              if piece_turn == pos.turn do
+                1
+              else
+                -1
+              end
             piece_type = KifuwarabeWcsc33.CLI.Mappings.ToPieceType.from_piece(piece)
             unit_value = get_value_by_piece_type(piece_type)
             value = sign * num * unit_value
@@ -60,22 +70,6 @@ defmodule KifuwarabeWcsc33.CLI.Helpers.MaterialsValueCalc do
         |> Enum.reduce(0, fn (value, acc) -> acc + value end)
 
     value_on_board + value_on_hand
-  end
-
-  def get_sign(piece_turn, pos) do
-    if pos.turn == :sente do
-      if piece_turn == :sente do
-        1
-      else
-        -1
-      end
-    else
-      if piece_turn == :sente do
-        -1
-      else
-        1
-      end
-    end
   end
 
   #
@@ -111,7 +105,6 @@ defmodule KifuwarabeWcsc33.CLI.Helpers.MaterialsValueCalc do
   @promoted_knight 500
   @promoted_lance 500
   @promoted_pawn 150
-  @space 0
   def get_value_by_piece_type(piece_type) do
     case piece_type do
       # キング（King；玉）
@@ -146,11 +139,6 @@ defmodule KifuwarabeWcsc33.CLI.Helpers.MaterialsValueCalc do
       :pl -> @promoted_lance
       # It's reasonably a プロモーテッド・ポーン（Promoted Pawn；成歩）. It's actually と（"To"；と is 金 cursive）
       :pp -> @promoted_pawn
-      #
-      # 空マス
-      # =====
-      #
-      :sp -> @space
       #
       # それ以外はエラー
       # ==============

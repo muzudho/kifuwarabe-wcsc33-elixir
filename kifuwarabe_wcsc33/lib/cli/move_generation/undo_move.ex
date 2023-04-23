@@ -30,30 +30,6 @@ defmodule KifuwarabeWcsc33.CLI.MoveGeneration.UndoMove do
     # (あれば)取った駒を取得（先後の情報無し、成りの情報付き）
     captured_pt = pos.captured_piece_types |> List.last()
 
-    # ## 雑談
-    #
-    # 取った駒を戻すと、駒得評価値が動く
-    #
-    # - この評価値は（この関数の最後に手番がひっくり返るから）予め、相手プレイヤーの評価値として算出しておく
-    #
-
-    # 自分が後手なら、正負をひっくり返す
-    sign =
-      if pos.turn == :gote do
-        -1
-      else
-        1
-      end
-
-    # 変動した評価値を減算
-    new_materials_value = if captured_pt != nil do
-        pos.materials_value - sign * KifuwarabeWcsc33.CLI.Helpers.MaterialsValueCalc.get_value_by_piece_type(captured_pt)
-      else
-        pos.materials_value
-      end
-
-    # IO.puts("[undo_move do_it] pos.materials_value=#{pos.materials_value} new_materials_value:#{new_materials_value}")
-
     # 局面更新
     #
     # - ターン反転
@@ -65,9 +41,31 @@ defmodule KifuwarabeWcsc33.CLI.MoveGeneration.UndoMove do
             # リストの最後の要素を削除。リストのサイズを揃える
             moves: pos.moves |> List.delete_at(last_index),
             captured_piece_types: pos.captured_piece_types |> List.delete_at(last_index),
-            # 変動した評価値を減算
-            materials_value: new_materials_value,
+            # 正負を反転
+            materials_value: - pos.materials_value
           }
+
+    # ## 雑談
+    #
+    # 取った駒を戻すと、駒得評価値が動く
+    #
+    # - 取った駒を返せば必ず駒損だから、負の数（減算）になるはず
+    #
+
+    #
+    # 取った駒の価値
+    #
+    pos =
+      if captured_pt != nil do
+        captured_material_value = KifuwarabeWcsc33.CLI.Helpers.MaterialsValueCalc.get_value_by_piece_type(captured_pt)
+        # IO.puts("[undo_move do_it] captured piece. m:#{KifuwarabeWcsc33.CLI.Views.Move.as_code(move)} mat_val=#{pos.materials_value} cap_val:#{captured_material_value}")
+        %{ pos |
+          materials_value: pos.materials_value - captured_material_value,
+        }
+      else
+        pos
+      end
+
 
     # 更新された局面を返す
     if move.drop_piece_type != nil do
@@ -102,41 +100,44 @@ defmodule KifuwarabeWcsc33.CLI.MoveGeneration.UndoMove do
 
       #
       # 動かしたあとの駒
+      # ==============
       #
       piece_after_play = pos.board[move.destination]
 
       #
       # 動かす前の駒
+      # ==========
       #
-      piece_before_play = if move.promote? do
-          # TODO （成った駒は）成らずに戻す
-          KifuwarabeWcsc33.CLI.Mappings.ToPiece.demote(piece_after_play)
+      {piece_before_play, new_materials_value} =
+        if move.promote? do
+          # （成った駒は）成らずに戻す
+          piece_before_play = KifuwarabeWcsc33.CLI.Mappings.ToPiece.demote(piece_after_play)
+
+          # ## 雑談
+          #
+          # 駒が成ったのを戻すと、駒得評価値が動く
+          #
+          # - 成った駒を成らずに戻しても「駒損」ではないが、評価値として減算するのは、よくある
+          #
+          materials_value_difference = KifuwarabeWcsc33.CLI.Helpers.MaterialsValueCalc.get_value_by_piece_type(
+              KifuwarabeWcsc33.CLI.Mappings.ToPieceType.from_piece(piece_after_play)
+            ) -
+            KifuwarabeWcsc33.CLI.Helpers.MaterialsValueCalc.get_value_by_piece_type(
+              KifuwarabeWcsc33.CLI.Mappings.ToPieceType.from_piece(piece_before_play)
+            )
+          new_materials_value = pos.materials_value - materials_value_difference
+          # IO.puts("[undo_move do_it] demotion. move:#{KifuwarabeWcsc33.CLI.Views.Move.as_code(move)} pos.materials_value=#{pos.materials_value} new_materials_value:#{new_materials_value}")
+
+          {piece_before_play, new_materials_value}
         else
-          pos.board[move.destination]
+          piece_before_play = pos.board[move.destination]
+          {piece_before_play, pos.materials_value}
         end
 
-      # ## 雑談
-      #
-      # 駒が成ったのを戻すと、駒得評価値が動く
-      #
-      # - 自分が後手なら、正負をひっくり返す
-      #
-      sign =
-        if pos.turn == :gote do
-          -1
-        else
-          1
-        end
-      materials_value_difference = KifuwarabeWcsc33.CLI.Helpers.MaterialsValueCalc.get_value_by_piece_type(
-          KifuwarabeWcsc33.CLI.Mappings.ToPieceType.from_piece(piece_after_play)
-        ) -
-        KifuwarabeWcsc33.CLI.Helpers.MaterialsValueCalc.get_value_by_piece_type(
-          KifuwarabeWcsc33.CLI.Mappings.ToPieceType.from_piece(piece_before_play)
-        )
-      new_materials_value = pos.materials_value - sign * materials_value_difference
 
-
+      #
       # 局面更新
+      #
       pos = %{ pos |
         # 将棋盤更新
         board: %{ pos.board |

@@ -52,6 +52,7 @@ defmodule KifuwarabeWcsc33.CLI.Search.Alpha do
 
     # シャッフルする
     move_list = move_list |> Enum.shuffle()
+    IO.puts("[Alpha do_it] shuffled moves. value:#{pos.materials_value}")
 
     # IO.puts(
     #   """
@@ -116,8 +117,8 @@ defmodule KifuwarabeWcsc33.CLI.Search.Alpha do
       #
       # - 手番がひっくり返ることに注意
       #
-      move_code = KifuwarabeWcsc33.CLI.Views.Move.as_code(move)
-      IO.write("[Alpha choice_best] move:#{move_code}")
+      # move_code = KifuwarabeWcsc33.CLI.Views.Move.as_code(move)
+      # IO.puts("[Alpha choice_best] move:#{move_code} pre_value:#{pos.materials_value}")
 
       pos = pos |> KifuwarabeWcsc33.CLI.MoveGeneration.DoMove.do_it(move)
 
@@ -133,7 +134,7 @@ defmodule KifuwarabeWcsc33.CLI.Search.Alpha do
       #     この尺度を使う場合、整数を使う（実数を使わない）
       #
       value = - lets_position_value(pos)
-      IO.puts(" value:#{value}")
+      # IO.puts("[Alpha choice_best] value:#{value}")
 
       #
       # 忘れずに、１手戻す

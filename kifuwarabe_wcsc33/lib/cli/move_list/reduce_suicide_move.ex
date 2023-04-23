@@ -63,7 +63,7 @@ defmodule KifuwarabeWcsc33.CLI.MoveList.ReduceSuicideMove do
     {rest_move_list, pos, cleanup_move_list} =
       if rest_move_list |> length() < 1 do
         # 合法手が無ければ投了
-        IO.puts("[move_elimination reduce_suicide_move] empty move list")
+        IO.puts("[reduce_suicide_move] empty move list")
         {rest_move_list, pos, cleanup_move_list}
       else
         # 合法手が１つ以上あれば、先頭の手を選ぶ。先頭の手は削除する
@@ -75,6 +75,7 @@ defmodule KifuwarabeWcsc33.CLI.MoveList.ReduceSuicideMove do
         # とりあえず、１手指してみる
         move_code = KifuwarabeWcsc33.CLI.Views.Move.as_code(move)
         pos = pos |> KifuwarabeWcsc33.CLI.MoveGeneration.DoMove.do_it(move)
+        # IO.puts("[reduce_suicide_move] trn:#{pos.turn} mat_val:#{pos.materials_value}")
 
         #
         # 手番がひっくり返ったことに注意
@@ -84,7 +85,7 @@ defmodule KifuwarabeWcsc33.CLI.MoveList.ReduceSuicideMove do
         #
         opponent_king_pc = KifuwarabeWcsc33.CLI.Mappings.ToPiece.from_turn_and_piece_type(pos.opponent_turn, :k)
         opponent_king_sq = pos.location_of_kings[opponent_king_pc]
-        # IO.puts("[move_elimination reduce_suicide_move] king sq:#{opponent_king_sq} pc:#{opponent_king_pc}")
+        # IO.puts("[reduce_suicide_move] king sq:#{opponent_king_sq} pc:#{opponent_king_pc}")
 
         #IO.puts(
         #  """
@@ -98,14 +99,14 @@ defmodule KifuwarabeWcsc33.CLI.MoveList.ReduceSuicideMove do
             #
             # 自殺手だ
             #
-            IO.puts("[think choice] Undo. Because #{move_code} is suicide move. king turn:#{pos.opponent_turn} pc:#{opponent_king_pc} sq:#{opponent_king_sq}")
+            IO.puts("[reduce_suicide_move] Undo. Because #{move_code} is suicide move. king trn:#{pos.opponent_turn} pc:#{opponent_king_pc} sq:#{opponent_king_sq}")
 
             {cleanup_move_list}
           else
             #
             # 自殺手ではない手だ
             #
-            IO.puts("[think choice] Ok. Because #{move_code} is no suicide move. king turn:#{pos.opponent_turn} pc:#{opponent_king_pc} sq:#{opponent_king_sq}")
+            IO.puts("[reduce_suicide_move] Ok. Because #{move_code} is no suicide move. king trn:#{pos.opponent_turn} pc:#{opponent_king_pc} sq:#{opponent_king_sq}")
             cleanup_move_list = cleanup_move_list ++ [move]
 
             {cleanup_move_list}

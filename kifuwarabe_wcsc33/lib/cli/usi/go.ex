@@ -17,6 +17,13 @@ defmodule KifuwarabeWcsc33.CLI.USI.Go do
   """
   def do_it(pos) do
 
+    # 盤表示
+    IO.puts(
+      """
+      [Go do_it] value:#{pos.materials_value}
+
+      """ <> KifuwarabeWcsc33.CLI.Views.Position.stringify(pos))
+
     # 探索
     {pos, best_move, _value} = KifuwarabeWcsc33.CLI.Search.Alpha.do_it(pos)
 
