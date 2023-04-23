@@ -37,9 +37,9 @@ defmodule KifuwarabeWcsc33.CLI.MoveGeneration.UndoMove do
     # - この評価値は（この関数の最後に手番がひっくり返るから）予め、相手プレイヤーの評価値として算出しておく
     #
 
-    # 相手が後手なら、正負をひっくり返す
+    # 自分が後手なら、正負をひっくり返す
     sign =
-      if pos.opponent_turn == :gote do
+      if pos.turn == :gote do
         -1
       else
         1

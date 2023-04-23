@@ -65,3 +65,9 @@ position sfen 8k/9/9/9/9/9/7+r1/9/8K b R1b4g4s4n4l18p 1
 ```plaintext
 position sfen 7lk/7l1/7lK/7r1/9/9/9/9/9 b Pr2b4g4s4nl17p 1
 ```
+
+# 駒得しようとするかのテスト
+
+```plaintext
+position sfen 1nsk1ggnl/l2r1s1b1/1ppp+N1ppp/p3pp3/1P7/2PP1P1P1/P3P1P1P/1B2RK2L/L1SGG1SN1 w - 1
+```

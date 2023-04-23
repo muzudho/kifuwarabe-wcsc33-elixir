@@ -117,7 +117,7 @@ defmodule KifuwarabeWcsc33.CLI.Search.Alpha do
       # - 手番がひっくり返ることに注意
       #
       move_code = KifuwarabeWcsc33.CLI.Views.Move.as_code(move)
-      IO.puts("[Alpha choice_best] move:#{move_code}")
+      IO.write("[Alpha choice_best] move:#{move_code}")
 
       pos = pos |> KifuwarabeWcsc33.CLI.MoveGeneration.DoMove.do_it(move)
 
@@ -132,7 +132,8 @@ defmodule KifuwarabeWcsc33.CLI.Search.Alpha do
       #   - 古典的には、歩１個の価値を 100 とする。これを 1 センチポーン（centipawn；一厘歩） と言う。
       #     この尺度を使う場合、整数を使う（実数を使わない）
       #
-      value = - lets_position_value()
+      value = - lets_position_value(pos)
+      IO.puts(" value:#{value}")
 
       #
       # 忘れずに、１手戻す
@@ -183,7 +184,7 @@ defmodule KifuwarabeWcsc33.CLI.Search.Alpha do
   #
   # 局面評価値（相手から見た評価値）を返す
   #
-  defp lets_position_value() do
-    0
+  defp lets_position_value(pos) do
+    pos.material_value
   end
 end
