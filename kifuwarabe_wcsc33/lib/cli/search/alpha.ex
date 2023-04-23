@@ -10,7 +10,7 @@ defmodule KifuwarabeWcsc33.CLI.Search.Alpha do
     o. ベスト・ムーブ（Best Move；指し手） - 無ければニル
 
   """
-  def do_it(pos) do
+  def do_it(pos, depth) do
     # IO.puts("[think go] pos.turn:#{pos.turn}")
 
     #
@@ -42,17 +42,13 @@ defmodule KifuwarabeWcsc33.CLI.Search.Alpha do
     #
 
     # IO.puts("[Think go] BELOW, MOVE LIST")
-    # # TODO 消す。盤表示
-    # IO.puts(KifuwarabeWcsc33.CLI.Views.Position.stringify(pos))
-
-    move_list |> Enum.map(fn(move) ->
-        move_code = KifuwarabeWcsc33.CLI.Views.Move.as_code(move)
-        IO.puts("[Think go] move list: (#{move_code})")
-      end)
+    # move_list |> Enum.map(fn(move) ->
+    #     move_code = KifuwarabeWcsc33.CLI.Views.Move.as_code(move)
+    #     IO.puts("[Think go] move list: (#{move_code})")
+    #   end)
 
     # シャッフルする
     move_list = move_list |> Enum.shuffle()
-    IO.puts("[Alpha do_it] shuffled moves. value:#{pos.materials_value}")
 
     # IO.puts(
     #   """
@@ -61,7 +57,7 @@ defmodule KifuwarabeWcsc33.CLI.Search.Alpha do
     #   """ <> KifuwarabeWcsc33.CLI.Views.Position.stringify(pos))
 
     # 最善手を選ぶ（投了ならニル）
-    {pos, best_move, value} = choice_best(pos, move_list, nil, -32768)
+    {pos, best_move, value} = choice_best(pos, move_list, nil, -32768, depth)
 
     {pos, best_move, value}
   end
@@ -69,12 +65,12 @@ defmodule KifuwarabeWcsc33.CLI.Search.Alpha do
   #
   # 関数シグニチャーのパターンマッチの定義
   #
-  def choice_best(pos, move_list \\ [], sibling_best_move, sibling_best_value)
+  defp choice_best(pos, move_list \\ [], sibling_best_move, sibling_best_value, depth)
 
   #
   # Base case
   #
-  def choice_best(pos, [], sibling_best_move, sibling_best_value) do
+  defp choice_best(pos, [], sibling_best_move, sibling_best_value, _depth) do
     # 再帰の帰り道
     {pos, sibling_best_move, sibling_best_value}
   end
@@ -96,7 +92,7 @@ defmodule KifuwarabeWcsc33.CLI.Search.Alpha do
   # 1. ムーブ・リスト（Move List；指し手のリスト） - 投了は含まない
   # 2. ベスト・ムーブ（Best Move；最善手） - 無ければニル
   #
-  def choice_best(pos, [move | move_list], sibling_best_move, sibling_best_value) do
+  defp choice_best(pos, [move | move_list], sibling_best_move, sibling_best_value, depth) do
 
     if move == nil do
       #
@@ -105,7 +101,7 @@ defmodule KifuwarabeWcsc33.CLI.Search.Alpha do
       #
       # - 指し手が無ければ停止
       #
-      IO.puts("[Alpha choice_best] move is nil. stop")
+      # IO.puts("[Alpha choice_best] move is nil. stop")
 
       # 再帰の帰り道
       {pos, sibling_best_move, sibling_best_value}
@@ -122,19 +118,36 @@ defmodule KifuwarabeWcsc33.CLI.Search.Alpha do
 
       pos = pos |> KifuwarabeWcsc33.CLI.MoveGeneration.DoMove.do_it(move)
 
-      #
-      # 候補手を指した後の局面に、バリュー（Value；局面評価値）を付ける
-      # =======================================================
-      #
-      #   - 相手から見た局面になっているので、相手から見た局面評価を行い、その正負を逆転（負数にする）すれば、自分から見た局面になる
-      #
-      # ## 雑談
-      #
-      #   - 古典的には、歩１個の価値を 100 とする。これを 1 センチポーン（centipawn；一厘歩） と言う。
-      #     この尺度を使う場合、整数を使う（実数を使わない）
-      #
-      value = - lets_position_value(pos)
-      # IO.puts("[Alpha choice_best] value:#{value}")
+      {pos, value} =
+        if depth < 1 do
+          #
+          # 候補手を指した後の局面に、バリュー（Value；局面評価値）を付ける
+          # =======================================================
+          #
+          #   - 相手から見た局面になっているので、相手から見た局面評価を行い、その正負を逆転（負数にする）すれば、自分から見た局面になる
+          #
+          # ## 雑談
+          #
+          #   - 古典的には、歩１個の価値を 100 とする。これを 1 センチポーン（centipawn；一厘歩） と言う。
+          #     この尺度を使う場合、整数を使う（実数を使わない）
+          #
+          value = - lets_position_value(pos)
+          # IO.puts("[Alpha choice_best] value:#{value}")
+          {pos, value}
+        else
+          #
+          # TODO ２手目を読みたい
+          # ===================
+          #
+          # - 何手目で打ち止めにするか決めないと、帰ってこれない。 depth を 1 減らす
+          # - この pos は、結局、現在の pos と同じはずだが
+          # - この best_move （ベスト・ムーブ）は、相手の次の手
+          # - この value （評価値）は、葉局面から帰ってくる
+          #
+          {pos, _best_move, value} = do_it(pos, depth - 1)
+
+          {pos, value}
+        end
 
       #
       # 忘れずに、１手戻す
@@ -168,7 +181,7 @@ defmodule KifuwarabeWcsc33.CLI.Search.Alpha do
         #
         # - 合法手が残ってなければ停止
         #
-        IO.puts("[Alpha choice_best] empty move list. stop")
+        # IO.puts("[Alpha choice_best] empty move list. stop")
 
         # 再帰の帰り道
         {pos, sibling_best_move, sibling_best_value}
@@ -177,7 +190,7 @@ defmodule KifuwarabeWcsc33.CLI.Search.Alpha do
         # Recursive
         # =========
         #
-        choice_best(pos, move_list, sibling_best_move, sibling_best_value)
+        choice_best(pos, move_list, sibling_best_move, sibling_best_value, depth)
       end
     end
   end

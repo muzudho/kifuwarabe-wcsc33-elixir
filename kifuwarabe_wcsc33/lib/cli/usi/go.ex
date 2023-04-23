@@ -25,7 +25,9 @@ defmodule KifuwarabeWcsc33.CLI.USI.Go do
       """ <> KifuwarabeWcsc33.CLI.Views.Position.stringify(pos))
 
     # 探索
-    {pos, best_move, _value} = KifuwarabeWcsc33.CLI.Search.Alpha.do_it(pos)
+    {pos, best_move, value} = KifuwarabeWcsc33.CLI.Search.Alpha.do_it(pos, 1)
+
+    IO.puts("[Go do_it] value:#{value}")
 
     best_move =
       if best_move == nil do

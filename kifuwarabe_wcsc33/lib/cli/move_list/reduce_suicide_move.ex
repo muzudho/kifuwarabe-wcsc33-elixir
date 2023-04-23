@@ -29,10 +29,10 @@ defmodule KifuwarabeWcsc33.CLI.MoveList.ReduceSuicideMove do
 
     if friend_king_sq == nil do
       # 指す前の自玉がいないケース（詰将棋でもやっているのだろう）では、自殺手判定はやらない
-      IO.puts("[think go] there is not friend king")
+      # IO.puts("[reduce_suicide_move] there is not friend king")
       {move_list, pos}
     else
-      IO.puts("[think go] there is friend king. sq:#{friend_king_sq} pc:#{friend_king_pc}")
+      # IO.puts("[reduce_suicide_move] there is friend king. sq:#{friend_king_sq} pc:#{friend_king_pc}")
       #
       # 自殺手の除去ルーチン
       # =================
@@ -63,7 +63,7 @@ defmodule KifuwarabeWcsc33.CLI.MoveList.ReduceSuicideMove do
     {rest_move_list, pos, cleanup_move_list} =
       if rest_move_list |> length() < 1 do
         # 合法手が無ければ投了
-        IO.puts("[reduce_suicide_move] empty move list")
+        # IO.puts("[reduce_suicide_move] empty move list")
         {rest_move_list, pos, cleanup_move_list}
       else
         # 合法手が１つ以上あれば、先頭の手を選ぶ。先頭の手は削除する
@@ -99,14 +99,14 @@ defmodule KifuwarabeWcsc33.CLI.MoveList.ReduceSuicideMove do
             #
             # 自殺手だ
             #
-            IO.puts("[reduce_suicide_move] Undo. Because #{move_code} is suicide move. king trn:#{pos.opponent_turn} pc:#{opponent_king_pc} sq:#{opponent_king_sq}")
+            # IO.puts("[reduce_suicide_move] Undo. Because #{move_code} is suicide move. king trn:#{pos.opponent_turn} pc:#{opponent_king_pc} sq:#{opponent_king_sq}")
 
             {cleanup_move_list}
           else
             #
             # 自殺手ではない手だ
             #
-            IO.puts("[reduce_suicide_move] Ok. Because #{move_code} is no suicide move. king trn:#{pos.opponent_turn} pc:#{opponent_king_pc} sq:#{opponent_king_sq}")
+            # IO.puts("[reduce_suicide_move] Ok. Because #{move_code} is no suicide move. king trn:#{pos.opponent_turn} pc:#{opponent_king_pc} sq:#{opponent_king_sq}")
             cleanup_move_list = cleanup_move_list ++ [move]
 
             {cleanup_move_list}

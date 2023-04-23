@@ -68,6 +68,8 @@ position sfen 7lk/7l1/7lK/7r1/9/9/9/9/9 b Pr2b4g4s4nl17p 1
 
 # 駒得しようとするかのテスト
 
+👇 アンドゥ・ムーブでちゃんと評価値を戻すようにして修正済
+
 ```plaintext
 position sfen 1nsk1ggnl/l2r1s1b1/1ppp+N1ppp/p3pp3/1P7/2PP1P1P1/P3P1P1P/1B2RK2L/L1SGG1SN1 w - 1
 ```
