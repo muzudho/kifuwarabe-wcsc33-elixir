@@ -77,7 +77,6 @@ defmodule KifuwarabeWcsc33.CLI.MoveGeneration.DoMove do
             #
             # - この評価値は（この関数の最後に手番がひっくり返るから）予め、相手プレイヤーの評価値として算出しておく
             #
-
             # 相手が後手なら、正負をひっくり返す
             sign =
               if pos.opponent_turn == :gote do
@@ -111,10 +110,21 @@ defmodule KifuwarabeWcsc33.CLI.MoveGeneration.DoMove do
           end
 
         #
-        # 動かす駒
-        # =======
+        # 動かす前の駒
+        # ==========
         #
         piece_before_play = pos.board[move.source]
+
+        #
+        # 動かした後の駒
+        # ============
+        #
+        piece_after_play = if move.promote? do
+            # （成るなら）成る
+            KifuwarabeWcsc33.CLI.Mappings.ToPiece.promote(piece_before_play)
+          else
+            piece_before_play
+          end
 
         #
         # 動かした駒が玉なら
@@ -134,15 +144,24 @@ defmodule KifuwarabeWcsc33.CLI.MoveGeneration.DoMove do
 
         # ## 雑談
         #
-        # TODO 駒を成ると、駒得評価値が動く
+        # 駒を成ると、駒得評価値が動く
         #
-
-        piece_after_play = if move.promote? do
-            # （成るなら）成る
-            KifuwarabeWcsc33.CLI.Mappings.ToPiece.promote(piece_before_play)
+        # - この評価値は（この関数の最後に手番がひっくり返るから）予め、相手プレイヤーの評価値として算出しておく
+        #
+        # 相手が後手なら、正負をひっくり返す
+        sign =
+          if pos.opponent_turn == :gote do
+            -1
           else
-            piece_before_play
+            1
           end
+        material_value_difference = KifuwarabeWcsc33.CLI.Helpers.MaterialValueCalc.get_value_by_piece_type(
+            KifuwarabeWcsc33.CLI.Mappings.ToPieceType.from_piece(piece_after_play)
+          ) -
+          KifuwarabeWcsc33.CLI.Helpers.MaterialValueCalc.get_value_by_piece_type(
+            KifuwarabeWcsc33.CLI.Mappings.ToPieceType.from_piece(piece_before_play)
+          )
+        new_material_value = pos.material_value + sign * material_value_difference
 
         # 局面更新
         pos =
@@ -153,7 +172,8 @@ defmodule KifuwarabeWcsc33.CLI.MoveGeneration.DoMove do
               move.source => :sp,
               # 移動先マスへ、移動元マスの駒を置く
               move.destination => piece_after_play
-            }
+            },
+            material_value: new_material_value
           }
 
         {pos, captured_pt}

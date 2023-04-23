@@ -58,6 +58,7 @@ defmodule KifuwarabeWcsc33.CLI.MoveGeneration.UndoMove do
     #
     # - ターン反転
     # - 指し手のリスト更新（最後の指し手を削除）
+    #
     pos = %{pos |
             turn: KifuwarabeWcsc33.CLI.Mappings.ToTurn.flip(pos.turn),
             opponent_turn: pos.turn,
@@ -100,21 +101,47 @@ defmodule KifuwarabeWcsc33.CLI.MoveGeneration.UndoMove do
       #
 
       #
-      # 動かした駒が玉なら
+      # 動かしたあとの駒
       #
-      played_piece = if move.promote? do
+      piece_after_play = pos.board[move.destination]
+
+      #
+      # 動かす前の駒
+      #
+      piece_before_play = if move.promote? do
           # TODO （成った駒は）成らずに戻す
-          KifuwarabeWcsc33.CLI.Mappings.ToPiece.demote(pos.board[move.destination])
+          KifuwarabeWcsc33.CLI.Mappings.ToPiece.demote(piece_after_play)
         else
           pos.board[move.destination]
         end
+
+      # ## 雑談
+      #
+      # 駒が成ったのを戻すと、駒得評価値が動く
+      #
+      # - 自分が後手なら、正負をひっくり返す
+      #
+      sign =
+        if pos.turn == :gote do
+          -1
+        else
+          1
+        end
+      material_value_difference = KifuwarabeWcsc33.CLI.Helpers.MaterialValueCalc.get_value_by_piece_type(
+          KifuwarabeWcsc33.CLI.Mappings.ToPieceType.from_piece(piece_after_play)
+        ) -
+        KifuwarabeWcsc33.CLI.Helpers.MaterialValueCalc.get_value_by_piece_type(
+          KifuwarabeWcsc33.CLI.Mappings.ToPieceType.from_piece(piece_before_play)
+        )
+      new_material_value = pos.material_value - sign * material_value_difference
+
 
       # 局面更新
       pos = %{ pos |
         # 将棋盤更新
         board: %{ pos.board |
-          # 移動元マスは、動かした駒になる
-          move.source => played_piece,
+          # 移動元マスは、動かす前の駒になる
+          move.source => piece_before_play,
 
           # 移動先マスは、取った駒（なければ空マス）になる
           move.destination =>
@@ -124,16 +151,17 @@ defmodule KifuwarabeWcsc33.CLI.MoveGeneration.UndoMove do
             else
               :sp
             end
-        }
+        },
+        material_value: new_material_value
       }
 
       # 局面更新
       pos =
-        if played_piece == :k1 or played_piece == :k2 do
+        if piece_before_play == :k1 or piece_before_play == :k2 do
           # 玉のいるマスを（移動元マスへ）更新
           %{ pos |
             location_of_kings: %{ pos.location_of_kings |
-              played_piece => move.source
+              piece_before_play => move.source
             }
           }
         else
