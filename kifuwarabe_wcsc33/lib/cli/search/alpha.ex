@@ -60,9 +60,22 @@ defmodule KifuwarabeWcsc33.CLI.Search.Alpha do
     #   """ <> KifuwarabeWcsc33.CLI.Views.Position.stringify(pos))
 
     # 最善手を選ぶ（投了ならニル）
-    {pos, best_move, value} = choice_best(pos, move_list)
+    {pos, best_move, value} = choice_best(pos, move_list, nil, -32768)
 
     {pos, best_move, value}
+  end
+
+  #
+  # 関数シグニチャーのパターンマッチの定義
+  #
+  def choice_best(pos, move_list \\ [], sibling_best_move, sibling_best_value)
+
+  #
+  # Base case
+  #
+  def choice_best(pos, [], sibling_best_move, sibling_best_value) do
+    # 再帰の帰り道
+    {pos, sibling_best_move, sibling_best_value}
   end
 
   # 最善手を返す
@@ -82,7 +95,7 @@ defmodule KifuwarabeWcsc33.CLI.Search.Alpha do
   # 1. ムーブ・リスト（Move List；指し手のリスト） - 投了は含まない
   # 2. ベスト・ムーブ（Best Move；最善手） - 無ければニル
   #
-  def choice_best(pos, [move | move_list], sibling_best_move \\ nil, sibling_best_value \\ -32768) do
+  def choice_best(pos, [move | move_list], sibling_best_move, sibling_best_value) do
 
     if move == nil do
       #

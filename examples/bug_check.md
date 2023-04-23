@@ -90,3 +90,20 @@ position startpos moves 7i7h 3c3d 6i7i 2b7g+ 5i6i 7g6g
 # このあと
 go
 ```
+
+# 異常終了_20230423_2002
+
+```plaintext
+position startpos moves 2h7h 8b4b 6i6h 3a3b 1i1h 6a7b 2g2f 7b8b 5i5h 2c2d 7g7f 4c4d 4g4f 6c6d 8h5e 1c1d 1g1f 4b6b 5e7g 5a4b 4i3h 8c8d 4f4e 1d1e 3g3f 3c3d 7g4d 4a5b 3i2h 9c9d 3h4g 2b3c 5g5f 5b5a 4g4f 9a9c 4f5e 3b4c 6h5g 6d6e 4d5c+ 4b5c 5h6h B*4h 5g4f 4h3g 2h1g 1a1b 7f7e 3g1i+ 5e4d 4c4d 8i7g 3c2b 6h6i G*8h 2i3g 3d3e 7h3h 5c4c 3h6h 4c3d 6h8h 5a4b G*4a 6b7b 3g2e 1i4f 8h4h 4f4g 6i6h 2b1a 2e1c G*6d 3f3e 3d2c 4h2h 1a3c 8g8f 4g5f 4a5a P*4g 7i8h 9d9e 3e3d 7b6b 8f8e 5f5g 6h7h 5g4h 9i9h 4h2f P*5d P*5g 7h6h 2f3g 8h7i 4d4e 2h2f 4e5f 5a5b 5f6g+ 6h6g 4b4a 7e7d 4g4h P*2e 6b6c S*5a 2c3b 5a6b 6d7e 6b7a+ 3c5e 2f2i 3g4f S*8i 4a4b P*6b 6c6d 8i8h 4f4g 2e2d P*3e 7g6e 5e3g 2d2c+ 3b3a 5b5c 6d7d 1g2f P*6a P*2h 4b5c P*7g 4g4f 9g9f G*4a 2c2d 3g2f 1f1e 4h4i+ 2i4i S*1g 5d5c 1g1h 6e7c 4a5a 6g7h 3e3f 4i4h L*8f P*4e 8b7b 7h6h P*1g G*9a 7d5d 9a8a 7b6b 1e1d 6b7c N*6c 1h2g 9f9e P*4c P*6d 5d3d 2h2g 5g5h S*5g 2f4h 8h9i 4f1i 5g4h N*9f 5c5b R*7f B*9d 7c8c P*3h 9f8h+ 2g2f 8h9h 7g7f 5a4b 7i7h 3d5d 6h6i L*3c R*7c 1b1c 6i7i 8c9d 7c7b+ 1i1h 6c5a+ 4b3b 6d6c B*6g 7i6i 1h2i 5a6a 3b4b 8e8d 9d8d 2d3c 9h9i 4h5i P*7g L*8c 8d8c 3c3d S*7i P*8d 4b5c 8d8c L*6d 5i5h 9i8i 6c6b N*2d 5h6g P*5a G*5e 5d5e B*2c G*5h
+
+# このあと
+go
+```
+
+関数名が、
+
+```plaintext
+  def choice_best(pos, [move | move_list], sibling_best_move \\ nil, sibling_best_value \\ -32768) do
+```
+
+にマッチしないケースが出る。
