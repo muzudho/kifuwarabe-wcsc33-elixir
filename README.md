@@ -8,6 +8,13 @@
 * Elixirのロガーが気に入らないので、表示レベルは「エラー」にする
 * Elixirのスーパーバイザーが気に入らないので、使わない
 
+## Elixir のインストール
+
+1. 📖 [Elixirをインストール](https://elixir-lang.jp/install.html)
+    * Edge でインストールできなければ、 Google Chrome や Firefox も使ってみる
+2. Windowsでも、ビルドパスを手動で設定しなくても、自動で設定してくれているはず
+    * 例： `C:\Program Files (x86)\Elixir`
+
 ## 実行方法
 
 ### その前に、注意すること
