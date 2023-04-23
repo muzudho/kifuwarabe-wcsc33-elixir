@@ -73,7 +73,7 @@ defmodule KifuwarabeWcsc33.CLI.MoveList.ReduceSuicideMove do
         # 指す前の自玉がいないケース（詰将棋でもやっているのだろう）ではない前提として、存在判定を省く
 
         # とりあえず、１手指してみる
-        move_code = KifuwarabeWcsc33.CLI.Views.Move.as_code(move)
+        # move_code = KifuwarabeWcsc33.CLI.Views.Move.as_code(move)
         pos = pos |> KifuwarabeWcsc33.CLI.MoveGeneration.DoMove.do_it(move)
         # IO.puts("[reduce_suicide_move] trn:#{pos.turn} mat_val:#{pos.materials_value}")
 
