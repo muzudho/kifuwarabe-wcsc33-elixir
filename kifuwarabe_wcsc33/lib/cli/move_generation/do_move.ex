@@ -29,6 +29,12 @@ defmodule KifuwarabeWcsc33.CLI.MoveGeneration.DoMove do
         # 打つ駒と、減った枚数
         drop_piece = KifuwarabeWcsc33.CLI.Mappings.ToPiece.from_turn_and_piece_type(pos.turn, move.drop_piece_type)
         num = pos.hand_pieces[drop_piece] - 1
+
+        # ## 雑談
+        #
+        # 駒を打っても、駒得評価値は変わらない
+        #
+
         # 局面更新
         pos =
           %{ pos |
@@ -65,6 +71,25 @@ defmodule KifuwarabeWcsc33.CLI.MoveGeneration.DoMove do
             # 取った駒種類（成りの情報を含む）
             captured_pt = KifuwarabeWcsc33.CLI.Mappings.ToPieceType.from_piece(target_pc)
 
+            # ## 雑談
+            #
+            # 駒を取ると、駒得評価値が動く
+            #
+            # - この評価値は（この関数の最後に手番がひっくり返るから）予め、相手プレイヤーの評価値として算出しておく
+            #
+
+            # 相手が後手なら、正負をひっくり返す
+            sign =
+              if pos.opponent_turn == :gote do
+                -1
+              else
+                1
+              end
+
+            # 変動した評価値を加算
+            new_material_value = pos.material_value + sign * KifuwarabeWcsc33.CLI.Helpers.MaterialValueCalc.get_value_by_piece_type(captured_pt)
+            # IO.puts("[do_move do_it] pos.material_value:#{pos.material_value} new_material_value")
+
             # 持ち駒種類（先後付き）（成りの情報を含まない）
             hand_pc = KifuwarabeWcsc33.CLI.Mappings.ToPiece.from_captured_piece_to_hand(target_pc)
 
@@ -74,7 +99,8 @@ defmodule KifuwarabeWcsc33.CLI.MoveGeneration.DoMove do
             pos = %{ pos |
                     hand_pieces: %{ pos.hand_pieces |
                                     hand_pc => num
-                                  }
+                                  },
+                    material_value: new_material_value
                   }
 
             {pos, captured_pt}
@@ -106,6 +132,11 @@ defmodule KifuwarabeWcsc33.CLI.MoveGeneration.DoMove do
             pos
           end
 
+        # ## 雑談
+        #
+        # TODO 駒を成ると、駒得評価値が動く
+        #
+
         piece_after_play = if move.promote? do
             # （成るなら）成る
             KifuwarabeWcsc33.CLI.Mappings.ToPiece.promote(piece_before_play)
@@ -130,6 +161,9 @@ defmodule KifuwarabeWcsc33.CLI.MoveGeneration.DoMove do
       end
 
     # 局面更新
+    #
+    # - 手番がひっくり返る
+    #
     pos = %{pos |
             turn: KifuwarabeWcsc33.CLI.Mappings.ToTurn.flip(pos.turn),
             opponent_turn: pos.turn,
