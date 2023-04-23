@@ -18,7 +18,7 @@ defmodule KifuwarabeWcsc33.CLI.USI.Go do
   def do_it(pos) do
 
     # 探索
-    best_move = KifuwarabeWcsc33.CLI.Search.Alpha.do_it(pos)
+    {_pos, best_move, _value} = KifuwarabeWcsc33.CLI.Search.Alpha.do_it(pos)
 
     best_move =
       if best_move == nil do
@@ -28,7 +28,6 @@ defmodule KifuwarabeWcsc33.CLI.USI.Go do
         best_move
       end
 
-    IO.puts("[Think go] best_move:#{KifuwarabeWcsc33.CLI.Views.Move.as_code(best_move)}")
     best_move
   end
 

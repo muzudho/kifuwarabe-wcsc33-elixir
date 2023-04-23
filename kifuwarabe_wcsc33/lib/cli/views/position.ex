@@ -294,6 +294,7 @@ defmodule KifuwarabeWcsc33.CLI.Views.Position do
     case turn do
       :sente -> "Sente"
       :gote -> "Gote"
+      _ -> raise "unexpected turn:#{turn}"
     end
   end
 

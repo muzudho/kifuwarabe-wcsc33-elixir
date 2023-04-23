@@ -195,6 +195,7 @@ defmodule KifuwarabeWcsc33.CLI.Models.Squares do
       7 -> @file7
       8 -> @file8
       9 -> @file9
+      _ -> raise "unexpected file:#{file}"
     end
   end
 
@@ -244,6 +245,7 @@ defmodule KifuwarabeWcsc33.CLI.Models.Squares do
       7 -> @file7
       8 -> @file8
       9 -> @file9
+      _ -> raise "unexpected file:#{file}"
     end
   end
 
@@ -293,6 +295,7 @@ defmodule KifuwarabeWcsc33.CLI.Models.Squares do
       7 -> @file7
       8 -> @file8
       9 -> @file9
+      _ -> raise "unexpected file:#{file}"
     end
   end
 

@@ -17,6 +17,7 @@ defmodule KifuwarabeWcsc33.CLI.Mappings.ToDestination do
       case turn do
         :sente -> src_sq + relative
         :gote -> src_sq - relative
+        _ -> raise "unexpected turn:#{turn}"
       end
 
     dst_sq

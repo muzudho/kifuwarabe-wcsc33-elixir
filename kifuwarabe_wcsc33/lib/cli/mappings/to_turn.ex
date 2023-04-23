@@ -18,6 +18,7 @@ defmodule KifuwarabeWcsc33.CLI.Mappings.ToTurn do
       case turn do
           :sente -> :gote
           :gote -> :sente
+          _ -> raise "unexpected turn:#{turn}"
       end
   end
 

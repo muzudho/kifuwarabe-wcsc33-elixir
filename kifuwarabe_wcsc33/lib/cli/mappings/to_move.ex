@@ -155,6 +155,7 @@ defmodule KifuwarabeWcsc33.CLI.Mappings.ToMove do
               "g" -> 7
               "h" -> 8
               "i" -> 9
+              _ -> raise "unexpected second_char:#{second_char}"
             end
 
           move = %{move | source: 10 * file + rank}
@@ -225,6 +226,7 @@ defmodule KifuwarabeWcsc33.CLI.Mappings.ToMove do
         "g" -> 7
         "h" -> 8
         "i" -> 9
+        _ -> raise "unexpected fourth_char:#{fourth_char}"
       end
 
     move = %{move | destination: 10 * file + rank}
