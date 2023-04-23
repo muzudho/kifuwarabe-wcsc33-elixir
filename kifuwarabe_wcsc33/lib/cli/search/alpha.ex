@@ -87,7 +87,7 @@ defmodule KifuwarabeWcsc33.CLI.Search.Alpha do
       #
       # - 合法手が無くなったところで停止
       #
-      IO.puts("[ChoiceAny do_it] empty move list. stop")
+      IO.puts("[Alpha choice_best] empty move list. stop")
 
       # 再帰の帰り道
       {pos, sibling_best_move, sibling_best_value}
@@ -105,7 +105,8 @@ defmodule KifuwarabeWcsc33.CLI.Search.Alpha do
       #
       # - 手番がひっくり返ることに注意
       #
-      # move_code = KifuwarabeWcsc33.CLI.Views.Move.as_code(move)
+      move_code = KifuwarabeWcsc33.CLI.Views.Move.as_code(move)
+      IO.puts("[Alpha choice_best] move:#{move_code}")
       pos = pos |> KifuwarabeWcsc33.CLI.MoveGeneration.DoMove.do_it(move)
 
       #
