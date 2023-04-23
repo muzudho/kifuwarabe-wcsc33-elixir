@@ -1,4 +1,4 @@
-defmodule KifuwarabeWcsc33.CLI.Helpers.MaterialCalc do
+defmodule KifuwarabeWcsc33.CLI.Helpers.MaterialValueCalc do
   @moduledoc """
 
     駒得を数える
@@ -35,7 +35,7 @@ defmodule KifuwarabeWcsc33.CLI.Helpers.MaterialCalc do
     # |> すべてのマスの評価値を足して、１つの整数にする
     value_on_hand =
       pos.hand_pieces
-        |> Enum.map(fn (piece) -> get_value_by_piece(piece) end)
+        |> Enum.map(fn (piece_and_num) -> elem(piece_and_num, 1) * get_value_by_piece(elem(piece_and_num, 0)) end)
         |> Enum.reduce(0, fn (value, acc) -> acc + value end)
 
     value_on_board + value_on_hand
