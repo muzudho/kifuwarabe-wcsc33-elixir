@@ -14,10 +14,11 @@ defmodule KifuwarabeWcsc33.CLI.Views.Position do
     hand1 = pos |> stringify_hand1()
     record = pos |> stringify_record()
     location_of_kings = pos |> stringify_location_of_kings()
+    value_seen_from_sente = pos |> stringify_value()
 
     """
 
-    """ <> header <> hand2 <> body <> hand1 <> location_of_kings <> record
+    """ <> header <> hand2 <> body <> hand1 <> location_of_kings <> record <> value_seen_from_sente
   end
 
   # 盤表示のヘッダー
@@ -415,6 +416,14 @@ defmodule KifuwarabeWcsc33.CLI.Views.Position do
   defp stringify_location_of_kings(pos) do
     """
     king_sq ^#{pos.location_of_kings[:k1]} v#{pos.location_of_kings[:k2]}
+
+    """
+  end
+
+  # 先手から見た局面評価値
+  defp stringify_value(pos) do
+    """
+    value seen from sente: #{pos.material_value}
 
     """
   end
