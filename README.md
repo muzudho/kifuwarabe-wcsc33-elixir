@@ -41,3 +41,11 @@ mix run
 ### Windows デスクトップ・アプリケーション（将棋所）から実行するケース
 
 📖 [将棋所](http://shogidokoro.starfree.jp/) をダウンロードしろ  
+
+# 実行ファイルの作り方
+
+👇 説明通りやっても作れない。分けわからん  
+
+```shell
+mix release
+```
