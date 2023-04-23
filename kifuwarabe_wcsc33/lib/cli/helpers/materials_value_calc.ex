@@ -1,4 +1,4 @@
-defmodule KifuwarabeWcsc33.CLI.Helpers.MaterialValueCalc do
+defmodule KifuwarabeWcsc33.CLI.Helpers.MaterialsValueCalc do
   @moduledoc """
 
     駒得を数える
@@ -36,7 +36,7 @@ defmodule KifuwarabeWcsc33.CLI.Helpers.MaterialValueCalc do
             sign = get_sign(piece_turn, pos)
             piece_type = KifuwarabeWcsc33.CLI.Mappings.ToPieceType.from_piece(piece)
             value = sign * get_value_by_piece_type(piece_type)
-            # IO.puts("[material_value_calc] piece_type:#{piece_type} value:#{value}")
+            # IO.puts("[materials_value_calc] piece_type:#{piece_type} value:#{value}")
             value
           end)
         |> Enum.reduce(0, fn (value, acc) -> acc + value end)
@@ -54,7 +54,7 @@ defmodule KifuwarabeWcsc33.CLI.Helpers.MaterialValueCalc do
             piece_type = KifuwarabeWcsc33.CLI.Mappings.ToPieceType.from_piece(piece)
             unit_value = get_value_by_piece_type(piece_type)
             value = sign * num * unit_value
-            # IO.puts("[material_value_calc] num:#{num} value:#{value}")
+            # IO.puts("[materials_value_calc] num:#{num} value:#{value}")
             value
           end)
         |> Enum.reduce(0, fn (value, acc) -> acc + value end)

@@ -143,7 +143,7 @@ defmodule KifuwarabeWcsc33.CLI.Helpers.PositionParser do
         :k2 => KifuwarabeWcsc33.CLI.Finder.Square.find_king_on_board(pos, :gote),
       },
       # 駒得評価値を算出
-      material_value: KifuwarabeWcsc33.CLI.Helpers.MaterialValueCalc.count(pos)
+      materials_value: KifuwarabeWcsc33.CLI.Helpers.MaterialsValueCalc.count(pos)
     }
 
     pos

@@ -46,13 +46,13 @@ defmodule KifuwarabeWcsc33.CLI.MoveGeneration.UndoMove do
       end
 
     # 変動した評価値を減算
-    new_material_value = if captured_pt != nil do
-        pos.material_value - sign * KifuwarabeWcsc33.CLI.Helpers.MaterialValueCalc.get_value_by_piece_type(captured_pt)
+    new_materials_value = if captured_pt != nil do
+        pos.materials_value - sign * KifuwarabeWcsc33.CLI.Helpers.MaterialsValueCalc.get_value_by_piece_type(captured_pt)
       else
-        pos.material_value
+        pos.materials_value
       end
 
-    # IO.puts("[undo_move do_it] pos.material_value=#{pos.material_value} new_material_value:#{new_material_value}")
+    # IO.puts("[undo_move do_it] pos.materials_value=#{pos.materials_value} new_materials_value:#{new_materials_value}")
 
     # 局面更新
     #
@@ -66,7 +66,7 @@ defmodule KifuwarabeWcsc33.CLI.MoveGeneration.UndoMove do
             moves: pos.moves |> List.delete_at(last_index),
             captured_piece_types: pos.captured_piece_types |> List.delete_at(last_index),
             # 変動した評価値を減算
-            material_value: new_material_value,
+            materials_value: new_materials_value,
           }
 
     # 更新された局面を返す
@@ -127,13 +127,13 @@ defmodule KifuwarabeWcsc33.CLI.MoveGeneration.UndoMove do
         else
           1
         end
-      material_value_difference = KifuwarabeWcsc33.CLI.Helpers.MaterialValueCalc.get_value_by_piece_type(
+      materials_value_difference = KifuwarabeWcsc33.CLI.Helpers.MaterialsValueCalc.get_value_by_piece_type(
           KifuwarabeWcsc33.CLI.Mappings.ToPieceType.from_piece(piece_after_play)
         ) -
-        KifuwarabeWcsc33.CLI.Helpers.MaterialValueCalc.get_value_by_piece_type(
+        KifuwarabeWcsc33.CLI.Helpers.MaterialsValueCalc.get_value_by_piece_type(
           KifuwarabeWcsc33.CLI.Mappings.ToPieceType.from_piece(piece_before_play)
         )
-      new_material_value = pos.material_value - sign * material_value_difference
+      new_materials_value = pos.materials_value - sign * materials_value_difference
 
 
       # 局面更新
@@ -152,7 +152,7 @@ defmodule KifuwarabeWcsc33.CLI.MoveGeneration.UndoMove do
               :sp
             end
         },
-        material_value: new_material_value
+        materials_value: new_materials_value
       }
 
       # 局面更新

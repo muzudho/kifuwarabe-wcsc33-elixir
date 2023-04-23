@@ -165,7 +165,7 @@ defmodule KifuwarabeWcsc33.CLI.Models.Position do
             #   - 古典的アルゴリズムで用いられる、思考部で使う
             #   - 現局面の手番の局面評価値
             #
-            material_value: 0
+            materials_value: 0
 
   # Elixir のリスト、リンクドリストだ、ランダム・アクセス遅そう、使いたくねー
   # defstruct piece_list:

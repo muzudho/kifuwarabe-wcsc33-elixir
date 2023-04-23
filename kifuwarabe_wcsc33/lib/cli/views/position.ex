@@ -423,7 +423,7 @@ defmodule KifuwarabeWcsc33.CLI.Views.Position do
   # 先手から見た局面評価値
   defp stringify_value(pos) do
     """
-    value seen from sente: #{pos.material_value}
+    value seen from sente: #{pos.materials_value}
 
     """
   end

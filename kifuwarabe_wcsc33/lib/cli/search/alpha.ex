@@ -185,6 +185,6 @@ defmodule KifuwarabeWcsc33.CLI.Search.Alpha do
   # 局面評価値（相手から見た評価値）を返す
   #
   defp lets_position_value(pos) do
-    pos.material_value
+    pos.materials_value
   end
 end
