@@ -522,9 +522,7 @@ defmodule KifuwarabeWcsc33.CLI.Helpers.PositionParser do
 
     {rest, pos} =
       if 1 <= length(rest) do
-        IO.inspect(rest, label: "[parse_moves_string_and_update_position] rest")
-        mchar = hd(rest)
-        rest = tl(rest)
+        IO.inspect(rest, label: "[parse_moves_string_and_update_position] rest1")
 
         # 区切り
         # ======
@@ -533,12 +531,14 @@ defmodule KifuwarabeWcsc33.CLI.Helpers.PositionParser do
         #
         # rest = rest |> String.trim_leading()
         rest =
-          if mchar == " " do
+          if hd(rest) == " " do
             # space = hd(rest)
             tl(rest)
           else
             rest
           end
+
+        IO.inspect(rest, label: "[parse_moves_string_and_update_position] rest2")
 
         # Recursive
         # =========

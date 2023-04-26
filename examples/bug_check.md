@@ -108,7 +108,7 @@ go
 
 にマッチしないケースが出る。
 
-# 歩を114枚持ってる？
+# 歩を114枚持ってる？ ----> パーサー書き直したから
 
 ```plaintext
 position sfen lnsgkgsnl/1r5b1/ppppppppp/9/9/2P6/PP1PPPPPP/1B5R1/LNSGKGSNL w - 1
@@ -116,6 +116,13 @@ position sfen lnsgkgsnl/1r5b1/ppppppppp/9/9/2P6/PP1PPPPPP/1B5R1/LNSGKGSNL w - 1
 
 ```plaintext
 position startpos moves 7g7f
+
+# のあと
+go
+```
+
+```plaintext
+position startpos moves 7g7f 3c3d
 
 # のあと
 go
