@@ -149,11 +149,23 @@ defmodule KifuwarabeWcsc33.CLI.Helpers.PositionParser do
     pos
   end
 
+  # パターンマッチ
+  defp map_string_to_board(rest \\ [], sq, board)
+
+  #
+  # Base case
+  #
+  defp map_string_to_board([], sq, board) do
+      # 何の成果も増えません。計算終了
+      {"", sq, board}
+  end
+
+
   # 盤面文字列を解析して、駒のリストを返す
   #
   # ## Parameters
   #
-  #   * `rest` - 残りの文字列
+  #   * `[first_char | rest]` - first_char は先頭の１文字、rest は残りの文字列
   #   * `sq` - スクウェア（Square；マス番地）
   #   * `board` - （成果物）ボード（Board；将棋盤）
   #
@@ -171,162 +183,148 @@ defmodule KifuwarabeWcsc33.CLI.Helpers.PositionParser do
   # デービッド・フォーサイスさんの発案したチェスの盤面の記録方法（１行ごとに縦線 | で区切る）を、
   # スティーブン・J・エドワーズさんがコンピューター・チェスのメーリングリストで１０年がかりで意見を取り入れてコンピューター向けに仕様を決めたもの
   #
-  defp map_string_to_board(rest, sq, board) do
-    if rest |> String.length() < 1 do
+  defp map_string_to_board([first_char | rest], sq, board) do
+    # 盤の区切り
+    if first_char == " " do
       # base case
 
       # 何の成果も増えません。計算終了
       {rest, sq, board}
     else
-      # recursive
+      {rest, sq, board} =
+        cond do
+          # 本将棋の盤上の１行では、連続するスペースの数は最大で１桁に収まる
+          Regex.match?(~r/^\d$/, first_char) ->
+            # 空きマスが何個連続するかの数
+            space_num = String.to_integer(first_char)
+            # 愚直な方法
+            {sq, board} =
+              case space_num do
+                1 ->
+                  {sq - 10, Map.merge(board, %{sq => :sp})}
 
-      # こうやって、１文字ずつ取りだして、減らしていけるけど……
-      first_char = rest |> String.at(0)
-      # IO.puts("map_string_to_board char:[#{first_char}]")
-      rest = rest |> String.slice(1..-1)
+                2 ->
+                  {sq - 20, Map.merge(board, %{sq => :sp, (sq - 10) => :sp})}
 
-      # 盤の区切り
-      if first_char == " " do
-        # base case
+                3 ->
+                  {sq - 30, Map.merge(board, %{sq => :sp, (sq - 10) => :sp, (sq - 20) => :sp})}
 
-        # 何の成果も増えません。計算終了
-        {rest, sq, board}
-      else
-        {rest, sq, board} =
-          cond do
-            # 本将棋の盤上の１行では、連続するスペースの数は最大で１桁に収まる
-            Regex.match?(~r/^\d$/, first_char) ->
-              # 空きマスが何個連続するかの数
-              space_num = String.to_integer(first_char)
-              # 愚直な方法
-              {sq, board} =
-                case space_num do
-                  1 ->
-                    {sq - 10, Map.merge(board, %{sq => :sp})}
+                4 ->
+                  {sq - 40,
+                    Map.merge(board, %{
+                      sq => :sp,
+                      (sq - 10) => :sp,
+                      (sq - 20) => :sp,
+                      (sq - 30) => :sp
+                    })}
 
-                  2 ->
-                    {sq - 20, Map.merge(board, %{sq => :sp, (sq - 10) => :sp})}
+                5 ->
+                  {sq - 50,
+                    Map.merge(board, %{
+                      sq => :sp,
+                      (sq - 10) => :sp,
+                      (sq - 20) => :sp,
+                      (sq - 30) => :sp,
+                      (sq - 40) => :sp
+                    })}
 
-                  3 ->
-                    {sq - 30, Map.merge(board, %{sq => :sp, (sq - 10) => :sp, (sq - 20) => :sp})}
+                6 ->
+                  {sq - 60,
+                    Map.merge(board, %{
+                      sq => :sp,
+                      (sq - 10) => :sp,
+                      (sq - 20) => :sp,
+                      (sq - 30) => :sp,
+                      (sq - 40) => :sp,
+                      (sq - 50) => :sp
+                    })}
 
-                  4 ->
-                    {sq - 40,
-                     Map.merge(board, %{
-                       sq => :sp,
-                       (sq - 10) => :sp,
-                       (sq - 20) => :sp,
-                       (sq - 30) => :sp
-                     })}
+                7 ->
+                  {sq - 70,
+                    Map.merge(board, %{
+                      sq => :sp,
+                      (sq - 10) => :sp,
+                      (sq - 20) => :sp,
+                      (sq - 30) => :sp,
+                      (sq - 40) => :sp,
+                      (sq - 50) => :sp,
+                      (sq - 60) => :sp
+                    })}
 
-                  5 ->
-                    {sq - 50,
-                     Map.merge(board, %{
-                       sq => :sp,
-                       (sq - 10) => :sp,
-                       (sq - 20) => :sp,
-                       (sq - 30) => :sp,
-                       (sq - 40) => :sp
-                     })}
+                8 ->
+                  {sq - 80,
+                    Map.merge(board, %{
+                      sq => :sp,
+                      (sq - 10) => :sp,
+                      (sq - 20) => :sp,
+                      (sq - 30) => :sp,
+                      (sq - 40) => :sp,
+                      (sq - 50) => :sp,
+                      (sq - 60) => :sp,
+                      (sq - 70) => :sp
+                    })}
 
-                  6 ->
-                    {sq - 60,
-                     Map.merge(board, %{
-                       sq => :sp,
-                       (sq - 10) => :sp,
-                       (sq - 20) => :sp,
-                       (sq - 30) => :sp,
-                       (sq - 40) => :sp,
-                       (sq - 50) => :sp
-                     })}
+                9 ->
+                  {sq - 90,
+                    Map.merge(board, %{
+                      sq => :sp,
+                      (sq - 10) => :sp,
+                      (sq - 20) => :sp,
+                      (sq - 30) => :sp,
+                      (sq - 40) => :sp,
+                      (sq - 50) => :sp,
+                      (sq - 60) => :sp,
+                      (sq - 70) => :sp,
+                      (sq - 80) => :sp
+                    })}
 
-                  7 ->
-                    {sq - 70,
-                     Map.merge(board, %{
-                       sq => :sp,
-                       (sq - 10) => :sp,
-                       (sq - 20) => :sp,
-                       (sq - 30) => :sp,
-                       (sq - 40) => :sp,
-                       (sq - 50) => :sp,
-                       (sq - 60) => :sp
-                     })}
+                _ ->
+                  raise "unexpected space_num:#{space_num}"
+              end
 
-                  8 ->
-                    {sq - 80,
-                     Map.merge(board, %{
-                       sq => :sp,
-                       (sq - 10) => :sp,
-                       (sq - 20) => :sp,
-                       (sq - 30) => :sp,
-                       (sq - 40) => :sp,
-                       (sq - 50) => :sp,
-                       (sq - 60) => :sp,
-                       (sq - 70) => :sp
-                     })}
+            {rest, sq, board}
 
-                  9 ->
-                    {sq - 90,
-                     Map.merge(board, %{
-                       sq => :sp,
-                       (sq - 10) => :sp,
-                       (sq - 20) => :sp,
-                       (sq - 30) => :sp,
-                       (sq - 40) => :sp,
-                       (sq - 50) => :sp,
-                       (sq - 60) => :sp,
-                       (sq - 70) => :sp,
-                       (sq - 80) => :sp
-                     })}
+          # 成り駒
+          first_char == "+" ->
+            second_char = rest |> String.at(0)
 
-                  _ ->
-                    raise "unexpected space_num:#{space_num}"
-                end
+            promoted_piece =
+              KifuwarabeWcsc33.CLI.Views.Piece.from_code(first_char <> second_char)
 
-              {rest, sq, board}
+            board = Map.merge(board, %{sq => promoted_piece})
+            # 右列へ１つ移動（-10）
+            sq = sq - 10
 
-            # 成り駒
-            first_char == "+" ->
-              second_char = rest |> String.at(0)
+            rest = rest |> String.slice(1..-1)
+            {rest, sq, board}
 
-              promoted_piece =
-                KifuwarabeWcsc33.CLI.Views.Piece.from_code(first_char <> second_char)
+          # 段の区切り
+          first_char == "/" ->
+            # 次の段へ
 
-              board = Map.merge(board, %{sq => promoted_piece})
-              # 右列へ１つ移動（-10）
-              sq = sq - 10
+            # 左端列に戻って（+90）
+            # 一段下がる（+1）
+            sq = sq + 91
+            {rest, sq, board}
 
-              rest = rest |> String.slice(1..-1)
-              {rest, sq, board}
+          # それ以外
+          true ->
+            piece = KifuwarabeWcsc33.CLI.Views.Piece.from_code(first_char)
+            board = Map.merge(board, %{sq => piece})
 
-            # 段の区切り
-            first_char == "/" ->
-              # 次の段へ
+            # 右列へ１つ移動（-10）
+            sq = sq - 10
 
-              # 左端列に戻って（+90）
-              # 一段下がる（+1）
-              sq = sq + 91
-              {rest, sq, board}
+            {rest, sq, board}
+        end
 
-            # それ以外
-            true ->
-              piece = KifuwarabeWcsc33.CLI.Views.Piece.from_code(first_char)
-              board = Map.merge(board, %{sq => piece})
+      # Recursive
+      # =========
 
-              # 右列へ１つ移動（-10）
-              sq = sq - 10
+      {rest, sq, board} = rest |> map_string_to_board(sq, board)
 
-              {rest, sq, board}
-          end
-
-        # Recursive
-        # =========
-
-        {rest, sq, board} = rest |> map_string_to_board(sq, board)
-
-        # 結果を上に投げ上げるだけ
-        {rest, sq, board}
-      end
+      # 結果を上に投げ上げるだけ
+      {rest, sq, board}
     end
   end
 
