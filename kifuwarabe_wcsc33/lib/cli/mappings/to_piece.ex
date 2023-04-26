@@ -336,4 +336,114 @@ defmodule KifuwarabeWcsc33.CLI.Mappings.ToPiece do
       _ -> raise "unexpected captured piece:#{captured_piece}"
     end
   end
+
+  @doc """
+  
+    「取った駒情報」から「駒台の持ち駒」へ変換
+  
+  ## Returns
+  
+    0. ピース（Piece；先後付きの駒） - ただし、持ち駒用にフィルタリング
+  
+  """
+  def from_captured_piece_type_to_hand(turn, captured_piece_type) do
+    case turn do
+      :sente ->
+        case captured_piece_type do
+          #
+          # ▲せんて（Sente；先手） or したて（Shitate；下手）
+          # ============================================
+          #
+          # キング（King；玉）
+          :k -> :k2
+          # ルック（Rook；飛車）
+          :r -> :r2
+          # ビショップ（Bishop；角）
+          :b -> :b2
+          # ゴールド（Gold；金）
+          :g -> :g2
+          # シルバー（Silver；銀）
+          :s -> :s2
+          # ナイト（kNight；桂）
+          :n -> :n2
+          # ランス（Lance；香）
+          :l -> :l2
+          # ポーン（Pawn；歩）
+          :p -> :p2
+          # 成り玉なんて無いぜ
+          # :pk
+          # It's reasonably a プロモーテッド・ルック（Promoted Rook；成飛）. It's actually ドラゴン（Dragon；竜）
+          :pr -> :r2
+          # It's reasonably a プロモーテッド・ビショップ（Promoted Bishop；成角）.  It's actually ホース（Horse；馬）. Ponanza calls ペガサス（Pegasus；天馬）
+          :pb -> :b2
+          # 裏返った金なんて無いぜ
+          # :pg1
+          # プロモーテッド・シルバー（Promoted Silver；成銀. Or 全 in one letter）
+          :ps -> :s2
+          # プロモーテッド・ナイト（Promoted kNight；成桂. Or 圭 in one letter）
+          :pn -> :n2
+          # プロモーテッド・ランス（Promoted Lance；成香. Or 杏 in one letter）
+          :pl -> :l2
+          # It's reasonably a プロモーテッド・ポーン（Promoted Pawn；成歩）. It's actually と（"To"；と is 金 cursive）
+          :pp -> :p2
+          #
+          # その他
+          # =====
+          #
+          _ -> raise "unexpected captured_piece_type:#{captured_piece_type}"
+        end
+
+      :gote ->
+        case captured_piece_type do
+          #
+          # ▽ごて（Gote；後手） or うわて（Uwate；上手）
+          # =======================================
+          #
+          # キング（King；玉）
+          :k -> :k1
+          # ルック（Rook；飛車）
+          :r -> :r1
+          # ビショップ（Bishop；角）
+          :b -> :b1
+          # ゴールド（Gold；金）
+          :g -> :g1
+          # シルバー（Silver；銀）
+          :s -> :s1
+          # ナイト（kNight；桂）
+          :n -> :n1
+          # ランス（Lance；香）
+          :l -> :l1
+          # ポーン（Pawn；歩）
+          :p -> :p1
+          # 成り玉なんて無いぜ
+          # :pk
+          # It's reasonably a プロモーテッド・ルック（Promoted Rook；成飛）. It's actually ドラゴン（Dragon；竜）
+          :pr -> :r1
+          # It's reasonably a プロモーテッド・ビショップ（Promoted Bishop；成角）.  It's actually ホース（Horse；馬）. Ponanza calls ペガサス（Pegasus；天馬）
+          :pb -> :b1
+          # 裏返った金なんて無いぜ
+          # :pg
+          # プロモーテッド・シルバー（Promoted Silver；成銀. Or 全 in one letter）
+          :ps -> :s1
+          # プロモーテッド・ナイト（Promoted kNight；成桂. Or 圭 in one letter）
+          :pn -> :n1
+          # プロモーテッド・ランス（Promoted Lance；成香. Or 杏 in one letter）
+          :pl -> :l1
+          # It's reasonably a プロモーテッド・ポーン（Promoted Pawn；成歩）. It's actually と（"To"；と is 金 cursive）
+          :pp -> :p1
+          #
+          # その他
+          # =====
+          #
+          _ -> raise "unexpected captured_piece_type:#{captured_piece_type}"
+        end
+
+      #
+      # その他
+      # =====
+      #
+      _ ->
+        raise "unexpected turn:#{turn}"
+    end
+  end
 end

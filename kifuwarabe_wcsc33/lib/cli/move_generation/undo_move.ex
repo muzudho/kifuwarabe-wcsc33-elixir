@@ -47,29 +47,12 @@ defmodule KifuwarabeWcsc33.CLI.MoveGeneration.UndoMove do
         materials_value: -pos.materials_value
     }
 
-    # ## 雑談
-    #
-    # 取った駒を戻すと、駒得評価値が動く
-    #
-    # - 取った駒を返せば必ず駒損だから、負の数（減算）になるはず
-    #
-
-    #
-    # 取った駒の価値
-    #
-    pos =
-      if captured_pt != nil do
-        captured_material_value =
-          KifuwarabeWcsc33.CLI.Helpers.MaterialsValueCalc.get_value_by_piece_type(captured_pt)
-
-        # IO.puts("[undo_move do_it] captured piece. m:#{KifuwarabeWcsc33.CLI.Views.Move.as_code(move)} mat_val=#{pos.materials_value} cap_val:#{captured_material_value}")
-        %{pos | materials_value: pos.materials_value - captured_material_value}
-      else
-        pos
-      end
-
     # 更新された局面を返す
     if move.drop_piece_type != nil do
+      #
+      # 打った駒を戻す
+      # ============
+      #
       # 打った駒と、減る前の枚数
       drop_piece =
         KifuwarabeWcsc33.CLI.Mappings.ToPiece.from_turn_and_piece_type(
@@ -77,6 +60,7 @@ defmodule KifuwarabeWcsc33.CLI.MoveGeneration.UndoMove do
           move.drop_piece_type
         )
 
+      IO.puts("[undo_move] drop_piece:#{drop_piece} old_num:#{pos.hand_pieces[drop_piece]}")
       num = pos.hand_pieces[drop_piece] + 1
 
       # ## 雑談
@@ -101,6 +85,47 @@ defmodule KifuwarabeWcsc33.CLI.MoveGeneration.UndoMove do
           }
       }
     else
+      #
+      # 盤上で動かした駒を戻す
+      # ===================
+      #
+      #
+
+      # ## 雑談
+      #
+      # 取った駒を戻すと、駒得評価値が動く
+      #
+      # - 取った駒を返せば必ず駒損だから、負の数（減算）になるはず
+      #
+
+      #
+      # 取った駒の価値
+      #
+      pos =
+        if captured_pt != nil do
+          # 持ち駒種類（先後付き）（成りの情報を含まない）
+          hand_pc =
+            KifuwarabeWcsc33.CLI.Mappings.ToPiece.from_captured_piece_type_to_hand(
+              pos.turn,
+              captured_pt
+            )
+
+          IO.puts("[undo_move] hand_pc:#{hand_pc} old_num:#{pos.hand_pieces[hand_pc]}")
+          num = pos.hand_pieces[hand_pc] - 1
+
+          captured_material_value =
+            KifuwarabeWcsc33.CLI.Helpers.MaterialsValueCalc.get_value_by_piece_type(captured_pt)
+
+          # IO.puts("[undo_move do_it] captured piece. m:#{KifuwarabeWcsc33.CLI.Views.Move.as_code(move)} mat_val=#{pos.materials_value} cap_val:#{captured_material_value}")
+          %{
+            pos
+            | hand_pieces: %{pos.hand_pieces | hand_pc => num},
+              materials_value: pos.materials_value - captured_material_value
+          }
+        else
+          pos
+        end
+
       # ## 雑談
       #
       # TODO 成った駒を戻すと、駒得評価値が動く

@@ -32,6 +32,7 @@ defmodule KifuwarabeWcsc33.CLI.MoveGeneration.DoMove do
             move.drop_piece_type
           )
 
+        IO.puts("[do_move] drop_piece:#{drop_piece} old_num:#{pos.hand_pieces[drop_piece]}")
         num = pos.hand_pieces[drop_piece] - 1
 
         # ## 雑談
@@ -40,19 +41,19 @@ defmodule KifuwarabeWcsc33.CLI.MoveGeneration.DoMove do
         #
 
         # 局面更新
+        #   将棋盤更新
+        #     持ち駒を置く
+        #   駒台更新
+        #     枚数を１減らす
         pos = %{
           pos
-          | # 将棋盤更新
-            board: %{
+          | board: %{
               pos.board
-              | # 持ち駒を置く
-                move.destination => drop_piece
+              | move.destination => drop_piece
             },
-            # 駒台更新
             hand_pieces: %{
               pos.hand_pieces
-              | # 枚数を１減らす
-                drop_piece => num
+              | drop_piece => num
             }
         }
 
@@ -96,6 +97,7 @@ defmodule KifuwarabeWcsc33.CLI.MoveGeneration.DoMove do
             # 持ち駒種類（先後付き）（成りの情報を含まない）
             hand_pc = KifuwarabeWcsc33.CLI.Mappings.ToPiece.from_captured_piece_to_hand(target_pc)
 
+            IO.puts("[do_move] hand_pc:#{hand_pc} old_num:#{pos.hand_pieces[hand_pc]}")
             num = pos.hand_pieces[hand_pc] + 1
 
             # 局面更新
