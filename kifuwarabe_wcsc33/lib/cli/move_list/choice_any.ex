@@ -1,8 +1,8 @@
 defmodule KifuwarabeWcsc33.CLI.MoveList.ChoiceAny do
   @moduledoc """
-
+  
     指し手のリストから１手選ぶ
-
+  
   """
 
   #
@@ -14,11 +14,9 @@ defmodule KifuwarabeWcsc33.CLI.MoveList.ChoiceAny do
   # ベース・ケース（Base case；基本形） - 再帰関数の繰り返し回数が０回のときの処理
   #
   def do_it([], pos) do
-
-      # 合法手が無ければ計算停止
-      IO.puts("[ChoiceAny do_it] empty move list. stop")
-      {pos, [], nil}
-
+    # 合法手が無ければ計算停止
+    IO.puts("[ChoiceAny do_it] empty move list. stop")
+    {pos, [], nil}
   end
 
   # 最善手（その手を指すと詰む手以外）を選ぶ。無ければ投了を返す
@@ -37,7 +35,6 @@ defmodule KifuwarabeWcsc33.CLI.MoveList.ChoiceAny do
   # 2. ベスト・ムーブ（Best Move；最善手）
   #
   def do_it([best_move | move_list], pos) do
-
     #
     # 候補手が、本当にダメでないか検討する
     # ===============================
@@ -52,10 +49,9 @@ defmodule KifuwarabeWcsc33.CLI.MoveList.ChoiceAny do
       # =========
       #
       do_it(move_list, pos)
-
     else
       ## TODO もし、歩を打ったときで、かつ、そこが相手の玉頭なら、打ち歩詰めチェックをしたい
-      #if best_move.drop_piece_type == :p do
+      # if best_move.drop_piece_type == :p do
       #  opponent_king_pc = KifuwarabeWcsc33.CLI.Mappings.ToPiece.from_turn_and_piece_type(pos.opponent_turn, :k)
       #  opponent_king_sq = pos.location_of_kings[opponent_king_pc]
       #  opponent_king_north_sq = KifuwarabeWcsc33.CLI.Mappings.ToDestination.from_turn_and_source(pos.opponent_turn, opponent_king_sq, :north_of)
@@ -69,9 +65,9 @@ defmodule KifuwarabeWcsc33.CLI.MoveList.ChoiceAny do
       #  else
       #    # 打ち歩詰めではない
       #  end
-      #else
+      # else
       #  # 打ち歩詰めではない
-      #end
+      # end
 
       #
       # Base case

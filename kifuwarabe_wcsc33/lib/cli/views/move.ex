@@ -1,5 +1,4 @@
 defmodule KifuwarabeWcsc33.CLI.Views.Move do
-
   #
   # コード化
   #

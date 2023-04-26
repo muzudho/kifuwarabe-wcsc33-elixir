@@ -1,10 +1,10 @@
 defmodule KifuwarabeWcsc33.CLI.Mappings.ToMove do
   @doc """
-
+  
     移動元マス番地と、先後から、指定方向の移動先マス番地を取得
-
+  
   ## Parameters
-
+  
     * `src_sq` - ソース・スクウェア（SouRCe SQuare：マス番地）
     * `pos` - ポジション（Position；局面）
     * `direction_of` - ディレクション・オブ（Direction of；向き）
@@ -12,16 +12,22 @@ defmodule KifuwarabeWcsc33.CLI.Mappings.ToMove do
   ## Returns
   
     0. ムーブ（Move；指し手）
-
+  
   """
   def from(src_sq, pos, direction_of) do
-    dst_sq = KifuwarabeWcsc33.CLI.Mappings.ToDestination.from_turn_and_source(pos.turn, src_sq, direction_of)
+    dst_sq =
+      KifuwarabeWcsc33.CLI.Mappings.ToDestination.from_turn_and_source(
+        pos.turn,
+        src_sq,
+        direction_of
+      )
 
     if KifuwarabeWcsc33.CLI.Thesis.Board.is_in_board?(dst_sq) do
       # 盤上なら
 
       # 移動先の駒の先後を調べる（なければニル）
-      target_turn_or_nil = pos |> KifuwarabeWcsc33.CLI.Mappings.ToPieceType.get_it_or_nil_from_destination(dst_sq)
+      target_turn_or_nil =
+        pos |> KifuwarabeWcsc33.CLI.Mappings.ToPieceType.get_it_or_nil_from_destination(dst_sq)
 
       if target_turn_or_nil == pos.turn do
         # 自駒とぶつかるなら
@@ -29,7 +35,7 @@ defmodule KifuwarabeWcsc33.CLI.Mappings.ToMove do
       else
         # 進める
         move = KifuwarabeWcsc33.CLI.Models.Move.new()
-        move = %{ move | source: src_sq, destination: dst_sq}
+        move = %{move | source: src_sq, destination: dst_sq}
         move
       end
     else
@@ -39,46 +45,50 @@ defmodule KifuwarabeWcsc33.CLI.Mappings.ToMove do
   end
 
   @doc """
-
+  
     移動元マス番地と、先後から、指定方向の移動先マス番地を取得
-
+  
   ## Parameters
-
+  
     * `src_sq` - ソース・スクウェア（SouRCe SQuare：マス番地）
     * `pos` - ポジション（Position；局面）
     * `direction_of` - ディレクション・オブ（Direction of；向き）
     * `origin_src_sq` - （再帰をするときの）１番最初の移動元マス
     * `move_list` - ムーブ・リスト（Move List；指し手のリスト）
-
+  
   ## Returns
-
+  
     0. ムーブ・リスト（Move List；指し手のリスト）
-
+  
   """
   def list_from(src_sq, pos, direction_of, origin_src_sq \\ nil, move_list \\ []) do
     # 盤外に出ると終わる
-    dst_sq = KifuwarabeWcsc33.CLI.Mappings.ToDestination.from_turn_and_source(pos.turn, src_sq, direction_of)
+    dst_sq =
+      KifuwarabeWcsc33.CLI.Mappings.ToDestination.from_turn_and_source(
+        pos.turn,
+        src_sq,
+        direction_of
+      )
 
     if KifuwarabeWcsc33.CLI.Thesis.Board.is_in_board?(dst_sq) do
       # 盤上なら
 
       # 移動先の駒の先後を調べる（なければニル）
-      target_turn_or_nil = pos |> KifuwarabeWcsc33.CLI.Mappings.ToPieceType.get_it_or_nil_from_destination(dst_sq)
+      target_turn_or_nil =
+        pos |> KifuwarabeWcsc33.CLI.Mappings.ToPieceType.get_it_or_nil_from_destination(dst_sq)
 
       if target_turn_or_nil == nil || target_turn_or_nil != pos.turn do
         # 空マス、または、相手駒にぶつかったら、指し手は生成する
 
-        origin_src_sq = if origin_src_sq != nil do
+        origin_src_sq =
+          if origin_src_sq != nil do
             origin_src_sq
           else
             src_sq
           end
 
         move = KifuwarabeWcsc33.CLI.Models.Move.new()
-        move = %{ move |
-          source: origin_src_sq,
-          destination: dst_sq
-        }
+        move = %{move | source: origin_src_sq, destination: dst_sq}
 
         move_list = move_list ++ [move]
         # IO.inspect(move_list, label: "[to_destination move_list_from] move_list")
@@ -90,7 +100,6 @@ defmodule KifuwarabeWcsc33.CLI.Mappings.ToMove do
           # 相手駒にぶつかったら、指し手は増やさない
           move_list
         end
-
       else
         # 自駒にぶつかったら、指し手は増やさない
         move_list
@@ -102,18 +111,18 @@ defmodule KifuwarabeWcsc33.CLI.Mappings.ToMove do
   end
 
   @doc """
-
+  
     コードから、ムーブ・オブジェクトを生成
-
+  
   ## Parameters
-
+  
     * `rest` - レスト（Rest；残り）の、文字列
-
+  
   ## Returns
-
+  
     0. レスト（Rest；残り） - の、文字列
     1. ムーブ（Move；指し手）
-
+  
   """
   def from_code_line([mchar | rest]) do
     # IO.puts("[to_move from_code_line] mchar:(#{mchar}) rest:(#{rest})")
@@ -176,12 +185,12 @@ defmodule KifuwarabeWcsc33.CLI.Mappings.ToMove do
           # mchar = hd(rest)
           rest = tl(rest)
 
-          #if second_char != "*" do
+          # if second_char != "*" do
           #  raise "unexpected second_char:#{second_char}"
-          #end
+          # end
 
           # IO.puts("parse_piece_type_on_hands first_char:[#{first_char}]")
-          #rest = rest |> String.slice(1..-1)
+          # rest = rest |> String.slice(1..-1)
 
           # IO.inspect(move, label: "parse(12) The move is")
           # IO.puts("parse_moves_string_and_update_position rest:[#{rest}]")

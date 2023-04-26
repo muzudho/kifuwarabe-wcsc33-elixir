@@ -2,13 +2,13 @@ defmodule KifuwarabeWcsc33.CLI.Thesis.Board do
   @moduledoc """
   
     将棋盤
-
+  
   """
 
   @doc """
-
+  
     指定マスが、盤上かどうか判定する
-
+  
   ## Parameters
   
     * `sq` - スクウェア（Square；マス番地）。11～99
@@ -19,25 +19,28 @@ defmodule KifuwarabeWcsc33.CLI.Thesis.Board do
     cond do
       sq < 11 ->
         false
+
       99 < sq ->
         false
+
       sq |> rem(10) == 0 ->
         # 0列はない
         false
+
       true ->
         true
     end
   end
 
   @doc """
-
+  
     相手の陣地のマス番地か？
-
+  
   ## Parameters
   
     * `pos` - ポジション（Position；局面）
     * `sq` - スクウェア（Square；マス番地）。11～99
-
+  
   """
   def is_in_teban_territory?(pos, sq) do
     if pos.turn == :sente do
@@ -48,14 +51,14 @@ defmodule KifuwarabeWcsc33.CLI.Thesis.Board do
   end
 
   @doc """
-
+  
     相手の陣地のマス番地か？
-
+  
   ## Parameters
   
     * `pos` - ポジション（Position；局面）
     * `sq` - スクウェア（Square；マス番地）。11～99
-
+  
   """
   def is_in_opponent_territory?(pos, sq) do
     if pos.turn == :sente do
@@ -66,16 +69,16 @@ defmodule KifuwarabeWcsc33.CLI.Thesis.Board do
   end
 
   @doc """
-
+  
     相手の陣地のマス番地か？
-
+  
     - 桂の成れない段
-
+  
   ## Parameters
   
     * `pos` - ポジション（Position；局面）
     * `sq` - スクウェア（Square；マス番地）。11～99
-
+  
   """
   def is_in_opponent_rank1_and_2?(pos, sq) do
     if pos.turn == :sente do
@@ -86,16 +89,16 @@ defmodule KifuwarabeWcsc33.CLI.Thesis.Board do
   end
 
   @doc """
-
+  
     相手の陣地のマス番地か？
-
+  
     - 香、歩の成れない段
-
+  
   ## Parameters
   
     * `pos` - ポジション（Position；局面）
     * `sq` - スクウェア（Square；マス番地）。11～99
-
+  
   """
   def is_in_opponent_rank1?(pos, sq) do
     if pos.turn == :sente do
@@ -109,7 +112,6 @@ defmodule KifuwarabeWcsc33.CLI.Thesis.Board do
   # 指定マスに、指定の駒があるか？
   #
   def is_there_piece?(squares, piece, board) do
-    squares |> Enum.any?(fn (sq) -> board[sq]==piece end)
+    squares |> Enum.any?(fn sq -> board[sq] == piece end)
   end
-
 end

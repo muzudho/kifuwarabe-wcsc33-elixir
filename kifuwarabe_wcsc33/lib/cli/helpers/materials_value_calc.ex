@@ -1,25 +1,24 @@
 defmodule KifuwarabeWcsc33.CLI.Helpers.MaterialsValueCalc do
   @moduledoc """
-
+  
     駒得を数える
-
+  
   """
 
   @doc """
-
+  
     駒得を数える
-
+  
   ## Parameters
-
+  
     * `pos` - ポジション（Position；局面）
-
+  
   ## Returns
-
+  
     0. バリュー（Value；評価値）
-
+  
   """
   def count(pos) do
-
     # 手番が良ければプラス、手番が悪ければマイナスとする
 
     # 全てのマス番地について
@@ -28,46 +27,50 @@ defmodule KifuwarabeWcsc33.CLI.Helpers.MaterialsValueCalc do
     # |> 駒を評価値に変換
     # |> すべてのマスの評価値を足して、１つの整数にする
     value_on_board =
-      KifuwarabeWcsc33.CLI.Models.Squares.all_squares
-        |> Enum.map(fn (sq) -> pos.board[sq] end)
-        |> Enum.filter(fn (piece) -> piece != :sp end)
-        |> Enum.map(fn (piece) ->
-            piece_turn = KifuwarabeWcsc33.CLI.Mappings.ToTurn.from_piece(piece)
-            sign =
-              if piece_turn == pos.turn do
-                1
-              else
-                -1
-              end
-            piece_type = KifuwarabeWcsc33.CLI.Mappings.ToPieceType.from_piece(piece)
-            value = sign * get_value_by_piece_type(piece_type)
-            # IO.puts("[materials_value_calc] piece_type:#{piece_type} value:#{value}")
-            value
-          end)
-        |> Enum.reduce(0, fn (value, acc) -> acc + value end)
+      KifuwarabeWcsc33.CLI.Models.Squares.all_squares()
+      |> Enum.map(fn sq -> pos.board[sq] end)
+      |> Enum.filter(fn piece -> piece != :sp end)
+      |> Enum.map(fn piece ->
+        piece_turn = KifuwarabeWcsc33.CLI.Mappings.ToTurn.from_piece(piece)
+
+        sign =
+          if piece_turn == pos.turn do
+            1
+          else
+            -1
+          end
+
+        piece_type = KifuwarabeWcsc33.CLI.Mappings.ToPieceType.from_piece(piece)
+        value = sign * get_value_by_piece_type(piece_type)
+        # IO.puts("[materials_value_calc] piece_type:#{piece_type} value:#{value}")
+        value
+      end)
+      |> Enum.reduce(0, fn value, acc -> acc + value end)
 
     # 全ての持ち駒について
     # |> 駒の数を、整数１つ分の評価値に変換
     # |> すべてのマスの評価値を足して、１つの整数にする
     value_on_hand =
       pos.hand_pieces
-        |> Enum.map(fn (piece_and_num) ->
-            num = elem(piece_and_num, 1)
-            piece = elem(piece_and_num, 0)
-            piece_turn = KifuwarabeWcsc33.CLI.Mappings.ToTurn.from_piece(piece)
-            sign =
-              if piece_turn == pos.turn do
-                1
-              else
-                -1
-              end
-            piece_type = KifuwarabeWcsc33.CLI.Mappings.ToPieceType.from_piece(piece)
-            unit_value = get_value_by_piece_type(piece_type)
-            value = sign * num * unit_value
-            # IO.puts("[materials_value_calc] num:#{num} value:#{value}")
-            value
-          end)
-        |> Enum.reduce(0, fn (value, acc) -> acc + value end)
+      |> Enum.map(fn piece_and_num ->
+        num = elem(piece_and_num, 1)
+        piece = elem(piece_and_num, 0)
+        piece_turn = KifuwarabeWcsc33.CLI.Mappings.ToTurn.from_piece(piece)
+
+        sign =
+          if piece_turn == pos.turn do
+            1
+          else
+            -1
+          end
+
+        piece_type = KifuwarabeWcsc33.CLI.Mappings.ToPieceType.from_piece(piece)
+        unit_value = get_value_by_piece_type(piece_type)
+        value = sign * num * unit_value
+        # IO.puts("[materials_value_calc] num:#{num} value:#{value}")
+        value
+      end)
+      |> Enum.reduce(0, fn value, acc -> acc + value end)
 
     value_on_board + value_on_hand
   end

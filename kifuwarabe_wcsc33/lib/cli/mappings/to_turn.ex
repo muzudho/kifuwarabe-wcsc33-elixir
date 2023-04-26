@@ -1,38 +1,38 @@
 defmodule KifuwarabeWcsc33.CLI.Mappings.ToTurn do
   @moduledoc """
-
+  
     手番
-
+  
   """
 
   @doc """
-
+  
     先後を反転
-
+  
   ## Parameters
-
+  
     * `turn` - ターン（Turn；先後）
-    
+  
   """
   def flip(turn) do
-      case turn do
-          :sente -> :gote
-          :gote -> :sente
-          _ -> raise "unexpected turn:#{turn}"
-      end
+    case turn do
+      :sente -> :gote
+      :gote -> :sente
+      _ -> raise "unexpected turn:#{turn}"
+    end
   end
 
   @doc """
     ピースを、ターンへ変換
-
+  
   ## Parameters
-
+  
     * `piece` - ピース（Piece；先後付きの駒種類）。スペースを渡すとエラー
-
+  
   ## Returns
-
+  
     0. ターン（Turn；先後）
-
+  
   """
   def from_piece(piece) do
     case piece do

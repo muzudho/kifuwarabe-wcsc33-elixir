@@ -1,7 +1,7 @@
 defmodule KifuwarabeWcsc33.CLI.Main do
   @doc """
   ## 雑談
-
+  
       このメソッドは、コンソール・アプリケーションのエントリー・ポイントではなく、
       本来はスーパーバイザーの開始を書くメソッドだが、Elixirのスーパーバイザーが気に入らないので書かない。
   """
@@ -156,15 +156,16 @@ defmodule KifuwarabeWcsc33.CLI.Main do
         #   0  1
         #
         first_token == "do" ->
-
           IO.inspect(rest_tokens, label: "[main usi_loop] rest_tokens")
           best_move_str = hd(rest_tokens)
           # rest_tokens = tl(rest_tokens)
           IO.puts("[main usi_loop] best_move:#{best_move_str}")
 
           # コードを、指し手へ変換
-          {_rest, best_move} = KifuwarabeWcsc33.CLI.Mappings.ToMove.from_code_line(
-            String.split(best_move_str, "", trim: true))
+          {_rest, best_move} =
+            KifuwarabeWcsc33.CLI.Mappings.ToMove.from_code_line(
+              String.split(best_move_str, "", trim: true)
+            )
 
           # 一手指す
           pos = pos |> KifuwarabeWcsc33.CLI.MoveGeneration.DoMove.do_it(best_move)
@@ -174,8 +175,9 @@ defmodule KifuwarabeWcsc33.CLI.Main do
           IO.puts(
             """
             [main usi_loop] Do #{best_move_str}.
-
-            """ <> KifuwarabeWcsc33.CLI.Views.Position.stringify(pos))
+            
+            """ <> KifuwarabeWcsc33.CLI.Views.Position.stringify(pos)
+          )
 
           {pos}
 
@@ -183,8 +185,10 @@ defmodule KifuwarabeWcsc33.CLI.Main do
         true ->
           # ここにくるようならエラー
           IO.puts(
-            "Hi! I am a Kifuwarabe. It's start! first_token[" <> first_token <> "] input:" <> input
+            "Hi! I am a Kifuwarabe. It's start! first_token[" <>
+              first_token <> "] input:" <> input
           )
+
           {pos}
       end
 

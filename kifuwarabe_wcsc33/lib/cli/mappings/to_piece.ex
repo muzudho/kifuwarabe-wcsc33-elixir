@@ -1,5 +1,4 @@
 defmodule KifuwarabeWcsc33.CLI.Mappings.ToPiece do
-
   @doc """
     変換
   """
@@ -248,13 +247,13 @@ defmodule KifuwarabeWcsc33.CLI.Mappings.ToPiece do
   end
 
   @doc """
-
+  
     駒台へ置けるように変換
-
+  
   ## Returns
-
+  
     0. ピース（Piece；先後付きの駒） - ただし、持ち駒用にフィルタリング
-
+  
   """
   def from_captured_piece_to_hand(captured_piece) do
     case captured_piece do

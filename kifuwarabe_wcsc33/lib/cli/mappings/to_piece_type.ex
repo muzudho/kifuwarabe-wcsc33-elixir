@@ -1,13 +1,12 @@
 defmodule KifuwarabeWcsc33.CLI.Mappings.ToPieceType do
-
   @doc """
-
+  
     解析
-
+  
   ## 引数
-
+  
     * `piece` - ピース（Piece；先後付きの駒種類）の文字列。例参照。この関数では、スペース（Space；空きマス）は判定しません
-
+  
   """
   def from_piece(piece) do
     case piece do
@@ -94,12 +93,12 @@ defmodule KifuwarabeWcsc33.CLI.Mappings.ToPieceType do
   @doc """
   
     移動先の駒の先後を調べる（なければニル）
-
+  
   ## Parameters
-
+  
     * `pos` - ポジション（Position；局面）
     * `dst_sq` - デスティネーション・スクウェア（DeSTination SQuare：移動先のマス番地）
-
+  
   """
   def get_it_or_nil_from_destination(pos, dst_sq) do
     # 盤上なら

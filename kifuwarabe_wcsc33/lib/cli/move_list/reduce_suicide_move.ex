@@ -1,19 +1,18 @@
 defmodule KifuwarabeWcsc33.CLI.MoveList.ReduceSuicideMove do
-
   @doc """
-
+  
     指し手のリストから、自殺手を除去
-
+  
   ## Parameters
-
+  
     * `move_list` - ムーブ・リスト（Move List；指し手のリスト）
     * `pos` - ポジション（Position；局面）
-
+  
   ## Returns
-
+  
     0. ムーブ・リスト（Move List；指し手のリスト）
     1. `pos` - ポジション（Position；局面）
-
+  
   """
   def do_it(move_list, pos) do
     # 自玉
@@ -21,11 +20,11 @@ defmodule KifuwarabeWcsc33.CLI.MoveList.ReduceSuicideMove do
     friend_king_sq = pos.location_of_kings[friend_king_pc]
 
     ## TODO デバッグ消す
-    #searched_friend_king_sq = KifuwarabeWcsc33.CLI.Finder.Square.find_king_on_board(pos, pos.turn)
-    #IO.puts("[think go] DEBUG king sq. friend_king_sq:#{friend_king_sq} searched_friend_king_sq:#{searched_friend_king_sq}")
-    #if friend_king_sq != searched_friend_king_sq do
+    # searched_friend_king_sq = KifuwarabeWcsc33.CLI.Finder.Square.find_king_on_board(pos, pos.turn)
+    # IO.puts("[think go] DEBUG king sq. friend_king_sq:#{friend_king_sq} searched_friend_king_sq:#{searched_friend_king_sq}")
+    # if friend_king_sq != searched_friend_king_sq do
     #  raise "[think go] error king sq. friend_king_sq:#{friend_king_sq} searched_friend_king_sq:#{searched_friend_king_sq}"
-    #end
+    # end
 
     if friend_king_sq == nil do
       # 指す前の自玉がいないケース（詰将棋でもやっているのだろう）では、自殺手判定はやらない
@@ -37,7 +36,9 @@ defmodule KifuwarabeWcsc33.CLI.MoveList.ReduceSuicideMove do
       # 自殺手の除去ルーチン
       # =================
       #
-      {_rest_move_list_is_empty, pos, cleanup_move_list} = reduce_suicide_move_2(move_list, pos, [])
+      {_rest_move_list_is_empty, pos, cleanup_move_list} =
+        reduce_suicide_move_2(move_list, pos, [])
+
       # IO.puts("[think go] rest_move_list.length:#{rest_move_list_is_empty |> length()} (Expected: 0)")
 
       {cleanup_move_list, pos}
@@ -73,7 +74,6 @@ defmodule KifuwarabeWcsc33.CLI.MoveList.ReduceSuicideMove do
   #  1. クリーンナップ・ムーブ・リスト（Clean-up Move List；掃除済みの指し手のリスト） - 自殺手を除去済み
   #
   defp reduce_suicide_move_2([move | rest_move_list], pos, cleanup_move_list) do
-
     # 指す前の自玉がいないケース（詰将棋でもやっているのだろう）ではない前提として、存在判定を省く
 
     # とりあえず、１手指してみる
@@ -87,19 +87,22 @@ defmodule KifuwarabeWcsc33.CLI.MoveList.ReduceSuicideMove do
     #
     # - 移動後の自玉
     #
-    opponent_king_pc = KifuwarabeWcsc33.CLI.Mappings.ToPiece.from_turn_and_piece_type(pos.opponent_turn, :k)
+    opponent_king_pc =
+      KifuwarabeWcsc33.CLI.Mappings.ToPiece.from_turn_and_piece_type(pos.opponent_turn, :k)
+
     opponent_king_sq = pos.location_of_kings[opponent_king_pc]
     # IO.puts("[reduce_suicide_move] king sq:#{opponent_king_sq} pc:#{opponent_king_pc}")
 
-    #IO.puts(
+    # IO.puts(
     #  """
     #  [think choice] Done #{move_code}.
     #
     #  """ <> KifuwarabeWcsc33.CLI.Views.Position.stringify(pos))
 
+    # 自玉は今 opponent_turn 側
     {cleanup_move_list} =
-      # 自玉は今 opponent_turn 側
-      if pos |> KifuwarabeWcsc33.CLI.Thesis.IsMated.is_mated?(pos.opponent_turn, opponent_king_sq) do
+      if pos
+         |> KifuwarabeWcsc33.CLI.Thesis.IsMated.is_mated?(pos.opponent_turn, opponent_king_sq) do
         #
         # 自殺手だ
         #
@@ -125,7 +128,7 @@ defmodule KifuwarabeWcsc33.CLI.MoveList.ReduceSuicideMove do
     #
 
     # 盤表示
-    #IO.puts(
+    # IO.puts(
     #  """
     #  [think choice] Undone #{best_move_code}. It is suicide move.
     #
@@ -135,7 +138,8 @@ defmodule KifuwarabeWcsc33.CLI.MoveList.ReduceSuicideMove do
     # =========
     #
     # - 消去法を続ける
-    {rest_move_list, pos, cleanup_move_list} = reduce_suicide_move_2(rest_move_list, pos, cleanup_move_list)
+    {rest_move_list, pos, cleanup_move_list} =
+      reduce_suicide_move_2(rest_move_list, pos, cleanup_move_list)
 
     # 再帰の帰り道
     {rest_move_list, pos, cleanup_move_list}

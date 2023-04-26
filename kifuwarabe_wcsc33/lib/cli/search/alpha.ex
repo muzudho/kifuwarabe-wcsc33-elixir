@@ -1,14 +1,14 @@
 defmodule KifuwarabeWcsc33.CLI.Search.Alpha do
   @doc """
-
+  
   ## Parameters
-
+  
     * `pos` - ポジション（Position；局面）
-
+  
   ## Returns
-
+  
     o. ベスト・ムーブ（Best Move；指し手） - 無ければニル
-
+  
   """
   def do_it(pos, depth) do
     # IO.puts("[think go] pos.turn:#{pos.turn}")
@@ -65,7 +65,7 @@ defmodule KifuwarabeWcsc33.CLI.Search.Alpha do
   #
   # 関数シグニチャーのパターンマッチの定義
   #
-  defp choice_best(pos, move_list \\ [], sibling_best_move, sibling_best_value, depth)
+  defp choice_best(pos, move_list, sibling_best_move, sibling_best_value, depth)
 
   #
   # ベース・ケース（Base case；基本形） - 再帰関数の繰り返し回数が０回のときの処理
@@ -93,7 +93,6 @@ defmodule KifuwarabeWcsc33.CLI.Search.Alpha do
   # 2. ベスト・ムーブ（Best Move；最善手） - 無ければニル
   #
   defp choice_best(pos, [move | move_list], sibling_best_move, sibling_best_value, depth) do
-
     if move == nil do
       #
       # Base case
@@ -106,7 +105,6 @@ defmodule KifuwarabeWcsc33.CLI.Search.Alpha do
       # 再帰の帰り道
       {pos, sibling_best_move, sibling_best_value}
     else
-
       #
       # とりあえず、１手指してみる
       # ======================
@@ -131,7 +129,7 @@ defmodule KifuwarabeWcsc33.CLI.Search.Alpha do
           #   - 古典的には、歩１個の価値を 100 とする。これを 1 センチポーン（centipawn；一厘歩） と言う。
           #     この尺度を使う場合、整数を使う（実数を使わない）
           #
-          value = - lets_position_value(pos)
+          value = -lets_position_value(pos)
           # IO.puts("[Alpha choice_best] value:#{value}")
           {pos, value}
         else

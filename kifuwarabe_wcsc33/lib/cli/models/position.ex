@@ -1,16 +1,15 @@
 defmodule KifuwarabeWcsc33.CLI.Models.Position do
-
   @type t :: %KifuwarabeWcsc33.CLI.Models.Position{
-    moves_num: integer,
-    turn: atom,
-    fourfold_repetition: integer,
-    board: map,
-    hand_pieces: map,
-    moves: list,
-    captured_piece_types: map,
-    location_of_kings: map,
-    materials_value: integer,
-  }
+          moves_num: integer,
+          turn: atom,
+          fourfold_repetition: integer,
+          board: map,
+          hand_pieces: map,
+          moves: list,
+          captured_piece_types: map,
+          location_of_kings: map,
+          materials_value: integer
+        }
 
   # ## 雑談
   #
@@ -198,11 +197,11 @@ defmodule KifuwarabeWcsc33.CLI.Models.Position do
   end
 
   @doc """
-
+  
   ## 雑談
-
+  
     Elixir さっぱり分からん。クラス定義できないから仕方なくマップに初期値いれて返す
-
+  
   """
   def new_hand_pieces() do
     %{

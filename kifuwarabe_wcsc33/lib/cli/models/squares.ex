@@ -25,7 +25,7 @@ defmodule KifuwarabeWcsc33.CLI.Models.Squares do
   # | *| *| *| *| *| *| *| *| *| i
   # +--+--+--+--+--+--+--+--+--+
   #
-  @all_squares for file <- 1..9, rank <- 1..9, do: 10*file+rank
+  @all_squares for file <- 1..9, rank <- 1..9, do: 10 * file + rank
   def all_squares, do: @all_squares
 
   # 持ち駒の先手桂馬の置けるマス
@@ -54,7 +54,7 @@ defmodule KifuwarabeWcsc33.CLI.Models.Squares do
   # |  |  |  |  |  |  |  |  | *| i
   # +--+--+--+--+--+--+--+--+--+
   #
-  @fn_data for file <- 1..9, rank <- 3..9, do: 10*file+rank
+  @fn_data for file <- 1..9, rank <- 3..9, do: 10 * file + rank
   def sente_knight_drop_squares, do: @fn_data
 
   # 持ち駒の後手桂馬の置けるマス
@@ -83,7 +83,7 @@ defmodule KifuwarabeWcsc33.CLI.Models.Squares do
   # |  |  |  |  |  |  |  |  |  | i
   # +--+--+--+--+--+--+--+--+--+
   #
-  @fn_data for file <- 1..9, rank <- 1..7, do: 10*file+rank
+  @fn_data for file <- 1..9, rank <- 1..7, do: 10 * file + rank
   def gote_knight_drop_squares, do: @fn_data
 
   # 持ち駒の先手香の置けるマス
@@ -112,7 +112,7 @@ defmodule KifuwarabeWcsc33.CLI.Models.Squares do
   # |  |  |  |  |  |  |  |  | *| i
   # +--+--+--+--+--+--+--+--+--+
   #
-  @fn_data for file <- 1..9, rank <- 2..9, do: 10*file+rank
+  @fn_data for file <- 1..9, rank <- 2..9, do: 10 * file + rank
   def sente_lance_drop_squares, do: @fn_data
 
   # 持ち駒の後手香の置けるマス
@@ -141,7 +141,7 @@ defmodule KifuwarabeWcsc33.CLI.Models.Squares do
   # |  |  |  |  |  |  |  |  |  | i
   # +--+--+--+--+--+--+--+--+--+
   #
-  @fn_data for file <- 1..9, rank <- 1..8, do: 10*file+rank
+  @fn_data for file <- 1..9, rank <- 1..8, do: 10 * file + rank
   def gote_lance_drop_squares, do: @fn_data
 
   # 持ち駒の先手歩の置けるマス（列ごと）
@@ -175,15 +175,15 @@ defmodule KifuwarabeWcsc33.CLI.Models.Squares do
   #
   #   Elixirのワンライナーの書き方、ワケ分かんないからやらない
   #
-  @file1 for rank <- 2..9, do: 1*10+rank
-  @file2 for rank <- 2..9, do: 2*10+rank
-  @file3 for rank <- 2..9, do: 3*10+rank
-  @file4 for rank <- 2..9, do: 4*10+rank
-  @file5 for rank <- 2..9, do: 5*10+rank
-  @file6 for rank <- 2..9, do: 6*10+rank
-  @file7 for rank <- 2..9, do: 7*10+rank
-  @file8 for rank <- 2..9, do: 8*10+rank
-  @file9 for rank <- 2..9, do: 9*10+rank
+  @file1 for rank <- 2..9, do: 1 * 10 + rank
+  @file2 for rank <- 2..9, do: 2 * 10 + rank
+  @file3 for rank <- 2..9, do: 3 * 10 + rank
+  @file4 for rank <- 2..9, do: 4 * 10 + rank
+  @file5 for rank <- 2..9, do: 5 * 10 + rank
+  @file6 for rank <- 2..9, do: 6 * 10 + rank
+  @file7 for rank <- 2..9, do: 7 * 10 + rank
+  @file8 for rank <- 2..9, do: 8 * 10 + rank
+  @file9 for rank <- 2..9, do: 9 * 10 + rank
   def get_sente_pawn_drop_squares_by_file(file) do
     case file do
       1 -> @file1
@@ -225,15 +225,15 @@ defmodule KifuwarabeWcsc33.CLI.Models.Squares do
   # |  |  |  |  |  |  |  |  |  | i
   # +--+--+--+--+--+--+--+--+--+
   #
-  @file1 for rank <- 1..8, do: 1*10+rank
-  @file2 for rank <- 1..8, do: 2*10+rank
-  @file3 for rank <- 1..8, do: 3*10+rank
-  @file4 for rank <- 1..8, do: 4*10+rank
-  @file5 for rank <- 1..8, do: 5*10+rank
-  @file6 for rank <- 1..8, do: 6*10+rank
-  @file7 for rank <- 1..8, do: 7*10+rank
-  @file8 for rank <- 1..8, do: 8*10+rank
-  @file9 for rank <- 1..8, do: 9*10+rank
+  @file1 for rank <- 1..8, do: 1 * 10 + rank
+  @file2 for rank <- 1..8, do: 2 * 10 + rank
+  @file3 for rank <- 1..8, do: 3 * 10 + rank
+  @file4 for rank <- 1..8, do: 4 * 10 + rank
+  @file5 for rank <- 1..8, do: 5 * 10 + rank
+  @file6 for rank <- 1..8, do: 6 * 10 + rank
+  @file7 for rank <- 1..8, do: 7 * 10 + rank
+  @file8 for rank <- 1..8, do: 8 * 10 + rank
+  @file9 for rank <- 1..8, do: 9 * 10 + rank
   def get_gote_pawn_drop_squares_by_file(file) do
     case file do
       1 -> @file1
@@ -275,15 +275,15 @@ defmodule KifuwarabeWcsc33.CLI.Models.Squares do
   # |  |  |  |  |  |  |  |  | *| i
   # +--+--+--+--+--+--+--+--+--+
   #
-  @file1 for rank <- 1..9, do: 1*10+rank
-  @file2 for rank <- 1..9, do: 2*10+rank
-  @file3 for rank <- 1..9, do: 3*10+rank
-  @file4 for rank <- 1..9, do: 4*10+rank
-  @file5 for rank <- 1..9, do: 5*10+rank
-  @file6 for rank <- 1..9, do: 6*10+rank
-  @file7 for rank <- 1..9, do: 7*10+rank
-  @file8 for rank <- 1..9, do: 8*10+rank
-  @file9 for rank <- 1..9, do: 9*10+rank
+  @file1 for rank <- 1..9, do: 1 * 10 + rank
+  @file2 for rank <- 1..9, do: 2 * 10 + rank
+  @file3 for rank <- 1..9, do: 3 * 10 + rank
+  @file4 for rank <- 1..9, do: 4 * 10 + rank
+  @file5 for rank <- 1..9, do: 5 * 10 + rank
+  @file6 for rank <- 1..9, do: 6 * 10 + rank
+  @file7 for rank <- 1..9, do: 7 * 10 + rank
+  @file8 for rank <- 1..9, do: 8 * 10 + rank
+  @file9 for rank <- 1..9, do: 9 * 10 + rank
   def get_squares_by_file(file) do
     case file do
       1 -> @file1
@@ -350,7 +350,7 @@ defmodule KifuwarabeWcsc33.CLI.Models.Squares do
     # 　　＼
     #  　　│
     # 　　55
-    north_north_west_of: 8,
+    north_north_west_of: 8
   }
   def relative_offset, do: @fn_data
 
@@ -359,9 +359,9 @@ defmodule KifuwarabeWcsc33.CLI.Models.Squares do
   #
   def get_list_of_squares_where_i_can_place_knight(pos) do
     if pos.turn == :sente do
-      KifuwarabeWcsc33.CLI.Models.Squares.sente_knight_drop_squares
+      KifuwarabeWcsc33.CLI.Models.Squares.sente_knight_drop_squares()
     else
-      KifuwarabeWcsc33.CLI.Models.Squares.gote_knight_drop_squares
+      KifuwarabeWcsc33.CLI.Models.Squares.gote_knight_drop_squares()
     end
   end
 
@@ -370,9 +370,9 @@ defmodule KifuwarabeWcsc33.CLI.Models.Squares do
   #
   def get_list_of_squares_where_i_can_place_lance(pos) do
     if pos.turn == :sente do
-      KifuwarabeWcsc33.CLI.Models.Squares.sente_lance_drop_squares
+      KifuwarabeWcsc33.CLI.Models.Squares.sente_lance_drop_squares()
     else
-      KifuwarabeWcsc33.CLI.Models.Squares.gote_lance_drop_squares
+      KifuwarabeWcsc33.CLI.Models.Squares.gote_lance_drop_squares()
     end
   end
 
@@ -386,7 +386,6 @@ defmodule KifuwarabeWcsc33.CLI.Models.Squares do
   # 0. スクウェア・リスト（Square List；マス番地のリスト）
   #
   def get_list_of_squares_where_i_can_place_pawn(pos) do
-
     # [ｎファイルの全マスのリスト]
     #
     # 👇 例えば、1列のケースでは、 * 印のマスが該当
@@ -421,7 +420,7 @@ defmodule KifuwarabeWcsc33.CLI.Models.Squares do
       KifuwarabeWcsc33.CLI.Models.Squares.get_squares_by_file(6),
       KifuwarabeWcsc33.CLI.Models.Squares.get_squares_by_file(7),
       KifuwarabeWcsc33.CLI.Models.Squares.get_squares_by_file(8),
-      KifuwarabeWcsc33.CLI.Models.Squares.get_squares_by_file(9),
+      KifuwarabeWcsc33.CLI.Models.Squares.get_squares_by_file(9)
     ]
 
     {target_pc, squares_can_drop} =
@@ -462,7 +461,7 @@ defmodule KifuwarabeWcsc33.CLI.Models.Squares do
           KifuwarabeWcsc33.CLI.Models.Squares.get_sente_pawn_drop_squares_by_file(6),
           KifuwarabeWcsc33.CLI.Models.Squares.get_sente_pawn_drop_squares_by_file(7),
           KifuwarabeWcsc33.CLI.Models.Squares.get_sente_pawn_drop_squares_by_file(8),
-          KifuwarabeWcsc33.CLI.Models.Squares.get_sente_pawn_drop_squares_by_file(9),
+          KifuwarabeWcsc33.CLI.Models.Squares.get_sente_pawn_drop_squares_by_file(9)
         ]
 
         {target_pc, squares_can_drop}
@@ -478,7 +477,7 @@ defmodule KifuwarabeWcsc33.CLI.Models.Squares do
           KifuwarabeWcsc33.CLI.Models.Squares.get_gote_pawn_drop_squares_by_file(6),
           KifuwarabeWcsc33.CLI.Models.Squares.get_gote_pawn_drop_squares_by_file(7),
           KifuwarabeWcsc33.CLI.Models.Squares.get_gote_pawn_drop_squares_by_file(8),
-          KifuwarabeWcsc33.CLI.Models.Squares.get_gote_pawn_drop_squares_by_file(9),
+          KifuwarabeWcsc33.CLI.Models.Squares.get_gote_pawn_drop_squares_by_file(9)
         ]
 
         {target_pc, squares_can_drop}
@@ -489,15 +488,15 @@ defmodule KifuwarabeWcsc33.CLI.Models.Squares do
 
     # Square List
     input_result_pair_list
-      |> Enum.map(fn ({input_squares, output_squares}) ->
-          if input_squares |> KifuwarabeWcsc33.CLI.Thesis.Board.is_there_piece?(target_pc, pos.board) do
-            # 二歩になるから置けない
-            []
-          else
-            output_squares
-          end
-        end)
-      |> List.flatten()
+    |> Enum.map(fn {input_squares, output_squares} ->
+      if input_squares
+         |> KifuwarabeWcsc33.CLI.Thesis.Board.is_there_piece?(target_pc, pos.board) do
+        # 二歩になるから置けない
+        []
+      else
+        output_squares
+      end
+    end)
+    |> List.flatten()
   end
-
 end

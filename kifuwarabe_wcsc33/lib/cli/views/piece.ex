@@ -2,24 +2,24 @@ defmodule KifuwarabeWcsc33.CLI.Views.Piece do
   @moduledoc """
   
     （先後の付いている）駒種類
-
+  
   """
 
   @doc """
-
+  
     解析
-
+  
   ## 引数
-
+  
     * `pc_text` - ピース（PieCe；先後付きの駒種類）の文字列。例参照。この関数では、スペース（Space；空きマス）は判定しません
-
+  
   ## 例
-
+  
     "l"
     "n"
     ...
   """
-  @spec from_code(String.t) :: atom
+  @spec from_code(String.t()) :: atom
   def from_code(pc_text) do
     case pc_text do
       #

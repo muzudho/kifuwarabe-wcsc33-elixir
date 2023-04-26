@@ -1,17 +1,17 @@
 defmodule KifuwarabeWcsc33.CLI.Views.BoardAddress do
   @doc """
     描画
-
+  
   ## Parameters
-
+  
     * `source` - 移動元。２桁の数。十の位がファイル（File；筋）、一の位がランク（Rank；段）
-
+  
   ## Examples
-
+  
     "76" -> "7g"
-
+  
   """
-  @spec as_code(integer) :: string
+  @spec as_code(integer) :: String.t()
   def as_code(source) do
     file = source |> div(10) |> rem(10)
     rank = source |> rem(10)
