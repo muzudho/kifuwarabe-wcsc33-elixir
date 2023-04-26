@@ -509,21 +509,22 @@ defmodule KifuwarabeWcsc33.CLI.Helpers.PositionParser do
   #
   defp parse_moves_string_and_update_position(mchar_list, pos) do
 
-    # IO.inspect(mchar_list, label: "[parse_moves_string_and_update_position] mchar_list")
+    IO.inspect(mchar_list, label: "[parse_moves_string_and_update_position] mchar_list")
 
     # コードを、指し手へ変換
     {rest, move} = KifuwarabeWcsc33.CLI.Mappings.ToMove.from_code_line(mchar_list)
-    # IO.inspect(move, label: "[parse_moves_string_and_update_position] parse move")
+    IO.inspect(move, label: "[parse_moves_string_and_update_position] parse move")
+
+    # 局面更新（実際、指してみる）
+    pos = pos |> KifuwarabeWcsc33.CLI.MoveGeneration.DoMove.do_it(move)
+
+    IO.puts("[parse_moves_string_and_update_position] length(rest):#{length(rest)}")
 
     {rest, pos} =
       if 1 <= length(rest) do
+        IO.inspect(rest, label: "[parse_moves_string_and_update_position] rest")
         mchar = hd(rest)
         rest = tl(rest)
-
-        # IO.puts("[parse_moves_string_and_update_position] rest:#{rest}")
-
-        # 局面更新（実際、指してみる）
-        pos = pos |> KifuwarabeWcsc33.CLI.MoveGeneration.DoMove.do_it(move)
 
         # 区切り
         # ======
