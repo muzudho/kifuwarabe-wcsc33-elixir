@@ -21,14 +21,15 @@ defmodule KifuwarabeWcsc33.CLI.MoveGeneration.UndoMove do
 
   """
   def do_it(pos) do
-    # # 最後の要素を削除するために、インデックスを取得しておく
-    # last_index = Enum.count(pos.moves) - 1
-    # # IO.puts("last_index:#{last_index} pos.moves.length:#{pos.moves|>length()}")
+    # 最後の指し手をリストから引っこ抜く
+    {new_moves, move} =
+      pos.moves
+        |> KifuwarabeWcsc33.CLI.Coding.ListPopLast.do_it()
 
-    # 最後の指し手を取得（リンクドリストなので効率が悪い）
-    move = pos.moves |> List.last()
-    # (あれば)取った駒を取得（先後の情報無し、成りの情報付き）
-    captured_pt = pos.captured_piece_types |> List.last()
+    # (あれば)最後の取った駒をリストから引っこ抜く
+    {new_captured_piece_types, captured_pt} =
+      pos.captured_piece_types
+        |> KifuwarabeWcsc33.CLI.Coding.ListPopLast.do_it()
 
     # 局面更新
     #
@@ -38,11 +39,9 @@ defmodule KifuwarabeWcsc33.CLI.MoveGeneration.UndoMove do
     pos = %{pos |
             turn: KifuwarabeWcsc33.CLI.Mappings.ToTurn.flip(pos.turn),
             opponent_turn: pos.turn,
-            # リストの最後の要素を削除。リストのサイズを揃える
-            # moves: pos.moves |> List.delete_at(last_index),
-            moves: KifuwarabeWcsc33.CLI.Coding.ListDeleteLast.do_it(pos.moves),
-            # captured_piece_types: pos.captured_piece_types |> List.delete_at(last_index),
-            captured_piece_types: KifuwarabeWcsc33.CLI.Coding.ListDeleteLast.do_it(pos.captured_piece_types),
+            # 下記２つのリストの長さは揃えろ
+            moves: new_moves,
+            captured_piece_types: new_captured_piece_types,
             # 正負を反転
             materials_value: - pos.materials_value
           }
