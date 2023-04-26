@@ -55,7 +55,13 @@ defmodule KifuwarabeWcsc33.CLI.Helpers.PositionParser do
           }
 
           # 盤面部分を解析。「９一」番地からスタート
-          {rest, _sq, board} = rest |> map_string_to_board(91, %{})
+          IO.puts("[PositionParser parse] rest:#{rest}")
+          # String.to_charlist() だと、要素が文字型になってしまう。String.split("") だと、要素が文字列型になるはず。 trim: true を付けないと、余計な空文字列が含まれている
+          string_list = rest |> String.split("", trim: true)
+          IO.inspect(string_list, label: "[PositionParser parse] string_list")
+          {rest, _sq, board} = string_list |> map_string_to_board(91, %{})
+          # 文字列のリストに分割してしまったので、くっつける
+          rest = rest |> Enum.join()
           # rest = tuple |> elem(0)
           # sq = tuple |> elem(1)
           # board = tuple |> elem(2)

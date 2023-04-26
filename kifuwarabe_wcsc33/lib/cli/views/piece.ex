@@ -92,7 +92,7 @@ defmodule KifuwarabeWcsc33.CLI.Views.Piece do
       # それ以外はエラー
       # ==============
       #
-      _ -> raise "unexpected pieec text:#{pc_text}"
+      _ -> raise "unexpected piece text:(#{pc_text})"
     end
   end
 end

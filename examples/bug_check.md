@@ -107,3 +107,9 @@ go
 ```
 
 にマッチしないケースが出る。
+
+# 歩を114枚持ってる？
+
+```plaintext
+position sfen lnsgkgsnl/1r5b1/ppppppppp/9/9/2P6/PP1PPPPPP/1B5R1/LNSGKGSNL w - 1
+```

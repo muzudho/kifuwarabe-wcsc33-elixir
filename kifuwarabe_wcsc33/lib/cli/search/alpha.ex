@@ -68,7 +68,7 @@ defmodule KifuwarabeWcsc33.CLI.Search.Alpha do
   defp choice_best(pos, move_list \\ [], sibling_best_move, sibling_best_value, depth)
 
   #
-  # Base case
+  # ベース・ケース（Base case；基本形） - 再帰関数の繰り返し回数が０回のときの処理
   #
   defp choice_best(pos, [], sibling_best_move, sibling_best_value, _depth) do
     # 再帰の帰り道
