@@ -11,6 +11,7 @@ defmodule KifuwarabeWcsc33.CLI.Views.BoardAddress do
     "76" -> "7g"
 
   """
+  @spec as_code(integer) :: string
   def as_code(source) do
     file = source |> div(10) |> rem(10)
     rank = source |> rem(10)
