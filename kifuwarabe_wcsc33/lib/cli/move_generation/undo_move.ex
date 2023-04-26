@@ -106,7 +106,7 @@ defmodule KifuwarabeWcsc33.CLI.MoveGeneration.UndoMove do
           # 持ち駒種類（先後付き）（成りの情報を含まない）
           hand_pc =
             KifuwarabeWcsc33.CLI.Mappings.ToPiece.from_captured_piece_type_to_hand(
-              pos.turn,
+              pos.opponent_turn,
               captured_pt
             )
 
