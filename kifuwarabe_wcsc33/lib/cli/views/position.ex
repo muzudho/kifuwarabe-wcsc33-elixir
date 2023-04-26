@@ -1,4 +1,10 @@
 defmodule KifuwarabeWcsc33.CLI.Views.Position do
+  @moduledoc """
+  
+    局面
+
+  """
+
   @doc """
     盤表示
 

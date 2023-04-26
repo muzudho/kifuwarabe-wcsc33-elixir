@@ -1,4 +1,9 @@
 defmodule KifuwarabeWcsc33.CLI.Views.Piece do
+  @moduledoc """
+  
+    （先後の付いている）駒種類
+
+  """
 
   @doc """
 
@@ -14,6 +19,7 @@ defmodule KifuwarabeWcsc33.CLI.Views.Piece do
     "n"
     ...
   """
+  @spec from_code(String.t) :: atom
   def from_code(pc_text) do
     case pc_text do
       #

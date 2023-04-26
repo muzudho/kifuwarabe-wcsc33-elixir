@@ -1,4 +1,16 @@
 defmodule KifuwarabeWcsc33.CLI.Views.PieceType do
+  @moduledoc """
+
+    （先後の付いていない）駒種類
+
+  """
+
+  @doc """
+
+    文字列化（大文字）
+
+  """
+  @spec stringify_upper_case(atom) :: String.t
   def stringify_upper_case(piece_type) do
     case piece_type do
       # キング（King；玉）

@@ -1,4 +1,9 @@
 defmodule KifuwarabeWcsc33.CLI.Mappings.ToDestination do
+  @moduledoc """
+  
+    移動先マス番地
+
+  """
 
   @doc """
     変換
@@ -10,6 +15,7 @@ defmodule KifuwarabeWcsc33.CLI.Mappings.ToDestination do
     * `direction_of` - ディレクション・オブ（Direction of；向き）
 
   """
+  @spec from_turn_and_source(atom, integer, atom) :: integer
   def from_turn_and_source(turn, src_sq, direction_of) do
     relative = KifuwarabeWcsc33.CLI.Models.Squares.relative_offset[direction_of]
 

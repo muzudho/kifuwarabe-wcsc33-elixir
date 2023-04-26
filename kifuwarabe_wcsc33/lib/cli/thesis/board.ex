@@ -1,4 +1,9 @@
 defmodule KifuwarabeWcsc33.CLI.Thesis.Board do
+  @moduledoc """
+  
+    将棋盤
+
+  """
 
   @doc """
 
@@ -9,6 +14,7 @@ defmodule KifuwarabeWcsc33.CLI.Thesis.Board do
     * `sq` - スクウェア（Square；マス番地）。11～99
   
   """
+  @spec is_in_board?(integer) :: bool
   def is_in_board?(sq) do
     cond do
       sq < 11 ->
