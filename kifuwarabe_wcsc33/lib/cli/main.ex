@@ -163,7 +163,8 @@ defmodule KifuwarabeWcsc33.CLI.Main do
           IO.puts("[main usi_loop] best_move:#{best_move_str}")
 
           # コードを、指し手へ変換
-          {_rest, best_move} = KifuwarabeWcsc33.CLI.Mappings.ToMove.from_code_line(best_move_str)
+          {_rest, best_move} = KifuwarabeWcsc33.CLI.Mappings.ToMove.from_code_line(
+            String.split(best_move_str, "", trim: true))
 
           # 一手指す
           pos = pos |> KifuwarabeWcsc33.CLI.MoveGeneration.DoMove.do_it(best_move)

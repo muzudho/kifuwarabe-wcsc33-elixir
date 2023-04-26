@@ -115,8 +115,8 @@ defmodule KifuwarabeWcsc33.CLI.Mappings.ToMove do
     1. ムーブ（Move；指し手）
 
   """
-  def from_code_line(rest) do
-    # IO.puts("[to_move from_code_line] rest:[#{rest}]")
+  def from_code_line([mchar | rest]) do
+    # IO.puts("[to_move from_code_line] mchar:(#{mchar}) rest:(#{rest})")
 
     move = KifuwarabeWcsc33.CLI.Models.Move.new()
 
@@ -127,25 +127,19 @@ defmodule KifuwarabeWcsc33.CLI.Mappings.ToMove do
     #
 
     # １文字目は、「大文字英字」か、「筋の数字」
-    # 先頭の１文字切り出し
-    first_char = rest |> String.at(0)
-    # IO.puts("parse_moves_string_and_update_position first_char:[#{first_char}]")
-    rest = rest |> String.slice(1..-1)
-
     {rest, move} =
       cond do
         # 数字が出てきたら -> 「ファイル（File；筋）の数字」
-        Regex.match?(~r/^\d$/, first_char) ->
-          file = String.to_integer(first_char)
+        Regex.match?(~r/^\d$/, mchar) ->
+          file = String.to_integer(mchar)
 
           # 「ランク（Rank；段）の小文字アルファベット」
-          # 先頭の１文字切り出し
-          second_char = rest |> String.at(0)
-          # IO.puts("parse_moves_string_and_update_position second_char:[#{second_char}]")
-          rest = rest |> String.slice(1..-1)
+          # ２文字目切り出し
+          mchar = hd(rest)
+          rest = tl(rest)
 
           rank =
-            case second_char do
+            case mchar do
               "a" -> 1
               "b" -> 2
               "c" -> 3
@@ -155,7 +149,7 @@ defmodule KifuwarabeWcsc33.CLI.Mappings.ToMove do
               "g" -> 7
               "h" -> 8
               "i" -> 9
-              _ -> raise "unexpected second_char:#{second_char}"
+              _ -> raise "unexpected second_char:#{mchar}"
             end
 
           move = %{move | source: 10 * file + rank}
@@ -167,7 +161,7 @@ defmodule KifuwarabeWcsc33.CLI.Mappings.ToMove do
         true ->
           # 1文字目が駒だったら打
           move =
-            case first_char do
+            case mchar do
               "R" -> %{move | drop_piece_type: :r}
               "B" -> %{move | drop_piece_type: :b}
               "G" -> %{move | drop_piece_type: :g}
@@ -175,18 +169,19 @@ defmodule KifuwarabeWcsc33.CLI.Mappings.ToMove do
               "N" -> %{move | drop_piece_type: :n}
               "L" -> %{move | drop_piece_type: :l}
               "P" -> %{move | drop_piece_type: :p}
-              _ -> raise "unexpected first_char:#{first_char}"
+              _ -> raise "unexpected first_char:#{mchar}"
             end
 
           # 2文字目は必ず「*」なはずなので読み飛ばす。
-          second_char = rest |> String.at(0)
+          # mchar = hd(rest)
+          rest = tl(rest)
 
-          if second_char != "*" do
-            raise "unexpected second_char:#{second_char}"
-          end
+          #if second_char != "*" do
+          #  raise "unexpected second_char:#{second_char}"
+          #end
 
           # IO.puts("parse_piece_type_on_hands first_char:[#{first_char}]")
-          rest = rest |> String.slice(1..-1)
+          #rest = rest |> String.slice(1..-1)
 
           # IO.inspect(move, label: "parse(12) The move is")
           # IO.puts("parse_moves_string_and_update_position rest:[#{rest}]")
@@ -201,22 +196,20 @@ defmodule KifuwarabeWcsc33.CLI.Mappings.ToMove do
     # * ４文字目は「ランク（Rank；段）のアルファベット」
     #
 
-    # 先頭の１文字切り出し
-    third_char = rest |> String.at(0)
-    # IO.puts("parse_moves_string_and_update_position third_char:[#{third_char}]")
-    rest = rest |> String.slice(1..-1)
+    # ３文字目切り出し
+    mchar = hd(rest)
+    rest = tl(rest)
 
     # きっと数字だろ
-    file = String.to_integer(third_char)
+    file = String.to_integer(mchar)
 
-    # 先頭の１文字切り出し
-    fourth_char = rest |> String.at(0)
-    # IO.puts("parse_moves_string_and_update_position fourth_char:[#{fourth_char}]")
-    rest = rest |> String.slice(1..-1)
+    # ４文字目切り出し
+    mchar = hd(rest)
+    rest = tl(rest)
 
     # きっと英数字小文字だろ
     rank =
-      case fourth_char do
+      case mchar do
         "a" -> 1
         "b" -> 2
         "c" -> 3
@@ -226,7 +219,7 @@ defmodule KifuwarabeWcsc33.CLI.Mappings.ToMove do
         "g" -> 7
         "h" -> 8
         "i" -> 9
-        _ -> raise "unexpected fourth_char:#{fourth_char}"
+        _ -> raise "unexpected fourth_char:#{mchar}"
       end
 
     move = %{move | destination: 10 * file + rank}
@@ -239,9 +232,9 @@ defmodule KifuwarabeWcsc33.CLI.Mappings.ToMove do
     #
 
     {rest, move} =
-      if rest |> String.at(0) == "+" do
-        # 先頭の１文字切り出し
-        rest = rest |> String.slice(1..-1)
+      if 1 <= length(rest) and hd(rest) == "+" do
+        # ５文字目切り出し
+        rest = tl(rest)
         move = %{move | promote?: true}
 
         {rest, move}

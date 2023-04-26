@@ -25,7 +25,6 @@ defmodule KifuwarabeWcsc33.CLI.Helpers.PositionParser do
   """
   def parse(line) do
     # IO.puts("parse(1) line:#{line}")
-    rest = line
 
     # 局面データ（初期値は平手初期局面）
     pos = KifuwarabeWcsc33.CLI.Models.Position.new()
@@ -33,17 +32,38 @@ defmodule KifuwarabeWcsc33.CLI.Helpers.PositionParser do
     {rest, pos} =
       cond do
         # 平手初期局面をセット（初期値のまま）
-        rest |> String.starts_with?("position startpos") ->
+        line |> String.starts_with?("position startpos") ->
           # `position startpos` を除去 |> あれば、続くスペースを削除
-          rest = rest |> String.slice(String.length("position startpos")..-1) |> String.trim_leading()
+          rest_line = line |> String.slice(String.length("position startpos")..-1) |> String.trim_leading()
+          #
+          # 文字列型は elixir では使いづらいんで、マルチバイト・キャラクター・リスト（Multi-byte Character List；マルチバイト文字列型のリスト）に変換する
+          #
+          # こうではない:
+          #   ['p', `o`, `s`, `i`, ...]
+          #
+          # こうだ:
+          #   ["p", "o", "s", "i", ...]
+          #
+          # `trim: true` を付ける。付けないと、余計な空文字列が含まれている
+          rest = rest_line |> String.split("", trim: true)
           {rest, pos}
 
         # 途中局面をセット
-        rest |> String.starts_with?("position sfen") ->
+        line |> String.starts_with?("position sfen") ->
           # `position startpos` を除去 |> あれば、続くスペースを削除
-          rest = line |> String.slice(String.length("position sfen")..-1) |> String.trim_leading()
-
-          # IO.puts("parse(3) rest:#{rest}")
+          rest_line = line |> String.slice(String.length("position sfen")..-1) |> String.trim_leading()
+          #
+          # 文字列型は elixir では使いづらいんで、マルチバイト・キャラクター・リスト（Multi-byte Character List；マルチバイト文字列型のリスト）に変換する
+          #
+          # こうではない:
+          #   ['p', `o`, `s`, `i`, ...]
+          #
+          # こうだ:
+          #   ["p", "o", "s", "i", ...]
+          #
+          # `trim: true` を付ける。付けないと、余計な空文字列が含まれている
+          rest = rest_line |> String.split("", trim: true)
+          IO.inspect(rest, label: "[PositionParser parse] rest mchar_list")
 
           # 将棋盤の初期化
           pos = %{pos |
@@ -55,18 +75,7 @@ defmodule KifuwarabeWcsc33.CLI.Helpers.PositionParser do
           }
 
           # 盤面部分を解析。「９一」番地からスタート
-          IO.puts("[PositionParser parse] rest:#{rest}")
-          # String.to_charlist() だと、要素が文字型になってしまう。String.split("") だと、要素が文字列型になるはず。 trim: true を付けないと、余計な空文字列が含まれている
-          string_list = rest |> String.split("", trim: true)
-          IO.inspect(string_list, label: "[PositionParser parse] string_list")
-          {rest, _sq, board} = string_list |> map_string_to_board(91, %{})
-          # 文字列のリストに分割してしまったので、くっつける
-          rest = rest |> Enum.join()
-          # rest = tuple |> elem(0)
-          # sq = tuple |> elem(1)
-          # board = tuple |> elem(2)
-          # IO.inspect(board, label: "parse(4) The board is")
-          # IO.puts("parse(5) rest:#{rest}")
+          {rest, _sq, board} = rest |> map_string_to_board(91, %{})
 
           if map_size(board) != 81 do
             raise "unexpected board cell count:#{length(board)}"
@@ -74,25 +83,24 @@ defmodule KifuwarabeWcsc33.CLI.Helpers.PositionParser do
 
           # 手番の解析
           {rest, turn} = rest |> parse_turn()
-          # IO.puts("parse(6) turn:#{turn} rest:#{rest}")
 
           # 駒台の解析
           {rest, hand_pieces} = rest |> parse_hands(KifuwarabeWcsc33.CLI.Models.Position.new_hand_pieces()) # TODO 空マップ %{} のような書き方ができるのか？ 要素数が不完全なんじゃないか？
           IO.inspect(hand_pieces, label: "parse(7) The Hand pieces is")
-          IO.puts("parse(8) rest:#{rest}")
 
+          #
           # 次の手は何手目か、を表す数字だが、「将棋所」は「この数字は必ず１にしています」という仕様なので
           # 「将棋所」しか使わないのなら、「1」しかこない、というプログラムにしてしまうのも手だ
-          first_char = rest |> String.at(0)
-          rest = rest |> String.slice(1..-1)
+          #
+          mchar = hd(rest)
+          rest = tl(rest)
 
-          if first_char != "1" do
-            raise "unexpected first_char:#{first_char}"
+          # 複数桁の数字列に対応する書き方分かんないんで、エラーにする
+          if mchar != "1" do
+            raise "unexpected mst_char:#{mchar}"
           end
 
-          # IO.puts("parse first_char:[#{first_char}]")
-          moves_num = String.to_integer(first_char)
-          # IO.puts("parse(9) moves_num:[#{moves_num}]")
+          moves_num = String.to_integer(mchar)
 
           # 将棋盤の更新
           pos = %{pos |
@@ -103,8 +111,14 @@ defmodule KifuwarabeWcsc33.CLI.Helpers.PositionParser do
             hand_pieces: hand_pieces
           }
 
-          # 残りの文字列 |> あれば、続くスペースを削除
-          rest = rest |> String.trim_leading()
+          # あれば、続くスペースを削除
+          # rest = rest |> String.trim_leading()
+          rest =
+            if 0 < length(rest) and hd(rest) == " " do
+              tl(rest)
+            else
+              rest
+            end
 
           {rest, pos}
 
@@ -112,45 +126,55 @@ defmodule KifuwarabeWcsc33.CLI.Helpers.PositionParser do
           raise "unexpected position command line:#{line}"
       end
 
-    # IO.puts("parse(2) rest:#{rest}")
-
-    # ５文字取る
-    first_5chars = rest |> String.slice(0..4)
-    rest = rest |> String.slice(5..-1)
-
+    #
+    # "moves" が続くか、ここで終わりのはず
+    #
     {_rest, pos} =
-      if first_5chars == "moves" do
-        # 指し手が付いている場合
-        # IO.puts("parse(10) first_5chars:[#{first_5chars}]")
-        # IO.puts("parse(11) rest:#{rest}")
+      if 5 <= length(rest) do
+        # 先頭の５文字取る
+        # first_5chars = rest |> String.slice(0..4)
+        # rest = rest |> String.slice(5..-1)
+        rest = tl(rest)
+        rest = tl(rest)
+        rest = tl(rest)
+        rest = tl(rest)
+        rest = tl(rest)
 
-        # 残りの文字列 |> あれば、続くスペースを削除
-        rest = rest |> String.trim_leading()
+        # 多分 "moves" だろう
 
-        # 指し手読取と、局面更新
-        {rest, pos} = rest |> parse_moves_string_and_update_position(pos)
+        # 空白が続くか？
+        if 1 <= length(rest) do
+          # １文字取る
+          # rest = rest |> String.trim_leading()
+          # space = hd(rest)
+          rest = tl(rest)
 
-        # IO.inspect(pos.moves, label: "parse(12) The Moves is")
-        # IO.inspect(pos.captured_piece_types, label: "parse(12) The Captured pieces is")
+          # 指し手読取と、局面更新
+          {rest, pos} = rest |> parse_moves_string_and_update_position(pos)
 
-        {rest, pos}
+          # IO.inspect(pos.moves, label: "parse(12) The Moves is")
+          # IO.inspect(pos.captured_piece_types, label: "parse(12) The Captured pieces is")
+
+          # IO.puts("parse(13) rest:#{rest}")
+
+          pos = %{ pos |
+            # 玉の場所は覚えておきたい
+            location_of_kings: %{ pos.location_of_kings |
+              :k1 => KifuwarabeWcsc33.CLI.Finder.Square.find_king_on_board(pos, :sente),
+              :k2 => KifuwarabeWcsc33.CLI.Finder.Square.find_king_on_board(pos, :gote),
+            },
+            # （手番から見た）駒得評価値を算出
+            materials_value: KifuwarabeWcsc33.CLI.Helpers.MaterialsValueCalc.count(pos)
+          }
+
+          {rest, pos}
+        else
+          {rest, pos}
+        end
+
       else
-        # 指し手が付いていない場合
-        # 完了
         {rest, pos}
       end
-
-    # IO.puts("parse(13) rest:#{rest}")
-
-    pos = %{ pos |
-      # 玉の場所は覚えておきたい
-      location_of_kings: %{ pos.location_of_kings |
-        :k1 => KifuwarabeWcsc33.CLI.Finder.Square.find_king_on_board(pos, :sente),
-        :k2 => KifuwarabeWcsc33.CLI.Finder.Square.find_king_on_board(pos, :gote),
-      },
-      # （手番から見た）駒得評価値を算出
-      materials_value: KifuwarabeWcsc33.CLI.Helpers.MaterialsValueCalc.count(pos)
-    }
 
     pos
   end
@@ -340,18 +364,22 @@ defmodule KifuwarabeWcsc33.CLI.Helpers.PositionParser do
   #
   # b （Blackの頭文字）なら、▲せんて（Sente；先手）
   # w （Whiteの頭文字）なら、▽ごて（Gote；後手）
-  defp parse_turn(rest) do
-    # ２文字取る
-    first_chars = rest |> String.slice(0..1)
-    # IO.puts("parse_turn chars:[#{first_chars}]")
-    rest = rest |> String.slice(2..-1)
-
+  #
+  # ## Parameters
+  #
+  #   * `[mchar, rest]` - mchar は先頭要素（文字列型）、rest は残りの文字列
+  #
+  defp parse_turn([mchar | rest]) do
     turn =
-      case first_chars do
-        "b " -> :sente
-        "w " -> :gote
-        _ -> raise "unexpected first_chars:#{first_chars}"
+      case mchar do
+        "b" -> :sente
+        "w" -> :gote
+        _ -> raise "unexpected mchar:#{mchar}"
       end
+
+    # 次の１文字は空白 " " なので読み飛ばす
+    # space = hd(rest)
+    rest = tl(rest)
 
     {rest, turn}
   end
@@ -360,36 +388,35 @@ defmodule KifuwarabeWcsc33.CLI.Helpers.PositionParser do
   #
   # ## Parameters
   #
-  # * `rest` - レスト（Rest；残りの文字列）
-  # * `hand_pieces` - ハンド・ピースズ（Hand Pieces；持ち駒と枚数のマップ）
+  #   * `[mchar, rest]` - mchar は先頭要素（文字列型）、rest は残りの文字列
+  #   * `hand_pieces` - ハンド・ピースズ（Hand Pieces；持ち駒と枚数のマップ）
   #
   # ## Returns
   #
   #   0. レスト（Rest；残りの文字列）
   #   1. ハンド・ピースズ（Hand Pieces；持ち駒と枚数のマップ）
   #
-  defp parse_hands(rest, hand_pieces) do
-    # 先頭の１文字（取りださない）
-    first_char = rest |> String.at(0)
-    IO.puts("[parse_hands] first_char:[#{first_char}]")
-
-    if first_char == "-" do
+  defp parse_hands([mchar | rest], hand_pieces) do
+    # 先頭の１文字
+    if mchar == "-" do
       # 持ち駒１つもなし
 
-      # 先頭の２文字 "- " を切り捨て
-      rest = rest |> String.slice(2..-1)
+      # 次の１文字は空白 " " なので読み飛ばす
+      # space = hd(rest)
+      rest = tl(rest)
 
       {rest, hand_pieces}
     else
       # 持ち駒あり
-      rest |> parse_piece_type_on_hands(0, hand_pieces)
+      mchar_list = mchar ++ rest
+      mchar_list |> parse_piece_type_on_hands(0, hand_pieces)
     end
   end
 
   #
   # パターンマッチ
   #
-  defp parse_piece_type_on_hands(rest, number, hand_pieces)
+  defp parse_piece_type_on_hands(mchar_list, number, hand_pieces)
 
   #
   # ベース・ケース（Base case；基本形） - 再帰関数の繰り返し回数が０回のときの処理
@@ -406,7 +433,7 @@ defmodule KifuwarabeWcsc33.CLI.Helpers.PositionParser do
   #
   # ## Parameters
   #
-  # * `[first_char | rest]` - first_char は先頭の１文字、レスト（Rest；残り）は残りの文字列
+  # * `[mchar | rest]` - mchar は先頭の１文字、レスト（Rest；残り）は残りの文字列
   # * `number` - ナンバー（Number；前回の解析から引き継いだ数字）
   # * `hand_pieces` - ハンド・ピースズ（Hand Pieces；持ち駒と枚数のマップ）
   #
@@ -415,20 +442,20 @@ defmodule KifuwarabeWcsc33.CLI.Helpers.PositionParser do
   #   0. レスト（Rest；残りの文字列）
   #   1. ハンド・ピースズ（Hand Pieces；持ち駒と枚数のマップ）
   #
-  defp parse_piece_type_on_hands([first_char | rest], number, hand_pieces) do
-    {rest, number, hand_pieces} =
+  defp parse_piece_type_on_hands([mchar | rest], number, hand_pieces) do
+    {mchar_list, number, hand_pieces} =
       cond do
         # 数字が出てきたら -> 数が増えるだけ
-        Regex.match?(~r/^\d$/, first_char) ->
+        Regex.match?(~r/^\d$/, mchar) ->
           # ２つ目の数字は一の位なので、以前の数は十の位なので、10倍する
-          number = 10 * number + String.to_integer(first_char)
+          number = 10 * number + String.to_integer(mchar)
           IO.puts("[parse_piece_type_on_hands] number:#{number}")
 
           {rest, number, hand_pieces}
 
         true ->
           # ピース（Piece；先後付きの駒種類）
-          piece = KifuwarabeWcsc33.CLI.Views.Piece.from_code(first_char)
+          piece = KifuwarabeWcsc33.CLI.Views.Piece.from_code(mchar)
 
           # 枚数指定がないなら 1
           number =
@@ -452,16 +479,16 @@ defmodule KifuwarabeWcsc33.CLI.Helpers.PositionParser do
 
     # Recursive
     # =========
-    {rest, hand_pieces} = rest |> parse_piece_type_on_hands(number, hand_pieces)
+    {mchar_list, hand_pieces} = mchar_list |> parse_piece_type_on_hands(number, hand_pieces)
 
     # 再帰からの帰り道にも成果を返す
-    {rest, hand_pieces}
+    {mchar_list, hand_pieces}
   end
 
   #
   # パターンマッチ
   #
-  defp parse_moves_string_and_update_position(rest, pos)
+  defp parse_moves_string_and_update_position(mchar_list, pos)
 
   #
   # ベース・ケース（Base case；基本形） - 再帰関数の繰り返し回数が０回のときの処理
@@ -477,30 +504,48 @@ defmodule KifuwarabeWcsc33.CLI.Helpers.PositionParser do
   #
   # ## Parameters
   #
-  #   * `rest` - レスト（Rest；残りの文字列）
+  #   * `mchar_list` - マルチバイト・キャラクター・リスト（Multi-byte Character List；マルチバイト文字列のリスト）
   #   * `pos` - ポジション（Position；局面）
   #
-  defp parse_moves_string_and_update_position(rest, pos) do
+  defp parse_moves_string_and_update_position(mchar_list, pos) do
+
+    # IO.inspect(mchar_list, label: "[parse_moves_string_and_update_position] mchar_list")
 
     # コードを、指し手へ変換
-    {rest, move} = KifuwarabeWcsc33.CLI.Mappings.ToMove.from_code_line(rest)
-
-    # IO.puts("[parse_moves_string_and_update_position] rest:#{rest}")
+    {rest, move} = KifuwarabeWcsc33.CLI.Mappings.ToMove.from_code_line(mchar_list)
     # IO.inspect(move, label: "[parse_moves_string_and_update_position] parse move")
 
-    # 局面更新（実際、指してみる）
-    pos = pos |> KifuwarabeWcsc33.CLI.MoveGeneration.DoMove.do_it(move)
+    {rest, pos} =
+      if 1 <= length(rest) do
+        mchar = hd(rest)
+        rest = tl(rest)
 
-    # 区切り
-    # ======
-    #
-    # * （あれば）続くスペースを除去
-    #
-    rest = rest |> String.trim_leading()
+        # IO.puts("[parse_moves_string_and_update_position] rest:#{rest}")
 
-    # Recursive
-    # =========
-    {rest, pos} = rest |> parse_moves_string_and_update_position(pos)
+        # 局面更新（実際、指してみる）
+        pos = pos |> KifuwarabeWcsc33.CLI.MoveGeneration.DoMove.do_it(move)
+
+        # 区切り
+        # ======
+        #
+        # * （あれば）続くスペースを除去
+        #
+        # rest = rest |> String.trim_leading()
+        rest =
+          if mchar == " " do
+            # space = hd(rest)
+            tl(rest)
+          else
+            rest
+          end
+
+        # Recursive
+        # =========
+        {rest, pos} = rest |> parse_moves_string_and_update_position(pos)
+        {rest, pos}
+      else
+        {rest, pos}
+      end
 
     # 再帰の帰り道でも、値を返します
     {rest, pos}
