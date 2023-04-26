@@ -47,8 +47,8 @@ defmodule KifuwarabeWcsc33.CLI.Search.Alpha do
     #     IO.puts("[Think go] move list: (#{move_code})")
     #   end)
 
-    # シャッフルする
-    move_list = move_list |> Enum.shuffle()
+    # TODO シャッフルする
+    # move_list = move_list |> Enum.shuffle()
 
     # IO.puts(
     #   """

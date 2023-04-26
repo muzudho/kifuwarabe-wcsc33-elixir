@@ -66,7 +66,7 @@ defmodule KifuwarabeWcsc33.CLI.Main do
     # 先頭の要素を取る
     # ==============
     #
-    # Elixier ではリストへの添え字アクセスは遅い。先頭の要素を取るのが高速なので、 hd という操作がある。 tl は、２番目以下の要素のリスト
+    # 公式のガイドによると、Elixier ではリストへの添え字アクセスは遅いらしい。先頭の要素を取るのが高速なので、 hd という操作がある。 tl は、２番目以下の要素のリスト
     first_token = hd(rest_tokens)
     rest_tokens = tl(rest_tokens)
     # IO.puts("first_token:" <> first_token)
