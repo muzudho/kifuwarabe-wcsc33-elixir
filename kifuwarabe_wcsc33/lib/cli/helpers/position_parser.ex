@@ -452,6 +452,18 @@ defmodule KifuwarabeWcsc33.CLI.Helpers.PositionParser do
     {rest, hand_pieces}
   end
 
+  #
+  # パターンマッチ
+  #
+  defp parse_moves_string_and_update_position(rest, pos)
+
+  #
+  # ベース・ケース（Base case；基本形） - 再帰関数の繰り返し回数が０回のときの処理
+  #
+  defp parse_moves_string_and_update_position([], pos) do
+    {"", pos}
+  end
+
   # 指し手の解析と、局面更新
   #
   # - 手番の更新
@@ -480,15 +492,11 @@ defmodule KifuwarabeWcsc33.CLI.Helpers.PositionParser do
     #
     rest = rest |> String.trim_leading()
 
-    if rest |> String.length() < 1 do
-      # Base case
-      {rest, pos}
-    else
-      # Recursive
-      {rest, pos} = rest |> parse_moves_string_and_update_position(pos)
+    # Recursive
+    # =========
+    {rest, pos} = rest |> parse_moves_string_and_update_position(pos)
 
-      # 再帰の帰り道でも、値を返します
-      {rest, pos}
-    end
+    # 再帰の帰り道でも、値を返します
+    {rest, pos}
   end
 end
