@@ -127,3 +127,11 @@ position startpos moves 7g7f 3c3d
 # のあと
 go
 ```
+
+# 分からん
+
+```plaintext
+position sfen lnsgk1snl/6B2/ppppppgpp/6p2/9/2P2P3/PP1PP1PPP/2S6/LN1bKGSNL w Rrg 1
+
+go
+```

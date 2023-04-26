@@ -1,27 +1,27 @@
 defmodule KifuwarabeWcsc33.CLI.Helpers.PositionParser do
   @doc """
-
+  
     解析
-
+  
   ## Parameters
-
+  
     * `line` - 一行の文字列。例参考
-
+  
   ## Returns
-
+  
     0. ポジション（Position；局面）
-
+  
   ## Examples
-
+  
     position startpos moves 7g7f 3c3d 2g2f
     position sfen lnsgkgsnl/9/ppppppppp/9/9/9/PPPPPPPPP/1B5R1/LNSGKGSNL w - 1 moves 5a6b 7g7f 3a3b
-
+  
     // 📖 [USIプロトコル表記: 最多合法手５９３手の局面](https://ameblo.jp/professionalhearts/entry-10001031814.html)
     position sfen R8/2K1S1SSk/4B4/9/9/9/9/9/1L1L1L3 w RBGSNLP3g3n17p 1
-
+  
     // 📖 [USIプロトコル表記: 飛角落ち初期局面](http://www.geocities.jp/shogidokoro/usi.html)
     position sfen lnsgkgsnl/9/ppppppppp/9/9/9/PPPPPPPPP/1B5R1/LNSGKGSNL w - 1 moves 5a6b 7g7f 3a3b
-
+  
   """
   def parse(line) do
     # IO.puts("parse(1) line:#{line}")
@@ -34,7 +34,9 @@ defmodule KifuwarabeWcsc33.CLI.Helpers.PositionParser do
         # 平手初期局面をセット（初期値のまま）
         line |> String.starts_with?("position startpos") ->
           # `position startpos` を除去 |> あれば、続くスペースを削除
-          rest_line = line |> String.slice(String.length("position startpos")..-1) |> String.trim_leading()
+          rest_line =
+            line |> String.slice(String.length("position startpos")..-1) |> String.trim_leading()
+
           #
           # 文字列型は elixir では使いづらいんで、マルチバイト・キャラクター・リスト（Multi-byte Character List；マルチバイト文字列型のリスト）に変換する
           #
@@ -51,7 +53,9 @@ defmodule KifuwarabeWcsc33.CLI.Helpers.PositionParser do
         # 途中局面をセット
         line |> String.starts_with?("position sfen") ->
           # `position startpos` を除去 |> あれば、続くスペースを削除
-          rest_line = line |> String.slice(String.length("position sfen")..-1) |> String.trim_leading()
+          rest_line =
+            line |> String.slice(String.length("position sfen")..-1) |> String.trim_leading()
+
           #
           # 文字列型は elixir では使いづらいんで、マルチバイト・キャラクター・リスト（Multi-byte Character List；マルチバイト文字列型のリスト）に変換する
           #
@@ -63,15 +67,16 @@ defmodule KifuwarabeWcsc33.CLI.Helpers.PositionParser do
           #
           # `trim: true` を付ける。付けないと、余計な空文字列が含まれている
           rest = rest_line |> String.split("", trim: true)
-          IO.inspect(rest, label: "[PositionParser parse] rest mchar_list")
+          # IO.inspect(rest, label: "[PositionParser parse] rest mchar_list")
 
           # 将棋盤の初期化
-          pos = %{pos |
-            location_of_kings: %{
-              # 玉は盤上に無いかもしれないので
-              :k1 => nil,
-              :k2 => nil,
-            }
+          pos = %{
+            pos
+            | location_of_kings: %{
+                # 玉は盤上に無いかもしれないので
+                :k1 => nil,
+                :k2 => nil
+              }
           }
 
           # 盤面部分を解析。「９一」番地からスタート
@@ -85,8 +90,10 @@ defmodule KifuwarabeWcsc33.CLI.Helpers.PositionParser do
           {rest, turn} = rest |> parse_turn()
 
           # 駒台の解析
-          {rest, hand_pieces} = rest |> parse_hands(KifuwarabeWcsc33.CLI.Models.Position.new_hand_pieces()) # TODO 空マップ %{} のような書き方ができるのか？ 要素数が不完全なんじゃないか？
-          IO.inspect(hand_pieces, label: "parse(7) The Hand pieces is")
+          {rest, hand_pieces} =
+            rest |> parse_hands(KifuwarabeWcsc33.CLI.Models.Position.new_hand_pieces())
+
+          # IO.inspect(hand_pieces, label: "parse(7) The Hand pieces is")
 
           #
           # 次の手は何手目か、を表す数字だが、「将棋所」は「この数字は必ず１にしています」という仕様なので
@@ -103,12 +110,13 @@ defmodule KifuwarabeWcsc33.CLI.Helpers.PositionParser do
           moves_num = String.to_integer(mchar)
 
           # 将棋盤の更新
-          pos = %{pos |
-            moves_num: moves_num,
-            turn: turn,
-            opponent_turn: KifuwarabeWcsc33.CLI.Mappings.ToTurn.flip(turn),
-            board: board,
-            hand_pieces: hand_pieces
+          pos = %{
+            pos
+            | moves_num: moves_num,
+              turn: turn,
+              opponent_turn: KifuwarabeWcsc33.CLI.Mappings.ToTurn.flip(turn),
+              board: board,
+              hand_pieces: hand_pieces
           }
 
           # あれば、続くスペースを削除
@@ -157,21 +165,22 @@ defmodule KifuwarabeWcsc33.CLI.Helpers.PositionParser do
 
           # IO.puts("parse(13) rest:#{rest}")
 
-          pos = %{ pos |
-            # 玉の場所は覚えておきたい
-            location_of_kings: %{ pos.location_of_kings |
-              :k1 => KifuwarabeWcsc33.CLI.Finder.Square.find_king_on_board(pos, :sente),
-              :k2 => KifuwarabeWcsc33.CLI.Finder.Square.find_king_on_board(pos, :gote),
-            },
-            # （手番から見た）駒得評価値を算出
-            materials_value: KifuwarabeWcsc33.CLI.Helpers.MaterialsValueCalc.count(pos)
+          pos = %{
+            pos
+            | # 玉の場所は覚えておきたい
+              location_of_kings: %{
+                pos.location_of_kings
+                | :k1 => KifuwarabeWcsc33.CLI.Finder.Square.find_king_on_board(pos, :sente),
+                  :k2 => KifuwarabeWcsc33.CLI.Finder.Square.find_king_on_board(pos, :gote)
+              },
+              # （手番から見た）駒得評価値を算出
+              materials_value: KifuwarabeWcsc33.CLI.Helpers.MaterialsValueCalc.count(pos)
           }
 
           {rest, pos}
         else
           {rest, pos}
         end
-
       else
         {rest, pos}
       end
@@ -191,7 +200,6 @@ defmodule KifuwarabeWcsc33.CLI.Helpers.PositionParser do
     # 何の成果も増えません。計算終了
     {"", sq, board}
   end
-
 
   # 盤面文字列を解析して、駒のリストを返す
   #
@@ -243,72 +251,72 @@ defmodule KifuwarabeWcsc33.CLI.Helpers.PositionParser do
 
                 4 ->
                   {sq - 40,
-                    Map.merge(board, %{
-                      sq => :sp,
-                      (sq - 10) => :sp,
-                      (sq - 20) => :sp,
-                      (sq - 30) => :sp
-                    })}
+                   Map.merge(board, %{
+                     sq => :sp,
+                     (sq - 10) => :sp,
+                     (sq - 20) => :sp,
+                     (sq - 30) => :sp
+                   })}
 
                 5 ->
                   {sq - 50,
-                    Map.merge(board, %{
-                      sq => :sp,
-                      (sq - 10) => :sp,
-                      (sq - 20) => :sp,
-                      (sq - 30) => :sp,
-                      (sq - 40) => :sp
-                    })}
+                   Map.merge(board, %{
+                     sq => :sp,
+                     (sq - 10) => :sp,
+                     (sq - 20) => :sp,
+                     (sq - 30) => :sp,
+                     (sq - 40) => :sp
+                   })}
 
                 6 ->
                   {sq - 60,
-                    Map.merge(board, %{
-                      sq => :sp,
-                      (sq - 10) => :sp,
-                      (sq - 20) => :sp,
-                      (sq - 30) => :sp,
-                      (sq - 40) => :sp,
-                      (sq - 50) => :sp
-                    })}
+                   Map.merge(board, %{
+                     sq => :sp,
+                     (sq - 10) => :sp,
+                     (sq - 20) => :sp,
+                     (sq - 30) => :sp,
+                     (sq - 40) => :sp,
+                     (sq - 50) => :sp
+                   })}
 
                 7 ->
                   {sq - 70,
-                    Map.merge(board, %{
-                      sq => :sp,
-                      (sq - 10) => :sp,
-                      (sq - 20) => :sp,
-                      (sq - 30) => :sp,
-                      (sq - 40) => :sp,
-                      (sq - 50) => :sp,
-                      (sq - 60) => :sp
-                    })}
+                   Map.merge(board, %{
+                     sq => :sp,
+                     (sq - 10) => :sp,
+                     (sq - 20) => :sp,
+                     (sq - 30) => :sp,
+                     (sq - 40) => :sp,
+                     (sq - 50) => :sp,
+                     (sq - 60) => :sp
+                   })}
 
                 8 ->
                   {sq - 80,
-                    Map.merge(board, %{
-                      sq => :sp,
-                      (sq - 10) => :sp,
-                      (sq - 20) => :sp,
-                      (sq - 30) => :sp,
-                      (sq - 40) => :sp,
-                      (sq - 50) => :sp,
-                      (sq - 60) => :sp,
-                      (sq - 70) => :sp
-                    })}
+                   Map.merge(board, %{
+                     sq => :sp,
+                     (sq - 10) => :sp,
+                     (sq - 20) => :sp,
+                     (sq - 30) => :sp,
+                     (sq - 40) => :sp,
+                     (sq - 50) => :sp,
+                     (sq - 60) => :sp,
+                     (sq - 70) => :sp
+                   })}
 
                 9 ->
                   {sq - 90,
-                    Map.merge(board, %{
-                      sq => :sp,
-                      (sq - 10) => :sp,
-                      (sq - 20) => :sp,
-                      (sq - 30) => :sp,
-                      (sq - 40) => :sp,
-                      (sq - 50) => :sp,
-                      (sq - 60) => :sp,
-                      (sq - 70) => :sp,
-                      (sq - 80) => :sp
-                    })}
+                   Map.merge(board, %{
+                     sq => :sp,
+                     (sq - 10) => :sp,
+                     (sq - 20) => :sp,
+                     (sq - 30) => :sp,
+                     (sq - 40) => :sp,
+                     (sq - 50) => :sp,
+                     (sq - 60) => :sp,
+                     (sq - 70) => :sp,
+                     (sq - 80) => :sp
+                   })}
 
                 _ ->
                   raise "unexpected space_num:#{space_num}"
@@ -320,8 +328,7 @@ defmodule KifuwarabeWcsc33.CLI.Helpers.PositionParser do
           first_char == "+" ->
             second_char = rest |> String.at(0)
 
-            promoted_piece =
-              KifuwarabeWcsc33.CLI.Views.Piece.from_code(first_char <> second_char)
+            promoted_piece = KifuwarabeWcsc33.CLI.Views.Piece.from_code(first_char <> second_char)
 
             board = Map.merge(board, %{sq => promoted_piece})
             # 右列へ１つ移動（-10）
@@ -408,7 +415,10 @@ defmodule KifuwarabeWcsc33.CLI.Helpers.PositionParser do
       {rest, hand_pieces}
     else
       # 持ち駒あり
-      mchar_list = mchar ++ rest
+
+      # 頭と尾をつなげて、元のリストに戻す
+      mchar_list = [mchar] ++ rest
+      # IO.inspect(mchar_list, label: "[parse_piece_type_on_hands] mchar_list")
       mchar_list |> parse_piece_type_on_hands(0, hand_pieces)
     end
   end
@@ -422,7 +432,7 @@ defmodule KifuwarabeWcsc33.CLI.Helpers.PositionParser do
   # ベース・ケース（Base case；基本形） - 再帰関数の繰り返し回数が０回のときの処理
   #
   defp parse_piece_type_on_hands([], _number, hand_pieces) do
-    IO.puts("[parse_piece_type_on_hands] Terminate")
+    # IO.puts("[parse_piece_type_on_hands] Terminate")
     # 何も成果を増やさず終了
     {"", hand_pieces}
   end
@@ -443,46 +453,51 @@ defmodule KifuwarabeWcsc33.CLI.Helpers.PositionParser do
   #   1. ハンド・ピースズ（Hand Pieces；持ち駒と枚数のマップ）
   #
   defp parse_piece_type_on_hands([mchar | rest], number, hand_pieces) do
-    {mchar_list, number, hand_pieces} =
-      cond do
-        # 数字が出てきたら -> 数が増えるだけ
-        Regex.match?(~r/^\d$/, mchar) ->
-          # ２つ目の数字は一の位なので、以前の数は十の位なので、10倍する
-          number = 10 * number + String.to_integer(mchar)
-          IO.puts("[parse_piece_type_on_hands] number:#{number}")
+    if mchar == " " do
+      # 区切りの空白。再帰を停止
+      {rest, hand_pieces}
+    else
+      {mchar_list, number, hand_pieces} =
+        cond do
+          # 数字が出てきたら -> 数が増えるだけ
+          Regex.match?(~r/^\d$/, mchar) ->
+            # ２つ目の数字は一の位なので、以前の数は十の位なので、10倍する
+            number = 10 * number + String.to_integer(mchar)
+            # IO.puts("[parse_piece_type_on_hands] number:#{number}")
 
-          {rest, number, hand_pieces}
+            {rest, number, hand_pieces}
 
-        true ->
-          # ピース（Piece；先後付きの駒種類）
-          piece = KifuwarabeWcsc33.CLI.Views.Piece.from_code(mchar)
+          true ->
+            # ピース（Piece；先後付きの駒種類）
+            piece = KifuwarabeWcsc33.CLI.Views.Piece.from_code(mchar)
 
-          # 枚数指定がないなら 1
-          number =
-            if number == 0 do
-              1
-            else
-              number
-            end
+            # 枚数指定がないなら 1
+            number =
+              if number == 0 do
+                1
+              else
+                number
+              end
 
-          IO.puts("[parse_piece_type_on_hands] number:#{number} piece:#{piece}")
+            # IO.puts("[parse_piece_type_on_hands] number:#{number} piece:#{piece}")
 
-          # 持ち駒データ追加
-          hand_pieces = Map.merge(hand_pieces, %{piece => number})
-          IO.inspect(hand_pieces, label: "[parse_piece_type_on_hands] hand_pieces:")
+            # 持ち駒データ追加
+            hand_pieces = Map.merge(hand_pieces, %{piece => number})
+            # IO.inspect(hand_pieces, label: "[parse_piece_type_on_hands] hand_pieces:")
 
-          # 数をリセット
-          number = 0
+            # 数をリセット
+            number = 0
 
-          {rest, number, hand_pieces}
-      end
+            {rest, number, hand_pieces}
+        end
 
-    # Recursive
-    # =========
-    {mchar_list, hand_pieces} = mchar_list |> parse_piece_type_on_hands(number, hand_pieces)
+      # Recursive
+      # =========
+      {mchar_list, hand_pieces} = mchar_list |> parse_piece_type_on_hands(number, hand_pieces)
 
-    # 再帰からの帰り道にも成果を返す
-    {mchar_list, hand_pieces}
+      # 再帰からの帰り道にも成果を返す
+      {mchar_list, hand_pieces}
+    end
   end
 
   #
@@ -508,7 +523,6 @@ defmodule KifuwarabeWcsc33.CLI.Helpers.PositionParser do
   #   * `pos` - ポジション（Position；局面）
   #
   defp parse_moves_string_and_update_position(mchar_list, pos) do
-
     # IO.inspect(mchar_list, label: "[parse_moves_string_and_update_position] mchar_list")
 
     # コードを、指し手へ変換
