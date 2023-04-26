@@ -1,4 +1,17 @@
 defmodule KifuwarabeWcsc33.CLI.Models.Position do
+
+  @type t :: %KifuwarabeWcsc33.CLI.Models.Position{
+    moves_num: integer,
+    turn: atom,
+    fourfold_repetition: integer,
+    board: map,
+    hand_pieces: map,
+    moves: list,
+    captured_piece_types: map,
+    location_of_kings: map,
+    materials_value: integer,
+  }
+
   # ## 雑談
   #
   #   Auto Format 融通きかねーっ

@@ -49,3 +49,7 @@ mix run
 ```shell
 mix release
 ```
+
+# References
+
+📖 [references.md](./docs/references.md) - あとで読む

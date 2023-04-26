@@ -13,6 +13,7 @@ defmodule KifuwarabeWcsc33.CLI.Views.Position do
     * `pos` - ポジション（Position；局面）
 
   """
+  @spec stringify(KifuwarabeWcsc33.CLI.Models.Position.t) :: String.t
   def stringify(pos) do
     header = pos |> stringify_header()
     hand2 = pos |> stringify_hand2()
@@ -37,6 +38,7 @@ defmodule KifuwarabeWcsc33.CLI.Views.Position do
   #
   #   [1 moves / First / 0 repeat(s)]
   #
+  @spec stringify_header(KifuwarabeWcsc33.CLI.Models.Position.t) :: String.t
   defp stringify_header(pos) do
     # ムーブズ・ナンバー（moves-number；何手目か）、Half-ply
     m = "#{pos.moves_num}"
@@ -66,6 +68,7 @@ defmodule KifuwarabeWcsc33.CLI.Views.Position do
   #
   #   * 0 は空欄になる
   #
+  @spec stringify_hand2(KifuwarabeWcsc33.CLI.Models.Position.t) :: String.t
   defp stringify_hand2(pos) do
     # キング（King；玉）
     k = :k2 |> stringify_cell(pos)
@@ -108,6 +111,7 @@ defmodule KifuwarabeWcsc33.CLI.Views.Position do
   #
   #   * 0 は空欄になる
   #
+  @spec stringify_hand1(KifuwarabeWcsc33.CLI.Models.Position.t) :: String.t
   defp stringify_hand1(pos) do
     # キング（King；玉）
     k = :k1 |> stringify_cell(pos)
@@ -139,6 +143,7 @@ defmodule KifuwarabeWcsc33.CLI.Views.Position do
   #
   #   * 0 は空欄になる
   #
+  @spec stringify_cell(atom, KifuwarabeWcsc33.CLI.Models.Position.t) :: String.t
   defp stringify_cell(piece_type, pos) do
     num = pos.hand_pieces[piece_type]
 
@@ -174,6 +179,7 @@ defmodule KifuwarabeWcsc33.CLI.Views.Position do
   #    |  |  |  |  |  |  |  |  |  | i
   #    +--+--+--+--+--+--+--+--+--+
   #
+  @spec stringify_body(KifuwarabeWcsc33.CLI.Models.Position.t) :: String.t
   defp stringify_body(pos) do
     #
     # 将棋盤を反時計回りに９０°回すと、座標は 11,12,13 ... のように合理的になるが
@@ -297,6 +303,7 @@ defmodule KifuwarabeWcsc33.CLI.Views.Position do
   end
 
   # 手番の表示
+  @spec stringify_turn(atom) :: String.t
   defp stringify_turn(turn) do
     case turn do
       :sente -> "Sente"
@@ -311,6 +318,7 @@ defmodule KifuwarabeWcsc33.CLI.Views.Position do
   #
   # pc - ピース（piece；先後付きの駒種類）
   #
+  @spec stringify_piece(atom) :: String.t
   defp stringify_piece(pc) do
     case pc do
       # ▲せんて（Sente；先手） or したて（Shitate；下手）
@@ -391,6 +399,7 @@ defmodule KifuwarabeWcsc33.CLI.Views.Position do
   end
 
   # 棋譜の表示
+  @spec stringify_record(KifuwarabeWcsc33.CLI.Models.Position.t) :: String.t
   defp stringify_record(pos) do
     # IO.inspect(pos.moves)
 
@@ -419,6 +428,7 @@ defmodule KifuwarabeWcsc33.CLI.Views.Position do
   end
 
   # 玉のいるマス番地
+  @spec stringify_location_of_kings(KifuwarabeWcsc33.CLI.Models.Position.t) :: String.t
   defp stringify_location_of_kings(pos) do
     """
     king_sq ^#{pos.location_of_kings[:k1]} v#{pos.location_of_kings[:k2]}
@@ -427,6 +437,7 @@ defmodule KifuwarabeWcsc33.CLI.Views.Position do
   end
 
   # 手番から見た局面評価値
+  @spec stringify_value(KifuwarabeWcsc33.CLI.Models.Position.t) :: String.t
   defp stringify_value(pos) do
     """
     value seen from #{pos.turn} #{pos.materials_value}
