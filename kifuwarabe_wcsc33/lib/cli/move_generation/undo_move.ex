@@ -21,9 +21,9 @@ defmodule KifuwarabeWcsc33.CLI.MoveGeneration.UndoMove do
 
   """
   def do_it(pos) do
-    # 最後の要素を削除するために、インデックスを取得しておく
-    last_index = Enum.count(pos.moves) - 1
-    # IO.puts("last_index:#{last_index} pos.moves.length:#{pos.moves|>length()}")
+    # # 最後の要素を削除するために、インデックスを取得しておく
+    # last_index = Enum.count(pos.moves) - 1
+    # # IO.puts("last_index:#{last_index} pos.moves.length:#{pos.moves|>length()}")
 
     # 最後の指し手を取得（リンクドリストなので効率が悪い）
     move = pos.moves |> List.last()
@@ -39,8 +39,10 @@ defmodule KifuwarabeWcsc33.CLI.MoveGeneration.UndoMove do
             turn: KifuwarabeWcsc33.CLI.Mappings.ToTurn.flip(pos.turn),
             opponent_turn: pos.turn,
             # リストの最後の要素を削除。リストのサイズを揃える
-            moves: pos.moves |> List.delete_at(last_index),
-            captured_piece_types: pos.captured_piece_types |> List.delete_at(last_index),
+            # moves: pos.moves |> List.delete_at(last_index),
+            moves: KifuwarabeWcsc33.CLI.Coding.ListDeleteLast.do_it(pos.moves),
+            # captured_piece_types: pos.captured_piece_types |> List.delete_at(last_index),
+            captured_piece_types: KifuwarabeWcsc33.CLI.Coding.ListDeleteLast.do_it(pos.captured_piece_types),
             # 正負を反転
             materials_value: - pos.materials_value
           }

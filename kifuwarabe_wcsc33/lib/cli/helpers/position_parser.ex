@@ -538,7 +538,7 @@ defmodule KifuwarabeWcsc33.CLI.Helpers.PositionParser do
             rest
           end
 
-        IO.inspect(rest, label: "[parse_moves_string_and_update_position] rest2")
+        # IO.inspect(rest, label: "[parse_moves_string_and_update_position] rest2")
 
         # Recursive
         # =========
