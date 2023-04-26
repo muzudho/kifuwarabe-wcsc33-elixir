@@ -149,15 +149,17 @@ defmodule KifuwarabeWcsc33.CLI.Helpers.PositionParser do
     pos
   end
 
+  #
   # パターンマッチ
-  defp map_string_to_board(rest \\ [], sq, board)
+  #
+  defp map_string_to_board(rest, sq, board)
 
   #
-  # Base case
+  # ベース・ケース（Base case；基本形） - 再帰関数の繰り返し回数が０回のときの処理
   #
   defp map_string_to_board([], sq, board) do
-      # 何の成果も増えません。計算終了
-      {"", sq, board}
+    # 何の成果も増えません。計算終了
+    {"", sq, board}
   end
 
 
@@ -378,13 +380,27 @@ defmodule KifuwarabeWcsc33.CLI.Helpers.PositionParser do
     end
   end
 
+  #
+  # パターンマッチ
+  #
+  defp parse_piece_type_on_hands(rest, number, hand_pieces)
+
+  #
+  # ベース・ケース（Base case；基本形） - 再帰関数の繰り返し回数が０回のときの処理
+  #
+  defp parse_piece_type_on_hands([], _number, hand_pieces) do
+    IO.puts("[parse_piece_type_on_hands] Terminate")
+    # 何も成果を増やさず終了
+    {"", hand_pieces}
+  end
+
   # 持ち駒の種類１つ分の解析
   #
   # 数字が出てきたら、もう１回再帰
   #
   # ## Parameters
   #
-  # * `rest` - レスト（Rest；残りの文字列）
+  # * `[first_char | rest]` - first_char は先頭の１文字、レスト（Rest；残り）は残りの文字列
   # * `number` - ナンバー（Number；前回の解析から引き継いだ数字）
   # * `hand_pieces` - ハンド・ピースズ（Hand Pieces；持ち駒と枚数のマップ）
   #
@@ -393,59 +409,47 @@ defmodule KifuwarabeWcsc33.CLI.Helpers.PositionParser do
   #   0. レスト（Rest；残りの文字列）
   #   1. ハンド・ピースズ（Hand Pieces；持ち駒と枚数のマップ）
   #
-  defp parse_piece_type_on_hands(rest, number, hand_pieces) do
-    # 先頭の１文字切り出し
-    first_char = rest |> String.at(0)
-    IO.puts("[parse_piece_type_on_hands] first_char:[#{first_char}]")
-    rest = rest |> String.slice(1..-1)
+  defp parse_piece_type_on_hands([first_char | rest], number, hand_pieces) do
+    {rest, number, hand_pieces} =
+      cond do
+        # 数字が出てきたら -> 数が増えるだけ
+        Regex.match?(~r/^\d$/, first_char) ->
+          # ２つ目の数字は一の位なので、以前の数は十の位なので、10倍する
+          number = 10 * number + String.to_integer(first_char)
+          IO.puts("[parse_piece_type_on_hands] number:#{number}")
 
-    if first_char == " " do
-      # Base case
-      IO.puts("[parse_piece_type_on_hands] Terminate")
-      # 何も成果を増やさず終了
-      {rest, hand_pieces}
-    else
-      {rest, number, hand_pieces} =
-        cond do
-          # 数字が出てきたら -> 数が増えるだけ
-          Regex.match?(~r/^\d$/, first_char) ->
-            # ２つ目の数字は一の位なので、以前の数は十の位なので、10倍する
-            number = 10 * number + String.to_integer(first_char)
-            IO.puts("[parse_piece_type_on_hands] number:#{number}")
+          {rest, number, hand_pieces}
 
-            {rest, number, hand_pieces}
+        true ->
+          # ピース（Piece；先後付きの駒種類）
+          piece = KifuwarabeWcsc33.CLI.Views.Piece.from_code(first_char)
 
-          true ->
-            # ピース（Piece；先後付きの駒種類）
-            piece = KifuwarabeWcsc33.CLI.Views.Piece.from_code(first_char)
+          # 枚数指定がないなら 1
+          number =
+            if number == 0 do
+              1
+            else
+              number
+            end
 
-            # 枚数指定がないなら 1
-            number =
-              if number == 0 do
-                1
-              else
-                number
-              end
+          IO.puts("[parse_piece_type_on_hands] number:#{number} piece:#{piece}")
 
-            IO.puts("[parse_piece_type_on_hands] number:#{number} piece:#{piece}")
+          # 持ち駒データ追加
+          hand_pieces = Map.merge(hand_pieces, %{piece => number})
+          IO.inspect(hand_pieces, label: "[parse_piece_type_on_hands] hand_pieces:")
 
-            # 持ち駒データ追加
-            hand_pieces = Map.merge(hand_pieces, %{piece => number})
-            IO.inspect(hand_pieces, label: "[parse_piece_type_on_hands] hand_pieces:")
+          # 数をリセット
+          number = 0
 
-            # 数をリセット
-            number = 0
+          {rest, number, hand_pieces}
+      end
 
-            {rest, number, hand_pieces}
-        end
+    # Recursive
+    # =========
+    {rest, hand_pieces} = rest |> parse_piece_type_on_hands(number, hand_pieces)
 
-      # Recursive
-      # =========
-      {rest, hand_pieces} = rest |> parse_piece_type_on_hands(number, hand_pieces)
-
-      # 再帰からの帰り道にも成果を返す
-      {rest, hand_pieces}
-    end
+    # 再帰からの帰り道にも成果を返す
+    {rest, hand_pieces}
   end
 
   # 指し手の解析と、局面更新
