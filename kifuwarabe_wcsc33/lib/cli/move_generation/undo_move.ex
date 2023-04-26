@@ -60,7 +60,7 @@ defmodule KifuwarabeWcsc33.CLI.MoveGeneration.UndoMove do
           move.drop_piece_type
         )
 
-      IO.puts("[undo_move] drop_piece:#{drop_piece} old_num:#{pos.hand_pieces[drop_piece]}")
+      # IO.puts("[undo_move] drop_piece:#{drop_piece} old_num:#{pos.hand_pieces[drop_piece]}")
       num = pos.hand_pieces[drop_piece] + 1
 
       # ## 雑談
@@ -110,7 +110,7 @@ defmodule KifuwarabeWcsc33.CLI.MoveGeneration.UndoMove do
               captured_pt
             )
 
-          IO.puts("[undo_move] hand_pc:#{hand_pc} old_num:#{pos.hand_pieces[hand_pc]}")
+          # IO.puts("[undo_move] hand_pc:#{hand_pc} old_num:#{pos.hand_pieces[hand_pc]}")
           num = pos.hand_pieces[hand_pc] - 1
 
           captured_material_value =

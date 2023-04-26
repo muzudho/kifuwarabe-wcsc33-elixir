@@ -32,7 +32,7 @@ defmodule KifuwarabeWcsc33.CLI.MoveGeneration.DoMove do
             move.drop_piece_type
           )
 
-        IO.puts("[do_move] drop_piece:#{drop_piece} old_num:#{pos.hand_pieces[drop_piece]}")
+        # IO.puts("[do_move] drop_piece:#{drop_piece} old_num:#{pos.hand_pieces[drop_piece]}")
         num = pos.hand_pieces[drop_piece] - 1
 
         # ## 雑談
@@ -97,7 +97,7 @@ defmodule KifuwarabeWcsc33.CLI.MoveGeneration.DoMove do
             # 持ち駒種類（先後付き）（成りの情報を含まない）
             hand_pc = KifuwarabeWcsc33.CLI.Mappings.ToPiece.from_captured_piece_to_hand(target_pc)
 
-            IO.puts("[do_move] hand_pc:#{hand_pc} old_num:#{pos.hand_pieces[hand_pc]}")
+            # IO.puts("[do_move] hand_pc:#{hand_pc} old_num:#{pos.hand_pieces[hand_pc]}")
             num = pos.hand_pieces[hand_pc] + 1
 
             # 局面更新
