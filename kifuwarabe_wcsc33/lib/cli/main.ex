@@ -120,7 +120,7 @@ defmodule KifuwarabeWcsc33.CLI.Main do
           {pos, best_move, value} = KifuwarabeWcsc33.CLI.USI.Go.do_it(pos)
           best_move_as_str = KifuwarabeWcsc33.CLI.Views.Move.as_code(best_move)
 
-          IO.puts("info score cp #{value}")
+          IO.puts("info score cp #{value} string ")
           IO.puts("bestmove #{best_move_as_str}")
           {pos}
 
