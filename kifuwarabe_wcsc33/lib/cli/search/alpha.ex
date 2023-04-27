@@ -93,103 +93,90 @@ defmodule KifuwarabeWcsc33.CLI.Search.Alpha do
   # 2. ベスト・ムーブ（Best Move；最善手） - 無ければニル
   #
   defp choice_best(pos, [move | move_list], sibling_best_move, sibling_best_value, depth) do
-    if move == nil do
+    #
+    # とりあえず、１手指してみる
+    # ======================
+    #
+    # - 手番がひっくり返ることに注意
+    #
+    # move_code = KifuwarabeWcsc33.CLI.Views.Move.as_code(move)
+    # IO.puts("[Alpha choice_best] move:#{move_code} pre_value:#{pos.materials_value}")
+
+    pos = pos |> KifuwarabeWcsc33.CLI.MoveGeneration.DoMove.do_it(move)
+
+    {pos, value} =
+      if depth < 1 do
+        #
+        # 候補手を指した後の局面に、バリュー（Value；局面評価値）を付ける
+        # =======================================================
+        #
+        #   - 相手から見た局面になっているので、相手から見た局面評価を行い、その正負を逆転（負数にする）すれば、自分から見た局面になる
+        #
+        # ## 雑談
+        #
+        #   - 古典的には、歩１個の価値を 100 とする。これを 1 センチポーン（centipawn；一厘歩） と言う。
+        #     この尺度を使う場合、整数を使う（実数を使わない）
+        #
+        value = -lets_position_value(pos)
+        # IO.puts("[Alpha choice_best] value:#{value}")
+        {pos, value}
+      else
+        #
+        # TODO ２手目を読みたい
+        # ===================
+        #
+        # - 何手目で打ち止めにするか決めないと、帰ってこれない。 depth を 1 減らす
+        # - この pos は、結局、現在の pos と同じはずだが
+        # - この best_move （ベスト・ムーブ）は、相手の次の手
+        # - この value （評価値）は、葉局面から帰ってくる
+        #
+        {pos, _best_move, value} = do_it(pos, depth - 1)
+
+        {pos, value}
+      end
+
+    #
+    # 忘れずに、１手戻す
+    # ===============
+    #
+    # - 手番がひっくり返ることに注意
+    #
+    pos = pos |> KifuwarabeWcsc33.CLI.MoveGeneration.UndoMove.do_it()
+
+    #
+    # アルファー・アップデート
+    # =====================
+    #
+    #   兄弟局面の中の最高局面評価値を更新したなら、最善手を更新する
+    #
+    # ## 雑談
+    #
+    #   アルファー（α；甲）は、わたしの番という意味。ベーター（β；乙）は、あなたの番という意味
+    #
+    {sibling_best_move, sibling_best_value} =
+      if sibling_best_value < value do
+        {move, value}
+      else
+        {sibling_best_move, sibling_best_value}
+      end
+
+    if move_list |> length() < 1 do
       #
       # Base case
       # =========
       #
-      # - 指し手が無ければ停止
+      # - 合法手が残ってなければ停止
       #
-      # IO.puts("[Alpha choice_best] move is nil. stop")
+      # IO.puts("[Alpha choice_best] empty move list. stop")
 
       # 再帰の帰り道
       {pos, sibling_best_move, sibling_best_value}
     else
       #
-      # とりあえず、１手指してみる
-      # ======================
+      # Recursive
+      # =========
       #
-      # - 手番がひっくり返ることに注意
-      #
-      # move_code = KifuwarabeWcsc33.CLI.Views.Move.as_code(move)
-      # IO.puts("[Alpha choice_best] move:#{move_code} pre_value:#{pos.materials_value}")
-
-      pos = pos |> KifuwarabeWcsc33.CLI.MoveGeneration.DoMove.do_it(move)
-
-      {pos, value} =
-        if depth < 1 do
-          #
-          # 候補手を指した後の局面に、バリュー（Value；局面評価値）を付ける
-          # =======================================================
-          #
-          #   - 相手から見た局面になっているので、相手から見た局面評価を行い、その正負を逆転（負数にする）すれば、自分から見た局面になる
-          #
-          # ## 雑談
-          #
-          #   - 古典的には、歩１個の価値を 100 とする。これを 1 センチポーン（centipawn；一厘歩） と言う。
-          #     この尺度を使う場合、整数を使う（実数を使わない）
-          #
-          value = -lets_position_value(pos)
-          # IO.puts("[Alpha choice_best] value:#{value}")
-          {pos, value}
-        else
-          #
-          # TODO ２手目を読みたい
-          # ===================
-          #
-          # - 何手目で打ち止めにするか決めないと、帰ってこれない。 depth を 1 減らす
-          # - この pos は、結局、現在の pos と同じはずだが
-          # - この best_move （ベスト・ムーブ）は、相手の次の手
-          # - この value （評価値）は、葉局面から帰ってくる
-          #
-          {pos, _best_move, value} = do_it(pos, depth - 1)
-
-          {pos, value}
-        end
-
-      #
-      # 忘れずに、１手戻す
-      # ===============
-      #
-      # - 手番がひっくり返ることに注意
-      #
-      pos = pos |> KifuwarabeWcsc33.CLI.MoveGeneration.UndoMove.do_it()
-
-      #
-      # アルファー・アップデート
-      # =====================
-      #
-      #   兄弟局面の中の最高局面評価値を更新したなら、最善手を更新する
-      #
-      # ## 雑談
-      #
-      #   アルファー（α；甲）は、わたしの番という意味。ベーター（β；乙）は、あなたの番という意味
-      #
-      {sibling_best_move, sibling_best_value} =
-        if sibling_best_value < value do
-          {move, value}
-        else
-          {sibling_best_move, sibling_best_value}
-        end
-
-      if move_list |> length() < 1 do
-        #
-        # Base case
-        # =========
-        #
-        # - 合法手が残ってなければ停止
-        #
-        # IO.puts("[Alpha choice_best] empty move list. stop")
-
-        # 再帰の帰り道
-        {pos, sibling_best_move, sibling_best_value}
-      else
-        #
-        # Recursive
-        # =========
-        #
-        choice_best(pos, move_list, sibling_best_move, sibling_best_value, depth)
-      end
+      choice_best(pos, move_list, sibling_best_move, sibling_best_value, depth)
     end
   end
 
