@@ -1,18 +1,18 @@
 defmodule KifuwarabeWcsc33.CLI.MoveList.ReduceSuicideMove do
   @doc """
-  
+
     指し手のリストから、自殺手を除去
-  
+
   ## Parameters
-  
+
     * `move_list` - ムーブ・リスト（Move List；指し手のリスト）
     * `pos` - ポジション（Position；局面）
-  
+
   ## Returns
-  
+
     0. ムーブ・リスト（Move List；指し手のリスト）
     1. `pos` - ポジション（Position；局面）
-  
+
   """
   def do_it(move_list, pos) do
     # 自玉
