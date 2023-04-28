@@ -9,7 +9,8 @@ defmodule KifuwarabeWcsc33.CLI.Models.Position do
           captured_piece_types: map,
           location_of_kings: map,
           materials_value: integer,
-          teban_is_lose?: boolean
+          teban_is_lose?: boolean,
+          aiteban_is_lose?: boolean
         }
 
   # ## 雑談
@@ -183,7 +184,12 @@ defmodule KifuwarabeWcsc33.CLI.Models.Position do
             # 手番の方は負けか？
             # ===============
             #
-            teban_is_lose?: false
+            teban_is_lose?: false,
+            #
+            # 相手番の方は負けか？
+            # =================
+            #
+            aiteban_is_lose?: false
 
   # Elixir のリスト、リンクドリストだ、ランダム・アクセス遅そう、使いたくねー
   # defstruct piece_list:

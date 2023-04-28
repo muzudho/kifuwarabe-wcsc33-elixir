@@ -149,14 +149,14 @@ defmodule KifuwarabeWcsc33.CLI.Helpers.PositionParser do
     }
 
     #
-    # 手番は負けか？
-    # ============
+    # 手番（または相手番）は負けか？
+    # ==========================
     #
-    teban_is_lose? =
+    pos = %{
       pos
-      |> KifuwarabeWcsc33.CLI.Thesis.IsCheckmated.is_checkmated?(:teban)
-
-    pos = %{pos | teban_is_lose?: teban_is_lose?}
+      | teban_is_lose?: KifuwarabeWcsc33.CLI.Thesis.IsCheckmated.is_checkmated?(pos, :teban),
+        aiteban_is_lose?: KifuwarabeWcsc33.CLI.Thesis.IsCheckmated.is_checkmated?(pos, :aiteban)
+    }
 
     #
     # "moves" が続くか、ここで終わりのはず
