@@ -1,13 +1,13 @@
-defmodule KifuwarabeWcsc33.CLI.Thesis.IsMated do
+defmodule KifuwarabeWcsc33.CLI.Thesis.IsCheckmated do
   @moduledoc """
-  
-  自玉が相手の利きに飛び込んでいますか？
-  
+
+  手番の玉が相手の利きに飛び込んでいますか？
+
   * 自殺手判定に使う
-  
+
   """
 
-  # 玉の自殺手ですか？
+  # 手番の玉が詰んでいるか判定
   #
   # ## Parameters
   #
@@ -18,7 +18,7 @@ defmodule KifuwarabeWcsc33.CLI.Thesis.IsMated do
   #
   #   論理値型は関数名の末尾に ? を付ける？
   #
-  def is_mated?(pos, king_turn, src_sq) do
+  def is_checkmated?(pos, king_turn, src_sq) do
     #
     # 利きに飛び込むか？　先手視点で定義しろだぜ
     # ====================================

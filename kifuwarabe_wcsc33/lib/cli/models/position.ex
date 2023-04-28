@@ -8,7 +8,8 @@ defmodule KifuwarabeWcsc33.CLI.Models.Position do
           moves: list,
           captured_piece_types: map,
           location_of_kings: map,
-          materials_value: integer
+          materials_value: integer,
+          is_checkmated?: boolean
         }
 
   # ## 雑談
@@ -177,7 +178,12 @@ defmodule KifuwarabeWcsc33.CLI.Models.Position do
             #   - 古典的アルゴリズムで用いられる、思考部で使う
             #   - 現局面の手番の局面評価値。正の数なら手番良し、負の数なら相手番良し
             #
-            materials_value: 0
+            materials_value: 0,
+            #
+            # 手番の玉が詰んでいるか？
+            # ====================
+            #
+            is_checkmated?: false
 
   # Elixir のリスト、リンクドリストだ、ランダム・アクセス遅そう、使いたくねー
   # defstruct piece_list:

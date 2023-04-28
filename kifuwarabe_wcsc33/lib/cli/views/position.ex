@@ -448,6 +448,7 @@ defmodule KifuwarabeWcsc33.CLI.Views.Position do
   defp stringify_value(pos) do
     """
     value seen from #{pos.turn} #{pos.materials_value}
+    Teban is lose? #{pos.is_checkmated?}
     
     """
   end

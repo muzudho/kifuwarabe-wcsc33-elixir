@@ -135,6 +135,37 @@ defmodule KifuwarabeWcsc33.CLI.Helpers.PositionParser do
       end
 
     #
+    # 玉の場所は覚えておきたい
+    # =====================
+    #
+
+    pos = %{
+      pos
+      | location_of_kings: %{
+          pos.location_of_kings
+          | :k1 => KifuwarabeWcsc33.CLI.Finder.Square.find_king_on_board(pos, :sente),
+            :k2 => KifuwarabeWcsc33.CLI.Finder.Square.find_king_on_board(pos, :gote)
+        }
+    }
+
+    #
+    # 手番の玉は詰んでいるか？
+    # ====================
+    #
+    is_checkmated? =
+      KifuwarabeWcsc33.CLI.Thesis.IsCheckmated.is_checkmated?(
+        pos,
+        pos.turn,
+        if pos.turn == :sente do
+          pos.location_of_kings[:k1]
+        else
+          pos.location_of_kings[:k2]
+        end
+      )
+
+    pos = %{pos | is_checkmated?: is_checkmated?}
+
+    #
     # "moves" が続くか、ここで終わりのはず
     #
     {_rest, pos} =
@@ -178,20 +209,6 @@ defmodule KifuwarabeWcsc33.CLI.Helpers.PositionParser do
       else
         {rest, pos}
       end
-
-    #
-    # 玉の場所は覚えておきたい
-    # =====================
-    #
-
-    pos = %{
-      pos
-      | location_of_kings: %{
-          pos.location_of_kings
-          | :k1 => KifuwarabeWcsc33.CLI.Finder.Square.find_king_on_board(pos, :sente),
-            :k2 => KifuwarabeWcsc33.CLI.Finder.Square.find_king_on_board(pos, :gote)
-        }
-    }
 
     pos
   end
