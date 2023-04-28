@@ -449,6 +449,7 @@ defmodule KifuwarabeWcsc33.CLI.Views.Position do
     """
     value seen from #{pos.turn} #{pos.materials_value}
     Teban is lose? #{pos.teban_is_lose?}
+    Aiteban is lose? #{pos.aiteban_is_lose?}
     
     """
   end
