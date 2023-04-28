@@ -153,15 +153,8 @@ defmodule KifuwarabeWcsc33.CLI.Helpers.PositionParser do
     # ============
     #
     teban_is_lose? =
-      KifuwarabeWcsc33.CLI.Thesis.IsCheckmated.is_checkmated?(
-        pos,
-        pos.turn,
-        if pos.turn == :sente do
-          pos.location_of_kings[:k1]
-        else
-          pos.location_of_kings[:k2]
-        end
-      )
+      pos
+      |> KifuwarabeWcsc33.CLI.Thesis.IsCheckmated.teban_is_checkmated?()
 
     pos = %{pos | teban_is_lose?: teban_is_lose?}
 

@@ -143,11 +143,7 @@ defmodule KifuwarabeWcsc33.CLI.MoveList.ReduceSuicideMove do
     # ==============
     #
     {cleanup_move_list} =
-      if pos
-         |> KifuwarabeWcsc33.CLI.Thesis.IsCheckmated.is_checkmated?(
-           pos.opponent_turn,
-           opponent_king_sq
-         ) do
+      if pos.teban_is_lose? do
         #
         # 自殺手だ
         #
