@@ -659,7 +659,7 @@ defmodule KifuwarabeWcsc33.CLI.Thesis.IsCheckmated do
   # 指定の方向のマスを調べていく
   # ========================
   #
-  defp adjacent(pos, src_sq, direction_of, is_effect?, is_long_effect, is_effect_2?) do
+  defp adjacent(pos, src_sq, direction_of, is_effect?, must_long_effect_check, is_effect_2?) do
     #
     # 対象のマス
     #
@@ -676,31 +676,48 @@ defmodule KifuwarabeWcsc33.CLI.Thesis.IsCheckmated do
 
     if KifuwarabeWcsc33.CLI.Config.is_debug_suicide_move_check?() do
       IO.puts(
-        "[teban_is_checkmated] pos.turn:#{pos.turn} src_sq:#{src_sq} direction_of:#{direction_of} ----> target_sq:#{target_sq}"
+        "[teban_is_checkmated] DEBUG pos.turn:#{pos.turn} src_sq:#{src_sq} direction_of:#{direction_of} ----> target_sq:#{target_sq}"
       )
     end
 
-    # 盤内で
+    # 自玉が相手の利きに飛び込んでいるか？
     is_suicide_move =
       if KifuwarabeWcsc33.CLI.Thesis.Board.is_in_board?(target_sq) do
         #
-        # 盤内
+        # 盤内だ
+        # =====
         #
         # 隣の駒
         target_pc = pos.board[target_sq]
-        # IO.write(" target_pc:#{target_pc}")
+
+        if KifuwarabeWcsc33.CLI.Config.is_debug_suicide_move_check?() do
+          IO.puts("[teban_is_checkmated] DEBUG in-board target_pc:#{target_pc}")
+        end
 
         if target_pc != :sp do
+          #
           # 空マスではない
+          # ============
+          #
           # 先後
           target_turn = KifuwarabeWcsc33.CLI.Mappings.ToTurn.from_piece(target_pc)
-          # IO.write(" target_turn:#{target_turn}")
 
-          # 相手番（一手指した後を想定し、現手番は相手）
-          if target_turn == pos.turn do
+          if KifuwarabeWcsc33.CLI.Config.is_debug_suicide_move_check?() do
+            IO.puts("[teban_is_checkmated] DEBUG target_turn:#{target_turn}")
+          end
+
+          if target_turn == pos.opponent_turn do
+            #
+            # 相手の駒だ
+            # ========
+            #
+
             # 駒種類
             target_pt = KifuwarabeWcsc33.CLI.Mappings.ToPieceType.from_piece(target_pc)
-            # IO.write(" target_pt:#{target_pt}")
+
+            if KifuwarabeWcsc33.CLI.Config.is_debug_suicide_move_check?() do
+              IO.puts("[teban_is_checkmated] DEBUG target_pt:#{target_pt}")
+            end
 
             # 自玉に利いているか？
             is_effect?.(target_pt)
@@ -709,8 +726,15 @@ defmodule KifuwarabeWcsc33.CLI.Thesis.IsCheckmated do
             false
           end
         else
-          if is_long_effect do
-            # （空きマスなら）長い利き
+          #
+          # 空きマスだ
+          # ========
+          #
+          if must_long_effect_check do
+            #
+            # 長い利きを調べろ
+            # ==============
+            #
             pos
             |> far_to(
               target_sq,
@@ -727,7 +751,9 @@ defmodule KifuwarabeWcsc33.CLI.Thesis.IsCheckmated do
         false
       end
 
-    # IO.puts(" is_suicide_move:#{is_suicide_move}")
+    if KifuwarabeWcsc33.CLI.Config.is_debug_suicide_move_check?() do
+      IO.puts("[teban_is_checkmated] DEBUG is_suicide_move:#{is_suicide_move}")
+    end
 
     is_suicide_move
   end
