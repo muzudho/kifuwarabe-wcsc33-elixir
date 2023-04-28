@@ -37,15 +37,10 @@ defmodule KifuwarabeWcsc33.CLI.Search.Alpha do
     {move_list, pos} = KifuwarabeWcsc33.CLI.MoveList.ReduceSuicideMove.do_it(move_list, pos)
 
     #
-    # 指し手一覧
-    # =========
+    # 指し手一覧表示
+    # ============
     #
-
-    # IO.puts("[Think go] BELOW, MOVE LIST")
-    # move_list |> Enum.map(fn(move) ->
-    #     move_code = KifuwarabeWcsc33.CLI.Views.Move.as_code(move)
-    #     IO.puts("[Think go] move list: (#{move_code})")
-    #   end)
+    KifuwarabeWcsc33.CLI.Debug.MoveGenList.print(move_list)
 
     # TODO シャッフルする
     # move_list = move_list |> Enum.shuffle()
