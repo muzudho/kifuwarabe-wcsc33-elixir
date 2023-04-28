@@ -6,15 +6,15 @@ defmodule KifuwarabeWcsc33.CLI.Config do
   """
 
   # デバッグ・モード
-  @is_debug? false
+  @is_debug? true
   def is_debug?, do: @is_debug?
 
   # デバッグ・モード . 自殺手チェック
-  @is_debug_suicide_move_check? false
+  @is_debug_suicide_move_check? true
   def is_debug_suicide_move_check?, do: is_debug?() && @is_debug_suicide_move_check?
 
   # デバッグ・モード . 打ち歩詰めチェック
-  @is_debug_utifudume_check? false
+  @is_debug_utifudume_check? true
   def is_debug_utifudume_check?, do: is_debug?() && @is_debug_utifudume_check?
 
   # - depth=0 は、一度も駒を動かさずに次の１手を選ぶ。打ち歩詰めチェックなどで 0 にすることがある

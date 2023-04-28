@@ -1,6 +1,6 @@
 # Rule Cover Check
 
-# (__UchifuDumeCheck__) 打ち歩詰めしないことのテスト
+# (__UchifuDumeCheck__) 先手が打ち歩詰めしないことのテスト
 
 ```plaintext
 position sfen +P+P+P+P+P+P+P+P1/PPPPPPPPk/9/6g1K/8L/8L/8L/8L/9 b P2r2b3g4s4np 1
@@ -24,3 +24,11 @@ go
 
 何度か `go` を試みても、  
 探索で `P*1c` は、直接的にも、枝刈りでも、除外されること  
+
+👇 後手番のケース  
+
+```plaintext
+position sfen 9/8l/8l/8l/8l/6G1k/9/ppppppppK/+p+p+p+p+p+p+p+p1 w 2R2B3G4S4NPp 1
+
+go
+```

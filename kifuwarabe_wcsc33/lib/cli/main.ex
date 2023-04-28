@@ -193,6 +193,29 @@ defmodule KifuwarabeWcsc33.CLI.Main do
 
           {pos}
 
+        #
+        # * `undo` - 一手戻す
+        #
+        # ## Examples
+        #
+        #   undo
+        #   ----
+        #   0
+        #
+        first_token == "undo" ->
+          # 一手戻す
+          pos = pos |> KifuwarabeWcsc33.CLI.MoveGeneration.UndoMove.do_it()
+
+          # 盤表示
+          IO.puts(
+            """
+            [main usi_loop] Undone.
+            
+            """ <> KifuwarabeWcsc33.CLI.Views.Position.stringify(pos)
+          )
+
+          {pos}
+
         # Otherwise
         true ->
           # ここにくるようならエラー
