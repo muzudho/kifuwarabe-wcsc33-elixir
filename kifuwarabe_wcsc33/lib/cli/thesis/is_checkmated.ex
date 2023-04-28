@@ -660,7 +660,13 @@ defmodule KifuwarabeWcsc33.CLI.Thesis.IsCheckmated do
   # ========================
   #
   defp adjacent(pos, src_sq, direction_of, is_effect?, is_long_effect, is_effect_2?) do
-    # 対象のマスが（１手指してる想定なので、反対側が手番）
+    #
+    # 対象のマス
+    #
+    #   * `pos.turn` - 手番
+    #   * `src_sq` - 手番の玉のマス番地
+    #   * `direction_of` - 向き
+    #
     target_sq =
       KifuwarabeWcsc33.CLI.Mappings.ToDestination.from_turn_and_source(
         pos.turn,
@@ -668,7 +674,11 @@ defmodule KifuwarabeWcsc33.CLI.Thesis.IsCheckmated do
         direction_of
       )
 
-    # IO.write("[is_suicide_move adjacent] target_sq:#{target_sq}")
+    if KifuwarabeWcsc33.CLI.Config.is_debug_suicide_move_check?() do
+      IO.puts(
+        "[teban_is_checkmated] pos.turn:#{pos.turn} src_sq:#{src_sq} direction_of:#{direction_of} ----> target_sq:#{target_sq}"
+      )
+    end
 
     # 盤内で
     is_suicide_move =
