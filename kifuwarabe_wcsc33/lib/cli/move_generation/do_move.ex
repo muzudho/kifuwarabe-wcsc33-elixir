@@ -1,6 +1,6 @@
 defmodule KifuwarabeWcsc33.CLI.MoveGeneration.DoMove do
   @moduledoc """
-    局面ができる
+    一手指す
   """
 
   @doc """
@@ -199,6 +199,23 @@ defmodule KifuwarabeWcsc33.CLI.MoveGeneration.DoMove do
         # 正負を逆転する
         materials_value: -pos.materials_value
     }
+
+    #
+    # 手番は負けか？
+    # ============
+    #
+    teban_is_lose? =
+      KifuwarabeWcsc33.CLI.Thesis.IsCheckmated.is_checkmated?(
+        pos,
+        pos.turn,
+        if pos.turn == :sente do
+          pos.location_of_kings[:k1]
+        else
+          pos.location_of_kings[:k2]
+        end
+      )
+
+    pos = %{pos | teban_is_lose?: teban_is_lose?}
 
     pos
   end

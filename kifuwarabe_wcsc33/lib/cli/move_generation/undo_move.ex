@@ -47,6 +47,14 @@ defmodule KifuwarabeWcsc33.CLI.MoveGeneration.UndoMove do
         materials_value: -pos.materials_value
     }
 
+    #
+    # 手番は負けなはずがない
+    # ===================
+    #
+    # - 負けたあとに続けて指すことは無い前提
+    #
+    pos = %{pos | teban_is_lose?: false}
+
     # 更新された局面を返す
     if move.drop_piece_type != nil do
       #

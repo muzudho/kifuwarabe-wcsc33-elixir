@@ -9,7 +9,7 @@ defmodule KifuwarabeWcsc33.CLI.Models.Position do
           captured_piece_types: map,
           location_of_kings: map,
           materials_value: integer,
-          is_checkmated?: boolean
+          teban_is_lose?: boolean
         }
 
   # ## 雑談
@@ -180,10 +180,10 @@ defmodule KifuwarabeWcsc33.CLI.Models.Position do
             #
             materials_value: 0,
             #
-            # 手番の玉が詰んでいるか？
-            # ====================
+            # 手番の方は負けか？
+            # ===============
             #
-            is_checkmated?: false
+            teban_is_lose?: false
 
   # Elixir のリスト、リンクドリストだ、ランダム・アクセス遅そう、使いたくねー
   # defstruct piece_list:
