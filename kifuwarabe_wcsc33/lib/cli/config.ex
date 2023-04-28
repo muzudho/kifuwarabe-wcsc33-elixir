@@ -9,6 +9,10 @@ defmodule KifuwarabeWcsc33.CLI.Config do
   @is_debug? true
   def is_debug?, do: @is_debug?
 
+  # デバッグ・モード . 自殺手チェック
+  @is_debug_suicide_move_check? true
+  def is_debug_suicide_move_check?, do: is_debug?() && @is_debug_suicide_move_check?
+
   # デバッグ・モード . 打ち歩詰めチェック
   @is_debug_utifudume_check? true
   def is_debug_utifudume_check?, do: is_debug?() && @is_debug_utifudume_check?
