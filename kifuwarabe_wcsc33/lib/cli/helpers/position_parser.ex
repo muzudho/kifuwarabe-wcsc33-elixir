@@ -205,7 +205,7 @@ defmodule KifuwarabeWcsc33.CLI.Helpers.PositionParser do
   #
   # ## Parameters
   #
-  #   * `[first_char | rest]` - first_char は先頭の１文字、rest は残りの文字列
+  #   * `[mchar1 | rest]` - mchar1 は先頭の１文字、rest は残りの文字列
   #   * `sq` - スクウェア（Square；マス番地）
   #   * `board` - （成果物）ボード（Board；将棋盤）
   #
@@ -223,9 +223,9 @@ defmodule KifuwarabeWcsc33.CLI.Helpers.PositionParser do
   # デービッド・フォーサイスさんの発案したチェスの盤面の記録方法（１行ごとに縦線 | で区切る）を、
   # スティーブン・J・エドワーズさんがコンピューター・チェスのメーリングリストで１０年がかりで意見を取り入れてコンピューター向けに仕様を決めたもの
   #
-  defp map_string_to_board([first_char | rest], sq, board) do
+  defp map_string_to_board([mchar1 | rest], sq, board) do
     # 盤の区切り
-    if first_char == " " do
+    if mchar1 == " " do
       # base case
 
       # 何の成果も増えません。計算終了
@@ -234,9 +234,9 @@ defmodule KifuwarabeWcsc33.CLI.Helpers.PositionParser do
       {rest, sq, board} =
         cond do
           # 本将棋の盤上の１行では、連続するスペースの数は最大で１桁に収まる
-          Regex.match?(~r/^\d$/, first_char) ->
+          Regex.match?(~r/^\d$/, mchar1) ->
             # 空きマスが何個連続するかの数
-            space_num = String.to_integer(first_char)
+            space_num = String.to_integer(mchar1)
             # 愚直な方法
             {sq, board} =
               case space_num do
@@ -325,20 +325,20 @@ defmodule KifuwarabeWcsc33.CLI.Helpers.PositionParser do
             {rest, sq, board}
 
           # 成り駒
-          first_char == "+" ->
-            second_char = rest |> String.at(0)
+          mchar1 == "+" ->
+            mchar2 = hd(rest)
+            rest = tl(rest)
 
-            promoted_piece = KifuwarabeWcsc33.CLI.Views.Piece.from_code(first_char <> second_char)
+            promoted_piece = KifuwarabeWcsc33.CLI.Views.Piece.from_code(mchar1 <> mchar2)
 
             board = Map.merge(board, %{sq => promoted_piece})
             # 右列へ１つ移動（-10）
             sq = sq - 10
 
-            rest = rest |> String.slice(1..-1)
             {rest, sq, board}
 
           # 段の区切り
-          first_char == "/" ->
+          mchar1 == "/" ->
             # 次の段へ
 
             # 左端列に戻って（+90）
@@ -348,7 +348,7 @@ defmodule KifuwarabeWcsc33.CLI.Helpers.PositionParser do
 
           # それ以外
           true ->
-            piece = KifuwarabeWcsc33.CLI.Views.Piece.from_code(first_char)
+            piece = KifuwarabeWcsc33.CLI.Views.Piece.from_code(mchar1)
             board = Map.merge(board, %{sq => piece})
 
             # 右列へ１つ移動（-10）

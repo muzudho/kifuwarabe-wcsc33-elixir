@@ -50,7 +50,7 @@ defmodule KifuwarabeWcsc33.CLI.MoveList.ChoiceAny do
       #
       do_it(move_list, pos)
     else
-      ## TODO もし、歩を打ったときで、かつ、そこが相手の玉頭なら、打ち歩詰めチェックをしたい
+      ## TODO (__UchifuDumeCheck__) もし、歩を打ったときで、かつ、そこが相手の玉頭なら、打ち歩詰めチェックをしたい
       # if best_move.drop_piece_type == :p do
       #  opponent_king_pc = KifuwarabeWcsc33.CLI.Mappings.ToPiece.from_turn_and_piece_type(pos.opponent_turn, :k)
       #  opponent_king_sq = pos.location_of_kings[opponent_king_pc]
