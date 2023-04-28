@@ -21,7 +21,8 @@ defmodule KifuwarabeWcsc33.CLI.Thesis.IsCheckmated do
   def is_checkmated?(pos, rel_turn) do
     # * `src_sq` - ソース・スクウェア（SouRCe SQuare：マス番地）
     src_sq =
-      if pos.turn == :sente do
+      if (rel_turn == :teban and pos.turn == :sente) or
+           (rel_turn == :aiteban and pos.opponent_turn == :sente) do
         pos.location_of_kings[:k1]
       else
         pos.location_of_kings[:k2]
@@ -517,6 +518,8 @@ defmodule KifuwarabeWcsc33.CLI.Thesis.IsCheckmated do
         # 北隣のマス
         #
         # ＊
+        # ∧
+        # │
         # 玉
         pos
         |> adjacent(
@@ -688,7 +691,11 @@ defmodule KifuwarabeWcsc33.CLI.Thesis.IsCheckmated do
     #
     target_sq =
       KifuwarabeWcsc33.CLI.Mappings.ToDestination.from_turn_and_source(
-        pos.turn,
+        if rel_turn == :teban do
+          pos.turn
+        else
+          pos.opponent_turn
+        end,
         src_sq,
         direction_of
       )
