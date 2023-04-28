@@ -167,13 +167,7 @@ defmodule KifuwarabeWcsc33.CLI.Helpers.PositionParser do
 
           pos = %{
             pos
-            | # 玉の場所は覚えておきたい
-              location_of_kings: %{
-                pos.location_of_kings
-                | :k1 => KifuwarabeWcsc33.CLI.Finder.Square.find_king_on_board(pos, :sente),
-                  :k2 => KifuwarabeWcsc33.CLI.Finder.Square.find_king_on_board(pos, :gote)
-              },
-              # （手番から見た）駒得評価値を算出
+            | # （手番から見た）駒得評価値を算出
               materials_value: KifuwarabeWcsc33.CLI.Helpers.MaterialsValueCalc.count(pos)
           }
 
@@ -184,6 +178,20 @@ defmodule KifuwarabeWcsc33.CLI.Helpers.PositionParser do
       else
         {rest, pos}
       end
+
+    #
+    # 玉の場所は覚えておきたい
+    # =====================
+    #
+
+    pos = %{
+      pos
+      | location_of_kings: %{
+          pos.location_of_kings
+          | :k1 => KifuwarabeWcsc33.CLI.Finder.Square.find_king_on_board(pos, :sente),
+            :k2 => KifuwarabeWcsc33.CLI.Finder.Square.find_king_on_board(pos, :gote)
+        }
+    }
 
     pos
   end

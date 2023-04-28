@@ -51,7 +51,7 @@ defmodule KifuwarabeWcsc33.CLI.Search.Alpha do
     move_list =
       if KifuwarabeWcsc33.CLI.Config.is_debug_utifudume_check?() do
         # シャッフル
-        move_list = move_list |> Enum.shuffle()
+        move_list |> Enum.shuffle()
       else
         move_list
       end
@@ -173,25 +173,40 @@ defmodule KifuwarabeWcsc33.CLI.Search.Alpha do
         #   - もし、歩を打ったときで、かつ、そこが相手の玉頭なら、打ち歩詰めチェックをしたい
         #
         if move.drop_piece_type == :p do
+          #
+          # 歩打
+          #
           IO.puts(
             "[ChoiceAny do_it] Uchifudume check, Drop a pawn #{KifuwarabeWcsc33.CLI.Views.Move.as_code(move)}"
           )
 
-          #  opponent_king_pc = KifuwarabeWcsc33.CLI.Mappings.ToPiece.from_turn_and_piece_type(pos.opponent_turn, :k)
-          #  opponent_king_sq = pos.location_of_kings[opponent_king_pc]
-          #  opponent_king_north_sq = KifuwarabeWcsc33.CLI.Mappings.ToDestination.from_turn_and_source(pos.opponent_turn, opponent_king_sq, :north_of)
-          #  if best_move.destination == opponent_king_north_sq do
-          #    IO.puts("[Think go] TODO Uchifudume check")
-          #
-          #    # TODO さらに相手の局面で指し手生成、全部の手を指してみて、１つでも指せる手があるか調べる
-          #    _second_move_list = KifuwarabeWcsc33.CLI.MoveGeneration.MakeList.do_it(pos)
-          #    # TODO 自殺手を除去
-          #
-          #  else
-          #    # 打ち歩詰めではない
-          #  end
+          opponent_king_pc =
+            KifuwarabeWcsc33.CLI.Mappings.ToPiece.from_turn_and_piece_type(pos.opponent_turn, :k)
+
+          opponent_king_sq = pos.location_of_kings[opponent_king_pc]
+
+          opponent_king_north_sq =
+            KifuwarabeWcsc33.CLI.Mappings.ToDestination.from_turn_and_source(
+              pos.opponent_turn,
+              opponent_king_sq,
+              :north_of
+            )
+
+          if move.destination == opponent_king_north_sq do
+            #
+            # 玉頭
+            #
+            IO.puts("[Think go] Uchifudume check, King head")
+            #
+            #    # TODO さらに相手の局面で指し手生成、全部の手を指してみて、１つでも指せる手があるか調べる
+            #    _second_move_list = KifuwarabeWcsc33.CLI.MoveGeneration.MakeList.do_it(pos)
+            #    # TODO 自殺手を除去
+            #
+          else
+            # 打ち歩詰めではない
+          end
         else
-          #  # 打ち歩詰めではない
+          # 打ち歩詰めではない
         end
 
         {move, value}
