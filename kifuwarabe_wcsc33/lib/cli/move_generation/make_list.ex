@@ -4,51 +4,27 @@ defmodule KifuwarabeWcsc33.CLI.MoveGeneration.MakeList do
   """
 
   @doc """
-
+  
   ## Parameters
-
+  
     * `pos` - ポジション（Position；局面）
-
+  
   ## Returns
-
+  
     0. ムーブ・リスト（Move List；指し手のリスト） - 投了を含まない
-
+  
   """
   def do_it(pos) do
-    # Flow 使ったら実行速度が遅いなあ
-    #
-    # 盤上の自駒
-    # =========
-    #
-    # |> スペース（:sp；空マス）は除去。かつ、手番の駒だけ残す
-    # |> `Flow.from_enumerable()` - コンピューターの各コアへ処理を振り分け
-    # |> ピース（Piece；先後付きの駒種類）から、先後を消し、ピース・タイプ（Piece Type；駒種類）に変換する
-    # |> マス番地と駒種類から、指し手生成
-    # |> `Enum.to_list()` - 振り分けた処理をリストに戻す
-    # |> リストがネストしていたら、フラットにする
-    # |> 指し手が nil なら除去
-    move_list_on_board =
-      pos.board
-      |> Enum.filter(fn {_sq, piece} ->
-        piece != :sp and pos.turn == KifuwarabeWcsc33.CLI.Mappings.ToTurn.from_piece(piece)
-      end)
-      |> Flow.from_enumerable()
-      |> Flow.map(fn {sq, piece} ->
-        piece_type = KifuwarabeWcsc33.CLI.Mappings.ToPieceType.from_piece(piece)
-        pos |> make_move_list_by_piece_on_board(sq, piece_type)
-      end)
-      |> Enum.to_list()
-      |> List.flatten()
-      |> Enum.filter(fn move -> !is_nil(move) end)
-
-    # 難しい書き方 |> Enum.filter(& !is_nil(&1))
-
+    # # Flow 使ったら実行速度が遅いなあ
+    # #
     # # 盤上の自駒
     # # =========
     # #
     # # |> スペース（:sp；空マス）は除去。かつ、手番の駒だけ残す
+    # # |> `Flow.from_enumerable()` - コンピューターの各コアへ処理を振り分け
     # # |> ピース（Piece；先後付きの駒種類）から、先後を消し、ピース・タイプ（Piece Type；駒種類）に変換する
     # # |> マス番地と駒種類から、指し手生成
+    # # |> `Enum.to_list()` - 振り分けた処理をリストに戻す
     # # |> リストがネストしていたら、フラットにする
     # # |> 指し手が nil なら除去
     # move_list_on_board =
@@ -56,41 +32,40 @@ defmodule KifuwarabeWcsc33.CLI.MoveGeneration.MakeList do
     #   |> Enum.filter(fn {_sq, piece} ->
     #     piece != :sp and pos.turn == KifuwarabeWcsc33.CLI.Mappings.ToTurn.from_piece(piece)
     #   end)
-    #   |> Enum.map(fn {sq, piece} ->
-    #     {sq, KifuwarabeWcsc33.CLI.Mappings.ToPieceType.from_piece(piece)}
-    #   end)
-    #   |> Enum.map(fn {sq, piece_type} ->
+    #   |> Flow.from_enumerable()
+    #   |> Flow.map(fn {sq, piece} ->
+    #     piece_type = KifuwarabeWcsc33.CLI.Mappings.ToPieceType.from_piece(piece)
     #     pos |> make_move_list_by_piece_on_board(sq, piece_type)
     #   end)
+    #   |> Enum.to_list()
     #   |> List.flatten()
     #   |> Enum.filter(fn move -> !is_nil(move) end)
 
     # 難しい書き方 |> Enum.filter(& !is_nil(&1))
 
-    # Flow 使ったら実行速度が遅いなあ
+    # Flow を使わない書き方
     #
+    # 盤上の自駒
+    # =========
     #
-    # 打つ手のリスト
-    # ============
-    #
-    # |> 手番側、かつ、１つ以上持っている駒種類だけ残す
-    # |> 駒の数を消す。ピース（Piece；先後付きの駒種類）から、先後を消し、ピース・タイプ（Piece Type；駒種類）に変換する。駒種類から、指し手生成
+    # |> スペース（:sp；空マス）は除去。かつ、手番の駒だけ残す
+    # |> ピース（Piece；先後付きの駒種類）から、先後を消し、ピース・タイプ（Piece Type；駒種類）に変換する
+    # |> マス番地と駒種類から、指し手生成
     # |> リストがネストしていたら、フラットにする
     # |> 指し手が nil なら除去
-    move_list_on_hand =
-      pos.hand_pieces
-      |> Enum.filter(fn {piece, num} ->
-        pos.turn == KifuwarabeWcsc33.CLI.Mappings.ToTurn.from_piece(piece) and 0 < num
+    move_list_on_board =
+      pos.board
+      |> Enum.filter(fn {_sq, piece} ->
+        piece != :sp and pos.turn == KifuwarabeWcsc33.CLI.Mappings.ToTurn.from_piece(piece)
       end)
-      |> Flow.from_enumerable()
-      |> Flow.map(fn {piece, _num} ->
-        KifuwarabeWcsc33.CLI.Mappings.ToPieceType.from_piece(piece)
-        |> make_move_list_on_hand(pos)
+      |> Enum.map(fn {sq, piece} ->
+        piece_type = KifuwarabeWcsc33.CLI.Mappings.ToPieceType.from_piece(piece)
+        pos |> make_move_list_by_piece_on_board(sq, piece_type)
       end)
-      |> Enum.to_list()
       |> List.flatten()
       |> Enum.filter(fn move -> !is_nil(move) end)
 
+    # # Flow 使ったら実行速度が遅いなあ
     # #
     # # 打つ手のリスト
     # # ============
@@ -104,12 +79,34 @@ defmodule KifuwarabeWcsc33.CLI.MoveGeneration.MakeList do
     #   |> Enum.filter(fn {piece, num} ->
     #     pos.turn == KifuwarabeWcsc33.CLI.Mappings.ToTurn.from_piece(piece) and 0 < num
     #   end)
-    #   |> Enum.map(fn {piece, _num} ->
+    #   |> Flow.from_enumerable()
+    #   |> Flow.map(fn {piece, _num} ->
     #     KifuwarabeWcsc33.CLI.Mappings.ToPieceType.from_piece(piece)
     #     |> make_move_list_on_hand(pos)
     #   end)
+    #   |> Enum.to_list()
     #   |> List.flatten()
     #   |> Enum.filter(fn move -> !is_nil(move) end)
+
+    #
+    # 打つ手のリスト
+    # ============
+    #
+    # |> 手番側、かつ、１つ以上持っている駒種類だけ残す
+    # |> 駒の数を消す。ピース（Piece；先後付きの駒種類）から、先後を消し、ピース・タイプ（Piece Type；駒種類）に変換する。駒種類から、指し手生成
+    # |> リストがネストしていたら、フラットにする
+    # |> 指し手が nil なら除去
+    move_list_on_hand =
+      pos.hand_pieces
+      |> Enum.filter(fn {piece, num} ->
+        pos.turn == KifuwarabeWcsc33.CLI.Mappings.ToTurn.from_piece(piece) and 0 < num
+      end)
+      |> Enum.map(fn {piece, _num} ->
+        KifuwarabeWcsc33.CLI.Mappings.ToPieceType.from_piece(piece)
+        |> make_move_list_on_hand(pos)
+      end)
+      |> List.flatten()
+      |> Enum.filter(fn move -> !is_nil(move) end)
 
     # IO.inspect(move_list_on_hand, label: "[MakeList do_it] move_list_on_hand")
 
