@@ -204,10 +204,12 @@ defmodule KifuwarabeWcsc33.CLI.MoveGeneration.DoMove do
     # 手番（または相手番）は負けか？
     # ==========================
     #
+    # TODO is_checked? ではなくて、 is_checkmated? を使う必要がある
+    #
     pos = %{
       pos
-      | teban_is_lose?: KifuwarabeWcsc33.CLI.Thesis.IsCheckmated.is_checkmated?(pos, :teban),
-        aiteban_is_lose?: KifuwarabeWcsc33.CLI.Thesis.IsCheckmated.is_checkmated?(pos, :aiteban)
+      | teban_is_lose?: KifuwarabeWcsc33.CLI.Thesis.IsChecked.is_checked?(pos, :teban),
+        aiteban_is_lose?: KifuwarabeWcsc33.CLI.Thesis.IsChecked.is_checked?(pos, :aiteban)
     }
 
     pos

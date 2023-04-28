@@ -1,24 +1,28 @@
-defmodule KifuwarabeWcsc33.CLI.Thesis.IsCheckmated do
+defmodule KifuwarabeWcsc33.CLI.Thesis.IsChecked do
   @moduledoc """
   
   手番の玉が相手の利きに飛び込んでいますか？
   
+  * これは王手であって、詰めかどうかは分からない
   * 自殺手判定に使う
   
   """
 
-  # 手番の玉が詰んでいるか判定
-  #
-  # ## Parameters
-  #
-  #   * `pos` - ポジション（Position；局面）
-  #   * `rel_turn` - `:teban`（手番） または `:aiteban`（相手番）
-  #
-  # ## 雑談
-  #
-  #   論理値型は関数名の末尾に ? を付ける？
-  #
-  def is_checkmated?(pos, rel_turn) do
+  @doc """
+  
+  手番の玉が利きに飛び込んでいるか判定（詰めかどうかは分からない）
+  
+  ## Parameters
+  
+    * `pos` - ポジション（Position；局面）
+    * `rel_turn` - `:teban`（手番） または `:aiteban`（相手番）
+  
+  ## 雑談
+  
+    論理値型は関数名の末尾に ? を付ける？
+  
+  """
+  def is_checked?(pos, rel_turn) do
     # * `src_sq` - ソース・スクウェア（SouRCe SQuare：マス番地）
     src_sq =
       if (rel_turn == :teban and pos.turn == :sente) or
@@ -32,7 +36,7 @@ defmodule KifuwarabeWcsc33.CLI.Thesis.IsCheckmated do
       # 盤表示
       IO.puts(
         """
-        [is_checkmated] DEBUG rel_turn:#{rel_turn} pos.turn:#{pos.turn} src_sq:#{src_sq}
+        [is_checked] DEBUG rel_turn:#{rel_turn} pos.turn:#{pos.turn} src_sq:#{src_sq}
         """ <> KifuwarabeWcsc33.CLI.Views.Position.stringify(pos)
       )
     end
@@ -706,7 +710,11 @@ defmodule KifuwarabeWcsc33.CLI.Thesis.IsCheckmated do
       )
     end
 
+    #
     # 自玉が相手の利きに飛び込んでいるか？
+    #
+    # - ここは（詰めかではなく）王手かを確認する
+    #
     is_suicide_move =
       if KifuwarabeWcsc33.CLI.Thesis.Board.is_in_board?(target_sq) do
         #
@@ -717,7 +725,7 @@ defmodule KifuwarabeWcsc33.CLI.Thesis.IsCheckmated do
         target_pc = pos.board[target_sq]
 
         if KifuwarabeWcsc33.CLI.Config.is_debug_suicide_move_check?() do
-          IO.puts("[is_checkmated] DEBUG in-board target_pc:#{target_pc}")
+          IO.puts("[adjacent] DEBUG in-board target_pc:#{target_pc}")
         end
 
         if target_pc != :sp do
@@ -729,7 +737,7 @@ defmodule KifuwarabeWcsc33.CLI.Thesis.IsCheckmated do
           target_turn = KifuwarabeWcsc33.CLI.Mappings.ToTurn.from_piece(target_pc)
 
           if KifuwarabeWcsc33.CLI.Config.is_debug_suicide_move_check?() do
-            IO.puts("[is_checkmated] DEBUG target_turn:#{target_turn}")
+            IO.puts("[adjacent] DEBUG target_turn:#{target_turn}")
           end
 
           if (rel_turn == :teban and target_turn == pos.opponent_turn) or
@@ -743,7 +751,7 @@ defmodule KifuwarabeWcsc33.CLI.Thesis.IsCheckmated do
             target_pt = KifuwarabeWcsc33.CLI.Mappings.ToPieceType.from_piece(target_pc)
 
             if KifuwarabeWcsc33.CLI.Config.is_debug_suicide_move_check?() do
-              IO.puts("[is_checkmated] DEBUG target_pt:#{target_pt}")
+              IO.puts("[adjacent] DEBUG target_pt:#{target_pt}")
             end
 
             # 自玉に利いているか？
@@ -780,7 +788,7 @@ defmodule KifuwarabeWcsc33.CLI.Thesis.IsCheckmated do
       end
 
     if KifuwarabeWcsc33.CLI.Config.is_debug_suicide_move_check?() do
-      IO.puts("[is_checkmated] DEBUG is_suicide_move:#{is_suicide_move}")
+      IO.puts("[adjacent] DEBUG is_suicide_move:#{is_suicide_move}")
     end
 
     is_suicide_move
