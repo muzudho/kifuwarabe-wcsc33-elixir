@@ -17,7 +17,7 @@ defmodule KifuwarabeWcsc33.CLI.MoveGeneration.UndoMove do
   
   ## 雑談
   
-    - 自殺手のときアンドゥする
+    - アンドゥする場面の例：自殺手
   
   """
   def do_it(pos) do

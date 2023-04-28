@@ -154,7 +154,7 @@ defmodule KifuwarabeWcsc33.CLI.Helpers.PositionParser do
     #
     teban_is_lose? =
       pos
-      |> KifuwarabeWcsc33.CLI.Thesis.IsCheckmated.teban_is_checkmated?()
+      |> KifuwarabeWcsc33.CLI.Thesis.IsCheckmated.is_checkmated?(:teban)
 
     pos = %{pos | teban_is_lose?: teban_is_lose?}
 

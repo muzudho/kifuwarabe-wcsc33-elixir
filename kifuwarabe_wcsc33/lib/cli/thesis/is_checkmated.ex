@@ -12,12 +12,13 @@ defmodule KifuwarabeWcsc33.CLI.Thesis.IsCheckmated do
   # ## Parameters
   #
   #   * `pos` - ポジション（Position；局面）
+  #   * `rel_turn` - `:teban`（手番） または `:aiteban`（相手番）
   #
   # ## 雑談
   #
   #   論理値型は関数名の末尾に ? を付ける？
   #
-  def teban_is_checkmated?(pos) do
+  def is_checkmated?(pos, rel_turn) do
     # * `src_sq` - ソース・スクウェア（SouRCe SQuare：マス番地）
     src_sq =
       if pos.turn == :sente do
@@ -30,7 +31,7 @@ defmodule KifuwarabeWcsc33.CLI.Thesis.IsCheckmated do
       # 盤表示
       IO.puts(
         """
-        [teban_is_checkmated] DEBUG pos.turn:#{pos.turn} src_sq:#{src_sq}
+        [is_checkmated] DEBUG rel_turn:#{rel_turn} pos.turn:#{pos.turn} src_sq:#{src_sq}
         """ <> KifuwarabeWcsc33.CLI.Views.Position.stringify(pos)
       )
     end
@@ -519,6 +520,7 @@ defmodule KifuwarabeWcsc33.CLI.Thesis.IsCheckmated do
         # 玉
         pos
         |> adjacent(
+          rel_turn,
           src_sq,
           :north_of,
           in_effect_from_north?,
@@ -532,6 +534,7 @@ defmodule KifuwarabeWcsc33.CLI.Thesis.IsCheckmated do
         # ／
         pos
         |> adjacent(
+          rel_turn,
           src_sq,
           :north_east_of,
           in_effect_from_north_east?,
@@ -545,6 +548,7 @@ defmodule KifuwarabeWcsc33.CLI.Thesis.IsCheckmated do
         # ──＞
         pos
         |> adjacent(
+          rel_turn,
           src_sq,
           :east_of,
           in_effect_from_east?,
@@ -558,6 +562,7 @@ defmodule KifuwarabeWcsc33.CLI.Thesis.IsCheckmated do
         # 　─┘
         pos
         |> adjacent(
+          rel_turn,
           src_sq,
           :south_east_of,
           in_effect_from_south_east?,
@@ -571,6 +576,7 @@ defmodule KifuwarabeWcsc33.CLI.Thesis.IsCheckmated do
         # Ｖ
         pos
         |> adjacent(
+          rel_turn,
           src_sq,
           :south_of,
           in_effect_from_south?,
@@ -584,6 +590,7 @@ defmodule KifuwarabeWcsc33.CLI.Thesis.IsCheckmated do
         # └─
         pos
         |> adjacent(
+          rel_turn,
           src_sq,
           :south_west_of,
           in_effect_from_south_east?,
@@ -597,6 +604,7 @@ defmodule KifuwarabeWcsc33.CLI.Thesis.IsCheckmated do
         # ＜──
         pos
         |> adjacent(
+          rel_turn,
           src_sq,
           :west_of,
           in_effect_from_east?,
@@ -610,6 +618,7 @@ defmodule KifuwarabeWcsc33.CLI.Thesis.IsCheckmated do
         # 　＼
         pos
         |> adjacent(
+          rel_turn,
           src_sq,
           :north_west_of,
           in_effect_from_north_east?,
@@ -624,6 +633,7 @@ defmodule KifuwarabeWcsc33.CLI.Thesis.IsCheckmated do
         # │
         pos
         |> adjacent(
+          rel_turn,
           src_sq,
           :north_north_east_of,
           in_effect_from_north_north_east?,
@@ -638,6 +648,7 @@ defmodule KifuwarabeWcsc33.CLI.Thesis.IsCheckmated do
         # 　　│
         pos
         |> adjacent(
+          rel_turn,
           src_sq,
           :north_north_west_of,
           in_effect_from_north_north_east?,
@@ -659,7 +670,15 @@ defmodule KifuwarabeWcsc33.CLI.Thesis.IsCheckmated do
   # 指定の方向のマスを調べていく
   # ========================
   #
-  defp adjacent(pos, src_sq, direction_of, is_effect?, must_long_effect_check, is_effect_2?) do
+  defp adjacent(
+         pos,
+         rel_turn,
+         src_sq,
+         direction_of,
+         is_effect?,
+         must_long_effect_check,
+         is_effect_2?
+       ) do
     #
     # 対象のマス
     #
@@ -676,7 +695,7 @@ defmodule KifuwarabeWcsc33.CLI.Thesis.IsCheckmated do
 
     if KifuwarabeWcsc33.CLI.Config.is_debug_suicide_move_check?() do
       IO.puts(
-        "[teban_is_checkmated] DEBUG pos.turn:#{pos.turn} src_sq:#{src_sq} direction_of:#{direction_of} ----> target_sq:#{target_sq}"
+        "[adjacent] DEBUG rel_turn:#{rel_turn} pos.turn:#{pos.turn} src_sq:#{src_sq} direction_of:#{direction_of} ----> target_sq:#{target_sq}"
       )
     end
 
@@ -691,7 +710,7 @@ defmodule KifuwarabeWcsc33.CLI.Thesis.IsCheckmated do
         target_pc = pos.board[target_sq]
 
         if KifuwarabeWcsc33.CLI.Config.is_debug_suicide_move_check?() do
-          IO.puts("[teban_is_checkmated] DEBUG in-board target_pc:#{target_pc}")
+          IO.puts("[is_checkmated] DEBUG in-board target_pc:#{target_pc}")
         end
 
         if target_pc != :sp do
@@ -703,20 +722,21 @@ defmodule KifuwarabeWcsc33.CLI.Thesis.IsCheckmated do
           target_turn = KifuwarabeWcsc33.CLI.Mappings.ToTurn.from_piece(target_pc)
 
           if KifuwarabeWcsc33.CLI.Config.is_debug_suicide_move_check?() do
-            IO.puts("[teban_is_checkmated] DEBUG target_turn:#{target_turn}")
+            IO.puts("[is_checkmated] DEBUG target_turn:#{target_turn}")
           end
 
-          if target_turn == pos.opponent_turn do
+          if (rel_turn == :teban and target_turn == pos.opponent_turn) or
+               (rel_turn == :aiteban and target_turn == pos.turn) do
             #
             # 相手の駒だ
-            # ========
+            # =========
             #
 
             # 駒種類
             target_pt = KifuwarabeWcsc33.CLI.Mappings.ToPieceType.from_piece(target_pc)
 
             if KifuwarabeWcsc33.CLI.Config.is_debug_suicide_move_check?() do
-              IO.puts("[teban_is_checkmated] DEBUG target_pt:#{target_pt}")
+              IO.puts("[is_checkmated] DEBUG target_pt:#{target_pt}")
             end
 
             # 自玉に利いているか？
@@ -737,6 +757,7 @@ defmodule KifuwarabeWcsc33.CLI.Thesis.IsCheckmated do
             #
             pos
             |> far_to(
+              rel_turn,
               target_sq,
               direction_of,
               is_effect_2?
@@ -752,7 +773,7 @@ defmodule KifuwarabeWcsc33.CLI.Thesis.IsCheckmated do
       end
 
     if KifuwarabeWcsc33.CLI.Config.is_debug_suicide_move_check?() do
-      IO.puts("[teban_is_checkmated] DEBUG is_suicide_move:#{is_suicide_move}")
+      IO.puts("[is_checkmated] DEBUG is_suicide_move:#{is_suicide_move}")
     end
 
     is_suicide_move
@@ -762,7 +783,7 @@ defmodule KifuwarabeWcsc33.CLI.Thesis.IsCheckmated do
   # 長い利きのマス
   # ============
   #
-  defp far_to(pos, src_sq, direction_of, is_effect_2?) do
+  defp far_to(pos, rel_turn, src_sq, direction_of, is_effect_2?) do
     # 対象のマスが（１手指してる想定なので、反対側が手番）
     target_sq =
       KifuwarabeWcsc33.CLI.Mappings.ToDestination.from_turn_and_source(
@@ -773,21 +794,32 @@ defmodule KifuwarabeWcsc33.CLI.Thesis.IsCheckmated do
 
     # IO.write("[is_suicide_move far_to] target_sq:#{target_sq}")
 
-    # 盤内で
+    # 相手の利きに飛び込むか？
     is_suicide_move =
       if KifuwarabeWcsc33.CLI.Thesis.Board.is_in_board?(target_sq) do
+        #
+        # 盤内だ
+        # =====
+        #
         # その駒は
         target_pc = pos.board[target_sq]
         # IO.write(" target_pc:#{target_pc}")
 
-        # 空マスではなく
         if target_pc != :sp do
+          #
+          # 空マスではない
+          # ============
+          #
           # 先後が
           target_turn = KifuwarabeWcsc33.CLI.Mappings.ToTurn.from_piece(target_pc)
           # IO.write(" target_turn:#{target_turn}")
 
-          # 相手番で（一手指した後を想定し、手番は相手）
-          if target_turn == pos.turn do
+          if (rel_turn == :teban and target_turn == pos.opponent_turn) or
+               (rel_turn == :aiteban and target_turn == pos.turn) do
+            #
+            # 相手の駒だ
+            # =========
+            #
             # 駒種類は
             target_pt = KifuwarabeWcsc33.CLI.Mappings.ToPieceType.from_piece(target_pc)
             # IO.write(" target_pt:#{target_pt}")
@@ -802,6 +834,7 @@ defmodule KifuwarabeWcsc33.CLI.Thesis.IsCheckmated do
           # （空きマスなら）長い利き
           pos
           |> far_to(
+            rel_turn,
             target_sq,
             direction_of,
             is_effect_2?
