@@ -9,6 +9,17 @@ defmodule KifuwarabeWcsc33.CLI.Main do
     # Elixirのロガーが気に入らないので、正常時には出ないようにする
     Logger.configure(level: :error)
 
+    # デバッグ・フラグ表示
+    if KifuwarabeWcsc33.CLI.Config.is_debug?() do
+      IO.puts("[main] is_debug? : #{KifuwarabeWcsc33.CLI.Config.is_debug?()}")
+    end
+
+    if KifuwarabeWcsc33.CLI.Config.is_debug_utifudume_check?() do
+      IO.puts(
+        "[main] is_debug_utifudume_check? : #{KifuwarabeWcsc33.CLI.Config.is_debug_utifudume_check?()}"
+      )
+    end
+
     # 局面データ
     pos = KifuwarabeWcsc33.CLI.Models.Position.new()
 

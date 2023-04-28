@@ -7,7 +7,7 @@ defmodule KifuwarabeWcsc33.CLI.Debug.MoveGenList do
     表示
   """
   def print(move_list) do
-    if KifuwarabeWcsc33.CLI.Config do
+    if KifuwarabeWcsc33.CLI.Config.is_debug_utifudume_check?() do
       IO.write("""
       
       [Think go] BELOW, MOVE LIST
