@@ -135,8 +135,10 @@ defmodule KifuwarabeWcsc33.CLI.Main do
 
           # 探索終了時刻
           end_time = :os.system_time(:millisecond)
+          # 処理時間（単位：ミリ秒）
+          time = end_time - start_time
           # 処理時間（単位：秒）
-          elapsed_seconds = (end_time - start_time) / 1000
+          elapsed_seconds = time / 1000
           # IO.puts("[main] go elapsed_seconds:#{elapsed_seconds} sec")
 
           best_move_as_str = KifuwarabeWcsc33.CLI.Views.Move.as_code(best_move)
@@ -155,7 +157,7 @@ defmodule KifuwarabeWcsc33.CLI.Main do
           # エヌ・ピー・エス（NPS；ノード数／秒）は、Node Per Second だから 秒で割る
           # とりあえず　小数点以下切り捨て
           nps = trunc(nodes_num_searched/elapsed_seconds)
-          IO.puts("info depth #{depth} nodes #{nodes_num_searched} score cp #{value} nps #{nps} string #{comment}")
+          IO.puts("info depth #{depth} time #{time} nodes #{nodes_num_searched} score cp #{value} nps #{nps} string #{comment}")
 
           IO.puts("bestmove #{best_move_as_str}")
           {pos}
