@@ -1,8 +1,8 @@
 defmodule KifuwarabeWcsc33.CLI.Config do
   @moduledoc """
-  
+
     設定
-  
+
   """
 
   # デバッグ・モード
@@ -17,14 +17,17 @@ defmodule KifuwarabeWcsc33.CLI.Config do
   @is_debug_utifudume_check? true
   def is_debug_utifudume_check?, do: is_debug?() && @is_debug_utifudume_check?
 
-  # - depth=0 は、一度も駒を動かさずに次の１手を選ぶ。打ち歩詰めチェックなどで 0 にすることがある
-  # - depth=1 は Ok。すいすい指す。しかしランダム性がなく、同じ動きを反復し出す
-  # - depth=2 で待ち時間が生じる。序盤で１手 1～16秒（持ち駒を持っていると、とたんに遅くなる）
+  # 何手読みか
+  # =========
+  #
+  # - depth=1 は、平手初期局面の初手で 30 局面読む。駒をただ突いているだけ。ランダム性がなく、同じ動きを反復して千日手になってしまう。打ち歩詰めチェックなどで 1 にすることがある
+  # - depth=2 は、平手初期局面の初手で 930 局面読む。すいすい指す。駒を取り返される損が見えない？
+  # - depth=3 は、平手初期局面の初手で 26352 局面読む。長考に沈んでゲームにならない。駒が取り返されるのを恐れるような手を指す？
   @depth 2
   def depth() do
     if is_debug_utifudume_check?() do
-      # 打ち歩詰めチェックは、０手読み（１度も駒を動かさない）で行う
-      0
+      # 打ち歩詰めチェックは、１手読み（１度も駒を動かさない）で行う
+      1
     else
       @depth
     end
