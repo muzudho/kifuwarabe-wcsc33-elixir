@@ -209,11 +209,11 @@ defmodule KifuwarabeWcsc33.CLI.Models.Position do
   end
 
   @doc """
-  
+
   ## 雑談
-  
+
     Elixir さっぱり分からん。クラス定義できないから仕方なくマップに初期値いれて返す
-  
+
   """
   def new_hand_pieces() do
     %{

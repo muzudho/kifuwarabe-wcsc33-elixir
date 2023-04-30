@@ -22,12 +22,14 @@ __global__ void multiply_them(float *dest, float *a, float *b)
 
 multiply_them = mod.get_function("multiply_them")
 
-a = numpy.random.randn(400).astype(numpy.float32)
-b = numpy.random.randn(400).astype(numpy.float32)
+# 葉局面で 400 だと遅い。しかし 400 でも 16 でも遅いから 400 ぐらい計算しないと意味ない
+size = 400
+a = numpy.random.randn(size).astype(numpy.float32)
+b = numpy.random.randn(size).astype(numpy.float32)
 
 dest = numpy.zeros_like(a)
 multiply_them(
         drv.Out(dest), drv.In(a), drv.In(b),
-        block=(400,1,1), grid=(1,1))
+        block=(size,1,1), grid=(1,1))
 
 print(dest-a*b)

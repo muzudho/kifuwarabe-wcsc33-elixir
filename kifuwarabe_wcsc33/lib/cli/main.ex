@@ -127,9 +127,21 @@ defmodule KifuwarabeWcsc33.CLI.Main do
           # > | position        | (GUIから私へ) さっき送った局面に対して、指し手を返せ
           # < | bestmove xxxx   | (私からGUIへ) (指し手を返す)
 
+          # 探索開始時刻
+          start_time = :os.system_time(:millisecond)
+
           # 現局面から、最善手を１つ選ぶ
-          {pos, best_move, value} = KifuwarabeWcsc33.CLI.USI.Go.do_it(pos)
+          {pos, best_move, value, nodes_num_searched} = KifuwarabeWcsc33.CLI.USI.Go.do_it(pos)
+
+          # 探索終了時刻
+          end_time = :os.system_time(:millisecond)
+          # 処理時間（単位：秒）
+          elapsed_seconds = (end_time - start_time) / 1000
+          # IO.puts("[main] go elapsed_seconds:#{elapsed_seconds} sec")
+
           best_move_as_str = KifuwarabeWcsc33.CLI.Views.Move.as_code(best_move)
+
+          depth = KifuwarabeWcsc33.CLI.Config.depth()
 
           # TODO ４手に１回は Flow を使って並列処理をするときのコメント
           remain = rem(pos.moves_num,8)
@@ -139,7 +151,11 @@ defmodule KifuwarabeWcsc33.CLI.Main do
             else
               "Single thread!"
             end
-          IO.puts("info score cp #{value} string #{comment}")
+
+          # エヌ・ピー・エス（NPS；ノード数／秒）は、Node Per Second だから 秒で割る
+          # とりあえず　小数点以下切り捨て
+          nps = trunc(nodes_num_searched/elapsed_seconds)
+          IO.puts("info depth #{depth} nodes #{nodes_num_searched} score cp #{value} nps #{nps} string #{comment}")
 
           IO.puts("bestmove #{best_move_as_str}")
           {pos}

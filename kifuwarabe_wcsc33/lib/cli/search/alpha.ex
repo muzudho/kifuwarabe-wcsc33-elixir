@@ -10,7 +10,7 @@ defmodule KifuwarabeWcsc33.CLI.Search.Alpha do
     o. ベスト・ムーブ（Best Move；指し手） - 無ければニル
 
   """
-  def do_it(pos, depth) do
+  def do_it(pos, depth, nodes_num_searched \\ 0) do
     # IO.puts("[think go] pos.turn:#{pos.turn}")
 
     #
@@ -63,41 +63,39 @@ defmodule KifuwarabeWcsc33.CLI.Search.Alpha do
     #   """ <> KifuwarabeWcsc33.CLI.Views.Position.stringify(pos))
 
     # 最善手を選ぶ（投了ならニル）
-    {pos, best_move, value} = choice_best(pos, move_list, nil, -32768, depth)
+    {pos, best_move, value, nodes_num_searched} = choice_best(pos, move_list, nil, -32768, depth, nodes_num_searched)
 
-    {pos, best_move, value}
+    {pos, best_move, value, nodes_num_searched}
   end
 
   #
   # 関数シグニチャーのパターンマッチの定義
   #
-  defp choice_best(pos, move_list, sibling_best_move, sibling_best_value, depth)
+  defp choice_best(pos, move_list, sibling_best_move, sibling_best_value, depth, nodes_num_searched)
 
   #
   # ベース・ケース（Base case；基本形） - 再帰関数の繰り返し回数が０回のときの処理
   #
-  defp choice_best(pos, [], sibling_best_move, sibling_best_value, _depth) do
-    #
-    # TODO 葉ノードでの局面評価（したいなあ）
-    # ====================================
-    #
-
-    #
-    # GPUへアクセス
-    # ============
-    #
-    # TODO 消す
-    #
-    # - ネタ勢
-    # - きふわらべがGPUへアクセスしているという実績（キャラクター付け）を付けるために、GPUへアクセスするだけ
-    # - 計算結果は使ってない
-    # - 計算時間は一瞬。思っているより遅くない
-    # - エラーが出て止まるリスクもある
-    #
-    KifuwarabeWcsc33.CLI.CallPython.HelloGpu.hello_gpu()
+  # - 同局面の最後の兄弟がいなくなったとき
+  # - 葉局面ではない
+  #
+  defp choice_best(pos, [], sibling_best_move, sibling_best_value, _depth, nodes_num_searched) do
+      #
+      # GPUへアクセス
+      # ============
+      #
+      # TODO 消す
+      #
+      # - ネタ勢
+      # - きふわらべがGPUへアクセスしているという実績（キャラクター付け）を付けるために、GPUへアクセスするだけ
+      # - 計算結果は使ってない
+      # - 計算時間は一瞬。思っているより遅くない
+      # - エラーが出て止まるリスクもある
+      #
+      KifuwarabeWcsc33.CLI.CallPython.HelloGpu.hello_gpu()
 
     # 再帰の帰り道
-    {pos, sibling_best_move, sibling_best_value}
+    {pos, sibling_best_move, sibling_best_value, nodes_num_searched}
   end
 
   # 最善手を返す
@@ -117,7 +115,7 @@ defmodule KifuwarabeWcsc33.CLI.Search.Alpha do
   # 1. ムーブ・リスト（Move List；指し手のリスト） - 投了は含まない
   # 2. ベスト・ムーブ（Best Move；最善手） - 無ければニル
   #
-  defp choice_best(pos, [move | move_list], sibling_best_move, sibling_best_value, depth) do
+  defp choice_best(pos, [move | move_list], sibling_best_move, sibling_best_value, depth, nodes_num_searched) do
     #
     # とりあえず、１手指してみる
     # ======================
@@ -129,8 +127,20 @@ defmodule KifuwarabeWcsc33.CLI.Search.Alpha do
 
     pos = pos |> KifuwarabeWcsc33.CLI.MoveGeneration.DoMove.do_it(move)
 
-    {pos, value} =
+    #
+    # - 探索ノード数（訪問ノード数ではない）を１増やす
+    # - 単純に、Do move したら１増やす
+    #
+    nodes_num_searched = nodes_num_searched + 1
+
+    {pos, value, nodes_num_searched} =
       if depth < 1 do
+        #
+        #
+        # TODO 葉ノードでの局面評価（したいなあ）
+        # ====================================
+        #
+
         #
         # 候補手を指した後の局面に、バリュー（Value；局面評価値）を付ける
         # =======================================================
@@ -144,7 +154,7 @@ defmodule KifuwarabeWcsc33.CLI.Search.Alpha do
         #
         value = -lets_position_value(pos)
         # IO.puts("[Alpha choice_best] value:#{value}")
-        {pos, value}
+        {pos, value, nodes_num_searched}
       else
         #
         # TODO ２手目を読みたい
@@ -155,9 +165,9 @@ defmodule KifuwarabeWcsc33.CLI.Search.Alpha do
         # - この best_move （ベスト・ムーブ）は、相手の次の手
         # - この value （評価値）は、葉局面から帰ってくる
         #
-        {pos, _best_move, value} = do_it(pos, depth - 1)
+        {pos, _best_move, value, nodes_num_searched} = do_it(pos, depth - 1, nodes_num_searched)
 
-        {pos, value}
+        {pos, value, nodes_num_searched}
       end
 
     # （あれば）最前手の更新
@@ -181,13 +191,13 @@ defmodule KifuwarabeWcsc33.CLI.Search.Alpha do
       # IO.puts("[Alpha choice_best] empty move list. stop")
 
       # 再帰の帰り道
-      {pos, sibling_best_move, sibling_best_value}
+      {pos, sibling_best_move, sibling_best_value, nodes_num_searched}
     else
       #
       # Recursive
       # =========
       #
-      choice_best(pos, move_list, sibling_best_move, sibling_best_value, depth)
+      choice_best(pos, move_list, sibling_best_move, sibling_best_value, depth, nodes_num_searched)
     end
   end
 

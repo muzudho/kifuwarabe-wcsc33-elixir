@@ -29,7 +29,7 @@ defmodule KifuwarabeWcsc33.CLI.USI.Go do
     # ====
     #
     depth = KifuwarabeWcsc33.CLI.Config.depth()
-    {pos, best_move, value} = KifuwarabeWcsc33.CLI.Search.Alpha.do_it(pos, depth)
+    {pos, best_move, value, nodes_num_searched} = KifuwarabeWcsc33.CLI.Search.Alpha.do_it(pos, depth)
 
     # IO.puts("[Go do_it] value:#{value}")
 
@@ -41,6 +41,6 @@ defmodule KifuwarabeWcsc33.CLI.USI.Go do
         best_move
       end
 
-    {pos, best_move, value}
+    {pos, best_move, value, nodes_num_searched}
   end
 end
