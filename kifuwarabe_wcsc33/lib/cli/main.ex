@@ -1,7 +1,7 @@
 defmodule KifuwarabeWcsc33.CLI.Main do
   @doc """
   ## 雑談
-  
+
       このメソッドは、コンソール・アプリケーションのエントリー・ポイントではなく、
       本来はスーパーバイザーの開始を書くメソッドだが、Elixirのスーパーバイザーが気に入らないので書かない。
   """
@@ -131,7 +131,16 @@ defmodule KifuwarabeWcsc33.CLI.Main do
           {pos, best_move, value} = KifuwarabeWcsc33.CLI.USI.Go.do_it(pos)
           best_move_as_str = KifuwarabeWcsc33.CLI.Views.Move.as_code(best_move)
 
-          IO.puts("info score cp #{value} string ")
+          # TODO ４手に１回は Flow を使って並列処理をするときのコメント
+          remain = rem(pos.moves_num,8)
+          comment =
+            if remain < 2 do
+              "Parallel processing of move generation! (Except drop) pos.moves_num:#{pos.moves_num} remain:#{remain}"
+            else
+              "Single thread!"
+            end
+          IO.puts("info score cp #{value} string #{comment}")
+
           IO.puts("bestmove #{best_move_as_str}")
           {pos}
 
@@ -187,7 +196,7 @@ defmodule KifuwarabeWcsc33.CLI.Main do
           IO.puts(
             """
             [main usi_loop] Do #{best_move_str}.
-            
+
             """ <> KifuwarabeWcsc33.CLI.Views.Position.stringify(pos)
           )
 
@@ -210,7 +219,7 @@ defmodule KifuwarabeWcsc33.CLI.Main do
           IO.puts(
             """
             [main usi_loop] Undone.
-            
+
             """ <> KifuwarabeWcsc33.CLI.Views.Position.stringify(pos)
           )
 

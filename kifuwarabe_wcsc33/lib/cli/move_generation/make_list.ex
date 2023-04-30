@@ -15,60 +15,68 @@ defmodule KifuwarabeWcsc33.CLI.MoveGeneration.MakeList do
 
   """
   def do_it(pos) do
-    # Flow 使ったら実行速度が遅いなあ
-    # これだったら使わない方がいいけど、きふわらべが並列処理をしているだろうというキャラクター付け（実績）のためにしておく
-    #
-    # - ２手目、後手「１八飛打」の反則手を指すことがあった。並列処理が関係するんだろうか？それとも単にプログラミングのミス？
     #
     # TODO Flow消すかも
     #
-    # 盤上の自駒
-    # =========
+    # Flow 使ったら実行速度が遅いなあ。
+    # これだったら使わない方がいいけど、きふわらべが並列処理をしているだろうというキャラクター付け（実績）のためにしておく
+    # 何手目かを８で割って余りが０か１のときだけ並列化するようにしよ。４回に１回だけ並列処理
     #
-    # |> スペース（:sp；空マス）は除去。かつ、手番の駒だけ残す
-    # |> （並列化） `Flow.from_enumerable()` - コンピューターの各コアへ処理を振り分け
-    # |> （並列化） ピース（Piece；先後付きの駒種類）から、先後を消し、ピース・タイプ（Piece Type；駒種類）に変換する
-    #              マス番地と駒種類から、指し手生成
-    # |> （並列化終り） `Enum.to_list()` - 振り分けた処理をリストに戻す
-    # |> リストがネストしていたら、フラットにする
-    # |> 指し手が nil なら除去
+    # - ２手目、後手「１八飛打」の反則手を指すことがあった。並列処理が関係するんだろうか？それとも単にプログラミングのミス？
+    #
     move_list_on_board =
-      pos.board
-      |> Enum.filter(fn {_sq, piece} ->
-        piece != :sp and pos.turn == KifuwarabeWcsc33.CLI.Mappings.ToTurn.from_piece(piece)
-      end)
-      |> Flow.from_enumerable()
-      |> Flow.map(fn {sq, piece} ->
-        piece_type = KifuwarabeWcsc33.CLI.Mappings.ToPieceType.from_piece(piece)
-        pos |> make_move_list_by_piece_on_board(sq, piece_type)
-      end)
-      |> Enum.to_list()
-      |> List.flatten()
-      |> Enum.filter(fn move -> !is_nil(move) end)
+      if rem(pos.moves_num,8) < 2 do
+        #
+        # 盤上の自駒
+        # =========
+        #
+        # |> スペース（:sp；空マス）は除去。かつ、手番の駒だけ残す
+        # |> （並列化） `Flow.from_enumerable()` - コンピューターの各コアへ処理を振り分け
+        # |> （並列化） ピース（Piece；先後付きの駒種類）から、先後を消し、ピース・タイプ（Piece Type；駒種類）に変換する
+        #              マス番地と駒種類から、指し手生成
+        # |> （並列化終り） `Enum.to_list()` - 振り分けた処理をリストに戻す
+        # |> リストがネストしていたら、フラットにする
+        # |> 指し手が nil なら除去
+        move_list_on_board =
+          pos.board
+          |> Enum.filter(fn {_sq, piece} ->
+            piece != :sp and pos.turn == KifuwarabeWcsc33.CLI.Mappings.ToTurn.from_piece(piece)
+          end)
+          |> Flow.from_enumerable()
+          |> Flow.map(fn {sq, piece} ->
+            piece_type = KifuwarabeWcsc33.CLI.Mappings.ToPieceType.from_piece(piece)
+            pos |> make_move_list_by_piece_on_board(sq, piece_type)
+          end)
+          |> Enum.to_list()
+          |> List.flatten()
+          |> Enum.filter(fn move -> !is_nil(move) end)
 
-    # 難しい書き方 |> Enum.filter(& !is_nil(&1))
+        move_list_on_board
+      else
+        # Flow を使わない書き方
+        #
+        # 盤上の自駒
+        # =========
+        #
+        # |> スペース（:sp；空マス）は除去。かつ、手番の駒だけ残す
+        # |> ピース（Piece；先後付きの駒種類）から、先後を消し、ピース・タイプ（Piece Type；駒種類）に変換する
+        # |> マス番地と駒種類から、指し手生成
+        # |> リストがネストしていたら、フラットにする
+        # |> 指し手が nil なら除去
+        move_list_on_board =
+          pos.board
+          |> Enum.filter(fn {_sq, piece} ->
+            piece != :sp and pos.turn == KifuwarabeWcsc33.CLI.Mappings.ToTurn.from_piece(piece)
+          end)
+          |> Enum.map(fn {sq, piece} ->
+            piece_type = KifuwarabeWcsc33.CLI.Mappings.ToPieceType.from_piece(piece)
+            pos |> make_move_list_by_piece_on_board(sq, piece_type)
+          end)
+          |> List.flatten()
+          |> Enum.filter(fn move -> !is_nil(move) end)
 
-    # # Flow を使わない書き方
-    # #
-    # # 盤上の自駒
-    # # =========
-    # #
-    # # |> スペース（:sp；空マス）は除去。かつ、手番の駒だけ残す
-    # # |> ピース（Piece；先後付きの駒種類）から、先後を消し、ピース・タイプ（Piece Type；駒種類）に変換する
-    # # |> マス番地と駒種類から、指し手生成
-    # # |> リストがネストしていたら、フラットにする
-    # # |> 指し手が nil なら除去
-    # move_list_on_board =
-    #   pos.board
-    #   |> Enum.filter(fn {_sq, piece} ->
-    #     piece != :sp and pos.turn == KifuwarabeWcsc33.CLI.Mappings.ToTurn.from_piece(piece)
-    #   end)
-    #   |> Enum.map(fn {sq, piece} ->
-    #     piece_type = KifuwarabeWcsc33.CLI.Mappings.ToPieceType.from_piece(piece)
-    #     pos |> make_move_list_by_piece_on_board(sq, piece_type)
-    #   end)
-    #   |> List.flatten()
-    #   |> Enum.filter(fn move -> !is_nil(move) end)
+        move_list_on_board
+      end
 
     # # Flow 使ったら実行速度が遅いなあ
     # #
