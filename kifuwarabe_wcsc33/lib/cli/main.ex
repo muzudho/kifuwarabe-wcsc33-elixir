@@ -135,7 +135,7 @@ defmodule KifuwarabeWcsc33.CLI.Main do
           remain = rem(pos.moves_num,8)
           comment =
             if remain < 2 do
-              "Parallel processing of move generation! (Except drop) pos.moves_num:#{pos.moves_num} remain:#{remain}"
+              "Parallel processing of move generation! (Except drop)"
             else
               "Single thread!"
             end

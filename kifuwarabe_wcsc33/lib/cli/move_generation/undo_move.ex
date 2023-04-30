@@ -4,21 +4,21 @@ defmodule KifuwarabeWcsc33.CLI.MoveGeneration.UndoMove do
   """
 
   @doc """
-  
+
     駒を（逆向きに）動かす
-  
+
   ## Parameters
-  
+
     * `pos` - ポジション（Position；局面）
-  
+
   ## Returns
-  
+
     0. ポジション（Position；局面）
-  
+
   ## 雑談
-  
+
     - アンドゥする場面の例：自殺手
-  
+
   """
   def do_it(pos) do
     # 最後の指し手をリストから引っこ抜く
@@ -40,6 +40,7 @@ defmodule KifuwarabeWcsc33.CLI.MoveGeneration.UndoMove do
       pos
       | turn: KifuwarabeWcsc33.CLI.Mappings.ToTurn.flip(pos.turn),
         opponent_turn: pos.turn,
+        moves_num: pos.moves_num - 1,
         # 下記２つのリストの長さは揃えろ
         moves: new_moves,
         captured_piece_types: new_captured_piece_types,

@@ -4,18 +4,18 @@ defmodule KifuwarabeWcsc33.CLI.MoveGeneration.DoMove do
   """
 
   @doc """
-  
+
     駒を動かす
-  
+
   ## Parameters
-  
+
     * `pos` - ポジション（Position；局面）
     * `move` - ムーブ（Move；指し手）
-  
+
   ## Returns
-  
+
     0. ポジション（Position；局面）
-  
+
   """
   def do_it(pos, move) do
     {pos, captured_pt} =
@@ -193,6 +193,7 @@ defmodule KifuwarabeWcsc33.CLI.MoveGeneration.DoMove do
       pos
       | turn: KifuwarabeWcsc33.CLI.Mappings.ToTurn.flip(pos.turn),
         opponent_turn: pos.turn,
+        moves_num: pos.moves_num + 1,
         # リストのサイズを合わせたいので、 captured_piece_types にはニルでも入れる
         moves: pos.moves ++ [move],
         captured_piece_types: pos.captured_piece_types ++ [captured_pt],
