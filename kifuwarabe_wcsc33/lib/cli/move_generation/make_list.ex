@@ -4,15 +4,15 @@ defmodule KifuwarabeWcsc33.CLI.MoveGeneration.MakeList do
   """
 
   @doc """
-  
+
   ## Parameters
-  
+
     * `pos` - ポジション（Position；局面）
-  
+
   ## Returns
-  
+
     0. ムーブ・リスト（Move List；指し手のリスト） - 投了を含まない
-  
+
   """
   def do_it(pos) do
     # # Flow 使ったら実行速度が遅いなあ

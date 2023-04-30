@@ -25,16 +25,6 @@ defmodule KifuwarabeWcsc33.CLI.USI.Go do
     )
 
     #
-    # GPUへアクセス
-    # ============
-    #
-    # - ネタ勢
-    # - きふわらべがGPUへアクセスしているという実績（キャラクター付け）を付けるために、GPUへアクセスするだけ
-    # - 時間がもったいないだけで、邪魔
-    #
-    KifuwarabeWcsc33.CLI.CallPython.HelloGpu.hello_gpu()
-
-    #
     # 探索
     # ====
     #

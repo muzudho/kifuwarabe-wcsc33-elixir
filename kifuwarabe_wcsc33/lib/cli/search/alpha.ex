@@ -1,14 +1,14 @@
 defmodule KifuwarabeWcsc33.CLI.Search.Alpha do
   @doc """
-  
+
   ## Parameters
-  
+
     * `pos` - ポジション（Position；局面）
-  
+
   ## Returns
-  
+
     o. ベスト・ムーブ（Best Move；指し手） - 無ければニル
-  
+
   """
   def do_it(pos, depth) do
     # IO.puts("[think go] pos.turn:#{pos.turn}")
@@ -77,6 +77,23 @@ defmodule KifuwarabeWcsc33.CLI.Search.Alpha do
   # ベース・ケース（Base case；基本形） - 再帰関数の繰り返し回数が０回のときの処理
   #
   defp choice_best(pos, [], sibling_best_move, sibling_best_value, _depth) do
+    #
+    # TODO 葉ノードでの局面評価（したいなあ）
+    # ====================================
+    #
+
+    #
+    # GPUへアクセス
+    # ============
+    #
+    # - ネタ勢
+    # - 計算結果は使ってない
+    # - きふわらべがGPUへアクセスしているという実績（キャラクター付け）を付けるために、GPUへアクセスするだけ
+    # - 計算時間は一瞬。思っているより遅くない
+    # - エラーが出て止まるリスクもある
+    #
+    KifuwarabeWcsc33.CLI.CallPython.HelloGpu.hello_gpu()
+
     # 再帰の帰り道
     {pos, sibling_best_move, sibling_best_value}
   end
