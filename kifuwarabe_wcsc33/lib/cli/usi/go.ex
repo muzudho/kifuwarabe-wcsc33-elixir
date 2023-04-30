@@ -5,24 +5,34 @@ defmodule KifuwarabeWcsc33.CLI.USI.Go do
 
   @doc """
     思考開始
-  
+
   ## Parameters
-  
+
     * `pos` - ポジション（Position；局面）
-  
+
   ## Returns
-  
+
     0. ベスト・ムーブ（Best move；最善手）
-  
+
   """
   def do_it(pos) do
     # 盤表示
     IO.puts(
       """
       [Go do_it] value:#{pos.materials_value}
-      
+
       """ <> KifuwarabeWcsc33.CLI.Views.Position.stringify(pos)
     )
+
+    #
+    # GPUへアクセス
+    # ============
+    #
+    # - ネタ勢
+    # - きふわらべがGPUへアクセスしているという実績（キャラクター付け）を付けるために、GPUへアクセスするだけ
+    # - 時間がもったいないだけで、邪魔
+    #
+    KifuwarabeWcsc33.CLI.CallPython.HelloGpu.hello_gpu()
 
     #
     # 探索
