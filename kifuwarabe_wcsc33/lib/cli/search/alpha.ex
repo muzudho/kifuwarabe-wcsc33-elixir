@@ -160,6 +160,9 @@ defmodule KifuwarabeWcsc33.CLI.Search.Alpha do
         {pos, value}
       end
 
+    # （あれば）最前手の更新
+    {sibling_best_move, sibling_best_value} = alpha_update(move, value, sibling_best_move, sibling_best_value, pos)
+
     #
     # 忘れずに、１手戻す
     # ===============
@@ -168,16 +171,37 @@ defmodule KifuwarabeWcsc33.CLI.Search.Alpha do
     #
     pos = pos |> KifuwarabeWcsc33.CLI.MoveGeneration.UndoMove.do_it()
 
-    #
-    # アルファー・アップデート
-    # =====================
-    #
-    #   兄弟局面の中の最高局面評価値を更新したなら、最善手を更新する
-    #
-    # ## 雑談
-    #
-    #   アルファー（α；甲）は、わたしの番という意味。ベーター（β；乙）は、あなたの番という意味
-    #
+    if move_list |> length() < 1 do
+      #
+      # Base case
+      # =========
+      #
+      # - 合法手が残ってなければ停止
+      #
+      # IO.puts("[Alpha choice_best] empty move list. stop")
+
+      # 再帰の帰り道
+      {pos, sibling_best_move, sibling_best_value}
+    else
+      #
+      # Recursive
+      # =========
+      #
+      choice_best(pos, move_list, sibling_best_move, sibling_best_value, depth)
+    end
+  end
+
+  #
+  # アルファー・アップデート
+  # =====================
+  #
+  #   兄弟局面の中の最高局面評価値を更新したなら、最善手を更新する
+  #
+  # ## 雑談
+  #
+  #   アルファー（α；甲）は、わたしの番という意味。ベーター（β；乙）は、あなたの番という意味
+  #
+  defp alpha_update(move, value, sibling_best_move, sibling_best_value, pos) do
     {sibling_best_move, sibling_best_value} =
       if sibling_best_value < value do
         #
@@ -205,24 +229,7 @@ defmodule KifuwarabeWcsc33.CLI.Search.Alpha do
         {sibling_best_move, sibling_best_value}
       end
 
-    if move_list |> length() < 1 do
-      #
-      # Base case
-      # =========
-      #
-      # - 合法手が残ってなければ停止
-      #
-      # IO.puts("[Alpha choice_best] empty move list. stop")
-
-      # 再帰の帰り道
-      {pos, sibling_best_move, sibling_best_value}
-    else
-      #
-      # Recursive
-      # =========
-      #
-      choice_best(pos, move_list, sibling_best_move, sibling_best_value, depth)
-    end
+    {sibling_best_move, sibling_best_value}
   end
 
   #
