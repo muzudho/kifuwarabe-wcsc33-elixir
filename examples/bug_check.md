@@ -317,3 +317,96 @@ position sfen lnsgk1s1l/5g3/pppppp1p1/6p1p/9/2P6/PP1PPPPPP/7R1/LNSGKGSNL b R2bn 
 
 go
 ```
+
+# 後手が先手の角を打ってしまう
+
+```
+position startpos moves 7g7f 3c3d 8h2b+ 8b2b B*8d B*1e 7i7h 8c8d 6g6f 9c9d 1i1h 9d9e 2g2f 1e2f 2h2f B*6g 2f2c
+
+position sfen lnsgkgsnl/7r1/2pppp1Rp/1p4p2/p8/2PP5/PP1bPPP1P/2S5L/LN1GKGSN1 w BPp 1
+```
+
+```
+>2:position startpos moves 7g7f 3c3d 8h2b+ 8b2b B*8d B*1e 7i7h 8c8d 6g6f 9c9d 1i1h 9d9e 2g2f 1e2f 2h2f B*6g 2f2c
+>2:go btime 1197000 wtime 1177000 binc 2000 winc 2000
+<2:[18 moves / Gote / 0 repeat(s)]
+<2:  k  r  b  g  s  n  l  p
+<2:+--+--+--+--+--+--+--+--+
+<2:|  |  |  |  |  |  |  | 1|
+<2:+--+--+--+--+--+--+--+--+
+<2:  9  8  7  6  5  4  3  2  1
+<2:+--+--+--+--+--+--+--+--+--+
+<2:| l| n| s| g| k| g| s| n| l| a
+<2:+--+--+--+--+--+--+--+--+--+
+<2:|  |  |  |  |  |  |  | r|  | b
+<2:+--+--+--+--+--+--+--+--+--+
+<2:|  |  | p| p| p| p|  | R| p| c
+<2:+--+--+--+--+--+--+--+--+--+
+<2:|  | p|  |  |  |  | p|  |  | d
+<2:+--+--+--+--+--+--+--+--+--+
+<2:| p|  |  |  |  |  |  |  |  | e
+<2:+--+--+--+--+--+--+--+--+--+
+<2:|  |  | P| P|  |  |  |  |  | f
+<2:+--+--+--+--+--+--+--+--+--+
+<2:| P| P|  | b| P| P| P|  | P| g
+<2:+--+--+--+--+--+--+--+--+--+
+<2:|  |  | S|  |  |  |  |  | L| h
+<2:+--+--+--+--+--+--+--+--+--+
+<2:| L| N|  | G| K| G| S| N|  | i
+<2:+--+--+--+--+--+--+--+--+--+
+<2:     K  R  B  G  S  N  L  P
+<2:   +--+--+--+--+--+--+--+--+
+<2:   |  |  | 1|  |  |  |  | 1|
+<2:   +--+--+--+--+--+--+--+--+
+<2:king_sq ^59 v51
+<2:record  7g7f 3c3d 8h2b+<B> 8b2b<+B> B*8d B*1e 7i7h 8c8d<B> 6g6f 9c9d 1i1h 9d9e 2g2f 1e2f<P> 2h2f<B> B*6g 2f2c<P>
+<2:value seen from gote 0
+<2:Teban is lose? false
+<2:Aiteban is lose? false
+<2:[Go do_it] value:0
+<2:[18 moves / Gote / 0 repeat(s)]
+<2:  k  r  b  g  s  n  l  p
+<2:+--+--+--+--+--+--+--+--+
+<2:|  |  |  |  |  |  |  | 1|
+<2:+--+--+--+--+--+--+--+--+
+<2:  9  8  7  6  5  4  3  2  1
+<2:+--+--+--+--+--+--+--+--+--+
+<2:| l| n| s| g| k| g| s| n| l| a
+<2:+--+--+--+--+--+--+--+--+--+
+<2:|  |  |  |  |  |  |  | r|  | b
+<2:+--+--+--+--+--+--+--+--+--+
+<2:|  |  | p| p| p| p|  | R| p| c
+<2:+--+--+--+--+--+--+--+--+--+
+<2:|  | p|  |  |  |  | p|  |  | d
+<2:+--+--+--+--+--+--+--+--+--+
+<2:| p|  |  |  |  |  |  |  |  | e
+<2:+--+--+--+--+--+--+--+--+--+
+<2:|  |  | P| P|  |  |  |  |  | f
+<2:+--+--+--+--+--+--+--+--+--+
+<2:| P| P|  | b| P| P| P|  | P| g
+<2:+--+--+--+--+--+--+--+--+--+
+<2:|  |  | S|  |  |  |  |  | L| h
+<2:+--+--+--+--+--+--+--+--+--+
+<2:| L| N|  | G| K| G| S| N|  | i
+<2:+--+--+--+--+--+--+--+--+--+
+<2:     K  R  B  G  S  N  L  P
+<2:   +--+--+--+--+--+--+--+--+
+<2:   |  |  | 1|  |  |  |  | 1|
+<2:   +--+--+--+--+--+--+--+--+
+<2:king_sq ^59 v51
+<2:record  7g7f 3c3d 8h2b+<B> 8b2b<+B> B*8d B*1e 7i7h 8c8d<B> 6g6f 9c9d 1i1h 9d9e 2g2f 1e2f<P> 2h2f<B> B*6g 2f2c<P>
+<2:value seen from gote 0
+<2:Teban is lose? false
+<2:Aiteban is lose? false
+<2:info depth 2 nodes 572448 score cp 13500 nps 5090 string Single thread!
+<2:bestmove R*3h
+>1:gameover win
+>1:quit
+>2:gameover lose
+>2:quit
+<1:Hi! I am a Kifuwarabe. It's start! first_token[gameover] input:gameover win
+<2:info depth 2 time 11315 nodes 242880 score cp 16000 nps 21465 string Single thread!
+<2:bestmove 2b2c
+<2:Hi! I am a Kifuwarabe. It's start! first_token[gameover] input:gameover lose
+```
+
