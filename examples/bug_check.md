@@ -224,7 +224,7 @@ go
 <T:##[ERROR] unknown command: %%GAME floodgate-900-5F *
 <1:[Go do_it] value:-600
 <1:bestmove 9d9e
-<1:Hi! I am a Kifuwarabe. It's start! first_token[gameover] input:gameover lose
+<1:Hi! I am Kifuwarabe. It's start! first_token[gameover] input:gameover lose
 >1:quit
 >T:LOGOUT
 <T:LOGOUT:completed
@@ -241,7 +241,7 @@ go
 >1:quit
 >2:gameover win
 >2:quit
-<2:Hi! I am a Kifuwarabe. It's start! first_token[gameover] input:gameover win
+<2:Hi! I am Kifuwarabe. It's start! first_token[gameover] input:gameover win
 <1:[1 moves / Sente / 0 repeat(s)]
 <1:  k  r  b  g  s  n  l  p
 <1:+--+--+--+--+--+--+--+--+
@@ -309,7 +309,7 @@ go
 <1:value seen from sente 200
 <1:info score cp 1100 string 
 <1:bestmove R*1b
-<1:Hi! I am a Kifuwarabe. It's start! first_token[gameover] input:gameover lose
+<1:Hi! I am Kifuwarabe. It's start! first_token[gameover] input:gameover lose
 ```
 
 ```plaintext
@@ -404,10 +404,10 @@ position sfen lnsgkgsnl/7r1/2pppp1Rp/1p4p2/p8/2PP5/PP1bPPP1P/2S5L/LN1GKGSN1 w BP
 >1:quit
 >2:gameover lose
 >2:quit
-<1:Hi! I am a Kifuwarabe. It's start! first_token[gameover] input:gameover win
+<1:Hi! I am Kifuwarabe. It's start! first_token[gameover] input:gameover win
 <2:info depth 2 time 11315 nodes 242880 score cp 16000 nps 21465 string Single thread!
 <2:bestmove 2b2c
-<2:Hi! I am a Kifuwarabe. It's start! first_token[gameover] input:gameover lose
+<2:Hi! I am Kifuwarabe. It's start! first_token[gameover] input:gameover lose
 ```
 
 # 王手放置して３五桂打
@@ -492,7 +492,7 @@ lnsg1gs1l/9/1ppk3pp/6p2/p7+B/2PR5/PP1PPRPPP/9/LNSGKG1NL w BS3Pnp 1
 <1:bestmove N*3e
 >1:gameover lose
 >1:quit
-<1:Hi! I am a Kifuwarabe. It's start! first_token[gameover] input:gameover lose
+<1:Hi! I am Kifuwarabe. It's start! first_token[gameover] input:gameover lose
 ```
 
 # 利きへ飛び込んだ
@@ -597,7 +597,103 @@ position startpos moves 2g2f 9c9d 7g7f 9d9e 2f2e 5c5d 2e2d 4a3b 2d2c+ 3b2c 2h2c+
 <T:#LOSE
 >1:gameover lose
 >T:%%GAME floodgate-900-5F *
-<1:Hi! I am a Kifuwarabe. It's start! first_token[gameover] input:gameover lose
+<1:Hi! I am Kifuwarabe. It's start! first_token[gameover] input:gameover lose
+<T:##[ERROR] unknown command: %%GAME floodgate-900-5F *
+>T: 
+>T: 
+>T: 
+>T: 
+>1:quit
+>T:LOGOUT
+<T:LOGOUT:completed
+```
+
+# 利きへ飛び込んだ２
+
+```
+position startpos moves 7i7h 3c3d 1i1h 8c8d 2g2f 8d8e 4i4h 9a9b 1g1f 8e8f 8g8f 8b8f P*8g 8f8b 8g8f 8b8f 8h7i P*8h 1f1e 1a1b 7i6h 9c9d 1h1g 2b4d 6g6f 7a8b 6f6e 4a3b 6e6d 6c6d 1g1f 8f8c 9g9f 3a4b 8i9g 8h8i+ 9f9e P*8h 9e9d 8i9i 7g7f 3b2b 9d9c 9b9c P*9d P*9b 9d9c 8b9c 1e1d 1c1d 1f1d 1b1d P*1e 8h8i+ 1e1d 8i8h 7h6g 9i8i 6g5f 8c8d 5f4e 8i7i 4e4d 7i6i 5i6i 4c4d 1d1c 8d8g+
+```
+
+```
+>1:position startpos moves 7i7h 3c3d 1i1h 8c8d 2g2f 8d8e 4i4h 9a9b 1g1f 8e8f 8g8f 8b8f P*8g 8f8b 8g8f 8b8f 8h7i P*8h 1f1e 1a1b 7i6h 9c9d 1h1g 2b4d 6g6f 7a8b 6f6e 4a3b 6e6d 6c6d 1g1f 8f8c 9g9f 3a4b 8i9g 8h8i+ 9f9e P*8h 9e9d 8i9i 7g7f 3b2b 9d9c 9b9c P*9d P*9b 9d9c 8b9c 1e1d 1c1d 1f1d 1b1d P*1e 8h8i+ 1e1d 8i8h 7h6g 9i8i 6g5f 8c8d 5f4e 8i7i 4e4d 7i6i 5i6i 4c4d 1d1c 8d8g+
+>1:go btime 1070000 wtime 730000 binc 5000 winc 5000
+<1:[69 moves / Sente / 0 repeat(s)]
+<1:  k  r  b  g  s  n  l  p
+<1:+--+--+--+--+--+--+--+--+
+<1:|  |  |  | 1| 1|  | 2| 3|
+<1:+--+--+--+--+--+--+--+--+
+<1:  9  8  7  6  5  4  3  2  1
+<1:+--+--+--+--+--+--+--+--+--+
+<1:|  | n|  | g| k|  |  | n|  | a
+<1:+--+--+--+--+--+--+--+--+--+
+<1:| p|  |  |  |  | s|  | g|  | b
+<1:+--+--+--+--+--+--+--+--+--+
+<1:| s|  | p|  | p|  |  | p| P| c
+<1:+--+--+--+--+--+--+--+--+--+
+<1:|  |  |  | p|  | p| p|  |  | d
+<1:+--+--+--+--+--+--+--+--+--+
+<1:|  |  |  |  |  |  |  |  |  | e
+<1:+--+--+--+--+--+--+--+--+--+
+<1:|  |  | P|  |  |  |  | P|  | f
+<1:+--+--+--+--+--+--+--+--+--+
+<1:| N|+r|  |  | P| P| P|  |  | g
+<1:+--+--+--+--+--+--+--+--+--+
+<1:|  |+p|  | B|  | G|  | R|  | h
+<1:+--+--+--+--+--+--+--+--+--+
+<1:|  |  |  | K|  |  | S| N|  | i
+<1:+--+--+--+--+--+--+--+--+--+
+<1:     K  R  B  G  S  N  L  P
+<1:   +--+--+--+--+--+--+--+--+
+<1:   |  |  | 1|  |  |  | 2| 1|
+<1:   +--+--+--+--+--+--+--+--+
+<1:king_sq ^69 v51
+<1:record  7i7h 3c3d 1i1h 8c8d 2g2f 8d8e 4i4h 9a9b 1g1f 8e8f 8g8f<P> 8b8f<P> P*8g 8f8b 8g8f 8b8f<P> 8h7i P*8h 1f1e 1a1b 7i6h 9c9d 1h1g 2b4d 6g6f 7a8b 6f6e 4a3b 6e6d 6c6d<P> 1g1f 8f8c 9g9f 3a4b 8i9g 8h8i+ 9f9e P*8h 9e9d<P> 8i9i<L> 7g7f 3b2b 9d9c 9b9c<P> P*9d P*9b 9d9c<L> 8b9c<P> 1e1d 1c1d<P> 1f1d<P> 1b1d<L> P*1e 8h8i+ 1e1d<L> 8i8h 7h6g 9i8i 6g5f 8c8d 5f4e 8i7i 4e4d<B> 7i6i<G> 5i6i<+P> 4c4d<S> 1d1c 8d8g+
+<1:value seen from sente -750
+<1:Teban is lose? false
+<1:Aiteban is lose? false
+<1:[Go do_it] value:-750
+<1:[69 moves / Sente / 0 repeat(s)]
+<1:  k  r  b  g  s  n  l  p
+<1:+--+--+--+--+--+--+--+--+
+<1:|  |  |  | 1| 1|  | 2| 3|
+<1:+--+--+--+--+--+--+--+--+
+<1:  9  8  7  6  5  4  3  2  1
+<1:+--+--+--+--+--+--+--+--+--+
+<1:|  | n|  | g| k|  |  | n|  | a
+<1:+--+--+--+--+--+--+--+--+--+
+<1:| p|  |  |  |  | s|  | g|  | b
+<1:+--+--+--+--+--+--+--+--+--+
+<1:| s|  | p|  | p|  |  | p| P| c
+<1:+--+--+--+--+--+--+--+--+--+
+<1:|  |  |  | p|  | p| p|  |  | d
+<1:+--+--+--+--+--+--+--+--+--+
+<1:|  |  |  |  |  |  |  |  |  | e
+<1:+--+--+--+--+--+--+--+--+--+
+<1:|  |  | P|  |  |  |  | P|  | f
+<1:+--+--+--+--+--+--+--+--+--+
+<1:| N|+r|  |  | P| P| P|  |  | g
+<1:+--+--+--+--+--+--+--+--+--+
+<1:|  |+p|  | B|  | G|  | R|  | h
+<1:+--+--+--+--+--+--+--+--+--+
+<1:|  |  |  | K|  |  | S| N|  | i
+<1:+--+--+--+--+--+--+--+--+--+
+<1:     K  R  B  G  S  N  L  P
+<1:   +--+--+--+--+--+--+--+--+
+<1:   |  |  | 1|  |  |  | 2| 1|
+<1:   +--+--+--+--+--+--+--+--+
+<1:king_sq ^69 v51
+<1:record  7i7h 3c3d 1i1h 8c8d 2g2f 8d8e 4i4h 9a9b 1g1f 8e8f 8g8f<P> 8b8f<P> P*8g 8f8b 8g8f 8b8f<P> 8h7i P*8h 1f1e 1a1b 7i6h 9c9d 1h1g 2b4d 6g6f 7a8b 6f6e 4a3b 6e6d 6c6d<P> 1g1f 8f8c 9g9f 3a4b 8i9g 8h8i+ 9f9e P*8h 9e9d<P> 8i9i<L> 7g7f 3b2b 9d9c 9b9c<P> P*9d P*9b 9d9c<L> 8b9c<P> 1e1d 1c1d<P> 1f1d<P> 1b1d<L> P*1e 8h8i+ 1e1d<L> 8i8h 7h6g 9i8i 6g5f 8c8d 5f4e 8i7i 4e4d<B> 7i6i<G> 5i6i<+P> 4c4d<S> 1d1c 8d8g+
+<1:value seen from sente -750
+<1:Teban is lose? false
+<1:Aiteban is lose? false
+<1:info depth 2 time 435 nodes 26382 score cp 32768 nps 60648 string (^_^)
+<1:bestmove 6i7h
+>T:+6978OU
+<T:#ILLEGAL_MOVE
+<T:#LOSE
+>1:gameover lose
+>T:%%GAME floodgate-900-5F *
+<1:Hi! I am Kifuwarabe. It's start! first_token[gameover] input:gameover lose
 <T:##[ERROR] unknown command: %%GAME floodgate-900-5F *
 >T: 
 >T: 

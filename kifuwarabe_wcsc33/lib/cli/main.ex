@@ -38,7 +38,7 @@ defmodule KifuwarabeWcsc33.CLI.Main do
     IO.puts("id author TAKAHASHI satoshi")
     IO.puts("usiok")
   else
-    IO.puts("Hi! I am a Kifuwarabe. It's start! " <> input)
+    IO.puts("Hi! I am Kifuwarabe. It's start! " <> input)
   end
   """
 
@@ -287,7 +287,7 @@ defmodule KifuwarabeWcsc33.CLI.Main do
         true ->
           # 対応していないメッセージは無視します
           IO.puts(
-            "Hi! I am a Kifuwarabe. It's start! first_token[" <>
+            "Hi! I am Kifuwarabe. It's start! first_token[" <>
               first_token <> "] input:" <> input
           )
 

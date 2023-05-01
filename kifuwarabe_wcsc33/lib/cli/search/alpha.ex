@@ -22,10 +22,22 @@ defmodule KifuwarabeWcsc33.CLI.Search.Alpha do
     move_list = KifuwarabeWcsc33.CLI.MoveGeneration.MakeList.do_it(pos)
 
     #
+    # デバッグ：局面
+    # =============
+    #
+    if KifuwarabeWcsc33.CLI.Config.is_debug_move_generation?() do
+      IO.puts(
+        """
+        [alpha] Before reduce suicide move.
+
+        """ <> KifuwarabeWcsc33.CLI.Views.Position.stringify(pos))
+    end
+
+    #
     # デバッグ：指し手一覧表示
     # =====================
     #
-    KifuwarabeWcsc33.CLI.Debug.MoveGenList.print(move_list, "Before reduce suicide move. moves_num:#{pos.moves_num} nodes:#{nodes_num_searched}")
+    KifuwarabeWcsc33.CLI.Debug.MoveGenList.print(move_list, "[alpha] Before reduce suicide move. moves_num:#{pos.moves_num} nodes:#{nodes_num_searched}")
 
     #
     # 以下、分かりやすい弱い手を除去していく
@@ -34,14 +46,14 @@ defmodule KifuwarabeWcsc33.CLI.Search.Alpha do
     # - ポジション（Position；局面）データはサイズが大きいので、複製せず、差分更新したい
     #
 
-    # 自殺手の除去
-    {move_list, pos} = KifuwarabeWcsc33.CLI.MoveList.ReduceSuicideMove.do_it(move_list, pos)
+    # 自玉（手番）自殺手の除去
+    {move_list, pos} = KifuwarabeWcsc33.CLI.MoveList.ReduceSuicideMove.do_it(move_list, pos, :teban)
 
     #
     # デバッグ：指し手一覧表示
     # =====================
     #
-    KifuwarabeWcsc33.CLI.Debug.MoveGenList.print(move_list, "After reduce suicide move. moves_num:#{pos.moves_num} nodes:#{nodes_num_searched}")
+    KifuwarabeWcsc33.CLI.Debug.MoveGenList.print(move_list, "[alpha] After reduce suicide move. moves_num:#{pos.moves_num} nodes:#{nodes_num_searched}")
 
     #
     # デバッグ：指し手のシャッフル
@@ -121,6 +133,7 @@ defmodule KifuwarabeWcsc33.CLI.Search.Alpha do
     nodes_num_searched = nodes_num_searched + 1
 
     {pos, opponent_value, nodes_num_searched} =
+      # depth が 1 なら、次の手は読まないので、相手番である葉局面の評価値を返せ
       if depth < 2 do
         #
         #

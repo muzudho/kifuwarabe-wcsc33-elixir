@@ -1,14 +1,14 @@
 defmodule KifuwarabeWcsc33.CLI.Thesis.IsUchifuDume do
   @moduledoc """
-  
+
     打ち歩詰めチェック
-  
+
   """
 
   @doc """
-  
+
     - もし、歩を打ったときで、かつ、そこが相手の玉頭なら、打ち歩詰めチェックをしたい
-  
+
   """
   def is_uchifu_dume?(move, pos) do
     is_uchifu_dume? =
@@ -48,7 +48,7 @@ defmodule KifuwarabeWcsc33.CLI.Thesis.IsUchifuDume do
           # TODO 自殺手の除去（ができてない？）
           #
           {second_move_list, _pos} =
-            KifuwarabeWcsc33.CLI.MoveList.ReduceSuicideMove.do_it(second_move_list, pos)
+            KifuwarabeWcsc33.CLI.MoveList.ReduceSuicideMove.do_it(second_move_list, pos, :aiteban)
 
           moves_count = length(second_move_list)
           IO.puts("[is_uchifu_dume] Uchifudume check, moves_count:#{moves_count}")
