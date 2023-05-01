@@ -154,25 +154,27 @@ defmodule KifuwarabeWcsc33.CLI.Main do
           # 指し手の説明
           # ===========
           #
-          # - ４手に１回は Flow を使って並列処理をするときのコメント
+          # - GPUへのアクセスは、何手目でも行っている
+          # - 並列処理は、１０進数の一の位が３、４、５、６手目のとき行う
           #
-          remain = rem(pos.moves_num,8)
-          comment = "Hello, GPU! (I just made a table cleared by zero) Ok."
+          divided = 10
+          remain = rem(pos.moves_num, divided)
+          comment = "Hello GPU! I use CUDA! (I just made a table cleared by zero) Ok."
 
           comment =
-            if remain == 1 or remain == 2 or remain == 5 or remain == 6 do
-              comment <> "Hello, CUDA! The remainder of the #{pos.moves_num}(th) move divided by 8 is #{remain}."
+            if remain == 3 or remain == 4 or remain == 5 or remain == 6 do
+              comment <> " Hello Multi-core processor! The remainder of the #{pos.moves_num}(th) move divided by #{divided} is #{remain}."
             else
-              comment <> "See you later CUDA. I'll play single-threaded!"
+              comment <> " See you later Multi-core processor. I'll play single-threaded!"
             end
 
           comment =
             comment <>
               cond do
-                remain == 1 or remain == 2 ->
-                  " So parallel processing of move generation! (Just move the pieces on the board)"
+                remain == 3 or remain == 4 ->
+                  " Parallel processing of move generation on the board!"
                 remain == 5 or remain == 6 ->
-                  " So parallel processing of move generation! (Just drop the pieces)"
+                  " Parallel processing of move generation just drop the pieces!"
                 true ->
                   ""
               end

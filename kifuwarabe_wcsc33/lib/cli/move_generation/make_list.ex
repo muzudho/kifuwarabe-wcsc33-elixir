@@ -15,18 +15,18 @@ defmodule KifuwarabeWcsc33.CLI.MoveGeneration.MakeList do
 
   """
   def do_it(pos) do
-    remain = rem(pos.moves_num, 8)
+    remain = rem(pos.moves_num, 10)
     #
     # TODO Flow消すかも
     #
     # Flow 使ったら実行速度が遅いなあ。
     # これだったら使わない方がいいけど、きふわらべが並列処理をしているだろうというキャラクター付け（実績）のためにしておく
-    # 何手目かを８で割って余りが１か２のときだけ並列化するようにしよ。４回に１回だけ並列処理
+    # 何手目かで間引いて使っている
     #
     # - ２手目、後手「１八飛打」の反則手を指すことがあった。並列処理が関係するんだろうか？それとも単にプログラミングのミス？
     #
     move_list_on_board =
-      if remain == 1 or remain == 2 do
+      if remain == 3 or remain == 4 do
         #
         # 盤上の自駒
         # =========
@@ -84,7 +84,7 @@ defmodule KifuwarabeWcsc33.CLI.MoveGeneration.MakeList do
     #
     # Flow 使ったら実行速度が遅いなあ。
     # これだったら使わない方がいいけど、きふわらべが並列処理をしているだろうというキャラクター付け（実績）のためにしておく
-    # 何手目かを８で割って余りが５か６のときだけ並列化するようにしよ。４回に１回だけ並列処理
+    # 何手目かで間引いて使っている
     #
     move_list_on_hand =
       if remain == 5 or remain == 6 do
