@@ -6,7 +6,7 @@ defmodule KifuwarabeWcsc33.CLI.Config do
   """
 
   # デバッグ・モード
-  @is_debug? true
+  @is_debug? false
   def is_debug?, do: @is_debug?
 
   # デバッグ・モード . 自殺手チェック
@@ -29,7 +29,7 @@ defmodule KifuwarabeWcsc33.CLI.Config do
   # - depth=3 は、平手初期局面の初手で 26352 局面読む。長考に沈んでゲームにならない。駒が取り返されるのを恐れるような手を指す？
   @depth 2
   def depth() do
-    if is_debug_utifudume_check?() do
+    if is_debug_utifudume_check?() or is_debug_move_generation?() do
       # 打ち歩詰めチェックは、１手読み（１度も駒を動かさない）で行う
       1
     else

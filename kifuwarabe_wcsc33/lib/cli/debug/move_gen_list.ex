@@ -6,12 +6,12 @@ defmodule KifuwarabeWcsc33.CLI.Debug.MoveGenList do
   @doc """
     表示
   """
-  def print(move_list) do
-    if KifuwarabeWcsc33.CLI.Config.is_debug_utifudume_check?() do
+  def print(move_list, label \\ "") do
+    if KifuwarabeWcsc33.CLI.Config.is_debug_move_generation?() do
       IO.write("""
-      
-      [Think go] BELOW, MOVE LIST
-      ===========================
+
+      [debug move_gen_list] BELOW, MOVE LIST #{label}
+      ======================================
       """)
 
       move_list

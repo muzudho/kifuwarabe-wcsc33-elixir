@@ -20,11 +20,12 @@ defmodule KifuwarabeWcsc33.CLI.Search.Alpha do
     # - とりあえず、現局面で指せる手（合法手）を全部列挙しようぜ
     #
     move_list = KifuwarabeWcsc33.CLI.MoveGeneration.MakeList.do_it(pos)
-    # IO.inspect(move_list, label: "[Think go] raw move_list")
-    # Enum.map(move_list, fn(move) ->
-    #     move_code = KifuwarabeWcsc33.CLI.Views.Move.as_code(move)
-    #     IO.puts("[Think go] move list: (#{move_code})")
-    #   end)
+
+    #
+    # デバッグ：指し手一覧表示
+    # =====================
+    #
+    KifuwarabeWcsc33.CLI.Debug.MoveGenList.print(move_list, "Before reduce suicide move. moves_num:#{pos.moves_num} nodes:#{nodes_num_searched}")
 
     #
     # 以下、分かりやすい弱い手を除去していく
@@ -40,7 +41,7 @@ defmodule KifuwarabeWcsc33.CLI.Search.Alpha do
     # デバッグ：指し手一覧表示
     # =====================
     #
-    KifuwarabeWcsc33.CLI.Debug.MoveGenList.print(move_list)
+    KifuwarabeWcsc33.CLI.Debug.MoveGenList.print(move_list, "After reduce suicide move. moves_num:#{pos.moves_num} nodes:#{nodes_num_searched}")
 
     #
     # デバッグ：指し手のシャッフル
@@ -120,7 +121,7 @@ defmodule KifuwarabeWcsc33.CLI.Search.Alpha do
     nodes_num_searched = nodes_num_searched + 1
 
     {pos, opponent_value, nodes_num_searched} =
-      if depth < 1 do
+      if depth < 2 do
         #
         #
         # TODO 葉ノードでの局面評価（したいなあ）
