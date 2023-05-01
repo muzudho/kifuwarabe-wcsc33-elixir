@@ -120,7 +120,7 @@ defmodule KifuwarabeWcsc33.CLI.MoveList.ReduceSuicideMove do
     # とりあえず、１手指してみる
     pos = pos |> KifuwarabeWcsc33.CLI.MoveOperation.DoMove.do_it(move)
 
-    if KifuwarabeWcsc33.CLI.Config.is_debug_suicide_move_check?() or KifuwarabeWcsc33.CLI.Config.is_debug_move_generation?() do
+    if KifuwarabeWcsc33.CLI.Config.is_debug_suicide_move_check?() or KifuwarabeWcsc33.CLI.Config.is_debug_move_generation?(move) do
       move_code = KifuwarabeWcsc33.CLI.Views.Move.as_code(move)
 
       IO.puts(
@@ -149,7 +149,7 @@ defmodule KifuwarabeWcsc33.CLI.MoveList.ReduceSuicideMove do
 
     opponent_king_sq = pos.location_of_kings[opponent_king_pc]
 
-    if KifuwarabeWcsc33.CLI.Config.is_debug_suicide_move_check?() or KifuwarabeWcsc33.CLI.Config.is_debug_move_generation?() do
+    if KifuwarabeWcsc33.CLI.Config.is_debug_suicide_move_check?() or KifuwarabeWcsc33.CLI.Config.is_debug_move_generation?(move) do
       IO.puts("[reduce_suicide_move_2] king trn:#{opponent_king_turn} sq:#{opponent_king_sq} pc:#{opponent_king_pc}")
     end
 
@@ -160,8 +160,8 @@ defmodule KifuwarabeWcsc33.CLI.MoveList.ReduceSuicideMove do
     #
     king_is_lose? =
       cond do
-        rel_turn == :teban -> pos.aiteban_is_lose?
-        rel_turn == :aiteban -> pos.teban_is_lose?
+        rel_turn == :teban -> KifuwarabeWcsc33.CLI.Coding.ListGetLast.do_it(pos.aiteban_is_lose_list)
+        rel_turn == :aiteban -> KifuwarabeWcsc33.CLI.Coding.ListGetLast.do_it(pos.teban_is_lose_list)
         true -> raise "unexpected rel_turn:#{rel_turn}"
       end
 
@@ -171,7 +171,7 @@ defmodule KifuwarabeWcsc33.CLI.MoveList.ReduceSuicideMove do
         # 自殺手だ
         #
 
-        if KifuwarabeWcsc33.CLI.Config.is_debug_suicide_move_check?() or KifuwarabeWcsc33.CLI.Config.is_debug_move_generation?() do
+        if KifuwarabeWcsc33.CLI.Config.is_debug_suicide_move_check?() or KifuwarabeWcsc33.CLI.Config.is_debug_move_generation?(move) do
           move_code = KifuwarabeWcsc33.CLI.Views.Move.as_code(move)
 
           IO.puts(
@@ -184,7 +184,7 @@ defmodule KifuwarabeWcsc33.CLI.MoveList.ReduceSuicideMove do
         #
         # 自殺手ではない手だ
         #
-        if KifuwarabeWcsc33.CLI.Config.is_debug_suicide_move_check?() or KifuwarabeWcsc33.CLI.Config.is_debug_move_generation?() do
+        if KifuwarabeWcsc33.CLI.Config.is_debug_suicide_move_check?() or KifuwarabeWcsc33.CLI.Config.is_debug_move_generation?(move) do
           move_code = KifuwarabeWcsc33.CLI.Views.Move.as_code(move)
 
           IO.puts(
@@ -206,7 +206,7 @@ defmodule KifuwarabeWcsc33.CLI.MoveList.ReduceSuicideMove do
     #
 
     # 盤表示
-    if KifuwarabeWcsc33.CLI.Config.is_debug_suicide_move_check?() or KifuwarabeWcsc33.CLI.Config.is_debug_move_generation?() do
+    if KifuwarabeWcsc33.CLI.Config.is_debug_suicide_move_check?() or KifuwarabeWcsc33.CLI.Config.is_debug_move_generation?(move) do
       move_code = KifuwarabeWcsc33.CLI.Views.Move.as_code(move)
 
       IO.puts(

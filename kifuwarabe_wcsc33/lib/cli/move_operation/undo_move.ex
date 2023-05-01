@@ -49,12 +49,16 @@ defmodule KifuwarabeWcsc33.CLI.MoveOperation.UndoMove do
     }
 
     #
-    # 手番は負けなはずがない
-    # ===================
+    # 手番（または相手番）は負けか？
+    # ==========================
     #
-    # - 負けたあとに続けて指すことは無い前提
+    # - 王手をされた後に、さらに利きに飛び込むケースでは、負け、負けと続くのが盲点。ヒストリーを持っておくことにする
     #
-    pos = %{pos | teban_is_lose?: false}
+    pos = %{
+      pos |
+        teban_is_lose_list: KifuwarabeWcsc33.CLI.Coding.ListDeleteLast.do_it(pos.teban_is_lose_list),
+        aiteban_is_lose_list: KifuwarabeWcsc33.CLI.Coding.ListDeleteLast.do_it(pos.aiteban_is_lose_list)
+    }
 
     # 更新された局面を返す
     if move.drop_piece_type != nil do

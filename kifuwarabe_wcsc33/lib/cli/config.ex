@@ -21,6 +21,12 @@ defmodule KifuwarabeWcsc33.CLI.Config do
   @is_debug_move_generation? true
   def is_debug_move_generation?, do: is_debug?() && @is_debug_move_generation?
 
+  # 特定の指し手を指定
+  @move_code "4i4h"
+  def is_debug_move_generation?(move) do
+    is_debug_move_generation?() && KifuwarabeWcsc33.CLI.Views.Move.as_code(move) == @move_code
+  end
+
   # 何手読みか
   # =========
   #

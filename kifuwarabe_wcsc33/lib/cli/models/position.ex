@@ -6,11 +6,11 @@ defmodule KifuwarabeWcsc33.CLI.Models.Position do
           board: map,
           hand_pieces: map,
           moves: list,
+          teban_is_lose_list: list,
+          aiteban_is_lose_list: list,
           captured_piece_types: map,
           location_of_kings: map,
-          materials_value: integer,
-          teban_is_lose?: boolean,
-          aiteban_is_lose?: boolean
+          materials_value: integer
         }
 
   # ## 雑談
@@ -165,6 +165,16 @@ defmodule KifuwarabeWcsc33.CLI.Models.Position do
             },
             # ムーブズ（Moves；指し手のリスト）
             moves: [],
+            #
+            # 手番の方は負けか？
+            # ===============
+            #
+            teban_is_lose_list: [false],
+            #
+            # 相手番の方は負けか？
+            # =================
+            #
+            aiteban_is_lose_list: [false],
             # キャプチャード・ピースズ（Captured pieces；取った駒のリスト）（先後の情報なし、成りの情報付き）
             captured_piece_types: [],
             # 玉のいるマス番地（玉のいるマス番地をよく探すので）
@@ -179,17 +189,7 @@ defmodule KifuwarabeWcsc33.CLI.Models.Position do
             #   - 古典的アルゴリズムで用いられる、思考部で使う
             #   - 現局面の手番の局面評価値。正の数なら手番良し、負の数なら相手番良し
             #
-            materials_value: 0,
-            #
-            # 手番の方は負けか？
-            # ===============
-            #
-            teban_is_lose?: false,
-            #
-            # 相手番の方は負けか？
-            # =================
-            #
-            aiteban_is_lose?: false
+            materials_value: 0
 
   # Elixir のリスト、リンクドリストだ、ランダム・アクセス遅そう、使いたくねー
   # defstruct piece_list:

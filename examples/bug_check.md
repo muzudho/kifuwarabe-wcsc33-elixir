@@ -703,3 +703,104 @@ position startpos moves 7i7h 3c3d 1i1h 8c8d 2g2f 8d8e 4i4h 9a9b 1g1f 8e8f 8g8f 8
 >T:LOGOUT
 <T:LOGOUT:completed
 ```
+
+# 利きへ飛び込んだ３
+
+👇 `4i4h` で頭金を取ったが、そこは角の利き  
+
+```
+position startpos moves 7i7h 3c3d 6g6f 2b6f 1i1h 6f5g+ 3i3h 9c9d 2g2f 3a2b 8g8f 5a5b 1g1f 2b3c 1f1e 8c8d 1h1g 9a9b 1g1f 1a1b 9g9f 5b5a 9f9e 9d9e 9i9h 4a3b 1e1d 1c1d 1f1d 1b1d P*1e 1d1e 9h9e 9b9e P*5b 8b5b 7h8g 6a7b 8g7f 9e9h+ 4i4h 9h8h 4h5g 8h8i 5i5h L*5d 5g5f 5d5f 5h4h B*6f 4h4i G*4h
+```
+
+👇 `4i4h` 後の局面
+
+```
+position sfen 1n3g1+L1/1rsk5/2pp2p2/1p2LBsp1/L8/2P4P1/1PSPPPP2/2G1R1G2/1N2K1SN1 w NL6Pbg 1
+```
+
+```
+>1:position startpos moves 7i7h 3c3d 6g6f 2b6f 1i1h 6f5g+ 3i3h 9c9d 2g2f 3a2b 8g8f 5a5b 1g1f 2b3c 1f1e 8c8d 1h1g 9a9b 1g1f 1a1b 9g9f 5b5a 9f9e 9d9e 9i9h 4a3b 1e1d 1c1d 1f1d 1b1d P*1e 1d1e 9h9e 9b9e P*5b 8b5b 7h8g 6a7b 8g7f 9e9h+ 4i4h 9h8h 4h5g 8h8i 5i5h L*5d 5g5f 5d5f 5h4h B*6f 4h4i G*4h
+>1:go btime 1030000 wtime 790000 binc 5000 winc 5000
+<1:[53 moves / Sente / 0 repeat(s)]
+<1:  k  r  b  g  s  n  l  p
+<1:+--+--+--+--+--+--+--+--+
+<1:|  |  |  |  |  | 1| 1| 6|
+<1:+--+--+--+--+--+--+--+--+
+<1:  9  8  7  6  5  4  3  2  1
+<1:+--+--+--+--+--+--+--+--+--+
+<1:|  | n| s|  | k|  |  | n|  | a
+<1:+--+--+--+--+--+--+--+--+--+
+<1:|  |  | g|  | r|  | g|  |  | b
+<1:+--+--+--+--+--+--+--+--+--+
+<1:|  |  | p| p| p| p| s| p|  | c
+<1:+--+--+--+--+--+--+--+--+--+
+<1:|  | p|  |  |  |  | p|  |  | d
+<1:+--+--+--+--+--+--+--+--+--+
+<1:|  |  |  |  |  |  |  |  | l| e
+<1:+--+--+--+--+--+--+--+--+--+
+<1:|  | P| S| b| l|  |  | P|  | f
+<1:+--+--+--+--+--+--+--+--+--+
+<1:|  |  | P|  |  | P| P|  |  | g
+<1:+--+--+--+--+--+--+--+--+--+
+<1:|  |  |  |  |  | g| S| R|  | h
+<1:+--+--+--+--+--+--+--+--+--+
+<1:|  |+l|  | G|  | K|  | N|  | i
+<1:+--+--+--+--+--+--+--+--+--+
+<1:     K  R  B  G  S  N  L  P
+<1:   +--+--+--+--+--+--+--+--+
+<1:   |  |  | 1|  |  |  |  |  |
+<1:   +--+--+--+--+--+--+--+--+
+<1:king_sq ^49 v51
+<1:record  7i7h 3c3d 6g6f 2b6f<P> 1i1h 6f5g+<P> 3i3h 9c9d 2g2f 3a2b 8g8f 5a5b 1g1f 2b3c 1f1e 8c8d 1h1g 9a9b 1g1f 1a1b 9g9f 5b5a 9f9e 9d9e<P> 9i9h 4a3b 1e1d 1c1d<P> 1f1d<P> 1b1d<L> P*1e 1d1e<P> 9h9e<P> 9b9e<L> P*5b 8b5b<P> 7h8g 6a7b 8g7f 9e9h+ 4i4h 9h8h<B> 4h5g<+B> 8h8i<N> 5i5h L*5d 5g5f 5d5f<G> 5h4h B*6f 4h4i G*4h
+<1:value seen from sente -3300
+<1:Teban is lose? true
+<1:Aiteban is lose? false
+<1:[Go do_it] value:-3300
+<1:[53 moves / Sente / 0 repeat(s)]
+<1:  k  r  b  g  s  n  l  p
+<1:+--+--+--+--+--+--+--+--+
+<1:|  |  |  |  |  | 1| 1| 6|
+<1:+--+--+--+--+--+--+--+--+
+<1:  9  8  7  6  5  4  3  2  1
+<1:+--+--+--+--+--+--+--+--+--+
+<1:|  | n| s|  | k|  |  | n|  | a
+<1:+--+--+--+--+--+--+--+--+--+
+<1:|  |  | g|  | r|  | g|  |  | b
+<1:+--+--+--+--+--+--+--+--+--+
+<1:|  |  | p| p| p| p| s| p|  | c
+<1:+--+--+--+--+--+--+--+--+--+
+<1:|  | p|  |  |  |  | p|  |  | d
+<1:+--+--+--+--+--+--+--+--+--+
+<1:|  |  |  |  |  |  |  |  | l| e
+<1:+--+--+--+--+--+--+--+--+--+
+<1:|  | P| S| b| l|  |  | P|  | f
+<1:+--+--+--+--+--+--+--+--+--+
+<1:|  |  | P|  |  | P| P|  |  | g
+<1:+--+--+--+--+--+--+--+--+--+
+<1:|  |  |  |  |  | g| S| R|  | h
+<1:+--+--+--+--+--+--+--+--+--+
+<1:|  |+l|  | G|  | K|  | N|  | i
+<1:+--+--+--+--+--+--+--+--+--+
+<1:     K  R  B  G  S  N  L  P
+<1:   +--+--+--+--+--+--+--+--+
+<1:   |  |  | 1|  |  |  |  |  |
+<1:   +--+--+--+--+--+--+--+--+
+<1:king_sq ^49 v51
+<1:record  7i7h 3c3d 6g6f 2b6f<P> 1i1h 6f5g+<P> 3i3h 9c9d 2g2f 3a2b 8g8f 5a5b 1g1f 2b3c 1f1e 8c8d 1h1g 9a9b 1g1f 1a1b 9g9f 5b5a 9f9e 9d9e<P> 9i9h 4a3b 1e1d 1c1d<P> 1f1d<P> 1b1d<L> P*1e 1d1e<P> 9h9e<P> 9b9e<L> P*5b 8b5b<P> 7h8g 6a7b 8g7f 9e9h+ 4i4h 9h8h<B> 4h5g<+B> 8h8i<N> 5i5h L*5d 5g5f 5d5f<G> 5h4h B*6f 4h4i G*4h
+<1:value seen from sente -3300
+<1:Teban is lose? true
+<1:Aiteban is lose? false
+<1:info depth 2 time 7 nodes 150 score cp -17900 nps 21428 string The remainder of the 53(th) move divided by 10 is 3. Hello Multi-core processor(^q^)! I use Flow module on Elixir. Parallel processing of move generation just drop the pieces!
+<1:bestmove 4i4h
+>T:+4948OU
+<T:#ILLEGAL_MOVE
+<T:#LOSE
+>1:gameover lose
+>T:%%GAME floodgate-900-5F *
+<1:Hi! I am Kifuwarabe. It's start! first_token[gameover] input:gameover lose
+<T:##[ERROR] unknown command: %%GAME floodgate-900-5F *
+>T: 
+>T: 
+>T: 
+>T: 
+```

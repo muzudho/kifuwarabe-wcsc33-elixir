@@ -1,17 +1,17 @@
 defmodule KifuwarabeWcsc33.CLI.Views.Position do
   @moduledoc """
-  
+
     局面
-  
+
   """
 
   @doc """
     盤表示
-  
+
   ## 引数
-  
+
     * `pos` - ポジション（Position；局面）
-  
+
   """
   @spec stringify(KifuwarabeWcsc33.CLI.Models.Position.t()) :: String.t()
   def stringify(pos) do
@@ -24,7 +24,7 @@ defmodule KifuwarabeWcsc33.CLI.Views.Position do
     value_seen_from_sente = pos |> stringify_value()
 
     """
-    
+
     """ <>
       header <> hand2 <> body <> hand1 <> location_of_kings <> record <> value_seen_from_sente
   end
@@ -50,7 +50,7 @@ defmodule KifuwarabeWcsc33.CLI.Views.Position do
 
     """
     [#{m} moves / #{t} / #{r} repeat(s)]
-    
+
     """
   end
 
@@ -93,7 +93,7 @@ defmodule KifuwarabeWcsc33.CLI.Views.Position do
     +--+--+--+--+--+--+--+--+
     |#{k}|#{r}|#{b}|#{g}|#{s}|#{n}|#{l}|#{p}|
     +--+--+--+--+--+--+--+--+
-    
+
     """
   end
 
@@ -136,7 +136,7 @@ defmodule KifuwarabeWcsc33.CLI.Views.Position do
        +--+--+--+--+--+--+--+--+
        |#{k}|#{r}|#{b}|#{g}|#{s}|#{n}|#{l}|#{p}|
        +--+--+--+--+--+--+--+--+
-    
+
     """
   end
 
@@ -300,7 +300,7 @@ defmodule KifuwarabeWcsc33.CLI.Views.Position do
     +--+--+--+--+--+--+--+--+--+
     |#{i9}|#{i8}|#{i7}|#{i6}|#{i5}|#{i4}|#{i3}|#{i2}|#{i1}| i
     +--+--+--+--+--+--+--+--+--+
-    
+
     """
   end
 
@@ -430,7 +430,7 @@ defmodule KifuwarabeWcsc33.CLI.Views.Position do
 
     """
     record #{record_text}
-    
+
     """
   end
 
@@ -439,7 +439,7 @@ defmodule KifuwarabeWcsc33.CLI.Views.Position do
   defp stringify_location_of_kings(pos) do
     """
     king_sq ^#{pos.location_of_kings[:k1]} v#{pos.location_of_kings[:k2]}
-    
+
     """
   end
 
@@ -448,9 +448,9 @@ defmodule KifuwarabeWcsc33.CLI.Views.Position do
   defp stringify_value(pos) do
     """
     value seen from #{pos.turn} #{pos.materials_value}
-    Teban is lose? #{pos.teban_is_lose?}
-    Aiteban is lose? #{pos.aiteban_is_lose?}
-    
+    Teban is lose? #{KifuwarabeWcsc33.CLI.Coding.ListGetLast.do_it(pos.teban_is_lose_list)}
+    Aiteban is lose? #{KifuwarabeWcsc33.CLI.Coding.ListGetLast.do_it(pos.aiteban_is_lose_list)}
+
     """
   end
 end

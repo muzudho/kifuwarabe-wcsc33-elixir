@@ -209,8 +209,8 @@ defmodule KifuwarabeWcsc33.CLI.MoveOperation.DoMove do
     #
     pos = %{
       pos
-      | teban_is_lose?: KifuwarabeWcsc33.CLI.Thesis.IsChecked.is_checked?(pos, :teban),
-        aiteban_is_lose?: KifuwarabeWcsc33.CLI.Thesis.IsChecked.is_checked?(pos, :aiteban)
+      | teban_is_lose_list: pos.teban_is_lose_list ++ [KifuwarabeWcsc33.CLI.Thesis.IsChecked.is_checked?(pos, :teban)],
+        aiteban_is_lose_list: pos.aiteban_is_lose_list ++ [KifuwarabeWcsc33.CLI.Thesis.IsChecked.is_checked?(pos, :aiteban)]
     }
 
     pos
