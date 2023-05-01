@@ -1,4 +1,4 @@
-defmodule KifuwarabeWcsc33.CLI.MoveGeneration.UndoMove do
+defmodule KifuwarabeWcsc33.CLI.MoveOperation.UndoMove do
   @moduledoc """
     局面ができる
   """

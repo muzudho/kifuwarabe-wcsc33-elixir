@@ -1,4 +1,4 @@
-defmodule KifuwarabeWcsc33.CLI.MoveGeneration.DoMove do
+defmodule KifuwarabeWcsc33.CLI.MoveOperation.DoMove do
   @moduledoc """
     一手指す
   """

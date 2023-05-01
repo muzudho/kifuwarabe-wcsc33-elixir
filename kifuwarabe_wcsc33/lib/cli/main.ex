@@ -247,7 +247,7 @@ defmodule KifuwarabeWcsc33.CLI.Main do
             )
 
           # 一手指す
-          pos = pos |> KifuwarabeWcsc33.CLI.MoveGeneration.DoMove.do_it(best_move)
+          pos = pos |> KifuwarabeWcsc33.CLI.MoveOperation.DoMove.do_it(best_move)
 
           best_move_str = KifuwarabeWcsc33.CLI.Views.Move.as_code(best_move)
           # 盤表示
@@ -271,7 +271,7 @@ defmodule KifuwarabeWcsc33.CLI.Main do
         #
         first_token == "undo" ->
           # 一手戻す
-          pos = pos |> KifuwarabeWcsc33.CLI.MoveGeneration.UndoMove.do_it()
+          pos = pos |> KifuwarabeWcsc33.CLI.MoveOperation.UndoMove.do_it()
 
           # 盤表示
           IO.puts(

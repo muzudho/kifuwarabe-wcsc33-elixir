@@ -6,16 +6,20 @@ defmodule KifuwarabeWcsc33.CLI.Config do
   """
 
   # デバッグ・モード
-  @is_debug? false
+  @is_debug? true
   def is_debug?, do: @is_debug?
 
   # デバッグ・モード . 自殺手チェック
-  @is_debug_suicide_move_check? true
+  @is_debug_suicide_move_check? false
   def is_debug_suicide_move_check?, do: is_debug?() && @is_debug_suicide_move_check?
 
   # デバッグ・モード . 打ち歩詰めチェック
-  @is_debug_utifudume_check? true
+  @is_debug_utifudume_check? false
   def is_debug_utifudume_check?, do: is_debug?() && @is_debug_utifudume_check?
+
+  # デバッグ・モード . 指し手生成チェック
+  @is_debug_move_generation? true
+  def is_debug_move_generation?, do: is_debug?() && @is_debug_move_generation?
 
   # 何手読みか
   # =========

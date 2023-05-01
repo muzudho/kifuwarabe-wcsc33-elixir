@@ -1,18 +1,18 @@
 defmodule KifuwarabeWcsc33.CLI.MoveList.ReduceSuicideMove do
   @doc """
-  
+
     指し手のリストから、自殺手を除去
-  
+
   ## Parameters
-  
+
     * `move_list` - ムーブ・リスト（Move List；指し手のリスト）
     * `pos` - ポジション（Position；局面）
-  
+
   ## Returns
-  
+
     0. ムーブ・リスト（Move List；指し手のリスト）
     1. `pos` - ポジション（Position；局面）
-  
+
   """
   def do_it(move_list, pos) do
     # 自玉
@@ -109,7 +109,7 @@ defmodule KifuwarabeWcsc33.CLI.MoveList.ReduceSuicideMove do
     # 指す前の自玉がいないケース（詰将棋でもやっているのだろう）ではない前提として、存在判定を省く
 
     # とりあえず、１手指してみる
-    pos = pos |> KifuwarabeWcsc33.CLI.MoveGeneration.DoMove.do_it(move)
+    pos = pos |> KifuwarabeWcsc33.CLI.MoveOperation.DoMove.do_it(move)
 
     if KifuwarabeWcsc33.CLI.Config.is_debug_suicide_move_check?() do
       move_code = KifuwarabeWcsc33.CLI.Views.Move.as_code(move)
@@ -117,7 +117,7 @@ defmodule KifuwarabeWcsc33.CLI.MoveList.ReduceSuicideMove do
       IO.puts(
         """
         [reduce_suicide_move_2] Done #{move_code}. trn:#{pos.turn} mat_val:#{pos.materials_value}"
-        
+
         """ <> KifuwarabeWcsc33.CLI.Views.Position.stringify(pos)
       )
     end
@@ -175,7 +175,7 @@ defmodule KifuwarabeWcsc33.CLI.MoveList.ReduceSuicideMove do
       end
 
     # 手を戻す
-    pos = pos |> KifuwarabeWcsc33.CLI.MoveGeneration.UndoMove.do_it()
+    pos = pos |> KifuwarabeWcsc33.CLI.MoveOperation.UndoMove.do_it()
 
     #
     # ひっくり返っていた手番が元に戻っていることに注意
@@ -189,7 +189,7 @@ defmodule KifuwarabeWcsc33.CLI.MoveList.ReduceSuicideMove do
       IO.puts(
         """
         [reduce_suicide_move_2] Undone #{move_code}.
-        
+
         """ <>
           KifuwarabeWcsc33.CLI.Views.Position.stringify(pos) <>
           """

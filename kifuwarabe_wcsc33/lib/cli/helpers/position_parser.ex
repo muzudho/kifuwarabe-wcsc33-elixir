@@ -1,27 +1,27 @@
 defmodule KifuwarabeWcsc33.CLI.Helpers.PositionParser do
   @doc """
-  
+
     解析
-  
+
   ## Parameters
-  
+
     * `line` - 一行の文字列。例参考
-  
+
   ## Returns
-  
+
     0. ポジション（Position；局面）
-  
+
   ## Examples
-  
+
     position startpos moves 7g7f 3c3d 2g2f
     position sfen lnsgkgsnl/9/ppppppppp/9/9/9/PPPPPPPPP/1B5R1/LNSGKGSNL w - 1 moves 5a6b 7g7f 3a3b
-  
+
     // 📖 [USIプロトコル表記: 最多合法手５９３手の局面](https://ameblo.jp/professionalhearts/entry-10001031814.html)
     position sfen R8/2K1S1SSk/4B4/9/9/9/9/9/1L1L1L3 w RBGSNLP3g3n17p 1
-  
+
     // 📖 [USIプロトコル表記: 飛角落ち初期局面](http://www.geocities.jp/shogidokoro/usi.html)
     position sfen lnsgkgsnl/9/ppppppppp/9/9/9/PPPPPPPPP/1B5R1/LNSGKGSNL w - 1 moves 5a6b 7g7f 3a3b
-  
+
   """
   def parse(line) do
     # IO.puts("parse(1) line:#{line}")
@@ -550,7 +550,7 @@ defmodule KifuwarabeWcsc33.CLI.Helpers.PositionParser do
     # IO.inspect(move, label: "[parse_moves_string_and_update_position] parse move")
 
     # 局面更新（実際、指してみる）
-    pos = pos |> KifuwarabeWcsc33.CLI.MoveGeneration.DoMove.do_it(move)
+    pos = pos |> KifuwarabeWcsc33.CLI.MoveOperation.DoMove.do_it(move)
 
     # IO.puts("[parse_moves_string_and_update_position] length(rest):#{length(rest)}")
 

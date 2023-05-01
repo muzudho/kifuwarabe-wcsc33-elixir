@@ -498,6 +498,10 @@ lnsg1gs1l/9/1ppk3pp/6p2/p7+B/2PR5/PP1PPRPPP/9/LNSGKG1NL w BS3Pnp 1
 # 利きへ飛び込んだ
 
 ```
+position startpos moves 2g2f 9c9d 7g7f 9d9e 2f2e 5c5d 2e2d 4a3b 2d2c+ 3b2c 2h2c+ 8b9b 2c2d 9b9c 8h3c+ 2b3c 2d2a 3c9i 2a3a 5a5b 3a3b 5b5c N*4e 5c4d S*5c
+```
+
+```
 >1:position startpos moves 2g2f 9c9d 7g7f 9d9e 2f2e 5c5d 2e2d 4a3b 2d2c+ 3b2c 2h2c+ 8b9b 2c2d 9b9c 8h3c+ 2b3c 2d2a 3c9i 2a3a 5a5b 3a3b 5b5c N*4e 5c4d S*5c
 >1:go btime 849000 wtime 839000 binc 5000 winc 5000
 <1:[26 moves / Gote / 0 repeat(s)]

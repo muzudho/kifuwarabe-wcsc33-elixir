@@ -111,7 +111,7 @@ defmodule KifuwarabeWcsc33.CLI.Search.Alpha do
     # move_code = KifuwarabeWcsc33.CLI.Views.Move.as_code(move)
     # IO.puts("[Alpha choice_best] move:#{move_code} pre_value:#{pos.materials_value}")
 
-    pos = pos |> KifuwarabeWcsc33.CLI.MoveGeneration.DoMove.do_it(move)
+    pos = pos |> KifuwarabeWcsc33.CLI.MoveOperation.DoMove.do_it(move)
 
     #
     # - 探索ノード数（訪問ノード数ではない）を１増やす
@@ -210,7 +210,7 @@ defmodule KifuwarabeWcsc33.CLI.Search.Alpha do
     #
     # - 手番がひっくり返ることに注意
     #
-    pos = pos |> KifuwarabeWcsc33.CLI.MoveGeneration.UndoMove.do_it()
+    pos = pos |> KifuwarabeWcsc33.CLI.MoveOperation.UndoMove.do_it()
 
     if move_list |> length() < 1 do
       #
