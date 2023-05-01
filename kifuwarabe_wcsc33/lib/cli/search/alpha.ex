@@ -119,7 +119,7 @@ defmodule KifuwarabeWcsc33.CLI.Search.Alpha do
     #
     nodes_num_searched = nodes_num_searched + 1
 
-    {pos, value, nodes_num_searched} =
+    {pos, opponent_value, nodes_num_searched} =
       if depth < 1 do
         #
         #
@@ -138,9 +138,10 @@ defmodule KifuwarabeWcsc33.CLI.Search.Alpha do
         #   - 古典的には、歩１個の価値を 100 とする。これを 1 センチポーン（centipawn；一厘歩） と言う。
         #     この尺度を使う場合、整数を使う（実数を使わない）
         #
-        value = -lets_position_value(pos)
+        opponent_value = lets_position_value(pos)
+
         # IO.puts("[Alpha choice_best] value:#{value}")
-        {pos, value, nodes_num_searched}
+        {pos, opponent_value, nodes_num_searched}
       else
         #
         # TODO ２手目を読みたい
@@ -151,10 +152,15 @@ defmodule KifuwarabeWcsc33.CLI.Search.Alpha do
         # - この best_move （ベスト・ムーブ）は、相手の次の手
         # - この value （評価値）は、葉局面から帰ってくる
         #
-        {pos, _best_move, value, nodes_num_searched} = do_it(pos, depth - 1, nodes_num_searched)
+        {pos, _best_move, opponent_value, nodes_num_searched} = do_it(pos, depth - 1, nodes_num_searched)
 
-        {pos, value, nodes_num_searched}
+        {pos, opponent_value, nodes_num_searched}
       end
+
+    #
+    # 相手の評価値が返ってくるから、正負を逆にする
+    #
+    value = -opponent_value
 
     # （あれば）最前手の更新
     {sibling_best_move, sibling_best_value} = alpha_update(move, value, sibling_best_move, sibling_best_value, pos)
