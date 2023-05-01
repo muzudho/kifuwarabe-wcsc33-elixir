@@ -145,18 +145,27 @@ defmodule KifuwarabeWcsc33.CLI.Main do
 
           depth = KifuwarabeWcsc33.CLI.Config.depth()
 
-          # TODO ４手に１回は Flow を使って並列処理をするときのコメント
-          remain = rem(pos.moves_num,8)
-          comment =
-            if remain < 2 do
-              "Parallel processing of move generation! (Except drop)"
-            else
-              "Single thread!"
-            end
-
           # エヌ・ピー・エス（NPS；ノード数／秒）は、Node Per Second だから 秒で割る
           # とりあえず　小数点以下切り捨て
           nps = trunc(nodes_num_searched/elapsed_seconds)
+
+
+          #
+          # 指し手の説明
+          # ===========
+          #
+          # - ４手に１回は Flow を使って並列処理をするときのコメント
+          #
+          comment = "Hello, GPU!"
+          remain = rem(pos.moves_num,8)
+          comment =
+            comment <>
+              if remain < 2 do
+                " Parallel processing of move generation! (Except drop)"
+              else
+                " Single thread!"
+              end
+
           IO.puts("info depth #{depth} time #{time} nodes #{nodes_num_searched} score cp #{value} nps #{nps} string #{comment}")
 
           IO.puts("bestmove #{best_move_as_str}")
