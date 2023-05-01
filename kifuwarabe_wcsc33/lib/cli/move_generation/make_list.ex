@@ -15,17 +15,18 @@ defmodule KifuwarabeWcsc33.CLI.MoveGeneration.MakeList do
 
   """
   def do_it(pos) do
+    remain = rem(pos.moves_num, 8)
     #
     # TODO Flow消すかも
     #
     # Flow 使ったら実行速度が遅いなあ。
     # これだったら使わない方がいいけど、きふわらべが並列処理をしているだろうというキャラクター付け（実績）のためにしておく
-    # 何手目かを８で割って余りが０か１のときだけ並列化するようにしよ。４回に１回だけ並列処理
+    # 何手目かを８で割って余りが１か２のときだけ並列化するようにしよ。４回に１回だけ並列処理
     #
     # - ２手目、後手「１八飛打」の反則手を指すことがあった。並列処理が関係するんだろうか？それとも単にプログラミングのミス？
     #
     move_list_on_board =
-      if rem(pos.moves_num,8) < 2 do
+      if remain == 1 or remain == 2 do
         #
         # 盤上の自駒
         # =========
@@ -78,48 +79,62 @@ defmodule KifuwarabeWcsc33.CLI.MoveGeneration.MakeList do
         move_list_on_board
       end
 
-    # # Flow 使ったら実行速度が遅いなあ
-    # #
-    # # 打つ手のリスト
-    # # ============
-    # #
-    # # |> 手番側、かつ、１つ以上持っている駒種類だけ残す
-    # # |> 駒の数を消す。ピース（Piece；先後付きの駒種類）から、先後を消し、ピース・タイプ（Piece Type；駒種類）に変換する。駒種類から、指し手生成
-    # # |> リストがネストしていたら、フラットにする
-    # # |> 指し手が nil なら除去
-    # move_list_on_hand =
-    #   pos.hand_pieces
-    #   |> Enum.filter(fn {piece, num} ->
-    #     pos.turn == KifuwarabeWcsc33.CLI.Mappings.ToTurn.from_piece(piece) and 0 < num
-    #   end)
-    #   |> Flow.from_enumerable()
-    #   |> Flow.map(fn {piece, _num} ->
-    #     KifuwarabeWcsc33.CLI.Mappings.ToPieceType.from_piece(piece)
-    #     |> make_move_list_on_hand(pos)
-    #   end)
-    #   |> Enum.to_list()
-    #   |> List.flatten()
-    #   |> Enum.filter(fn move -> !is_nil(move) end)
-
     #
-    # 打つ手のリスト
-    # ============
+    # TODO Flow消すかも
     #
-    # |> 手番側、かつ、１つ以上持っている駒種類だけ残す
-    # |> 駒の数を消す。ピース（Piece；先後付きの駒種類）から、先後を消し、ピース・タイプ（Piece Type；駒種類）に変換する。駒種類から、指し手生成
-    # |> リストがネストしていたら、フラットにする
-    # |> 指し手が nil なら除去
+    # Flow 使ったら実行速度が遅いなあ。
+    # これだったら使わない方がいいけど、きふわらべが並列処理をしているだろうというキャラクター付け（実績）のためにしておく
+    # 何手目かを８で割って余りが５か６のときだけ並列化するようにしよ。４回に１回だけ並列処理
+    #
     move_list_on_hand =
-      pos.hand_pieces
-      |> Enum.filter(fn {piece, num} ->
-        pos.turn == KifuwarabeWcsc33.CLI.Mappings.ToTurn.from_piece(piece) and 0 < num
-      end)
-      |> Enum.map(fn {piece, _num} ->
-        KifuwarabeWcsc33.CLI.Mappings.ToPieceType.from_piece(piece)
-        |> make_move_list_on_hand(pos)
-      end)
-      |> List.flatten()
-      |> Enum.filter(fn move -> !is_nil(move) end)
+      if remain == 5 or remain == 6 do
+        #
+        # 打つ手のリスト
+        # ============
+        #
+        # |> 手番側、かつ、１つ以上持っている駒種類だけ残す
+        # |> 駒の数を消す。ピース（Piece；先後付きの駒種類）から、先後を消し、ピース・タイプ（Piece Type；駒種類）に変換する。駒種類から、指し手生成
+        # |> リストがネストしていたら、フラットにする
+        # |> 指し手が nil なら除去
+        move_list_on_hand =
+          pos.hand_pieces
+          |> Enum.filter(fn {piece, num} ->
+            pos.turn == KifuwarabeWcsc33.CLI.Mappings.ToTurn.from_piece(piece) and 0 < num
+          end)
+          |> Flow.from_enumerable()
+          |> Flow.map(fn {piece, _num} ->
+            KifuwarabeWcsc33.CLI.Mappings.ToPieceType.from_piece(piece)
+            |> make_move_list_on_hand(pos)
+          end)
+          |> Enum.to_list()
+          |> List.flatten()
+          |> Enum.filter(fn move -> !is_nil(move) end)
+
+        move_list_on_hand
+      else
+        #
+        # 打つ手のリスト
+        # ============
+        #
+        # |> 手番側、かつ、１つ以上持っている駒種類だけ残す
+        # |> 駒の数を消す。ピース（Piece；先後付きの駒種類）から、先後を消し、ピース・タイプ（Piece Type；駒種類）に変換する。駒種類から、指し手生成
+        # |> リストがネストしていたら、フラットにする
+        # |> 指し手が nil なら除去
+        move_list_on_hand =
+          pos.hand_pieces
+          |> Enum.filter(fn {piece, num} ->
+            pos.turn == KifuwarabeWcsc33.CLI.Mappings.ToTurn.from_piece(piece) and 0 < num
+          end)
+          |> Enum.map(fn {piece, _num} ->
+            KifuwarabeWcsc33.CLI.Mappings.ToPieceType.from_piece(piece)
+            |> make_move_list_on_hand(pos)
+          end)
+          |> List.flatten()
+          |> Enum.filter(fn move -> !is_nil(move) end)
+
+        move_list_on_hand
+      end
+
 
     # IO.inspect(move_list_on_hand, label: "[MakeList do_it] move_list_on_hand")
 

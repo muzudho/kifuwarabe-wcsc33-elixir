@@ -156,14 +156,25 @@ defmodule KifuwarabeWcsc33.CLI.Main do
           #
           # - ４手に１回は Flow を使って並列処理をするときのコメント
           #
-          comment = "Hello, GPU!"
           remain = rem(pos.moves_num,8)
+          comment = "Hello, GPU! (I just made a table cleared by zero) Ok."
+
+          comment =
+            if remain == 1 or remain == 2 or remain == 5 or remain == 6 do
+              comment <> "Hello, CUDA! The remainder of the #{pos.moves_num}(th) move divided by 8 is #{remain}."
+            else
+              comment <> "See you later CUDA. I'll play single-threaded!"
+            end
+
           comment =
             comment <>
-              if remain < 2 do
-                " Parallel processing of move generation! (Except drop)"
-              else
-                " Single thread!"
+              cond do
+                remain == 1 or remain == 2 ->
+                  " So parallel processing of move generation! (Just move the pieces on the board)"
+                remain == 5 or remain == 6 ->
+                  " So parallel processing of move generation! (Just drop the pieces)"
+                true ->
+                  ""
               end
 
           IO.puts("info depth #{depth} time #{time} nodes #{nodes_num_searched} score cp #{value} nps #{nps} string #{comment}")
@@ -254,7 +265,7 @@ defmodule KifuwarabeWcsc33.CLI.Main do
 
         # Otherwise
         true ->
-          # ここにくるようならエラー
+          # 対応していないメッセージは無視します
           IO.puts(
             "Hi! I am a Kifuwarabe. It's start! first_token[" <>
               first_token <> "] input:" <> input
