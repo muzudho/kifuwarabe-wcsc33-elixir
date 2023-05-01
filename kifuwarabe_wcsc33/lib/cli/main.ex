@@ -154,30 +154,48 @@ defmodule KifuwarabeWcsc33.CLI.Main do
           # 指し手の説明
           # ===========
           #
-          # - GPUへのアクセスは、何手目でも行っている
-          # - 並列処理は、１０進数の一の位が３、４、５、６手目のとき行う
+          # - 並列処理は、１０進数の一の位が１、２、３、４手目のとき行う
+          # - GPUへのアクセスは、１０進数の一の位が５、６手目のとき行う
+          # - １０進数の一の位が７、８、９、０手目のときは、並列処理も、GPUへのアクセスも行わない
           #
           divided = 10
           remain = rem(pos.moves_num, divided)
-          comment = "Hello GPU! I use CUDA! (I just made a table cleared by zero) Ok."
 
           comment =
-            if remain == 3 or remain == 4 or remain == 5 or remain == 6 do
-              comment <> " Hello Multi-core processor! The remainder of the #{pos.moves_num}(th) move divided by #{divided} is #{remain}."
-            else
-              comment <> " See you later Multi-core processor. I'll play single-threaded!"
+            cond do
+              remain == 1 or remain == 2 or remain == 3 or remain == 4 or remain == 5 or remain == 6 ->
+                comment = "The remainder of the #{pos.moves_num}(th) move divided by #{divided} is #{remain}."
+
+                comment =
+                  comment <>
+                    cond do
+                      remain == 1 or remain == 2 or remain == 3 or remain == 4 ->
+                        comment = " Hello Multi-core processor!"
+
+                        comment =
+                          comment <>
+                            cond do
+                              remain == 1 or remain == 2 ->
+                                " Parallel processing of move generation on the board!"
+                              remain == 3 or remain == 4 ->
+                                " Parallel processing of move generation just drop the pieces!"
+                              true ->
+                                ""
+                            end
+
+                          comment
+
+                      remain == 5 or remain == 6 ->
+                        "Hello GPU! I use CUDA! 1 time before the start of the search. (I just made a table cleared by zero) Ok."
+
+                      true->
+                        raise "unexpected remain:#{remain}"
+                    end
+
+                comment
+              true ->
+                "(^_^)"
             end
-
-          comment =
-            comment <>
-              cond do
-                remain == 3 or remain == 4 ->
-                  " Parallel processing of move generation on the board!"
-                remain == 5 or remain == 6 ->
-                  " Parallel processing of move generation just drop the pieces!"
-                true ->
-                  ""
-              end
 
           IO.puts("info depth #{depth} time #{time} nodes #{nodes_num_searched} score cp #{value} nps #{nps} string #{comment}")
 

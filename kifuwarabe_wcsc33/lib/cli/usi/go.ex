@@ -24,6 +24,24 @@ defmodule KifuwarabeWcsc33.CLI.USI.Go do
       """ <> KifuwarabeWcsc33.CLI.Views.Position.stringify(pos)
     )
 
+    divided = 10
+    remain = rem(pos.moves_num, divided)
+    if remain == 5 or remain == 6 do
+      #
+      # GPUへアクセス
+      # ============
+      #
+      # TODO 消す
+      #
+      # - ネタ勢
+      # - きふわらべがGPUへアクセスしているという実績（キャラクター付け）を付けるために、GPUへアクセスするだけ
+      # - 計算結果は使ってない
+      # - 計算時間は一瞬。思っているより遅くない
+      # - エラーが出て止まるリスクもある
+      #
+      KifuwarabeWcsc33.CLI.CallPython.HelloGpu.hello_gpu()
+    end
+
     #
     # 探索
     # ====

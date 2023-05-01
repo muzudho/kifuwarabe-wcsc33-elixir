@@ -80,20 +80,6 @@ defmodule KifuwarabeWcsc33.CLI.Search.Alpha do
   # - 葉局面ではない
   #
   defp choice_best(pos, [], sibling_best_move, sibling_best_value, _depth, nodes_num_searched) do
-      #
-      # GPUへアクセス
-      # ============
-      #
-      # TODO 消す
-      #
-      # - ネタ勢
-      # - きふわらべがGPUへアクセスしているという実績（キャラクター付け）を付けるために、GPUへアクセスするだけ
-      # - 計算結果は使ってない
-      # - 計算時間は一瞬。思っているより遅くない
-      # - エラーが出て止まるリスクもある
-      #
-      KifuwarabeWcsc33.CLI.CallPython.HelloGpu.hello_gpu()
-
     # 再帰の帰り道
     {pos, sibling_best_move, sibling_best_value, nodes_num_searched}
   end

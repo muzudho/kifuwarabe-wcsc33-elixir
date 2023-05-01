@@ -26,7 +26,7 @@ defmodule KifuwarabeWcsc33.CLI.MoveGeneration.MakeList do
     # - ２手目、後手「１八飛打」の反則手を指すことがあった。並列処理が関係するんだろうか？それとも単にプログラミングのミス？
     #
     move_list_on_board =
-      if remain == 3 or remain == 4 do
+      if remain == 1 or remain == 2 do
         #
         # 盤上の自駒
         # =========
@@ -87,7 +87,7 @@ defmodule KifuwarabeWcsc33.CLI.MoveGeneration.MakeList do
     # 何手目かで間引いて使っている
     #
     move_list_on_hand =
-      if remain == 5 or remain == 6 do
+      if remain == 3 or remain == 4 do
         #
         # 打つ手のリスト
         # ============
