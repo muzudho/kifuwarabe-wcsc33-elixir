@@ -158,12 +158,51 @@ defmodule KifuwarabeWcsc33.CLI.Search.Alpha do
       end
 
     #
-    # 相手の評価値が返ってくるから、正負を逆にする
+    # 局面評価値の反転
+    # ===============
+    #
+    # - 相手の評価値が返ってきた
+    # - 相手番局面の高評価は、自分にとって低評価。正負を逆転する
     #
     value = -opponent_value
 
-    # （あれば）最前手の更新
-    {sibling_best_move, sibling_best_value} = alpha_update(move, value, sibling_best_move, sibling_best_value, pos)
+    #
+    # アルファー・アップデート
+    # ======================
+    #
+    # - アルファー（α；甲）は、自分（手番）の局面の評価値
+    # - 相手番局面の評価が低ければ、手番局面の評価は高くなる
+    # - 手番局面の評価（アルファー）が、いままでの兄弟局面より良ければ、記憶を更新（アップデート）する
+    #
+    # ## 雑談
+    #
+    #   アルファー（α；甲）は、バリュー（Value；わたしの番の評価値）、
+    #   ベーター（β；乙）は、オポネント・バリュー（Opponent Value；あなたの番の評価値）を指すのに使う。
+    #   再帰の１回目（奇数回目）がアルファー、２回目（偶数回目）がベーターになる。
+    #   だから、選んだアルゴリズムや、コーディングの仕方によっては、アルファーとベーターの違いは無くなる
+    #
+    {sibling_best_move, sibling_best_value} =
+      if is_alpha_update?(value, sibling_best_value) do
+        #
+        # (__UchifuDumeCheck__) 採用する前に、打ち歩詰めチェックする
+        # =======================================================
+        #
+        #   - もし、歩を打ったときで、かつ、そこが相手の玉頭なら、打ち歩詰めチェックをしたい
+        #   - チェックする度に余分に思考時間が減るので、避けたい。そこでアルファー・アップデートのとき（手の採用に一考されるとき）にチェックする
+        #
+        is_uchifu_dume? = KifuwarabeWcsc33.CLI.Thesis.IsUchifuDume.is_uchifu_dume?(move, pos)
+
+        if is_uchifu_dume? do
+          # アルファー・アップデートを却下する
+          {sibling_best_move, sibling_best_value}
+        else
+          # アルファー・アップデートする
+          {move, value}
+        end
+      else
+        # アルファー・アップデート対象外
+        {sibling_best_move, sibling_best_value}
+      end
 
     #
     # 忘れずに、１手戻す
@@ -194,44 +233,11 @@ defmodule KifuwarabeWcsc33.CLI.Search.Alpha do
   end
 
   #
-  # アルファー・アップデート
-  # =====================
+  # アルファー・アップデートが起こるか確認
+  # ===================================
   #
-  #   兄弟局面の中の最高局面評価値を更新したなら、最善手を更新する
-  #
-  # ## 雑談
-  #
-  #   アルファー（α；甲）は、わたしの番という意味。ベーター（β；乙）は、あなたの番という意味
-  #
-  defp alpha_update(move, value, sibling_best_move, sibling_best_value, pos) do
-    {sibling_best_move, sibling_best_value} =
-      if sibling_best_value < value do
-        #
-        # alpha update
-        # ============
-        #
-
-        #
-        # TODO (__UchifuDumeCheck__) 採用する前に、打ち歩詰めチェックする
-        # ==========================================================
-        #
-        #   - もし、歩を打ったときで、かつ、そこが相手の玉頭なら、打ち歩詰めチェックをしたい
-        #
-        is_uchifu_dume? = KifuwarabeWcsc33.CLI.Thesis.IsUchifuDume.is_uchifu_dume?(move, pos)
-
-        if is_uchifu_dume? do
-          #
-          #
-          #
-          {sibling_best_move, sibling_best_value}
-        else
-          {move, value}
-        end
-      else
-        {sibling_best_move, sibling_best_value}
-      end
-
-    {sibling_best_move, sibling_best_value}
+  defp is_alpha_update?(value, sibling_best_value) do
+    sibling_best_value < value
   end
 
   #
