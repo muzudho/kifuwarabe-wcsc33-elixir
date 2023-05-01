@@ -170,7 +170,7 @@ defmodule KifuwarabeWcsc33.CLI.Main do
                   comment <>
                     cond do
                       remain == 1 or remain == 2 or remain == 3 or remain == 4 ->
-                        comment = " Hello Multi-core processor! I use Flow module on Elixir."
+                        comment = " Hello Multi-core processor(^q^)! I use Flow module on Elixir."
 
                         comment =
                           comment <>
@@ -186,7 +186,7 @@ defmodule KifuwarabeWcsc33.CLI.Main do
                           comment
 
                       remain == 5 or remain == 6 ->
-                        "Hello GPU! I use PyCUDA on Python. 1 time before the start of the search. (I just made a table cleared by zero) Ok."
+                        "Hello GPU(^q^)! I use PyCUDA on Python. 1 time before the start of the search. I just made a table cleared by zero."
 
                       true->
                         raise "unexpected remain:#{remain}"
