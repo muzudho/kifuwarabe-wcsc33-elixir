@@ -6,7 +6,7 @@ defmodule KifuwarabeWcsc33.CLI.Config do
   """
 
   # デバッグ・モード
-  @is_debug? false
+  @is_debug? true
   def is_debug?, do: @is_debug?
 
   # デバッグ・モード . 自殺手チェック

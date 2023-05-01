@@ -32,3 +32,9 @@ position sfen 9/8l/8l/8l/8l/6G1k/9/ppppppppK/+p+p+p+p+p+p+p+p1 w 2R2B3G4S4NPp 1
 
 go
 ```
+
+# 長い利きを認識するテスト
+
+```plaintext
+position sfen 4k4/1b7/9/9/4K4/9/9/9/9 b 2rb4g4s4n4l18p 1
+```

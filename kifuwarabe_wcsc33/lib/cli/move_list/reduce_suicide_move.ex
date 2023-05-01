@@ -151,12 +151,16 @@ defmodule KifuwarabeWcsc33.CLI.MoveList.ReduceSuicideMove do
 
     if KifuwarabeWcsc33.CLI.Config.is_debug_suicide_move_check?() or KifuwarabeWcsc33.CLI.Config.is_debug_move_generation?(move) do
       IO.puts("[reduce_suicide_move_2] king trn:#{opponent_king_turn} sq:#{opponent_king_sq} pc:#{opponent_king_pc}")
+      IO.puts("[reduce_suicide_move_2] ** teban_is_lose?:#{KifuwarabeWcsc33.CLI.Coding.ListGetLast.do_it(pos.teban_is_lose_list)}")
+      IO.puts("[reduce_suicide_move_2] ** aiteban_is_lose?:#{KifuwarabeWcsc33.CLI.Coding.ListGetLast.do_it(pos.aiteban_is_lose_list)}")
     end
 
     # 自玉は今 opponent_turn 側
     #
-    # 詰んでいるか判定
-    # ==============
+    # TODO 詰んでいるか判定
+    # ====================
+    #
+    # - TODO 利きに飛び込んでいるか判定している。本当は、詰んでいるか判定しないといけない
     #
     king_is_lose? =
       cond do

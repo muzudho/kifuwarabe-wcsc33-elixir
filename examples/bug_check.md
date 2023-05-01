@@ -706,7 +706,7 @@ position startpos moves 7i7h 3c3d 1i1h 8c8d 2g2f 8d8e 4i4h 9a9b 1g1f 8e8f 8g8f 8
 
 # 利きへ飛び込んだ３
 
-👇 `4i4h` で頭金を取ったが、そこは角の利き  
+👇 このあと `4i4h` で頭金を取ったが、そこは角の利き  
 
 ```
 position startpos moves 7i7h 3c3d 6g6f 2b6f 1i1h 6f5g+ 3i3h 9c9d 2g2f 3a2b 8g8f 5a5b 1g1f 2b3c 1f1e 8c8d 1h1g 9a9b 1g1f 1a1b 9g9f 5b5a 9f9e 9d9e 9i9h 4a3b 1e1d 1c1d 1f1d 1b1d P*1e 1d1e 9h9e 9b9e P*5b 8b5b 7h8g 6a7b 8g7f 9e9h+ 4i4h 9h8h 4h5g 8h8i 5i5h L*5d 5g5f 5d5f 5h4h B*6f 4h4i G*4h
