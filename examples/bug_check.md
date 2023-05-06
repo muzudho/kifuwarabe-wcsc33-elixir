@@ -704,7 +704,7 @@ position startpos moves 7i7h 3c3d 1i1h 8c8d 2g2f 8d8e 4i4h 9a9b 1g1f 8e8f 8g8f 8
 <T:LOGOUT:completed
 ```
 
-# 利きへ飛び込んだ３
+# 利きへ飛び込んだ３ ----> 長い利き判定の手番を、相対手番に変えたら直った
 
 👇 このあと `4i4h` で頭金を取ったが、そこは角の利き  
 
