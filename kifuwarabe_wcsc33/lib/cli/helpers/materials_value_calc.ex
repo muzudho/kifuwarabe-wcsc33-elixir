@@ -50,7 +50,7 @@ defmodule KifuwarabeWcsc33.CLI.Helpers.MaterialsValueCalc do
     # 全ての持ち駒について
     # |> 駒の数を、整数１つ分の評価値に変換
     # |> すべてのマスの評価値を足して、１つの整数にする
-    value_on_hand =
+    value_in_hand =
       pos.hand_pieces
       |> Enum.map(fn piece_and_num ->
         num = elem(piece_and_num, 1)
@@ -72,7 +72,7 @@ defmodule KifuwarabeWcsc33.CLI.Helpers.MaterialsValueCalc do
       end)
       |> Enum.reduce(0, fn value, acc -> acc + value end)
 
-    value_on_board + value_on_hand
+    value_on_board + value_in_hand
   end
 
   #

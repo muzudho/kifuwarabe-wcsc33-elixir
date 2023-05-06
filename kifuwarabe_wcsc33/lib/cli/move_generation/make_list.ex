@@ -86,7 +86,7 @@ defmodule KifuwarabeWcsc33.CLI.MoveGeneration.MakeList do
     # これだったら使わない方がいいけど、きふわらべが並列処理をしているだろうというキャラクター付け（実績）のためにしておく
     # 何手目かで間引いて使っている
     #
-    move_list_on_hand =
+    move_list_in_hand =
       if remain == 3 or remain == 4 do
         #
         # 打つ手のリスト
@@ -96,7 +96,7 @@ defmodule KifuwarabeWcsc33.CLI.MoveGeneration.MakeList do
         # |> 駒の数を消す。ピース（Piece；先後付きの駒種類）から、先後を消し、ピース・タイプ（Piece Type；駒種類）に変換する。駒種類から、指し手生成
         # |> リストがネストしていたら、フラットにする
         # |> 指し手が nil なら除去
-        move_list_on_hand =
+        move_list_in_hand =
           pos.hand_pieces
           |> Enum.filter(fn {piece, num} ->
             pos.turn == KifuwarabeWcsc33.CLI.Mappings.ToTurn.from_piece(piece) and 0 < num
@@ -104,13 +104,13 @@ defmodule KifuwarabeWcsc33.CLI.MoveGeneration.MakeList do
           |> Flow.from_enumerable()
           |> Flow.map(fn {piece, _num} ->
             KifuwarabeWcsc33.CLI.Mappings.ToPieceType.from_piece(piece)
-            |> make_move_list_on_hand(pos)
+            |> make_move_list_in_hand(pos)
           end)
           |> Enum.to_list()
           |> List.flatten()
           |> Enum.filter(fn move -> !is_nil(move) end)
 
-        move_list_on_hand
+        move_list_in_hand
       else
         #
         # 打つ手のリスト
@@ -120,25 +120,24 @@ defmodule KifuwarabeWcsc33.CLI.MoveGeneration.MakeList do
         # |> 駒の数を消す。ピース（Piece；先後付きの駒種類）から、先後を消し、ピース・タイプ（Piece Type；駒種類）に変換する。駒種類から、指し手生成
         # |> リストがネストしていたら、フラットにする
         # |> 指し手が nil なら除去
-        move_list_on_hand =
+        move_list_in_hand =
           pos.hand_pieces
           |> Enum.filter(fn {piece, num} ->
             pos.turn == KifuwarabeWcsc33.CLI.Mappings.ToTurn.from_piece(piece) and 0 < num
           end)
           |> Enum.map(fn {piece, _num} ->
             KifuwarabeWcsc33.CLI.Mappings.ToPieceType.from_piece(piece)
-            |> make_move_list_on_hand(pos)
+            |> make_move_list_in_hand(pos)
           end)
           |> List.flatten()
           |> Enum.filter(fn move -> !is_nil(move) end)
 
-        move_list_on_hand
+        move_list_in_hand
       end
 
+    # IO.inspect(move_list_in_hand, label: "[MakeList do_it] move_list_in_hand")
 
-    # IO.inspect(move_list_on_hand, label: "[MakeList do_it] move_list_on_hand")
-
-    move_list_on_board ++ move_list_on_hand
+    move_list_on_board ++ move_list_in_hand
   end
 
   # ## Parameters
@@ -633,7 +632,7 @@ defmodule KifuwarabeWcsc33.CLI.MoveGeneration.MakeList do
   #
   # 0. ムーブ・リスト
   #
-  defp make_move_list_on_hand(piece_type, pos) do
+  defp make_move_list_in_hand(piece_type, pos) do
     # デスティネーション・スクウェアーズ（Destination Squares；移動先のマスのリスト）
     destination_squares =
       case piece_type do

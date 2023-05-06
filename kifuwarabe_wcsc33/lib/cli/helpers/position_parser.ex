@@ -1,27 +1,27 @@
 defmodule KifuwarabeWcsc33.CLI.Helpers.PositionParser do
   @doc """
-
+  
     解析
-
+  
   ## Parameters
-
+  
     * `line` - 一行の文字列。例参考
-
+  
   ## Returns
-
+  
     0. ポジション（Position；局面）
-
+  
   ## Examples
-
+  
     position startpos moves 7g7f 3c3d 2g2f
     position sfen lnsgkgsnl/9/ppppppppp/9/9/9/PPPPPPPPP/1B5R1/LNSGKGSNL w - 1 moves 5a6b 7g7f 3a3b
-
+  
     // 📖 [USIプロトコル表記: 最多合法手５９３手の局面](https://ameblo.jp/professionalhearts/entry-10001031814.html)
     position sfen R8/2K1S1SSk/4B4/9/9/9/9/9/1L1L1L3 w RBGSNLP3g3n17p 1
-
+  
     // 📖 [USIプロトコル表記: 飛角落ち初期局面](http://www.geocities.jp/shogidokoro/usi.html)
     position sfen lnsgkgsnl/9/ppppppppp/9/9/9/PPPPPPPPP/1B5R1/LNSGKGSNL w - 1 moves 5a6b 7g7f 3a3b
-
+  
   """
   def parse(line) do
     # IO.puts("parse(1) line:#{line}")
@@ -438,21 +438,21 @@ defmodule KifuwarabeWcsc33.CLI.Helpers.PositionParser do
 
       # 頭と尾をつなげて、元のリストに戻す
       mchar_list = [mchar] ++ rest
-      # IO.inspect(mchar_list, label: "[parse_piece_type_on_hands] mchar_list")
-      mchar_list |> parse_piece_type_on_hands(0, hand_pieces)
+      # IO.inspect(mchar_list, label: "[parse_piece_type_in_hands] mchar_list")
+      mchar_list |> parse_piece_type_in_hands(0, hand_pieces)
     end
   end
 
   #
   # パターンマッチ
   #
-  defp parse_piece_type_on_hands(mchar_list, number, hand_pieces)
+  defp parse_piece_type_in_hands(mchar_list, number, hand_pieces)
 
   #
   # ベース・ケース（Base case；基本形） - 再帰関数の繰り返し回数が０回のときの処理
   #
-  defp parse_piece_type_on_hands([], _number, hand_pieces) do
-    # IO.puts("[parse_piece_type_on_hands] Terminate")
+  defp parse_piece_type_in_hands([], _number, hand_pieces) do
+    # IO.puts("[parse_piece_type_in_hands] Terminate")
     # 何も成果を増やさず終了
     {"", hand_pieces}
   end
@@ -472,7 +472,7 @@ defmodule KifuwarabeWcsc33.CLI.Helpers.PositionParser do
   #   0. レスト（Rest；残りの文字列）
   #   1. ハンド・ピースズ（Hand Pieces；持ち駒と枚数のマップ）
   #
-  defp parse_piece_type_on_hands([mchar | rest], number, hand_pieces) do
+  defp parse_piece_type_in_hands([mchar | rest], number, hand_pieces) do
     if mchar == " " do
       # 区切りの空白。再帰を停止
       {rest, hand_pieces}
@@ -483,7 +483,7 @@ defmodule KifuwarabeWcsc33.CLI.Helpers.PositionParser do
           Regex.match?(~r/^\d$/, mchar) ->
             # ２つ目の数字は一の位なので、以前の数は十の位なので、10倍する
             number = 10 * number + String.to_integer(mchar)
-            # IO.puts("[parse_piece_type_on_hands] number:#{number}")
+            # IO.puts("[parse_piece_type_in_hands] number:#{number}")
 
             {rest, number, hand_pieces}
 
@@ -499,11 +499,11 @@ defmodule KifuwarabeWcsc33.CLI.Helpers.PositionParser do
                 number
               end
 
-            # IO.puts("[parse_piece_type_on_hands] number:#{number} piece:#{piece}")
+            # IO.puts("[parse_piece_type_in_hands] number:#{number} piece:#{piece}")
 
             # 持ち駒データ追加
             hand_pieces = Map.merge(hand_pieces, %{piece => number})
-            # IO.inspect(hand_pieces, label: "[parse_piece_type_on_hands] hand_pieces:")
+            # IO.inspect(hand_pieces, label: "[parse_piece_type_in_hands] hand_pieces:")
 
             # 数をリセット
             number = 0
@@ -513,7 +513,7 @@ defmodule KifuwarabeWcsc33.CLI.Helpers.PositionParser do
 
       # Recursive
       # =========
-      {mchar_list, hand_pieces} = mchar_list |> parse_piece_type_on_hands(number, hand_pieces)
+      {mchar_list, hand_pieces} = mchar_list |> parse_piece_type_in_hands(number, hand_pieces)
 
       # 再帰からの帰り道にも成果を返す
       {mchar_list, hand_pieces}

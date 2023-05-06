@@ -189,7 +189,7 @@ defmodule KifuwarabeWcsc33.CLI.Mappings.ToMove do
           #  raise "unexpected second_char:#{second_char}"
           # end
 
-          # IO.puts("parse_piece_type_on_hands first_char:[#{first_char}]")
+          # IO.puts("parse_piece_type_in_hands first_char:[#{first_char}]")
           # rest = rest |> String.slice(1..-1)
 
           # IO.inspect(move, label: "parse(12) The move is")
