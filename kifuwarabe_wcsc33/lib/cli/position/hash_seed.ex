@@ -458,6 +458,138 @@ defmodule KifuwarabeWcsc33.CLI.Position.HashSeed do
           39 => %{:k1 => hash(), :r1 => hash(), :b1 => hash(), :g1 => hash(), :s1 => hash(), :n1 => hash(), :l1 => hash(), :p1 => hash(), :k2 => hash(), :r2 => hash(), :b2 => hash(), :g2 => hash(), :s2 => hash(), :n2 => hash(), :l2 => hash(), :p2 => hash(), :sp => hash()},
           29 => %{:k1 => hash(), :r1 => hash(), :b1 => hash(), :g1 => hash(), :s1 => hash(), :n1 => hash(), :l1 => hash(), :p1 => hash(), :k2 => hash(), :r2 => hash(), :b2 => hash(), :g2 => hash(), :s2 => hash(), :n2 => hash(), :l2 => hash(), :p2 => hash(), :sp => hash()},
           19 => %{:k1 => hash(), :r1 => hash(), :b1 => hash(), :g1 => hash(), :s1 => hash(), :n1 => hash(), :l1 => hash(), :p1 => hash(), :k2 => hash(), :r2 => hash(), :b2 => hash(), :g2 => hash(), :s2 => hash(), :n2 => hash(), :l2 => hash(), :p2 => hash(), :sp => hash()}
+        },
+        # 駒台（持ち駒の数）
+        hand_pieces: %{
+          :k1 => %{
+            0 => hash(),
+            1 => hash(),
+            2 => hash()},
+          :r1 => %{
+            0 => hash(),
+            1 => hash(),
+            2 => hash()},
+          :b1 => %{
+            0 => hash(),
+            1 => hash(),
+            2 => hash()},
+          # ゴールド（Gold；金）
+          :g1 => %{
+            0 => hash(),
+            1 => hash(),
+            2 => hash(),
+            3 => hash(),
+            4 => hash()},
+          # シルバー（Silver；銀）
+          :s1 => %{
+            0 => hash(),
+            1 => hash(),
+            2 => hash(),
+            3 => hash(),
+            4 => hash()},
+          # ナイト（kNight；桂）
+          :n1 => %{
+            0 => hash(),
+            1 => hash(),
+            2 => hash(),
+            3 => hash(),
+            4 => hash()},
+          # ランス（Lance；香）
+          :l1 => %{
+            0 => hash(),
+            1 => hash(),
+            2 => hash(),
+            3 => hash(),
+            4 => hash()},
+          # ポーン（Pawn；歩）
+          :p1 => %{
+            0 => hash(),
+            1 => hash(),
+            2 => hash(),
+            3 => hash(),
+            4 => hash(),
+            5 => hash(),
+            6 => hash(),
+            7 => hash(),
+            8 => hash(),
+            9 => hash(),
+            10 => hash(),
+            11 => hash(),
+            12 => hash(),
+            13 => hash(),
+            14 => hash(),
+            15 => hash(),
+            16 => hash(),
+            17 => hash(),
+            18 => hash()},
+          #
+          # ▽ごて（Gote；後手） or うわて（Uwate；上手）
+          # =======================================
+          #
+          # キング（King；玉）. 対局中は玉は取れない。検討時など、盤上から玉を取り除きたいときに使う
+          :k2 => %{
+            0 => hash(),
+            1 => hash(),
+            2 => hash()},
+          # ルック（Rook；飛）
+          :r2 => %{
+            0 => hash(),
+            1 => hash(),
+            2 => hash()},
+          # ビショップ（Bishop；角）
+          :b2 => %{
+            0 => hash(),
+            1 => hash(),
+            2 => hash()},
+          # ゴールド（Gold；金）
+          :g2 => %{
+            0 => hash(),
+            1 => hash(),
+            2 => hash(),
+            3 => hash(),
+            4 => hash()},
+          # シルバー（Silver；銀）
+          :s2 => %{
+            0 => hash(),
+            1 => hash(),
+            2 => hash(),
+            3 => hash(),
+            4 => hash()},
+          # ナイト（kNight；桂）
+          :n2 => %{
+            0 => hash(),
+            1 => hash(),
+            2 => hash(),
+            3 => hash(),
+            4 => hash()},
+          # ランス（Lance；香）
+          :l2 => %{
+            0 => hash(),
+            1 => hash(),
+            2 => hash(),
+            3 => hash(),
+            4 => hash()},
+          # ポーン（Pawn；歩）
+          :p2 => %{
+            0 => hash(),
+            1 => hash(),
+            2 => hash(),
+            3 => hash(),
+            4 => hash(),
+            5 => hash(),
+            6 => hash(),
+            7 => hash(),
+            8 => hash(),
+            9 => hash(),
+            10 => hash(),
+            11 => hash(),
+            12 => hash(),
+            13 => hash(),
+            14 => hash(),
+            15 => hash(),
+            16 => hash(),
+            17 => hash(),
+            18 => hash()}
         }
     }
   end
