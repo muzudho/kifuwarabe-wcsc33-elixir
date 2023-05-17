@@ -163,7 +163,7 @@ defmodule KifuwarabeWcsc33.CLI.Models.Position do
               # ポーン（Pawn；歩）
               :p2 => 0
             },
-            # ムーブズ（Moves；指し手のリスト）
+            # ムーブズ（Moves；指し手のリスト） - 棋譜に当たる
             moves: [],
             #
             # 手番の方は負けか？
