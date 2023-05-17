@@ -312,13 +312,14 @@ defmodule KifuwarabeWcsc33.CLI.Position.HashSeed do
     %{
       hash_seed |
         turn: %{
-          sente: Enum.random(0..@max_int),
-          gote: Enum.random(0..@max_int)
+          sente: hash(),
+          gote: hash()
         }
     }
   end
 
-  def calc_hash() do
-    0
+  # ハッシュ値生成
+  defp hash() do
+    Enum.random(0..@max_int)
   end
 end
