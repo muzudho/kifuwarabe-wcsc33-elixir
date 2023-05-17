@@ -2,6 +2,10 @@ defmodule KifuwarabeWcsc33.CLI.Position.HashSeed do
   @moduledoc """
     局面のハッシュ化
 
+    ゾブリスト・ハッシュという手法を使う。
+    ゾブリストさんが囲碁の盤面をコンピューターに覚えさせるために考え出した手法。
+    コンピューター将棋でも使う。
+
     👇 手番に、ハッシュを割り当てる（２箇所）
     ┌───────┬──────┐
     │ Sente │ Gote │
@@ -224,136 +228,136 @@ defmodule KifuwarabeWcsc33.CLI.Position.HashSeed do
               #
               # キング（King；玉）. 対局中は玉は取れない。検討時など、盤上から玉を取り除きたいときに使う
               :k1 => %{
-                0 => Enum.random(0..@max_int),
-                1 => Enum.random(0..@max_int),
-                2 => Enum.random(0..@max_int)},
+                0 => 0,
+                1 => 0,
+                2 => 0},
               # ルック（Rook；飛）
               :r1 => %{
-                0 => Enum.random(0..@max_int),
-                1 => Enum.random(0..@max_int),
-                2 => Enum.random(0..@max_int)},
+                0 => 0,
+                1 => 0,
+                2 => 0},
               # ビショップ（Bishop；角）
               :b1 => %{
-                0 => Enum.random(0..@max_int),
-                1 => Enum.random(0..@max_int),
-                2 => Enum.random(0..@max_int)},
+                0 => 0,
+                1 => 0,
+                2 => 0},
               # ゴールド（Gold；金）
               :g1 => %{
-                0 => Enum.random(0..@max_int),
-                1 => Enum.random(0..@max_int),
-                2 => Enum.random(0..@max_int),
-                3 => Enum.random(0..@max_int),
-                4 => Enum.random(0..@max_int)},
+                0 => 0,
+                1 => 0,
+                2 => 0,
+                3 => 0,
+                4 => 0},
               # シルバー（Silver；銀）
               :s1 => %{
-                0 => Enum.random(0..@max_int),
-                1 => Enum.random(0..@max_int),
-                2 => Enum.random(0..@max_int),
-                3 => Enum.random(0..@max_int),
-                4 => Enum.random(0..@max_int)},
+                0 => 0,
+                1 => 0,
+                2 => 0,
+                3 => 0,
+                4 => 0},
               # ナイト（kNight；桂）
               :n1 => %{
-                0 => Enum.random(0..@max_int),
-                1 => Enum.random(0..@max_int),
-                2 => Enum.random(0..@max_int),
-                3 => Enum.random(0..@max_int),
-                4 => Enum.random(0..@max_int)},
+                0 => 0,
+                1 => 0,
+                2 => 0,
+                3 => 0,
+                4 => 0},
               # ランス（Lance；香）
               :l1 => %{
-                0 => Enum.random(0..@max_int),
-                1 => Enum.random(0..@max_int),
-                2 => Enum.random(0..@max_int),
-                3 => Enum.random(0..@max_int),
-                4 => Enum.random(0..@max_int)},
+                0 => 0,
+                1 => 0,
+                2 => 0,
+                3 => 0,
+                4 => 0},
               # ポーン（Pawn；歩）
               :p1 => %{
-                0 => Enum.random(0..@max_int),
-                1 => Enum.random(0..@max_int),
-                2 => Enum.random(0..@max_int),
-                3 => Enum.random(0..@max_int),
-                4 => Enum.random(0..@max_int),
-                5 => Enum.random(0..@max_int),
-                6 => Enum.random(0..@max_int),
-                7 => Enum.random(0..@max_int),
-                8 => Enum.random(0..@max_int),
-                9 => Enum.random(0..@max_int),
-                10 => Enum.random(0..@max_int),
-                11 => Enum.random(0..@max_int),
-                12 => Enum.random(0..@max_int),
-                13 => Enum.random(0..@max_int),
-                14 => Enum.random(0..@max_int),
-                15 => Enum.random(0..@max_int),
-                16 => Enum.random(0..@max_int),
-                17 => Enum.random(0..@max_int),
-                18=> Enum.random(0..@max_int)},
+                0 => 0,
+                1 => 0,
+                2 => 0,
+                3 => 0,
+                4 => 0,
+                5 => 0,
+                6 => 0,
+                7 => 0,
+                8 => 0,
+                9 => 0,
+                10 => 0,
+                11 => 0,
+                12 => 0,
+                13 => 0,
+                14 => 0,
+                15 => 0,
+                16 => 0,
+                17 => 0,
+                18 => 0},
               #
               # ▽ごて（Gote；後手） or うわて（Uwate；上手）
               # =======================================
               #
               # キング（King；玉）. 対局中は玉は取れない。検討時など、盤上から玉を取り除きたいときに使う
               :k2 => %{
-                0 => Enum.random(0..@max_int),
-                1 => Enum.random(0..@max_int),
-                2 => Enum.random(0..@max_int)},
+                0 => 0,
+                1 => 0,
+                2 => 0},
               # ルック（Rook；飛）
               :r2 => %{
-                0 => Enum.random(0..@max_int),
-                1 => Enum.random(0..@max_int),
-                2 => Enum.random(0..@max_int)},
+                0 => 0,
+                1 => 0,
+                2 => 0},
               # ビショップ（Bishop；角）
               :b2 => %{
-                0 => Enum.random(0..@max_int),
-                1 => Enum.random(0..@max_int),
-                2 => Enum.random(0..@max_int)},
+                0 => 0,
+                1 => 0,
+                2 => 0},
               # ゴールド（Gold；金）
               :g2 => %{
-                0 => Enum.random(0..@max_int),
-                1 => Enum.random(0..@max_int),
-                2 => Enum.random(0..@max_int),
-                3 => Enum.random(0..@max_int),
-                4 => Enum.random(0..@max_int)},
+                0 => 0,
+                1 => 0,
+                2 => 0,
+                3 => 0,
+                4 => 0},
               # シルバー（Silver；銀）
               :s2 => %{
-                0 => Enum.random(0..@max_int),
-                1 => Enum.random(0..@max_int),
-                2 => Enum.random(0..@max_int),
-                3 => Enum.random(0..@max_int),
-                4 => Enum.random(0..@max_int)},
+                0 => 0,
+                1 => 0,
+                2 => 0,
+                3 => 0,
+                4 => 0},
               # ナイト（kNight；桂）
               :n2 => %{
-                0 => Enum.random(0..@max_int),
-                1 => Enum.random(0..@max_int),
-                2 => Enum.random(0..@max_int),
-                3 => Enum.random(0..@max_int),
-                4 => Enum.random(0..@max_int)},
+                0 => 0,
+                1 => 0,
+                2 => 0,
+                3 => 0,
+                4 => 0},
               # ランス（Lance；香）
               :l2 => %{
-                0 => Enum.random(0..@max_int),
-                1 => Enum.random(0..@max_int),
-                2 => Enum.random(0..@max_int),
-                3 => Enum.random(0..@max_int),
-                4 => Enum.random(0..@max_int)},
+                0 => 0,
+                1 => 0,
+                2 => 0,
+                3 => 0,
+                4 => 0},
               # ポーン（Pawn；歩）
               :p2 => %{
-                0 => Enum.random(0..@max_int),
-                1 => Enum.random(0..@max_int),
-                2 => Enum.random(0..@max_int),
-                3 => Enum.random(0..@max_int),
-                4 => Enum.random(0..@max_int),
-                5 => Enum.random(0..@max_int),
-                6 => Enum.random(0..@max_int),
-                7 => Enum.random(0..@max_int),
-                8 => Enum.random(0..@max_int),
-                9 => Enum.random(0..@max_int),
-                10 => Enum.random(0..@max_int),
-                11 => Enum.random(0..@max_int),
-                12 => Enum.random(0..@max_int),
-                13 => Enum.random(0..@max_int),
-                14 => Enum.random(0..@max_int),
-                15 => Enum.random(0..@max_int),
-                16 => Enum.random(0..@max_int),
-                17 => Enum.random(0..@max_int),
-                18=> Enum.random(0..@max_int)},
+                0 => 0,
+                1 => 0,
+                2 => 0,
+                3 => 0,
+                4 => 0,
+                5 => 0,
+                6 => 0,
+                7 => 0,
+                8 => 0,
+                9 => 0,
+                10 => 0,
+                11 => 0,
+                12 => 0,
+                13 => 0,
+                14 => 0,
+                15 => 0,
+                16 => 0,
+                17 => 0,
+                18 => 0},
             }
 
   def new() do

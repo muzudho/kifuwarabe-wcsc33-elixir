@@ -252,6 +252,22 @@ defmodule KifuwarabeWcsc33.CLI.Parser.Position do
         |> bxor(pos.hash_seed.board[14][pos.board[97]])
         |> bxor(pos.hash_seed.board[14][pos.board[98]])
         |> bxor(pos.hash_seed.board[99][pos.board[99]])
+        |> bxor(pos.hash_seed.hand_pieces[:k1][pos.hand_pieces[:k1]])
+        |> bxor(pos.hash_seed.hand_pieces[:r1][pos.hand_pieces[:r1]])
+        |> bxor(pos.hash_seed.hand_pieces[:b1][pos.hand_pieces[:b1]])
+        |> bxor(pos.hash_seed.hand_pieces[:g1][pos.hand_pieces[:g1]])
+        |> bxor(pos.hash_seed.hand_pieces[:s1][pos.hand_pieces[:s1]])
+        |> bxor(pos.hash_seed.hand_pieces[:n1][pos.hand_pieces[:n1]])
+        |> bxor(pos.hash_seed.hand_pieces[:l1][pos.hand_pieces[:l1]])
+        |> bxor(pos.hash_seed.hand_pieces[:p1][pos.hand_pieces[:p1]])
+        |> bxor(pos.hash_seed.hand_pieces[:k2][pos.hand_pieces[:k2]])
+        |> bxor(pos.hash_seed.hand_pieces[:r2][pos.hand_pieces[:r2]])
+        |> bxor(pos.hash_seed.hand_pieces[:b2][pos.hand_pieces[:b2]])
+        |> bxor(pos.hash_seed.hand_pieces[:g2][pos.hand_pieces[:g2]])
+        |> bxor(pos.hash_seed.hand_pieces[:s2][pos.hand_pieces[:s2]])
+        |> bxor(pos.hash_seed.hand_pieces[:n2][pos.hand_pieces[:n2]])
+        |> bxor(pos.hash_seed.hand_pieces[:l2][pos.hand_pieces[:l2]])
+        |> bxor(pos.hash_seed.hand_pieces[:p2][pos.hand_pieces[:p2]])
     }
 
     #
