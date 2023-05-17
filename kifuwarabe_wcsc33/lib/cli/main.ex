@@ -116,7 +116,7 @@ defmodule KifuwarabeWcsc33.CLI.Main do
           #   | 　　　　    | (私からGUIへ送るものは何もありません)
 
           # 局面は、丸ごと差し替えだ
-          pos = KifuwarabeWcsc33.CLI.Helpers.PositionParser.parse(input)
+          pos = KifuwarabeWcsc33.CLI.Parser.Position.parse(input)
 
           # TODO 消す。盤表示
           IO.puts(KifuwarabeWcsc33.CLI.Views.Position.stringify(pos))

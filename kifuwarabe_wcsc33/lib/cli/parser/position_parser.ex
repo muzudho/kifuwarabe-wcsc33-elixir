@@ -1,4 +1,4 @@
-defmodule KifuwarabeWcsc33.CLI.Helpers.PositionParser do
+defmodule KifuwarabeWcsc33.CLI.Parser.Position do
   @doc """
 
     解析
@@ -158,6 +158,18 @@ defmodule KifuwarabeWcsc33.CLI.Helpers.PositionParser do
       pos
       | friend_is_lose_list: [KifuwarabeWcsc33.CLI.Thesis.IsChecked.is_checked?(pos, :friend)],
       opponent_is_lose_list: [KifuwarabeWcsc33.CLI.Thesis.IsChecked.is_checked?(pos, :opponent)]
+    }
+
+    #
+    # TODO 局面ハッシュ値を更新したい
+    # =============================
+    #
+    pos = %{
+      pos |
+      hash: case pos.turn do
+        :sente -> 1
+        :gote -> 2
+      end
     }
 
     #
