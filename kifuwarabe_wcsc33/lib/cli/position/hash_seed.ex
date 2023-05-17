@@ -72,99 +72,149 @@ defmodule KifuwarabeWcsc33.CLI.Position.HashSeed do
   @max_int 18_446_744_073_709_551_615
 
   # * `a..b` - a以上、b以下
-  defstruct turn: %{sente: Enum.random(0..@max_int), gote: Enum.random(0..@max_int)},
+  defstruct turn: %{sente: 0, gote: 0},
             # 盤上の駒
             board: %{
               # １段目
-              91 => Enum.random(0..@max_int),
-              81 => Enum.random(0..@max_int),
-              71 => Enum.random(0..@max_int),
-              61 => Enum.random(0..@max_int),
-              51 => Enum.random(0..@max_int),
-              41 => Enum.random(0..@max_int),
-              31 => Enum.random(0..@max_int),
-              21 => Enum.random(0..@max_int),
-              11 => Enum.random(0..@max_int),
+              91 => %{
+                #
+                # ▲せんて（Sente；先手） or したて（Shitate；下手）
+                # ============================================
+                #
+                # キング（King；玉）. 対局中は玉は取れない。検討時など、盤上から玉を取り除きたいときに使う
+                :k1 => 0,
+                # ルック（Rook；飛）
+                :r1 => 0,
+                # ビショップ（Bishop；角）
+                :b1 => 0,
+                # ゴールド（Gold；金）
+                :g1 => 0,
+                # シルバー（Silver；銀）
+                :s1 => 0,
+                # ナイト（kNight；桂）
+                :n1 => 0,
+                # ランス（Lance；香）
+                :l1 => 0,
+                # ポーン（Pawn；歩）
+                :p1 => 0,
+                #
+                # ▽ごて（Gote；後手） or うわて（Uwate；上手）
+                # =======================================
+                #
+                # キング（King；玉）. 対局中は玉は取れない。検討時など、盤上から玉を取り除きたいときに使う
+                :k2 => 0,
+                # ルック（Rook；飛）
+                :r2 => 0,
+                # ビショップ（Bishop；角）
+                :b2 => 0,
+                # ゴールド（Gold；金）
+                :g2 => 0,
+                # シルバー（Silver；銀）
+                :s2 => 0,
+                # ナイト（kNight；桂）
+                :n2 => 0,
+                # ランス（Lance；香）
+                :l2 => 0,
+                # ポーン（Pawn；歩）
+                :p2 => 0,
+                #
+                # 空マス
+                # =====
+                #
+                :sp => 0
+              },
+              #
+              # えっ、これあと８０回書くのかだぜ（＾～＾）？？ 書きたくないぜ、めんどくさいぜ（＾～＾）💦
+              # =============================================================================
+              #
+              81 => %{:k1 => 0, :r1 => 0, :b1 => 0, :g1 => 0, :s1 => 0, :n1 => 0, :l1 => 0, :p1 => 0, :k2 => 0, :r2 => 0, :b2 => 0, :g2 => 0, :s2 => 0, :n2 => 0, :l2 => 0, :p2 => 0, :sp => 0},
+              71 => %{:k1 => 0, :r1 => 0, :b1 => 0, :g1 => 0, :s1 => 0, :n1 => 0, :l1 => 0, :p1 => 0, :k2 => 0, :r2 => 0, :b2 => 0, :g2 => 0, :s2 => 0, :n2 => 0, :l2 => 0, :p2 => 0, :sp => 0},
+              61 => %{:k1 => 0, :r1 => 0, :b1 => 0, :g1 => 0, :s1 => 0, :n1 => 0, :l1 => 0, :p1 => 0, :k2 => 0, :r2 => 0, :b2 => 0, :g2 => 0, :s2 => 0, :n2 => 0, :l2 => 0, :p2 => 0, :sp => 0},
+              51 => %{:k1 => 0, :r1 => 0, :b1 => 0, :g1 => 0, :s1 => 0, :n1 => 0, :l1 => 0, :p1 => 0, :k2 => 0, :r2 => 0, :b2 => 0, :g2 => 0, :s2 => 0, :n2 => 0, :l2 => 0, :p2 => 0, :sp => 0},
+              41 => %{:k1 => 0, :r1 => 0, :b1 => 0, :g1 => 0, :s1 => 0, :n1 => 0, :l1 => 0, :p1 => 0, :k2 => 0, :r2 => 0, :b2 => 0, :g2 => 0, :s2 => 0, :n2 => 0, :l2 => 0, :p2 => 0, :sp => 0},
+              31 => %{:k1 => 0, :r1 => 0, :b1 => 0, :g1 => 0, :s1 => 0, :n1 => 0, :l1 => 0, :p1 => 0, :k2 => 0, :r2 => 0, :b2 => 0, :g2 => 0, :s2 => 0, :n2 => 0, :l2 => 0, :p2 => 0, :sp => 0},
+              21 => %{:k1 => 0, :r1 => 0, :b1 => 0, :g1 => 0, :s1 => 0, :n1 => 0, :l1 => 0, :p1 => 0, :k2 => 0, :r2 => 0, :b2 => 0, :g2 => 0, :s2 => 0, :n2 => 0, :l2 => 0, :p2 => 0, :sp => 0},
+              11 => %{:k1 => 0, :r1 => 0, :b1 => 0, :g1 => 0, :s1 => 0, :n1 => 0, :l1 => 0, :p1 => 0, :k2 => 0, :r2 => 0, :b2 => 0, :g2 => 0, :s2 => 0, :n2 => 0, :l2 => 0, :p2 => 0, :sp => 0},
               # ２段目
-              92 => Enum.random(0..@max_int),
-              82 => Enum.random(0..@max_int),
-              72 => Enum.random(0..@max_int),
-              62 => Enum.random(0..@max_int),
-              52 => Enum.random(0..@max_int),
-              42 => Enum.random(0..@max_int),
-              32 => Enum.random(0..@max_int),
-              22 => Enum.random(0..@max_int),
-              12 => Enum.random(0..@max_int),
+              92 => %{:k1 => 0, :r1 => 0, :b1 => 0, :g1 => 0, :s1 => 0, :n1 => 0, :l1 => 0, :p1 => 0, :k2 => 0, :r2 => 0, :b2 => 0, :g2 => 0, :s2 => 0, :n2 => 0, :l2 => 0, :p2 => 0, :sp => 0},
+              82 => %{:k1 => 0, :r1 => 0, :b1 => 0, :g1 => 0, :s1 => 0, :n1 => 0, :l1 => 0, :p1 => 0, :k2 => 0, :r2 => 0, :b2 => 0, :g2 => 0, :s2 => 0, :n2 => 0, :l2 => 0, :p2 => 0, :sp => 0},
+              72 => %{:k1 => 0, :r1 => 0, :b1 => 0, :g1 => 0, :s1 => 0, :n1 => 0, :l1 => 0, :p1 => 0, :k2 => 0, :r2 => 0, :b2 => 0, :g2 => 0, :s2 => 0, :n2 => 0, :l2 => 0, :p2 => 0, :sp => 0},
+              62 => %{:k1 => 0, :r1 => 0, :b1 => 0, :g1 => 0, :s1 => 0, :n1 => 0, :l1 => 0, :p1 => 0, :k2 => 0, :r2 => 0, :b2 => 0, :g2 => 0, :s2 => 0, :n2 => 0, :l2 => 0, :p2 => 0, :sp => 0},
+              52 => %{:k1 => 0, :r1 => 0, :b1 => 0, :g1 => 0, :s1 => 0, :n1 => 0, :l1 => 0, :p1 => 0, :k2 => 0, :r2 => 0, :b2 => 0, :g2 => 0, :s2 => 0, :n2 => 0, :l2 => 0, :p2 => 0, :sp => 0},
+              42 => %{:k1 => 0, :r1 => 0, :b1 => 0, :g1 => 0, :s1 => 0, :n1 => 0, :l1 => 0, :p1 => 0, :k2 => 0, :r2 => 0, :b2 => 0, :g2 => 0, :s2 => 0, :n2 => 0, :l2 => 0, :p2 => 0, :sp => 0},
+              32 => %{:k1 => 0, :r1 => 0, :b1 => 0, :g1 => 0, :s1 => 0, :n1 => 0, :l1 => 0, :p1 => 0, :k2 => 0, :r2 => 0, :b2 => 0, :g2 => 0, :s2 => 0, :n2 => 0, :l2 => 0, :p2 => 0, :sp => 0},
+              22 => %{:k1 => 0, :r1 => 0, :b1 => 0, :g1 => 0, :s1 => 0, :n1 => 0, :l1 => 0, :p1 => 0, :k2 => 0, :r2 => 0, :b2 => 0, :g2 => 0, :s2 => 0, :n2 => 0, :l2 => 0, :p2 => 0, :sp => 0},
+              12 => %{:k1 => 0, :r1 => 0, :b1 => 0, :g1 => 0, :s1 => 0, :n1 => 0, :l1 => 0, :p1 => 0, :k2 => 0, :r2 => 0, :b2 => 0, :g2 => 0, :s2 => 0, :n2 => 0, :l2 => 0, :p2 => 0, :sp => 0},
               # ３段目
-              93 => Enum.random(0..@max_int),
-              83 => Enum.random(0..@max_int),
-              73 => Enum.random(0..@max_int),
-              63 => Enum.random(0..@max_int),
-              53 => Enum.random(0..@max_int),
-              43 => Enum.random(0..@max_int),
-              33 => Enum.random(0..@max_int),
-              23 => Enum.random(0..@max_int),
-              13 => Enum.random(0..@max_int),
+              93 => %{:k1 => 0, :r1 => 0, :b1 => 0, :g1 => 0, :s1 => 0, :n1 => 0, :l1 => 0, :p1 => 0, :k2 => 0, :r2 => 0, :b2 => 0, :g2 => 0, :s2 => 0, :n2 => 0, :l2 => 0, :p2 => 0, :sp => 0},
+              83 => %{:k1 => 0, :r1 => 0, :b1 => 0, :g1 => 0, :s1 => 0, :n1 => 0, :l1 => 0, :p1 => 0, :k2 => 0, :r2 => 0, :b2 => 0, :g2 => 0, :s2 => 0, :n2 => 0, :l2 => 0, :p2 => 0, :sp => 0},
+              73 => %{:k1 => 0, :r1 => 0, :b1 => 0, :g1 => 0, :s1 => 0, :n1 => 0, :l1 => 0, :p1 => 0, :k2 => 0, :r2 => 0, :b2 => 0, :g2 => 0, :s2 => 0, :n2 => 0, :l2 => 0, :p2 => 0, :sp => 0},
+              63 => %{:k1 => 0, :r1 => 0, :b1 => 0, :g1 => 0, :s1 => 0, :n1 => 0, :l1 => 0, :p1 => 0, :k2 => 0, :r2 => 0, :b2 => 0, :g2 => 0, :s2 => 0, :n2 => 0, :l2 => 0, :p2 => 0, :sp => 0},
+              53 => %{:k1 => 0, :r1 => 0, :b1 => 0, :g1 => 0, :s1 => 0, :n1 => 0, :l1 => 0, :p1 => 0, :k2 => 0, :r2 => 0, :b2 => 0, :g2 => 0, :s2 => 0, :n2 => 0, :l2 => 0, :p2 => 0, :sp => 0},
+              43 => %{:k1 => 0, :r1 => 0, :b1 => 0, :g1 => 0, :s1 => 0, :n1 => 0, :l1 => 0, :p1 => 0, :k2 => 0, :r2 => 0, :b2 => 0, :g2 => 0, :s2 => 0, :n2 => 0, :l2 => 0, :p2 => 0, :sp => 0},
+              33 => %{:k1 => 0, :r1 => 0, :b1 => 0, :g1 => 0, :s1 => 0, :n1 => 0, :l1 => 0, :p1 => 0, :k2 => 0, :r2 => 0, :b2 => 0, :g2 => 0, :s2 => 0, :n2 => 0, :l2 => 0, :p2 => 0, :sp => 0},
+              23 => %{:k1 => 0, :r1 => 0, :b1 => 0, :g1 => 0, :s1 => 0, :n1 => 0, :l1 => 0, :p1 => 0, :k2 => 0, :r2 => 0, :b2 => 0, :g2 => 0, :s2 => 0, :n2 => 0, :l2 => 0, :p2 => 0, :sp => 0},
+              13 => %{:k1 => 0, :r1 => 0, :b1 => 0, :g1 => 0, :s1 => 0, :n1 => 0, :l1 => 0, :p1 => 0, :k2 => 0, :r2 => 0, :b2 => 0, :g2 => 0, :s2 => 0, :n2 => 0, :l2 => 0, :p2 => 0, :sp => 0},
               # ４段目
-              94 => Enum.random(0..@max_int),
-              84 => Enum.random(0..@max_int),
-              74 => Enum.random(0..@max_int),
-              64 => Enum.random(0..@max_int),
-              54 => Enum.random(0..@max_int),
-              44 => Enum.random(0..@max_int),
-              34 => Enum.random(0..@max_int),
-              24 => Enum.random(0..@max_int),
-              14 => Enum.random(0..@max_int),
+              94 => %{:k1 => 0, :r1 => 0, :b1 => 0, :g1 => 0, :s1 => 0, :n1 => 0, :l1 => 0, :p1 => 0, :k2 => 0, :r2 => 0, :b2 => 0, :g2 => 0, :s2 => 0, :n2 => 0, :l2 => 0, :p2 => 0, :sp => 0},
+              84 => %{:k1 => 0, :r1 => 0, :b1 => 0, :g1 => 0, :s1 => 0, :n1 => 0, :l1 => 0, :p1 => 0, :k2 => 0, :r2 => 0, :b2 => 0, :g2 => 0, :s2 => 0, :n2 => 0, :l2 => 0, :p2 => 0, :sp => 0},
+              74 => %{:k1 => 0, :r1 => 0, :b1 => 0, :g1 => 0, :s1 => 0, :n1 => 0, :l1 => 0, :p1 => 0, :k2 => 0, :r2 => 0, :b2 => 0, :g2 => 0, :s2 => 0, :n2 => 0, :l2 => 0, :p2 => 0, :sp => 0},
+              64 => %{:k1 => 0, :r1 => 0, :b1 => 0, :g1 => 0, :s1 => 0, :n1 => 0, :l1 => 0, :p1 => 0, :k2 => 0, :r2 => 0, :b2 => 0, :g2 => 0, :s2 => 0, :n2 => 0, :l2 => 0, :p2 => 0, :sp => 0},
+              54 => %{:k1 => 0, :r1 => 0, :b1 => 0, :g1 => 0, :s1 => 0, :n1 => 0, :l1 => 0, :p1 => 0, :k2 => 0, :r2 => 0, :b2 => 0, :g2 => 0, :s2 => 0, :n2 => 0, :l2 => 0, :p2 => 0, :sp => 0},
+              44 => %{:k1 => 0, :r1 => 0, :b1 => 0, :g1 => 0, :s1 => 0, :n1 => 0, :l1 => 0, :p1 => 0, :k2 => 0, :r2 => 0, :b2 => 0, :g2 => 0, :s2 => 0, :n2 => 0, :l2 => 0, :p2 => 0, :sp => 0},
+              34 => %{:k1 => 0, :r1 => 0, :b1 => 0, :g1 => 0, :s1 => 0, :n1 => 0, :l1 => 0, :p1 => 0, :k2 => 0, :r2 => 0, :b2 => 0, :g2 => 0, :s2 => 0, :n2 => 0, :l2 => 0, :p2 => 0, :sp => 0},
+              24 => %{:k1 => 0, :r1 => 0, :b1 => 0, :g1 => 0, :s1 => 0, :n1 => 0, :l1 => 0, :p1 => 0, :k2 => 0, :r2 => 0, :b2 => 0, :g2 => 0, :s2 => 0, :n2 => 0, :l2 => 0, :p2 => 0, :sp => 0},
+              14 => %{:k1 => 0, :r1 => 0, :b1 => 0, :g1 => 0, :s1 => 0, :n1 => 0, :l1 => 0, :p1 => 0, :k2 => 0, :r2 => 0, :b2 => 0, :g2 => 0, :s2 => 0, :n2 => 0, :l2 => 0, :p2 => 0, :sp => 0},
               # ５段目
-              95 => Enum.random(0..@max_int),
-              85 => Enum.random(0..@max_int),
-              75 => Enum.random(0..@max_int),
-              65 => Enum.random(0..@max_int),
-              55 => Enum.random(0..@max_int),
-              45 => Enum.random(0..@max_int),
-              35 => Enum.random(0..@max_int),
-              25 => Enum.random(0..@max_int),
-              15 => Enum.random(0..@max_int),
+              95 => %{:k1 => 0, :r1 => 0, :b1 => 0, :g1 => 0, :s1 => 0, :n1 => 0, :l1 => 0, :p1 => 0, :k2 => 0, :r2 => 0, :b2 => 0, :g2 => 0, :s2 => 0, :n2 => 0, :l2 => 0, :p2 => 0, :sp => 0},
+              85 => %{:k1 => 0, :r1 => 0, :b1 => 0, :g1 => 0, :s1 => 0, :n1 => 0, :l1 => 0, :p1 => 0, :k2 => 0, :r2 => 0, :b2 => 0, :g2 => 0, :s2 => 0, :n2 => 0, :l2 => 0, :p2 => 0, :sp => 0},
+              75 => %{:k1 => 0, :r1 => 0, :b1 => 0, :g1 => 0, :s1 => 0, :n1 => 0, :l1 => 0, :p1 => 0, :k2 => 0, :r2 => 0, :b2 => 0, :g2 => 0, :s2 => 0, :n2 => 0, :l2 => 0, :p2 => 0, :sp => 0},
+              65 => %{:k1 => 0, :r1 => 0, :b1 => 0, :g1 => 0, :s1 => 0, :n1 => 0, :l1 => 0, :p1 => 0, :k2 => 0, :r2 => 0, :b2 => 0, :g2 => 0, :s2 => 0, :n2 => 0, :l2 => 0, :p2 => 0, :sp => 0},
+              55 => %{:k1 => 0, :r1 => 0, :b1 => 0, :g1 => 0, :s1 => 0, :n1 => 0, :l1 => 0, :p1 => 0, :k2 => 0, :r2 => 0, :b2 => 0, :g2 => 0, :s2 => 0, :n2 => 0, :l2 => 0, :p2 => 0, :sp => 0},
+              45 => %{:k1 => 0, :r1 => 0, :b1 => 0, :g1 => 0, :s1 => 0, :n1 => 0, :l1 => 0, :p1 => 0, :k2 => 0, :r2 => 0, :b2 => 0, :g2 => 0, :s2 => 0, :n2 => 0, :l2 => 0, :p2 => 0, :sp => 0},
+              35 => %{:k1 => 0, :r1 => 0, :b1 => 0, :g1 => 0, :s1 => 0, :n1 => 0, :l1 => 0, :p1 => 0, :k2 => 0, :r2 => 0, :b2 => 0, :g2 => 0, :s2 => 0, :n2 => 0, :l2 => 0, :p2 => 0, :sp => 0},
+              25 => %{:k1 => 0, :r1 => 0, :b1 => 0, :g1 => 0, :s1 => 0, :n1 => 0, :l1 => 0, :p1 => 0, :k2 => 0, :r2 => 0, :b2 => 0, :g2 => 0, :s2 => 0, :n2 => 0, :l2 => 0, :p2 => 0, :sp => 0},
+              15 => %{:k1 => 0, :r1 => 0, :b1 => 0, :g1 => 0, :s1 => 0, :n1 => 0, :l1 => 0, :p1 => 0, :k2 => 0, :r2 => 0, :b2 => 0, :g2 => 0, :s2 => 0, :n2 => 0, :l2 => 0, :p2 => 0, :sp => 0},
               # ６段目
-              96 => Enum.random(0..@max_int),
-              86 => Enum.random(0..@max_int),
-              76 => Enum.random(0..@max_int),
-              66 => Enum.random(0..@max_int),
-              56 => Enum.random(0..@max_int),
-              46 => Enum.random(0..@max_int),
-              36 => Enum.random(0..@max_int),
-              26 => Enum.random(0..@max_int),
-              16 => Enum.random(0..@max_int),
+              96 => %{:k1 => 0, :r1 => 0, :b1 => 0, :g1 => 0, :s1 => 0, :n1 => 0, :l1 => 0, :p1 => 0, :k2 => 0, :r2 => 0, :b2 => 0, :g2 => 0, :s2 => 0, :n2 => 0, :l2 => 0, :p2 => 0, :sp => 0},
+              86 => %{:k1 => 0, :r1 => 0, :b1 => 0, :g1 => 0, :s1 => 0, :n1 => 0, :l1 => 0, :p1 => 0, :k2 => 0, :r2 => 0, :b2 => 0, :g2 => 0, :s2 => 0, :n2 => 0, :l2 => 0, :p2 => 0, :sp => 0},
+              76 => %{:k1 => 0, :r1 => 0, :b1 => 0, :g1 => 0, :s1 => 0, :n1 => 0, :l1 => 0, :p1 => 0, :k2 => 0, :r2 => 0, :b2 => 0, :g2 => 0, :s2 => 0, :n2 => 0, :l2 => 0, :p2 => 0, :sp => 0},
+              66 => %{:k1 => 0, :r1 => 0, :b1 => 0, :g1 => 0, :s1 => 0, :n1 => 0, :l1 => 0, :p1 => 0, :k2 => 0, :r2 => 0, :b2 => 0, :g2 => 0, :s2 => 0, :n2 => 0, :l2 => 0, :p2 => 0, :sp => 0},
+              56 => %{:k1 => 0, :r1 => 0, :b1 => 0, :g1 => 0, :s1 => 0, :n1 => 0, :l1 => 0, :p1 => 0, :k2 => 0, :r2 => 0, :b2 => 0, :g2 => 0, :s2 => 0, :n2 => 0, :l2 => 0, :p2 => 0, :sp => 0},
+              46 => %{:k1 => 0, :r1 => 0, :b1 => 0, :g1 => 0, :s1 => 0, :n1 => 0, :l1 => 0, :p1 => 0, :k2 => 0, :r2 => 0, :b2 => 0, :g2 => 0, :s2 => 0, :n2 => 0, :l2 => 0, :p2 => 0, :sp => 0},
+              36 => %{:k1 => 0, :r1 => 0, :b1 => 0, :g1 => 0, :s1 => 0, :n1 => 0, :l1 => 0, :p1 => 0, :k2 => 0, :r2 => 0, :b2 => 0, :g2 => 0, :s2 => 0, :n2 => 0, :l2 => 0, :p2 => 0, :sp => 0},
+              26 => %{:k1 => 0, :r1 => 0, :b1 => 0, :g1 => 0, :s1 => 0, :n1 => 0, :l1 => 0, :p1 => 0, :k2 => 0, :r2 => 0, :b2 => 0, :g2 => 0, :s2 => 0, :n2 => 0, :l2 => 0, :p2 => 0, :sp => 0},
+              16 => %{:k1 => 0, :r1 => 0, :b1 => 0, :g1 => 0, :s1 => 0, :n1 => 0, :l1 => 0, :p1 => 0, :k2 => 0, :r2 => 0, :b2 => 0, :g2 => 0, :s2 => 0, :n2 => 0, :l2 => 0, :p2 => 0, :sp => 0},
               # ７段目
-              97 => Enum.random(0..@max_int),
-              87 => Enum.random(0..@max_int),
-              77 => Enum.random(0..@max_int),
-              67 => Enum.random(0..@max_int),
-              57 => Enum.random(0..@max_int),
-              47 => Enum.random(0..@max_int),
-              37 => Enum.random(0..@max_int),
-              27 => Enum.random(0..@max_int),
-              17 => Enum.random(0..@max_int),
+              97 => %{:k1 => 0, :r1 => 0, :b1 => 0, :g1 => 0, :s1 => 0, :n1 => 0, :l1 => 0, :p1 => 0, :k2 => 0, :r2 => 0, :b2 => 0, :g2 => 0, :s2 => 0, :n2 => 0, :l2 => 0, :p2 => 0, :sp => 0},
+              87 => %{:k1 => 0, :r1 => 0, :b1 => 0, :g1 => 0, :s1 => 0, :n1 => 0, :l1 => 0, :p1 => 0, :k2 => 0, :r2 => 0, :b2 => 0, :g2 => 0, :s2 => 0, :n2 => 0, :l2 => 0, :p2 => 0, :sp => 0},
+              77 => %{:k1 => 0, :r1 => 0, :b1 => 0, :g1 => 0, :s1 => 0, :n1 => 0, :l1 => 0, :p1 => 0, :k2 => 0, :r2 => 0, :b2 => 0, :g2 => 0, :s2 => 0, :n2 => 0, :l2 => 0, :p2 => 0, :sp => 0},
+              67 => %{:k1 => 0, :r1 => 0, :b1 => 0, :g1 => 0, :s1 => 0, :n1 => 0, :l1 => 0, :p1 => 0, :k2 => 0, :r2 => 0, :b2 => 0, :g2 => 0, :s2 => 0, :n2 => 0, :l2 => 0, :p2 => 0, :sp => 0},
+              57 => %{:k1 => 0, :r1 => 0, :b1 => 0, :g1 => 0, :s1 => 0, :n1 => 0, :l1 => 0, :p1 => 0, :k2 => 0, :r2 => 0, :b2 => 0, :g2 => 0, :s2 => 0, :n2 => 0, :l2 => 0, :p2 => 0, :sp => 0},
+              47 => %{:k1 => 0, :r1 => 0, :b1 => 0, :g1 => 0, :s1 => 0, :n1 => 0, :l1 => 0, :p1 => 0, :k2 => 0, :r2 => 0, :b2 => 0, :g2 => 0, :s2 => 0, :n2 => 0, :l2 => 0, :p2 => 0, :sp => 0},
+              37 => %{:k1 => 0, :r1 => 0, :b1 => 0, :g1 => 0, :s1 => 0, :n1 => 0, :l1 => 0, :p1 => 0, :k2 => 0, :r2 => 0, :b2 => 0, :g2 => 0, :s2 => 0, :n2 => 0, :l2 => 0, :p2 => 0, :sp => 0},
+              27 => %{:k1 => 0, :r1 => 0, :b1 => 0, :g1 => 0, :s1 => 0, :n1 => 0, :l1 => 0, :p1 => 0, :k2 => 0, :r2 => 0, :b2 => 0, :g2 => 0, :s2 => 0, :n2 => 0, :l2 => 0, :p2 => 0, :sp => 0},
+              17 => %{:k1 => 0, :r1 => 0, :b1 => 0, :g1 => 0, :s1 => 0, :n1 => 0, :l1 => 0, :p1 => 0, :k2 => 0, :r2 => 0, :b2 => 0, :g2 => 0, :s2 => 0, :n2 => 0, :l2 => 0, :p2 => 0, :sp => 0},
               # ８段目
-              98 => Enum.random(0..@max_int),
-              88 => Enum.random(0..@max_int),
-              78 => Enum.random(0..@max_int),
-              68 => Enum.random(0..@max_int),
-              58 => Enum.random(0..@max_int),
-              48 => Enum.random(0..@max_int),
-              38 => Enum.random(0..@max_int),
-              28 => Enum.random(0..@max_int),
-              18 => Enum.random(0..@max_int),
+              98 => %{:k1 => 0, :r1 => 0, :b1 => 0, :g1 => 0, :s1 => 0, :n1 => 0, :l1 => 0, :p1 => 0, :k2 => 0, :r2 => 0, :b2 => 0, :g2 => 0, :s2 => 0, :n2 => 0, :l2 => 0, :p2 => 0, :sp => 0},
+              88 => %{:k1 => 0, :r1 => 0, :b1 => 0, :g1 => 0, :s1 => 0, :n1 => 0, :l1 => 0, :p1 => 0, :k2 => 0, :r2 => 0, :b2 => 0, :g2 => 0, :s2 => 0, :n2 => 0, :l2 => 0, :p2 => 0, :sp => 0},
+              78 => %{:k1 => 0, :r1 => 0, :b1 => 0, :g1 => 0, :s1 => 0, :n1 => 0, :l1 => 0, :p1 => 0, :k2 => 0, :r2 => 0, :b2 => 0, :g2 => 0, :s2 => 0, :n2 => 0, :l2 => 0, :p2 => 0, :sp => 0},
+              68 => %{:k1 => 0, :r1 => 0, :b1 => 0, :g1 => 0, :s1 => 0, :n1 => 0, :l1 => 0, :p1 => 0, :k2 => 0, :r2 => 0, :b2 => 0, :g2 => 0, :s2 => 0, :n2 => 0, :l2 => 0, :p2 => 0, :sp => 0},
+              58 => %{:k1 => 0, :r1 => 0, :b1 => 0, :g1 => 0, :s1 => 0, :n1 => 0, :l1 => 0, :p1 => 0, :k2 => 0, :r2 => 0, :b2 => 0, :g2 => 0, :s2 => 0, :n2 => 0, :l2 => 0, :p2 => 0, :sp => 0},
+              48 => %{:k1 => 0, :r1 => 0, :b1 => 0, :g1 => 0, :s1 => 0, :n1 => 0, :l1 => 0, :p1 => 0, :k2 => 0, :r2 => 0, :b2 => 0, :g2 => 0, :s2 => 0, :n2 => 0, :l2 => 0, :p2 => 0, :sp => 0},
+              38 => %{:k1 => 0, :r1 => 0, :b1 => 0, :g1 => 0, :s1 => 0, :n1 => 0, :l1 => 0, :p1 => 0, :k2 => 0, :r2 => 0, :b2 => 0, :g2 => 0, :s2 => 0, :n2 => 0, :l2 => 0, :p2 => 0, :sp => 0},
+              28 => %{:k1 => 0, :r1 => 0, :b1 => 0, :g1 => 0, :s1 => 0, :n1 => 0, :l1 => 0, :p1 => 0, :k2 => 0, :r2 => 0, :b2 => 0, :g2 => 0, :s2 => 0, :n2 => 0, :l2 => 0, :p2 => 0, :sp => 0},
+              18 => %{:k1 => 0, :r1 => 0, :b1 => 0, :g1 => 0, :s1 => 0, :n1 => 0, :l1 => 0, :p1 => 0, :k2 => 0, :r2 => 0, :b2 => 0, :g2 => 0, :s2 => 0, :n2 => 0, :l2 => 0, :p2 => 0, :sp => 0},
               # ９段目
-              99 => Enum.random(0..@max_int),
-              89 => Enum.random(0..@max_int),
-              79 => Enum.random(0..@max_int),
-              69 => Enum.random(0..@max_int),
-              59 => Enum.random(0..@max_int),
-              49 => Enum.random(0..@max_int),
-              39 => Enum.random(0..@max_int),
-              29 => Enum.random(0..@max_int),
-              19 => Enum.random(0..@max_int)
+              99 => %{:k1 => 0, :r1 => 0, :b1 => 0, :g1 => 0, :s1 => 0, :n1 => 0, :l1 => 0, :p1 => 0, :k2 => 0, :r2 => 0, :b2 => 0, :g2 => 0, :s2 => 0, :n2 => 0, :l2 => 0, :p2 => 0, :sp => 0},
+              89 => %{:k1 => 0, :r1 => 0, :b1 => 0, :g1 => 0, :s1 => 0, :n1 => 0, :l1 => 0, :p1 => 0, :k2 => 0, :r2 => 0, :b2 => 0, :g2 => 0, :s2 => 0, :n2 => 0, :l2 => 0, :p2 => 0, :sp => 0},
+              79 => %{:k1 => 0, :r1 => 0, :b1 => 0, :g1 => 0, :s1 => 0, :n1 => 0, :l1 => 0, :p1 => 0, :k2 => 0, :r2 => 0, :b2 => 0, :g2 => 0, :s2 => 0, :n2 => 0, :l2 => 0, :p2 => 0, :sp => 0},
+              69 => %{:k1 => 0, :r1 => 0, :b1 => 0, :g1 => 0, :s1 => 0, :n1 => 0, :l1 => 0, :p1 => 0, :k2 => 0, :r2 => 0, :b2 => 0, :g2 => 0, :s2 => 0, :n2 => 0, :l2 => 0, :p2 => 0, :sp => 0},
+              59 => %{:k1 => 0, :r1 => 0, :b1 => 0, :g1 => 0, :s1 => 0, :n1 => 0, :l1 => 0, :p1 => 0, :k2 => 0, :r2 => 0, :b2 => 0, :g2 => 0, :s2 => 0, :n2 => 0, :l2 => 0, :p2 => 0, :sp => 0},
+              49 => %{:k1 => 0, :r1 => 0, :b1 => 0, :g1 => 0, :s1 => 0, :n1 => 0, :l1 => 0, :p1 => 0, :k2 => 0, :r2 => 0, :b2 => 0, :g2 => 0, :s2 => 0, :n2 => 0, :l2 => 0, :p2 => 0, :sp => 0},
+              39 => %{:k1 => 0, :r1 => 0, :b1 => 0, :g1 => 0, :s1 => 0, :n1 => 0, :l1 => 0, :p1 => 0, :k2 => 0, :r2 => 0, :b2 => 0, :g2 => 0, :s2 => 0, :n2 => 0, :l2 => 0, :p2 => 0, :sp => 0},
+              29 => %{:k1 => 0, :r1 => 0, :b1 => 0, :g1 => 0, :s1 => 0, :n1 => 0, :l1 => 0, :p1 => 0, :k2 => 0, :r2 => 0, :b2 => 0, :g2 => 0, :s2 => 0, :n2 => 0, :l2 => 0, :p2 => 0, :sp => 0},
+              19 => %{:k1 => 0, :r1 => 0, :b1 => 0, :g1 => 0, :s1 => 0, :n1 => 0, :l1 => 0, :p1 => 0, :k2 => 0, :r2 => 0, :b2 => 0, :g2 => 0, :s2 => 0, :n2 => 0, :l2 => 0, :p2 => 0, :sp => 0}
             },
             # 駒台（持ち駒の数）
             hand_pieces: %{
@@ -311,9 +361,103 @@ defmodule KifuwarabeWcsc33.CLI.Position.HashSeed do
 
     %{
       hash_seed |
+        # 手番
         turn: %{
           sente: hash(),
           gote: hash()
+        },
+        # 盤上の駒
+        board: %{
+          # １段目
+          91 => %{:k1 => hash(), :r1 => hash(), :b1 => hash(), :g1 => hash(), :s1 => hash(), :n1 => hash(), :l1 => hash(), :p1 => hash(), :k2 => hash(), :r2 => hash(), :b2 => hash(), :g2 => hash(), :s2 => hash(), :n2 => hash(), :l2 => hash(), :p2 => hash(), :sp => hash()},
+          81 => %{:k1 => hash(), :r1 => hash(), :b1 => hash(), :g1 => hash(), :s1 => hash(), :n1 => hash(), :l1 => hash(), :p1 => hash(), :k2 => hash(), :r2 => hash(), :b2 => hash(), :g2 => hash(), :s2 => hash(), :n2 => hash(), :l2 => hash(), :p2 => hash(), :sp => hash()},
+          71 => %{:k1 => hash(), :r1 => hash(), :b1 => hash(), :g1 => hash(), :s1 => hash(), :n1 => hash(), :l1 => hash(), :p1 => hash(), :k2 => hash(), :r2 => hash(), :b2 => hash(), :g2 => hash(), :s2 => hash(), :n2 => hash(), :l2 => hash(), :p2 => hash(), :sp => hash()},
+          61 => %{:k1 => hash(), :r1 => hash(), :b1 => hash(), :g1 => hash(), :s1 => hash(), :n1 => hash(), :l1 => hash(), :p1 => hash(), :k2 => hash(), :r2 => hash(), :b2 => hash(), :g2 => hash(), :s2 => hash(), :n2 => hash(), :l2 => hash(), :p2 => hash(), :sp => hash()},
+          51 => %{:k1 => hash(), :r1 => hash(), :b1 => hash(), :g1 => hash(), :s1 => hash(), :n1 => hash(), :l1 => hash(), :p1 => hash(), :k2 => hash(), :r2 => hash(), :b2 => hash(), :g2 => hash(), :s2 => hash(), :n2 => hash(), :l2 => hash(), :p2 => hash(), :sp => hash()},
+          41 => %{:k1 => hash(), :r1 => hash(), :b1 => hash(), :g1 => hash(), :s1 => hash(), :n1 => hash(), :l1 => hash(), :p1 => hash(), :k2 => hash(), :r2 => hash(), :b2 => hash(), :g2 => hash(), :s2 => hash(), :n2 => hash(), :l2 => hash(), :p2 => hash(), :sp => hash()},
+          31 => %{:k1 => hash(), :r1 => hash(), :b1 => hash(), :g1 => hash(), :s1 => hash(), :n1 => hash(), :l1 => hash(), :p1 => hash(), :k2 => hash(), :r2 => hash(), :b2 => hash(), :g2 => hash(), :s2 => hash(), :n2 => hash(), :l2 => hash(), :p2 => hash(), :sp => hash()},
+          21 => %{:k1 => hash(), :r1 => hash(), :b1 => hash(), :g1 => hash(), :s1 => hash(), :n1 => hash(), :l1 => hash(), :p1 => hash(), :k2 => hash(), :r2 => hash(), :b2 => hash(), :g2 => hash(), :s2 => hash(), :n2 => hash(), :l2 => hash(), :p2 => hash(), :sp => hash()},
+          11 => %{:k1 => hash(), :r1 => hash(), :b1 => hash(), :g1 => hash(), :s1 => hash(), :n1 => hash(), :l1 => hash(), :p1 => hash(), :k2 => hash(), :r2 => hash(), :b2 => hash(), :g2 => hash(), :s2 => hash(), :n2 => hash(), :l2 => hash(), :p2 => hash(), :sp => hash()},
+          # ２段目
+          92 => %{:k1 => hash(), :r1 => hash(), :b1 => hash(), :g1 => hash(), :s1 => hash(), :n1 => hash(), :l1 => hash(), :p1 => hash(), :k2 => hash(), :r2 => hash(), :b2 => hash(), :g2 => hash(), :s2 => hash(), :n2 => hash(), :l2 => hash(), :p2 => hash(), :sp => hash()},
+          82 => %{:k1 => hash(), :r1 => hash(), :b1 => hash(), :g1 => hash(), :s1 => hash(), :n1 => hash(), :l1 => hash(), :p1 => hash(), :k2 => hash(), :r2 => hash(), :b2 => hash(), :g2 => hash(), :s2 => hash(), :n2 => hash(), :l2 => hash(), :p2 => hash(), :sp => hash()},
+          72 => %{:k1 => hash(), :r1 => hash(), :b1 => hash(), :g1 => hash(), :s1 => hash(), :n1 => hash(), :l1 => hash(), :p1 => hash(), :k2 => hash(), :r2 => hash(), :b2 => hash(), :g2 => hash(), :s2 => hash(), :n2 => hash(), :l2 => hash(), :p2 => hash(), :sp => hash()},
+          62 => %{:k1 => hash(), :r1 => hash(), :b1 => hash(), :g1 => hash(), :s1 => hash(), :n1 => hash(), :l1 => hash(), :p1 => hash(), :k2 => hash(), :r2 => hash(), :b2 => hash(), :g2 => hash(), :s2 => hash(), :n2 => hash(), :l2 => hash(), :p2 => hash(), :sp => hash()},
+          52 => %{:k1 => hash(), :r1 => hash(), :b1 => hash(), :g1 => hash(), :s1 => hash(), :n1 => hash(), :l1 => hash(), :p1 => hash(), :k2 => hash(), :r2 => hash(), :b2 => hash(), :g2 => hash(), :s2 => hash(), :n2 => hash(), :l2 => hash(), :p2 => hash(), :sp => hash()},
+          42 => %{:k1 => hash(), :r1 => hash(), :b1 => hash(), :g1 => hash(), :s1 => hash(), :n1 => hash(), :l1 => hash(), :p1 => hash(), :k2 => hash(), :r2 => hash(), :b2 => hash(), :g2 => hash(), :s2 => hash(), :n2 => hash(), :l2 => hash(), :p2 => hash(), :sp => hash()},
+          32 => %{:k1 => hash(), :r1 => hash(), :b1 => hash(), :g1 => hash(), :s1 => hash(), :n1 => hash(), :l1 => hash(), :p1 => hash(), :k2 => hash(), :r2 => hash(), :b2 => hash(), :g2 => hash(), :s2 => hash(), :n2 => hash(), :l2 => hash(), :p2 => hash(), :sp => hash()},
+          22 => %{:k1 => hash(), :r1 => hash(), :b1 => hash(), :g1 => hash(), :s1 => hash(), :n1 => hash(), :l1 => hash(), :p1 => hash(), :k2 => hash(), :r2 => hash(), :b2 => hash(), :g2 => hash(), :s2 => hash(), :n2 => hash(), :l2 => hash(), :p2 => hash(), :sp => hash()},
+          12 => %{:k1 => hash(), :r1 => hash(), :b1 => hash(), :g1 => hash(), :s1 => hash(), :n1 => hash(), :l1 => hash(), :p1 => hash(), :k2 => hash(), :r2 => hash(), :b2 => hash(), :g2 => hash(), :s2 => hash(), :n2 => hash(), :l2 => hash(), :p2 => hash(), :sp => hash()},
+          # ３段目
+          93 => %{:k1 => hash(), :r1 => hash(), :b1 => hash(), :g1 => hash(), :s1 => hash(), :n1 => hash(), :l1 => hash(), :p1 => hash(), :k2 => hash(), :r2 => hash(), :b2 => hash(), :g2 => hash(), :s2 => hash(), :n2 => hash(), :l2 => hash(), :p2 => hash(), :sp => hash()},
+          83 => %{:k1 => hash(), :r1 => hash(), :b1 => hash(), :g1 => hash(), :s1 => hash(), :n1 => hash(), :l1 => hash(), :p1 => hash(), :k2 => hash(), :r2 => hash(), :b2 => hash(), :g2 => hash(), :s2 => hash(), :n2 => hash(), :l2 => hash(), :p2 => hash(), :sp => hash()},
+          73 => %{:k1 => hash(), :r1 => hash(), :b1 => hash(), :g1 => hash(), :s1 => hash(), :n1 => hash(), :l1 => hash(), :p1 => hash(), :k2 => hash(), :r2 => hash(), :b2 => hash(), :g2 => hash(), :s2 => hash(), :n2 => hash(), :l2 => hash(), :p2 => hash(), :sp => hash()},
+          63 => %{:k1 => hash(), :r1 => hash(), :b1 => hash(), :g1 => hash(), :s1 => hash(), :n1 => hash(), :l1 => hash(), :p1 => hash(), :k2 => hash(), :r2 => hash(), :b2 => hash(), :g2 => hash(), :s2 => hash(), :n2 => hash(), :l2 => hash(), :p2 => hash(), :sp => hash()},
+          53 => %{:k1 => hash(), :r1 => hash(), :b1 => hash(), :g1 => hash(), :s1 => hash(), :n1 => hash(), :l1 => hash(), :p1 => hash(), :k2 => hash(), :r2 => hash(), :b2 => hash(), :g2 => hash(), :s2 => hash(), :n2 => hash(), :l2 => hash(), :p2 => hash(), :sp => hash()},
+          43 => %{:k1 => hash(), :r1 => hash(), :b1 => hash(), :g1 => hash(), :s1 => hash(), :n1 => hash(), :l1 => hash(), :p1 => hash(), :k2 => hash(), :r2 => hash(), :b2 => hash(), :g2 => hash(), :s2 => hash(), :n2 => hash(), :l2 => hash(), :p2 => hash(), :sp => hash()},
+          33 => %{:k1 => hash(), :r1 => hash(), :b1 => hash(), :g1 => hash(), :s1 => hash(), :n1 => hash(), :l1 => hash(), :p1 => hash(), :k2 => hash(), :r2 => hash(), :b2 => hash(), :g2 => hash(), :s2 => hash(), :n2 => hash(), :l2 => hash(), :p2 => hash(), :sp => hash()},
+          23 => %{:k1 => hash(), :r1 => hash(), :b1 => hash(), :g1 => hash(), :s1 => hash(), :n1 => hash(), :l1 => hash(), :p1 => hash(), :k2 => hash(), :r2 => hash(), :b2 => hash(), :g2 => hash(), :s2 => hash(), :n2 => hash(), :l2 => hash(), :p2 => hash(), :sp => hash()},
+          13 => %{:k1 => hash(), :r1 => hash(), :b1 => hash(), :g1 => hash(), :s1 => hash(), :n1 => hash(), :l1 => hash(), :p1 => hash(), :k2 => hash(), :r2 => hash(), :b2 => hash(), :g2 => hash(), :s2 => hash(), :n2 => hash(), :l2 => hash(), :p2 => hash(), :sp => hash()},
+          # ４段目
+          94 => %{:k1 => hash(), :r1 => hash(), :b1 => hash(), :g1 => hash(), :s1 => hash(), :n1 => hash(), :l1 => hash(), :p1 => hash(), :k2 => hash(), :r2 => hash(), :b2 => hash(), :g2 => hash(), :s2 => hash(), :n2 => hash(), :l2 => hash(), :p2 => hash(), :sp => hash()},
+          84 => %{:k1 => hash(), :r1 => hash(), :b1 => hash(), :g1 => hash(), :s1 => hash(), :n1 => hash(), :l1 => hash(), :p1 => hash(), :k2 => hash(), :r2 => hash(), :b2 => hash(), :g2 => hash(), :s2 => hash(), :n2 => hash(), :l2 => hash(), :p2 => hash(), :sp => hash()},
+          74 => %{:k1 => hash(), :r1 => hash(), :b1 => hash(), :g1 => hash(), :s1 => hash(), :n1 => hash(), :l1 => hash(), :p1 => hash(), :k2 => hash(), :r2 => hash(), :b2 => hash(), :g2 => hash(), :s2 => hash(), :n2 => hash(), :l2 => hash(), :p2 => hash(), :sp => hash()},
+          64 => %{:k1 => hash(), :r1 => hash(), :b1 => hash(), :g1 => hash(), :s1 => hash(), :n1 => hash(), :l1 => hash(), :p1 => hash(), :k2 => hash(), :r2 => hash(), :b2 => hash(), :g2 => hash(), :s2 => hash(), :n2 => hash(), :l2 => hash(), :p2 => hash(), :sp => hash()},
+          54 => %{:k1 => hash(), :r1 => hash(), :b1 => hash(), :g1 => hash(), :s1 => hash(), :n1 => hash(), :l1 => hash(), :p1 => hash(), :k2 => hash(), :r2 => hash(), :b2 => hash(), :g2 => hash(), :s2 => hash(), :n2 => hash(), :l2 => hash(), :p2 => hash(), :sp => hash()},
+          44 => %{:k1 => hash(), :r1 => hash(), :b1 => hash(), :g1 => hash(), :s1 => hash(), :n1 => hash(), :l1 => hash(), :p1 => hash(), :k2 => hash(), :r2 => hash(), :b2 => hash(), :g2 => hash(), :s2 => hash(), :n2 => hash(), :l2 => hash(), :p2 => hash(), :sp => hash()},
+          34 => %{:k1 => hash(), :r1 => hash(), :b1 => hash(), :g1 => hash(), :s1 => hash(), :n1 => hash(), :l1 => hash(), :p1 => hash(), :k2 => hash(), :r2 => hash(), :b2 => hash(), :g2 => hash(), :s2 => hash(), :n2 => hash(), :l2 => hash(), :p2 => hash(), :sp => hash()},
+          24 => %{:k1 => hash(), :r1 => hash(), :b1 => hash(), :g1 => hash(), :s1 => hash(), :n1 => hash(), :l1 => hash(), :p1 => hash(), :k2 => hash(), :r2 => hash(), :b2 => hash(), :g2 => hash(), :s2 => hash(), :n2 => hash(), :l2 => hash(), :p2 => hash(), :sp => hash()},
+          14 => %{:k1 => hash(), :r1 => hash(), :b1 => hash(), :g1 => hash(), :s1 => hash(), :n1 => hash(), :l1 => hash(), :p1 => hash(), :k2 => hash(), :r2 => hash(), :b2 => hash(), :g2 => hash(), :s2 => hash(), :n2 => hash(), :l2 => hash(), :p2 => hash(), :sp => hash()},
+          # ５段目
+          95 => %{:k1 => hash(), :r1 => hash(), :b1 => hash(), :g1 => hash(), :s1 => hash(), :n1 => hash(), :l1 => hash(), :p1 => hash(), :k2 => hash(), :r2 => hash(), :b2 => hash(), :g2 => hash(), :s2 => hash(), :n2 => hash(), :l2 => hash(), :p2 => hash(), :sp => hash()},
+          85 => %{:k1 => hash(), :r1 => hash(), :b1 => hash(), :g1 => hash(), :s1 => hash(), :n1 => hash(), :l1 => hash(), :p1 => hash(), :k2 => hash(), :r2 => hash(), :b2 => hash(), :g2 => hash(), :s2 => hash(), :n2 => hash(), :l2 => hash(), :p2 => hash(), :sp => hash()},
+          75 => %{:k1 => hash(), :r1 => hash(), :b1 => hash(), :g1 => hash(), :s1 => hash(), :n1 => hash(), :l1 => hash(), :p1 => hash(), :k2 => hash(), :r2 => hash(), :b2 => hash(), :g2 => hash(), :s2 => hash(), :n2 => hash(), :l2 => hash(), :p2 => hash(), :sp => hash()},
+          65 => %{:k1 => hash(), :r1 => hash(), :b1 => hash(), :g1 => hash(), :s1 => hash(), :n1 => hash(), :l1 => hash(), :p1 => hash(), :k2 => hash(), :r2 => hash(), :b2 => hash(), :g2 => hash(), :s2 => hash(), :n2 => hash(), :l2 => hash(), :p2 => hash(), :sp => hash()},
+          55 => %{:k1 => hash(), :r1 => hash(), :b1 => hash(), :g1 => hash(), :s1 => hash(), :n1 => hash(), :l1 => hash(), :p1 => hash(), :k2 => hash(), :r2 => hash(), :b2 => hash(), :g2 => hash(), :s2 => hash(), :n2 => hash(), :l2 => hash(), :p2 => hash(), :sp => hash()},
+          45 => %{:k1 => hash(), :r1 => hash(), :b1 => hash(), :g1 => hash(), :s1 => hash(), :n1 => hash(), :l1 => hash(), :p1 => hash(), :k2 => hash(), :r2 => hash(), :b2 => hash(), :g2 => hash(), :s2 => hash(), :n2 => hash(), :l2 => hash(), :p2 => hash(), :sp => hash()},
+          35 => %{:k1 => hash(), :r1 => hash(), :b1 => hash(), :g1 => hash(), :s1 => hash(), :n1 => hash(), :l1 => hash(), :p1 => hash(), :k2 => hash(), :r2 => hash(), :b2 => hash(), :g2 => hash(), :s2 => hash(), :n2 => hash(), :l2 => hash(), :p2 => hash(), :sp => hash()},
+          25 => %{:k1 => hash(), :r1 => hash(), :b1 => hash(), :g1 => hash(), :s1 => hash(), :n1 => hash(), :l1 => hash(), :p1 => hash(), :k2 => hash(), :r2 => hash(), :b2 => hash(), :g2 => hash(), :s2 => hash(), :n2 => hash(), :l2 => hash(), :p2 => hash(), :sp => hash()},
+          15 => %{:k1 => hash(), :r1 => hash(), :b1 => hash(), :g1 => hash(), :s1 => hash(), :n1 => hash(), :l1 => hash(), :p1 => hash(), :k2 => hash(), :r2 => hash(), :b2 => hash(), :g2 => hash(), :s2 => hash(), :n2 => hash(), :l2 => hash(), :p2 => hash(), :sp => hash()},
+          # ６段目
+          96 => %{:k1 => hash(), :r1 => hash(), :b1 => hash(), :g1 => hash(), :s1 => hash(), :n1 => hash(), :l1 => hash(), :p1 => hash(), :k2 => hash(), :r2 => hash(), :b2 => hash(), :g2 => hash(), :s2 => hash(), :n2 => hash(), :l2 => hash(), :p2 => hash(), :sp => hash()},
+          86 => %{:k1 => hash(), :r1 => hash(), :b1 => hash(), :g1 => hash(), :s1 => hash(), :n1 => hash(), :l1 => hash(), :p1 => hash(), :k2 => hash(), :r2 => hash(), :b2 => hash(), :g2 => hash(), :s2 => hash(), :n2 => hash(), :l2 => hash(), :p2 => hash(), :sp => hash()},
+          76 => %{:k1 => hash(), :r1 => hash(), :b1 => hash(), :g1 => hash(), :s1 => hash(), :n1 => hash(), :l1 => hash(), :p1 => hash(), :k2 => hash(), :r2 => hash(), :b2 => hash(), :g2 => hash(), :s2 => hash(), :n2 => hash(), :l2 => hash(), :p2 => hash(), :sp => hash()},
+          66 => %{:k1 => hash(), :r1 => hash(), :b1 => hash(), :g1 => hash(), :s1 => hash(), :n1 => hash(), :l1 => hash(), :p1 => hash(), :k2 => hash(), :r2 => hash(), :b2 => hash(), :g2 => hash(), :s2 => hash(), :n2 => hash(), :l2 => hash(), :p2 => hash(), :sp => hash()},
+          56 => %{:k1 => hash(), :r1 => hash(), :b1 => hash(), :g1 => hash(), :s1 => hash(), :n1 => hash(), :l1 => hash(), :p1 => hash(), :k2 => hash(), :r2 => hash(), :b2 => hash(), :g2 => hash(), :s2 => hash(), :n2 => hash(), :l2 => hash(), :p2 => hash(), :sp => hash()},
+          46 => %{:k1 => hash(), :r1 => hash(), :b1 => hash(), :g1 => hash(), :s1 => hash(), :n1 => hash(), :l1 => hash(), :p1 => hash(), :k2 => hash(), :r2 => hash(), :b2 => hash(), :g2 => hash(), :s2 => hash(), :n2 => hash(), :l2 => hash(), :p2 => hash(), :sp => hash()},
+          36 => %{:k1 => hash(), :r1 => hash(), :b1 => hash(), :g1 => hash(), :s1 => hash(), :n1 => hash(), :l1 => hash(), :p1 => hash(), :k2 => hash(), :r2 => hash(), :b2 => hash(), :g2 => hash(), :s2 => hash(), :n2 => hash(), :l2 => hash(), :p2 => hash(), :sp => hash()},
+          26 => %{:k1 => hash(), :r1 => hash(), :b1 => hash(), :g1 => hash(), :s1 => hash(), :n1 => hash(), :l1 => hash(), :p1 => hash(), :k2 => hash(), :r2 => hash(), :b2 => hash(), :g2 => hash(), :s2 => hash(), :n2 => hash(), :l2 => hash(), :p2 => hash(), :sp => hash()},
+          16 => %{:k1 => hash(), :r1 => hash(), :b1 => hash(), :g1 => hash(), :s1 => hash(), :n1 => hash(), :l1 => hash(), :p1 => hash(), :k2 => hash(), :r2 => hash(), :b2 => hash(), :g2 => hash(), :s2 => hash(), :n2 => hash(), :l2 => hash(), :p2 => hash(), :sp => hash()},
+          # ７段目
+          97 => %{:k1 => hash(), :r1 => hash(), :b1 => hash(), :g1 => hash(), :s1 => hash(), :n1 => hash(), :l1 => hash(), :p1 => hash(), :k2 => hash(), :r2 => hash(), :b2 => hash(), :g2 => hash(), :s2 => hash(), :n2 => hash(), :l2 => hash(), :p2 => hash(), :sp => hash()},
+          87 => %{:k1 => hash(), :r1 => hash(), :b1 => hash(), :g1 => hash(), :s1 => hash(), :n1 => hash(), :l1 => hash(), :p1 => hash(), :k2 => hash(), :r2 => hash(), :b2 => hash(), :g2 => hash(), :s2 => hash(), :n2 => hash(), :l2 => hash(), :p2 => hash(), :sp => hash()},
+          77 => %{:k1 => hash(), :r1 => hash(), :b1 => hash(), :g1 => hash(), :s1 => hash(), :n1 => hash(), :l1 => hash(), :p1 => hash(), :k2 => hash(), :r2 => hash(), :b2 => hash(), :g2 => hash(), :s2 => hash(), :n2 => hash(), :l2 => hash(), :p2 => hash(), :sp => hash()},
+          67 => %{:k1 => hash(), :r1 => hash(), :b1 => hash(), :g1 => hash(), :s1 => hash(), :n1 => hash(), :l1 => hash(), :p1 => hash(), :k2 => hash(), :r2 => hash(), :b2 => hash(), :g2 => hash(), :s2 => hash(), :n2 => hash(), :l2 => hash(), :p2 => hash(), :sp => hash()},
+          57 => %{:k1 => hash(), :r1 => hash(), :b1 => hash(), :g1 => hash(), :s1 => hash(), :n1 => hash(), :l1 => hash(), :p1 => hash(), :k2 => hash(), :r2 => hash(), :b2 => hash(), :g2 => hash(), :s2 => hash(), :n2 => hash(), :l2 => hash(), :p2 => hash(), :sp => hash()},
+          47 => %{:k1 => hash(), :r1 => hash(), :b1 => hash(), :g1 => hash(), :s1 => hash(), :n1 => hash(), :l1 => hash(), :p1 => hash(), :k2 => hash(), :r2 => hash(), :b2 => hash(), :g2 => hash(), :s2 => hash(), :n2 => hash(), :l2 => hash(), :p2 => hash(), :sp => hash()},
+          37 => %{:k1 => hash(), :r1 => hash(), :b1 => hash(), :g1 => hash(), :s1 => hash(), :n1 => hash(), :l1 => hash(), :p1 => hash(), :k2 => hash(), :r2 => hash(), :b2 => hash(), :g2 => hash(), :s2 => hash(), :n2 => hash(), :l2 => hash(), :p2 => hash(), :sp => hash()},
+          27 => %{:k1 => hash(), :r1 => hash(), :b1 => hash(), :g1 => hash(), :s1 => hash(), :n1 => hash(), :l1 => hash(), :p1 => hash(), :k2 => hash(), :r2 => hash(), :b2 => hash(), :g2 => hash(), :s2 => hash(), :n2 => hash(), :l2 => hash(), :p2 => hash(), :sp => hash()},
+          17 => %{:k1 => hash(), :r1 => hash(), :b1 => hash(), :g1 => hash(), :s1 => hash(), :n1 => hash(), :l1 => hash(), :p1 => hash(), :k2 => hash(), :r2 => hash(), :b2 => hash(), :g2 => hash(), :s2 => hash(), :n2 => hash(), :l2 => hash(), :p2 => hash(), :sp => hash()},
+          # ８段目
+          98 => %{:k1 => hash(), :r1 => hash(), :b1 => hash(), :g1 => hash(), :s1 => hash(), :n1 => hash(), :l1 => hash(), :p1 => hash(), :k2 => hash(), :r2 => hash(), :b2 => hash(), :g2 => hash(), :s2 => hash(), :n2 => hash(), :l2 => hash(), :p2 => hash(), :sp => hash()},
+          88 => %{:k1 => hash(), :r1 => hash(), :b1 => hash(), :g1 => hash(), :s1 => hash(), :n1 => hash(), :l1 => hash(), :p1 => hash(), :k2 => hash(), :r2 => hash(), :b2 => hash(), :g2 => hash(), :s2 => hash(), :n2 => hash(), :l2 => hash(), :p2 => hash(), :sp => hash()},
+          78 => %{:k1 => hash(), :r1 => hash(), :b1 => hash(), :g1 => hash(), :s1 => hash(), :n1 => hash(), :l1 => hash(), :p1 => hash(), :k2 => hash(), :r2 => hash(), :b2 => hash(), :g2 => hash(), :s2 => hash(), :n2 => hash(), :l2 => hash(), :p2 => hash(), :sp => hash()},
+          68 => %{:k1 => hash(), :r1 => hash(), :b1 => hash(), :g1 => hash(), :s1 => hash(), :n1 => hash(), :l1 => hash(), :p1 => hash(), :k2 => hash(), :r2 => hash(), :b2 => hash(), :g2 => hash(), :s2 => hash(), :n2 => hash(), :l2 => hash(), :p2 => hash(), :sp => hash()},
+          58 => %{:k1 => hash(), :r1 => hash(), :b1 => hash(), :g1 => hash(), :s1 => hash(), :n1 => hash(), :l1 => hash(), :p1 => hash(), :k2 => hash(), :r2 => hash(), :b2 => hash(), :g2 => hash(), :s2 => hash(), :n2 => hash(), :l2 => hash(), :p2 => hash(), :sp => hash()},
+          48 => %{:k1 => hash(), :r1 => hash(), :b1 => hash(), :g1 => hash(), :s1 => hash(), :n1 => hash(), :l1 => hash(), :p1 => hash(), :k2 => hash(), :r2 => hash(), :b2 => hash(), :g2 => hash(), :s2 => hash(), :n2 => hash(), :l2 => hash(), :p2 => hash(), :sp => hash()},
+          38 => %{:k1 => hash(), :r1 => hash(), :b1 => hash(), :g1 => hash(), :s1 => hash(), :n1 => hash(), :l1 => hash(), :p1 => hash(), :k2 => hash(), :r2 => hash(), :b2 => hash(), :g2 => hash(), :s2 => hash(), :n2 => hash(), :l2 => hash(), :p2 => hash(), :sp => hash()},
+          28 => %{:k1 => hash(), :r1 => hash(), :b1 => hash(), :g1 => hash(), :s1 => hash(), :n1 => hash(), :l1 => hash(), :p1 => hash(), :k2 => hash(), :r2 => hash(), :b2 => hash(), :g2 => hash(), :s2 => hash(), :n2 => hash(), :l2 => hash(), :p2 => hash(), :sp => hash()},
+          18 => %{:k1 => hash(), :r1 => hash(), :b1 => hash(), :g1 => hash(), :s1 => hash(), :n1 => hash(), :l1 => hash(), :p1 => hash(), :k2 => hash(), :r2 => hash(), :b2 => hash(), :g2 => hash(), :s2 => hash(), :n2 => hash(), :l2 => hash(), :p2 => hash(), :sp => hash()},
+          # ９段目
+          99 => %{:k1 => hash(), :r1 => hash(), :b1 => hash(), :g1 => hash(), :s1 => hash(), :n1 => hash(), :l1 => hash(), :p1 => hash(), :k2 => hash(), :r2 => hash(), :b2 => hash(), :g2 => hash(), :s2 => hash(), :n2 => hash(), :l2 => hash(), :p2 => hash(), :sp => hash()},
+          89 => %{:k1 => hash(), :r1 => hash(), :b1 => hash(), :g1 => hash(), :s1 => hash(), :n1 => hash(), :l1 => hash(), :p1 => hash(), :k2 => hash(), :r2 => hash(), :b2 => hash(), :g2 => hash(), :s2 => hash(), :n2 => hash(), :l2 => hash(), :p2 => hash(), :sp => hash()},
+          79 => %{:k1 => hash(), :r1 => hash(), :b1 => hash(), :g1 => hash(), :s1 => hash(), :n1 => hash(), :l1 => hash(), :p1 => hash(), :k2 => hash(), :r2 => hash(), :b2 => hash(), :g2 => hash(), :s2 => hash(), :n2 => hash(), :l2 => hash(), :p2 => hash(), :sp => hash()},
+          69 => %{:k1 => hash(), :r1 => hash(), :b1 => hash(), :g1 => hash(), :s1 => hash(), :n1 => hash(), :l1 => hash(), :p1 => hash(), :k2 => hash(), :r2 => hash(), :b2 => hash(), :g2 => hash(), :s2 => hash(), :n2 => hash(), :l2 => hash(), :p2 => hash(), :sp => hash()},
+          59 => %{:k1 => hash(), :r1 => hash(), :b1 => hash(), :g1 => hash(), :s1 => hash(), :n1 => hash(), :l1 => hash(), :p1 => hash(), :k2 => hash(), :r2 => hash(), :b2 => hash(), :g2 => hash(), :s2 => hash(), :n2 => hash(), :l2 => hash(), :p2 => hash(), :sp => hash()},
+          49 => %{:k1 => hash(), :r1 => hash(), :b1 => hash(), :g1 => hash(), :s1 => hash(), :n1 => hash(), :l1 => hash(), :p1 => hash(), :k2 => hash(), :r2 => hash(), :b2 => hash(), :g2 => hash(), :s2 => hash(), :n2 => hash(), :l2 => hash(), :p2 => hash(), :sp => hash()},
+          39 => %{:k1 => hash(), :r1 => hash(), :b1 => hash(), :g1 => hash(), :s1 => hash(), :n1 => hash(), :l1 => hash(), :p1 => hash(), :k2 => hash(), :r2 => hash(), :b2 => hash(), :g2 => hash(), :s2 => hash(), :n2 => hash(), :l2 => hash(), :p2 => hash(), :sp => hash()},
+          29 => %{:k1 => hash(), :r1 => hash(), :b1 => hash(), :g1 => hash(), :s1 => hash(), :n1 => hash(), :l1 => hash(), :p1 => hash(), :k2 => hash(), :r2 => hash(), :b2 => hash(), :g2 => hash(), :s2 => hash(), :n2 => hash(), :l2 => hash(), :p2 => hash(), :sp => hash()},
+          19 => %{:k1 => hash(), :r1 => hash(), :b1 => hash(), :g1 => hash(), :s1 => hash(), :n1 => hash(), :l1 => hash(), :p1 => hash(), :k2 => hash(), :r2 => hash(), :b2 => hash(), :g2 => hash(), :s2 => hash(), :n2 => hash(), :l2 => hash(), :p2 => hash(), :sp => hash()}
         }
     }
   end
