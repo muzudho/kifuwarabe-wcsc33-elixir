@@ -302,4 +302,11 @@ defmodule KifuwarabeWcsc33.CLI.Position.Hash do
                 18=> Enum.random(0..@max_int)},
             }
 
+  def new() do
+    struct!(KifuwarabeWcsc33.CLI.Position.Hash)
+  end
+
+  def calc_hash() do
+    0
+  end
 end

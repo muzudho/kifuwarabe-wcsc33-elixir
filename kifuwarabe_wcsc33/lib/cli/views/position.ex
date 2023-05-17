@@ -450,6 +450,7 @@ defmodule KifuwarabeWcsc33.CLI.Views.Position do
     value seen from #{pos.turn} #{pos.materials_value}
     Friend is lose? #{KifuwarabeWcsc33.CLI.Coding.ListGetLast.do_it(pos.friend_is_lose_list)}
     Opponent is lose? #{KifuwarabeWcsc33.CLI.Coding.ListGetLast.do_it(pos.opponent_is_lose_list)}
+    Hash #{pos.hash}
 
     """
   end
