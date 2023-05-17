@@ -2,6 +2,18 @@ defmodule KifuwarabeWcsc33.CLI.Position.FourfoldRepetition do
   @moduledoc """
     千日手
 
+    先に作っておくもの
+    ================
+
+    - 局面のハッシュ
+
+    千日手判定のアルゴリズム
+    =====================
+
+    WIP
+
+    以下、アルファベットは局面のハッシュとする
+
     👇 ３手まで進んでいたとする
     ┌───┬───┬───┐
     │ A │ B │ C │
