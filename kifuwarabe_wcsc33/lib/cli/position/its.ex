@@ -194,7 +194,8 @@ defmodule KifuwarabeWcsc33.CLI.Models.Position do
             # 局面のハッシュ
             # ============
             #
-            hash: 0
+            hash: 0,
+            hash_seed: KifuwarabeWcsc33.CLI.Position.HashSeed.new()
 
   # Elixir のリスト、リンクドリストだ、ランダム・アクセス遅そう、使いたくねー
   # defstruct piece_list:

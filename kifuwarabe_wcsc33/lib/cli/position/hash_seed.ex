@@ -1,4 +1,4 @@
-defmodule KifuwarabeWcsc33.CLI.Position.Hash do
+defmodule KifuwarabeWcsc33.CLI.Position.HashSeed do
   @moduledoc """
     局面のハッシュ化
 
@@ -303,7 +303,7 @@ defmodule KifuwarabeWcsc33.CLI.Position.Hash do
             }
 
   def new() do
-    struct!(KifuwarabeWcsc33.CLI.Position.Hash)
+    struct!(KifuwarabeWcsc33.CLI.Position.HashSeed)
   end
 
   def calc_hash() do

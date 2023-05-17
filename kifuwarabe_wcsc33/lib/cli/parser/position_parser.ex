@@ -167,8 +167,8 @@ defmodule KifuwarabeWcsc33.CLI.Parser.Position do
     pos = %{
       pos |
       hash: case pos.turn do
-        :sente -> 1
-        :gote -> 2
+        :sente -> pos.hash_seed.turn.sente
+        :gote -> pos.hash_seed.turn.gote
       end
     }
 
