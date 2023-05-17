@@ -56,8 +56,8 @@ defmodule KifuwarabeWcsc33.CLI.MoveOperation.UndoMove do
     #
     pos = %{
       pos |
-        teban_is_lose_list: KifuwarabeWcsc33.CLI.Coding.ListDeleteLast.do_it(pos.teban_is_lose_list),
-        aiteban_is_lose_list: KifuwarabeWcsc33.CLI.Coding.ListDeleteLast.do_it(pos.aiteban_is_lose_list)
+      friend_is_lose_list: KifuwarabeWcsc33.CLI.Coding.ListDeleteLast.do_it(pos.friend_is_lose_list),
+        opponent_is_lose_list: KifuwarabeWcsc33.CLI.Coding.ListDeleteLast.do_it(pos.opponent_is_lose_list)
     }
 
     # 更新された局面を返す

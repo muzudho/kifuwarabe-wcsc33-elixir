@@ -48,7 +48,7 @@ defmodule KifuwarabeWcsc33.CLI.Thesis.IsUchifuDume do
           # TODO 自殺手の除去（ができてない？）
           #
           {second_move_list, _pos} =
-            KifuwarabeWcsc33.CLI.MoveList.ReduceSuicideMove.do_it(second_move_list, pos, :aiteban)
+            KifuwarabeWcsc33.CLI.MoveList.ReduceSuicideMove.do_it(second_move_list, pos, :opponent)
 
           moves_count = length(second_move_list)
           IO.puts("[is_uchifu_dume] Uchifudume check, moves_count:#{moves_count}")

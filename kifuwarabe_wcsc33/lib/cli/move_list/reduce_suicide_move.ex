@@ -7,7 +7,7 @@ defmodule KifuwarabeWcsc33.CLI.MoveList.ReduceSuicideMove do
 
     * `move_list` - ムーブ・リスト（Move List；指し手のリスト）
     * `pos` - ポジション（Position；局面）
-    * `rel_turn` - リレーティブ・ターン（Relative Turn；相対手番）。 `:teban`（手番） または `:aiteban`（相手番）
+    * `rel_turn` - リレーティブ・ターン（Relative Turn；相対手番）。 `:friend`（手番） または `:opponent`（相手番）
 
   ## Returns
 
@@ -18,8 +18,8 @@ defmodule KifuwarabeWcsc33.CLI.MoveList.ReduceSuicideMove do
   def do_it(move_list, pos, rel_turn) do
     king_turn =
       cond do
-        rel_turn == :teban -> pos.turn
-        rel_turn == :aiteban -> pos.opponent_turn
+        rel_turn == :friend -> pos.turn
+        rel_turn == :opponent -> pos.opponent_turn
         true -> raise "unexpected rel_turn:#{rel_turn}"
       end
 
@@ -106,7 +106,7 @@ defmodule KifuwarabeWcsc33.CLI.MoveList.ReduceSuicideMove do
   #
   #   * `move | rest_move_list]` - move は先頭の要素、 レスト・ムーブ・リスト（Rest Move List；残りの指し手のリスト）は、まだ判定していない残りの指し手
   #   * `pos` - ポジション（Position；局面）
-  #   * `rel_turn` - リレーティブ・ターン（Relative Turn；相対手番）。 `:teban`（手番） または `:aiteban`（相手番）
+  #   * `rel_turn` - リレーティブ・ターン（Relative Turn；相対手番）。 `:friend`（手番） または `:opponent`（相手番）
   #   * `cleanup_move_list` - クリーンナップ・ムーブ・リスト（Clean-up Move List；掃除済みの指し手のリスト） - 自殺手を除去済み
   #
   # ## Returns
@@ -139,8 +139,8 @@ defmodule KifuwarabeWcsc33.CLI.MoveList.ReduceSuicideMove do
     #
     opponent_king_turn =
       cond do
-        rel_turn == :teban -> pos.opponent_turn
-        rel_turn == :aiteban -> pos.turn
+        rel_turn == :friend -> pos.opponent_turn
+        rel_turn == :opponent -> pos.turn
         true -> raise "unexpected rel_turn:#{rel_turn}"
       end
 
@@ -151,8 +151,8 @@ defmodule KifuwarabeWcsc33.CLI.MoveList.ReduceSuicideMove do
 
     if KifuwarabeWcsc33.CLI.Config.is_debug_suicide_move_check?() or KifuwarabeWcsc33.CLI.Config.is_debug_move_generation?(move) do
       IO.puts("[reduce_suicide_move_2] king trn:#{opponent_king_turn} sq:#{opponent_king_sq} pc:#{opponent_king_pc}")
-      IO.puts("[reduce_suicide_move_2] ** teban_is_lose?:#{KifuwarabeWcsc33.CLI.Coding.ListGetLast.do_it(pos.teban_is_lose_list)}")
-      IO.puts("[reduce_suicide_move_2] ** aiteban_is_lose?:#{KifuwarabeWcsc33.CLI.Coding.ListGetLast.do_it(pos.aiteban_is_lose_list)}")
+      IO.puts("[reduce_suicide_move_2] ** friend_is_lose?:#{KifuwarabeWcsc33.CLI.Coding.ListGetLast.do_it(pos.friend_is_lose_list)}")
+      IO.puts("[reduce_suicide_move_2] ** opponent_is_lose?:#{KifuwarabeWcsc33.CLI.Coding.ListGetLast.do_it(pos.opponent_is_lose_list)}")
     end
 
     # 自玉は今 opponent_turn 側
@@ -164,8 +164,8 @@ defmodule KifuwarabeWcsc33.CLI.MoveList.ReduceSuicideMove do
     #
     king_is_lose? =
       cond do
-        rel_turn == :teban -> KifuwarabeWcsc33.CLI.Coding.ListGetLast.do_it(pos.aiteban_is_lose_list)
-        rel_turn == :aiteban -> KifuwarabeWcsc33.CLI.Coding.ListGetLast.do_it(pos.teban_is_lose_list)
+        rel_turn == :friend -> KifuwarabeWcsc33.CLI.Coding.ListGetLast.do_it(pos.opponent_is_lose_list)
+        rel_turn == :opponent -> KifuwarabeWcsc33.CLI.Coding.ListGetLast.do_it(pos.friend_is_lose_list)
         true -> raise "unexpected rel_turn:#{rel_turn}"
       end
 

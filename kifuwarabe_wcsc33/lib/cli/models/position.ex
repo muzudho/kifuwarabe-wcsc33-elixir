@@ -6,8 +6,8 @@ defmodule KifuwarabeWcsc33.CLI.Models.Position do
           board: map,
           hand_pieces: map,
           moves: list,
-          teban_is_lose_list: list,
-          aiteban_is_lose_list: list,
+          friend_is_lose_list: list,
+          opponent_is_lose_list: list,
           captured_piece_types: map,
           location_of_kings: map,
           materials_value: integer
@@ -169,12 +169,12 @@ defmodule KifuwarabeWcsc33.CLI.Models.Position do
             # 手番の方は負けか？
             # ===============
             #
-            teban_is_lose_list: [false],
+            friend_is_lose_list: [false],
             #
             # 相手番の方は負けか？
             # =================
             #
-            aiteban_is_lose_list: [false],
+            opponent_is_lose_list: [false],
             # キャプチャード・ピースズ（Captured pieces；取った駒のリスト）（先後の情報なし、成りの情報付き）
             captured_piece_types: [],
             # 玉のいるマス番地（玉のいるマス番地をよく探すので）

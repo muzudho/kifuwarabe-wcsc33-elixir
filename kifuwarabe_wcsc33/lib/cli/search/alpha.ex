@@ -47,7 +47,7 @@ defmodule KifuwarabeWcsc33.CLI.Search.Alpha do
     #
 
     # 自玉（手番）自殺手の除去
-    {move_list, pos} = KifuwarabeWcsc33.CLI.MoveList.ReduceSuicideMove.do_it(move_list, pos, :teban)
+    {move_list, pos} = KifuwarabeWcsc33.CLI.MoveList.ReduceSuicideMove.do_it(move_list, pos, :friend)
 
     #
     # デバッグ：指し手一覧表示

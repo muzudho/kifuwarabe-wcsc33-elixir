@@ -1,32 +1,32 @@
 defmodule KifuwarabeWcsc33.CLI.Thesis.IsChecked do
   @moduledoc """
-  
+
   手番の玉が相手の利きに飛び込んでいますか？
-  
+
   * これは王手であって、詰めかどうかは分からない
   * 自殺手判定に使う
-  
+
   """
 
   @doc """
-  
+
   手番の玉が利きに飛び込んでいるか判定（詰めかどうかは分からない）
-  
+
   ## Parameters
-  
+
     * `pos` - ポジション（Position；局面）
-    * `rel_turn` - リレーティブ・ターン（Relative Turn；相対手番）。 `:teban`（手番） または `:aiteban`（相手番）
-  
+    * `rel_turn` - リレーティブ・ターン（Relative Turn；相対手番）。 `:friend`（手番） または `:opponent`（相手番）
+
   ## 雑談
-  
+
     論理値型は関数名の末尾に ? を付ける？
-  
+
   """
   def is_checked?(pos, rel_turn) do
     # * `src_sq` - ソース・スクウェア（SouRCe SQuare：マス番地）
     src_sq =
-      if (rel_turn == :teban and pos.turn == :sente) or
-           (rel_turn == :aiteban and pos.opponent_turn == :sente) do
+      if (rel_turn == :friend and pos.turn == :sente) or
+           (rel_turn == :opponent and pos.opponent_turn == :sente) do
         pos.location_of_kings[:k1]
       else
         pos.location_of_kings[:k2]
@@ -695,7 +695,7 @@ defmodule KifuwarabeWcsc33.CLI.Thesis.IsChecked do
     #
     target_sq =
       KifuwarabeWcsc33.CLI.Mappings.ToDestination.from_turn_and_source(
-        if rel_turn == :teban do
+        if rel_turn == :friend do
           pos.turn
         else
           pos.opponent_turn
@@ -740,8 +740,8 @@ defmodule KifuwarabeWcsc33.CLI.Thesis.IsChecked do
             IO.puts("[adjacent] DEBUG target_turn:#{target_turn}")
           end
 
-          if (rel_turn == :teban and target_turn == pos.opponent_turn) or
-               (rel_turn == :aiteban and target_turn == pos.turn) do
+          if (rel_turn == :friend and target_turn == pos.opponent_turn) or
+               (rel_turn == :opponent and target_turn == pos.turn) do
             #
             # 相手の駒だ
             # =========
@@ -800,13 +800,13 @@ defmodule KifuwarabeWcsc33.CLI.Thesis.IsChecked do
   #
   # ## Parameters
   #
-  #   * `rel_turn` - リレーティブ・ターン（Relative Turn；相対手番）。 `:teban`（手番） または `:aiteban`（相手番）
+  #   * `rel_turn` - リレーティブ・ターン（Relative Turn；相対手番）。 `:friend`（手番） または `:opponent`（相手番）
   #
   defp far_to(pos, rel_turn, src_sq, direction_of, is_effect_2?) do
     # 対象のマスが（１手指してる想定なので、反対側が手番）
     target_sq =
       KifuwarabeWcsc33.CLI.Mappings.ToDestination.from_turn_and_source(
-        if rel_turn == :teban do
+        if rel_turn == :friend do
           pos.turn
         else
           pos.opponent_turn
@@ -837,8 +837,8 @@ defmodule KifuwarabeWcsc33.CLI.Thesis.IsChecked do
           target_turn = KifuwarabeWcsc33.CLI.Mappings.ToTurn.from_piece(target_pc)
           # IO.write(" target_turn:#{target_turn}")
 
-          if (rel_turn == :teban and target_turn == pos.opponent_turn) or
-               (rel_turn == :aiteban and target_turn == pos.turn) do
+          if (rel_turn == :friend and target_turn == pos.opponent_turn) or
+               (rel_turn == :opponent and target_turn == pos.turn) do
             #
             # 相手の駒だ
             # =========

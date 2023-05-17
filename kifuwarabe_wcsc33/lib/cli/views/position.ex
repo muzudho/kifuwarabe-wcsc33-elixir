@@ -448,8 +448,8 @@ defmodule KifuwarabeWcsc33.CLI.Views.Position do
   defp stringify_value(pos) do
     """
     value seen from #{pos.turn} #{pos.materials_value}
-    Teban is lose? #{KifuwarabeWcsc33.CLI.Coding.ListGetLast.do_it(pos.teban_is_lose_list)}
-    Aiteban is lose? #{KifuwarabeWcsc33.CLI.Coding.ListGetLast.do_it(pos.aiteban_is_lose_list)}
+    Friend is lose? #{KifuwarabeWcsc33.CLI.Coding.ListGetLast.do_it(pos.friend_is_lose_list)}
+    Opponent is lose? #{KifuwarabeWcsc33.CLI.Coding.ListGetLast.do_it(pos.opponent_is_lose_list)}
 
     """
   end

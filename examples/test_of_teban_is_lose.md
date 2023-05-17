@@ -1,4 +1,4 @@
-# Test of teban is lose
+# Test of friend is lose
 
 # 先手負け局面
 
