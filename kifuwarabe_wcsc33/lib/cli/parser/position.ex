@@ -170,7 +170,7 @@ defmodule KifuwarabeWcsc33.CLI.Parser.Position do
       hash: case pos.turn do
         :sente -> pos.hash_seed.turn.sente
         :gote -> pos.hash_seed.turn.gote
-      end |> bxor(if pos.board[11] != :sp do 1 else 2 end)
+      end |> bxor(pos.hash_seed.board[11][pos.board[11]])
     }
 
     #
