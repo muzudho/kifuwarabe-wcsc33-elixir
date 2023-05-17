@@ -1,4 +1,5 @@
 defmodule KifuwarabeWcsc33.CLI.Parser.Position do
+  import Bitwise
   @doc """
 
     解析
@@ -169,7 +170,7 @@ defmodule KifuwarabeWcsc33.CLI.Parser.Position do
       hash: case pos.turn do
         :sente -> pos.hash_seed.turn.sente
         :gote -> pos.hash_seed.turn.gote
-      end
+      end |> bxor(0)
     }
 
     #
