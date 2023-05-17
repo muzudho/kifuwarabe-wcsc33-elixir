@@ -174,39 +174,132 @@ defmodule KifuwarabeWcsc33.CLI.Position.Hash do
                 1 => Enum.random(0..@max_int),
                 2 => Enum.random(0..@max_int)},
               # ルック（Rook；飛）
-              :r1 => 0,
+              :r1 => %{
+                0 => Enum.random(0..@max_int),
+                1 => Enum.random(0..@max_int),
+                2 => Enum.random(0..@max_int)},
               # ビショップ（Bishop；角）
-              :b1 => 0,
+              :b1 => %{
+                0 => Enum.random(0..@max_int),
+                1 => Enum.random(0..@max_int),
+                2 => Enum.random(0..@max_int)},
               # ゴールド（Gold；金）
-              :g1 => 0,
+              :g1 => %{
+                0 => Enum.random(0..@max_int),
+                1 => Enum.random(0..@max_int),
+                2 => Enum.random(0..@max_int),
+                3 => Enum.random(0..@max_int),
+                4 => Enum.random(0..@max_int)},
               # シルバー（Silver；銀）
-              :s1 => 0,
+              :s1 => %{
+                0 => Enum.random(0..@max_int),
+                1 => Enum.random(0..@max_int),
+                2 => Enum.random(0..@max_int),
+                3 => Enum.random(0..@max_int),
+                4 => Enum.random(0..@max_int)},
               # ナイト（kNight；桂）
-              :n1 => 0,
+              :n1 => %{
+                0 => Enum.random(0..@max_int),
+                1 => Enum.random(0..@max_int),
+                2 => Enum.random(0..@max_int),
+                3 => Enum.random(0..@max_int),
+                4 => Enum.random(0..@max_int)},
               # ランス（Lance；香）
-              :l1 => 0,
+              :l1 => %{
+                0 => Enum.random(0..@max_int),
+                1 => Enum.random(0..@max_int),
+                2 => Enum.random(0..@max_int),
+                3 => Enum.random(0..@max_int),
+                4 => Enum.random(0..@max_int)},
               # ポーン（Pawn；歩）
-              :p1 => 0,
+              :p1 => %{
+                0 => Enum.random(0..@max_int),
+                1 => Enum.random(0..@max_int),
+                2 => Enum.random(0..@max_int),
+                3 => Enum.random(0..@max_int),
+                4 => Enum.random(0..@max_int),
+                5 => Enum.random(0..@max_int),
+                6 => Enum.random(0..@max_int),
+                7 => Enum.random(0..@max_int),
+                8 => Enum.random(0..@max_int),
+                9 => Enum.random(0..@max_int),
+                10 => Enum.random(0..@max_int),
+                11 => Enum.random(0..@max_int),
+                12 => Enum.random(0..@max_int),
+                13 => Enum.random(0..@max_int),
+                14 => Enum.random(0..@max_int),
+                15 => Enum.random(0..@max_int),
+                16 => Enum.random(0..@max_int),
+                17 => Enum.random(0..@max_int),
+                18=> Enum.random(0..@max_int)},
               #
               # ▽ごて（Gote；後手） or うわて（Uwate；上手）
               # =======================================
               #
               # キング（King；玉）. 対局中は玉は取れない。検討時など、盤上から玉を取り除きたいときに使う
-              :k2 => 0,
+              :k2 => %{
+                0 => Enum.random(0..@max_int),
+                1 => Enum.random(0..@max_int),
+                2 => Enum.random(0..@max_int)},
               # ルック（Rook；飛）
-              :r2 => 0,
+              :r2 => %{
+                0 => Enum.random(0..@max_int),
+                1 => Enum.random(0..@max_int),
+                2 => Enum.random(0..@max_int)},
               # ビショップ（Bishop；角）
-              :b2 => 0,
+              :b2 => %{
+                0 => Enum.random(0..@max_int),
+                1 => Enum.random(0..@max_int),
+                2 => Enum.random(0..@max_int)},
               # ゴールド（Gold；金）
-              :g2 => 0,
+              :g2 => %{
+                0 => Enum.random(0..@max_int),
+                1 => Enum.random(0..@max_int),
+                2 => Enum.random(0..@max_int),
+                3 => Enum.random(0..@max_int),
+                4 => Enum.random(0..@max_int)},
               # シルバー（Silver；銀）
-              :s2 => 0,
+              :s2 => %{
+                0 => Enum.random(0..@max_int),
+                1 => Enum.random(0..@max_int),
+                2 => Enum.random(0..@max_int),
+                3 => Enum.random(0..@max_int),
+                4 => Enum.random(0..@max_int)},
               # ナイト（kNight；桂）
-              :n2 => 0,
+              :n2 => %{
+                0 => Enum.random(0..@max_int),
+                1 => Enum.random(0..@max_int),
+                2 => Enum.random(0..@max_int),
+                3 => Enum.random(0..@max_int),
+                4 => Enum.random(0..@max_int)},
               # ランス（Lance；香）
-              :l2 => 0,
+              :l2 => %{
+                0 => Enum.random(0..@max_int),
+                1 => Enum.random(0..@max_int),
+                2 => Enum.random(0..@max_int),
+                3 => Enum.random(0..@max_int),
+                4 => Enum.random(0..@max_int)},
               # ポーン（Pawn；歩）
-              :p2 => 0
+              :p2 => %{
+                0 => Enum.random(0..@max_int),
+                1 => Enum.random(0..@max_int),
+                2 => Enum.random(0..@max_int),
+                3 => Enum.random(0..@max_int),
+                4 => Enum.random(0..@max_int),
+                5 => Enum.random(0..@max_int),
+                6 => Enum.random(0..@max_int),
+                7 => Enum.random(0..@max_int),
+                8 => Enum.random(0..@max_int),
+                9 => Enum.random(0..@max_int),
+                10 => Enum.random(0..@max_int),
+                11 => Enum.random(0..@max_int),
+                12 => Enum.random(0..@max_int),
+                13 => Enum.random(0..@max_int),
+                14 => Enum.random(0..@max_int),
+                15 => Enum.random(0..@max_int),
+                16 => Enum.random(0..@max_int),
+                17 => Enum.random(0..@max_int),
+                18=> Enum.random(0..@max_int)},
             }
 
 end
